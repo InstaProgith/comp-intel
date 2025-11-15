@@ -257,6 +257,28 @@ def _log_failure(logs_dir: Path, url: str, component: str, error: Exception) -> 
         print(f"[ERROR] Failed to write error log: {log_error}")
 
 
+
+
+def run_multiple(urls: List[str]) -> List[Dict[str, Any]]:
+    """Run the comp pipeline for multiple URLs with per-URL error isolation."""
+    results: List[Dict[str, Any]] = []
+    for url in urls:
+        try:
+            results.append(run_full_comp_pipeline(url))
+        except Exception as exc:
+            results.append({
+                "address": "Error processing property",
+                "url": url,
+                "error": str(exc),
+                "summary_markdown": "",
+                "headline_metrics": None,
+                "redfin_data": None,
+                "ladbs_permits": None,
+                "cslb_info": None,
+            })
+            # continue to next URL without raising
+    return results
+
 def orchestrate(url: str) -> None:
     data = run_full_comp_pipeline(url)
     print("---")

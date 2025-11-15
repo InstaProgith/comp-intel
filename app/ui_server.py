@@ -9,7 +9,7 @@ from typing import Any, Dict, List
 from flask import Flask, render_template, request
 
 # Always import using the package path
-from app.orchestrator import run_full_comp_pipeline
+from app.orchestrator import run_full_comp_pipeline, run_multiple
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -125,18 +125,7 @@ def comp_intel():
             year=datetime.now().year,
         )
 
-    results: List[Dict[str, Any]] = []
-
-    for url in valid_urls:
-        try:
-            comp_data = run_full_comp_pipeline(url)
-            results.append(comp_data)
-        except Exception as e:
-            _log_error(url, e)
-            results.append(_build_error_result(
-                url,
-                "An error occurred while processing this property. The issue has been logged for review."
-            ))
+    results = run_multiple(valid_urls)
 
     return render_template(
         "comp_intel.html",
