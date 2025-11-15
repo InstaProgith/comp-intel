@@ -1,0 +1,83 @@
+{
+  "redfin": {
+    "source": "redfin_parsed_v2",
+    "url": "https://www.redfin.com/CA/Sherman-Oaks/13157-Otsego-St-91423/home/5216364",
+    "address": "13157 Otsego,Sherman Oaks, CA 91423",
+    "listing_beds": 5.0,
+    "listing_baths": 5.5,
+    "listing_building_sf": 3864.0,
+    "listing_year_built": null,
+    "list_price": null,
+    "beds": 5.0,
+    "baths": 5.5,
+    "building_sf": 3864.0,
+    "lot_sf": 7425.0,
+    "timeline": [
+      {
+        "date": "2024-05-30",
+        "event": "sold",
+        "price": 1460000,
+        "raw_status": "Sold (Public Records)"
+      },
+      {
+        "date": "2024-05-31",
+        "event": "listed",
+        "price": 1460000,
+        "raw_status": "Listed (Active)"
+      },
+      {
+        "date": "2024-05-31",
+        "event": "sold",
+        "price": 1460000,
+        "raw_status": "Sold (MLS)"
+      },
+      {
+        "date": "2025-11-04",
+        "event": "listed",
+        "price": 3795000,
+        "raw_status": "Listed (Active)"
+      }
+    ],
+    "tax": {
+      "apn": "2358004008",
+      "year": 2023,
+      "assessed_value": 900000
+    },
+    "public_records": {
+      "beds": 3.0,
+      "baths": 3.0,
+      "building_sf": 1662.0,
+      "lot_sf": 7425.0,
+      "year_built": 1950
+    },
+    "generated_at": "2025-11-12",
+    "raw_html_path": "C:\\Users\\navid\\comp-intel\\data\\raw\\20251112-182216_redfin_13157_Otsego_St_91423.html"
+  },
+  "ladbs": {
+    "source": "fake_ladbs_v0",
+    "apn": "2358004008",
+    "address": "13157 Otsego,Sherman Oaks, CA 91423",
+    "permits": [
+      {
+        "permit_no": "BS1234567",
+        "type": "Addition/Alteration",
+        "status": "Final",
+        "submit_date": "2023-02-15",
+        "issue_date": "2023-03-10",
+        "final_date": "2023-09-01",
+        "contractor": "Example Construction Inc.",
+        "owner_builder": false,
+        "architect": "Sample Architect",
+        "engineer": "Sample Engineer",
+        "scope": "Interior remodel and 400 SF rear addition."
+      }
+    ],
+    "fetched_at": "2025-11-12"
+  },
+  "metrics": {
+    "purchase_to_list_days": 1,
+    "gross_spread": 0,
+    "submit_to_issue_days_avg": 23.0,
+    "issue_to_final_days_avg": 175.0
+  }
+}

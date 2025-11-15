@@ -1,0 +1,141 @@
+{
+  "redfin": {
+    "source": "redfin_parsed_v2",
+    "url": "https://www.redfin.com/CA/Los-Angeles/1120-S-Lucerne-Blvd-90019/home/6911003",
+    "address": "1120 S Lucerne Blvd,Los Angeles, CA 90019",
+    "listing_beds": 2.0,
+    "listing_baths": 1.0,
+    "listing_building_sf": 1008.0,
+    "listing_year_built": null,
+    "list_price": null,
+    "beds": 2.0,
+    "baths": 1.0,
+    "building_sf": 1008.0,
+    "lot_sf": 7197.0,
+    "timeline": [
+      {
+        "date": "1972-04-25",
+        "event": "sold",
+        "price": 18500,
+        "raw_status": "Sold (Public Records)"
+      },
+      {
+        "date": "2025-05-22",
+        "event": "listed",
+        "price": 849900,
+        "raw_status": "Listed (Active)"
+      },
+      {
+        "date": "2025-09-05",
+        "event": "sold",
+        "price": 800000,
+        "raw_status": "Sold (MLS)"
+      }
+    ],
+    "tax": {
+      "apn": "5082004025",
+      "year": 2023,
+      "assessed_value": 900000
+    },
+    "public_records": {
+      "beds": 2.0,
+      "baths": 1.0,
+      "lot_sf": 7197.0,
+      "year_built": 1922
+    },
+    "generated_at": "2025-11-14",
+    "raw_html_path": "C:\\Users\\navid\\comp-intel\\data\\raw\\20251114-133634_redfin_1120_S_Lucerne_Blvd_90019.html"
+  },
+  "ladbs": {
+    "source": "ladbs_plr_v5",
+    "apn": "5082004025",
+    "address": "1120 S Lucerne Blvd,Los Angeles, CA 90019",
+    "fetched_at": "2025-11-14 13:36:53",
+    "permits": [
+      {
+        "Permit_Number": "25014-10000-03595",
+        "Job_Number": "B25LA33094",
+        "Type": "Bldg-Addition - 1 or 2 Family Dwelling",
+        "Status": "PC Info Complete on 11/10/2025",
+        "Work_Description": "Eplan MAJOR REMODEL AND 1-STORY REAR ADDITION TO EXISTING SINGLE FAMILY DWELLING Dwelling is in Methane Zone, Mitigation required",
+        "Issued_Date": "No",
+        "Contractor_Info": "Engineer: Mccormick,, Charles Norman; Lic. No.: C32534 15408 E 4TH AVE APT 114      SPOKANE VALLEY, WA 99037",
+        "raw_details": {
+          "permit_number": "25014-10000-03595",
+          "job_number": "B25LA33094",
+          "group": "Building",
+          "type": "Bldg-Addition",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "(1) Dwelling - Single Family",
+          "work_description": "Eplan MAJOR REMODEL AND 1-STORY REAR ADDITION TO EXISTING SINGLE FAMILY DWELLING Dwelling is in Methane Zone, Mitigation required",
+          "permit_issued": "No",
+          "current_status": "PC Info Complete on 11/10/2025",
+          "contact_information": {
+            "Engineer": "Mccormick,, Charles Norman; Lic. No.: C32534 15408 E 4TH AVE APT 114      SPOKANE VALLEY, WA 99037"
+          },
+          "status_history": [
+            {
+              "event": "Submitted",
+              "date": "8/8/2025",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Assigned to Plan Check Engineer",
+              "date": "8/14/2025",
+              "person": "MIGUEL LOPEZ"
+            },
+            {
+              "event": "Corrections Issued",
+              "date": "9/8/2025",
+              "person": "MIGUEL LOPEZ"
+            },
+            {
+              "event": "Quality Review Completed",
+              "date": "9/12/2025",
+              "person": "KESETE HAREGOT"
+            },
+            {
+              "event": "Applicant returned to address corrections",
+              "date": "9/22/2025",
+              "person": "MIGUEL LOPEZ"
+            },
+            {
+              "event": "Applicant returned to address corrections",
+              "date": "10/14/2025",
+              "person": "MIGUEL LOPEZ"
+            },
+            {
+              "event": "Applicant returned to address corrections",
+              "date": "10/15/2025",
+              "person": "MIGUEL LOPEZ"
+            },
+            {
+              "event": "Applicant returned to address corrections",
+              "date": "10/16/2025",
+              "person": "MIGUEL LOPEZ"
+            },
+            {
+              "event": "Plan Check Approved",
+              "date": "11/10/2025",
+              "person": "MIGUEL LOPEZ"
+            }
+          ]
+        }
+      }
+    ],
+    "note": "Found 1 permits with status date >= 2020 via PLR."
+  },
+  "metrics": {
+    "purchase_price": 18500,
+    "purchase_date": "1972-04-25",
+    "resale_price": 849900,
+    "resale_date": "2025-05-22",
+    "hold_days": 19385,
+    "gross_spread": 831400,
+    "gross_roi": 44.94054054054054,
+    "price_per_sf_purchase": null,
+    "price_per_sf_resale": 843.1547619047619,
+    "has_ladbs_permits": true
+  },
+  "created_at": "2025-11-14 13:36:53"
+}

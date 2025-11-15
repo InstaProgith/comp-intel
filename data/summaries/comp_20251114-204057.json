@@ -1,0 +1,376 @@
+{
+  "url": "https://www.redfin.com/CA/Los-Angeles/1393-Casiano-Rd-90049/home/6829339",
+  "address": "1393 Casiano Rd,Los Angeles, CA 90049",
+  "headline_metrics": {
+    "purchase_price": 1200,
+    "purchase_date": "2019-11-27",
+    "current_price": 15403,
+    "current_date": "2021-09-22",
+    "spread": 14203,
+    "roi_pct": 1183.58,
+    "hold_days": 665
+  },
+  "current_summary": null,
+  "public_record_summary": null,
+  "lot_summary": null,
+  "permit_summary": "Found 6 permits with status date >= 2020 via PLR.",
+  "permit_count": 6,
+  "ladbs": {
+    "source": "ladbs_plr_v5",
+    "apn": "4368025014",
+    "address": "1393 Casiano Rd,Los Angeles, CA 90049",
+    "fetched_at": "2025-11-14 20:40:07",
+    "permits": [
+      {
+        "permit_number": "20016-20000-01179",
+        "job_number": "B20VN00625",
+        "permit_type": "Bldg-Addition - 1 or 2 Family Dwelling",
+        "Type": "Bldg-Addition - 1 or 2 Family Dwelling",
+        "Status": "CofO Issued on 8/18/2021",
+        "status_date": "8/18/2021",
+        "Work_Description": "INTERIOR REMODEL THROUGHOUT SINGLE FAMILY DWELLING. REMOVE AND REPLACE WINDOWS AND DOORS. ADD 5'-0\" X 5'-0\" ATTACHED TRELLIS.",
+        "Issued_Date": "Issued on 2/12/2020",
+        "contractor": "Pro Renovation Enterprises Inc; Lic. No.: 989072-B 11306 E 183RD ST 204      CERRITOS, CA 90703",
+        "contractor_license": "989072",
+        "architect": null,
+        "architect_license": null,
+        "engineer": "Boranian,, Paul Darian; Lic. No.: S5944 23261 BURBANK BL      WOODLAND HILLS, CA 91367",
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "20016-20000-01179",
+          "job_number": "B20VN00625",
+          "group": "Building",
+          "type": "Bldg-Addition",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "(1) Dwelling - Single Family",
+          "work_description": "INTERIOR REMODEL THROUGHOUT SINGLE FAMILY DWELLING. REMOVE AND REPLACE WINDOWS AND DOORS. ADD 5'-0\" X 5'-0\" ATTACHED TRELLIS.",
+          "permit_issued": "Issued on 2/12/2020",
+          "current_status": "CofO Issued on 8/18/2021",
+          "issuing_office": "Metro",
+          "certificate_of_occupancy": "CofO Issued More Information",
+          "contact_information": {
+            "Contractor": "Pro Renovation Enterprises Inc; Lic. No.: 989072-B 11306 E 183RD ST 204      CERRITOS, CA 90703",
+            "Engineer": "Boranian,, Paul Darian; Lic. No.: S5944 23261 BURBANK BL      WOODLAND HILLS, CA 91367"
+          },
+          "status_history": [
+            {
+              "event": "Submitted",
+              "date": "1/15/2020",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Assigned to Plan Check Engineer",
+              "date": "1/15/2020",
+              "person": "JEROME MAGAT PALMA"
+            },
+            {
+              "event": "Corrections Issued",
+              "date": "1/15/2020",
+              "person": "JEROME MAGAT PALMA"
+            },
+            {
+              "event": "Building Plans Picked Up",
+              "date": "1/17/2020",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Plan Check Approved",
+              "date": "1/21/2020",
+              "person": "JEROME MAGAT PALMA"
+            },
+            {
+              "event": "Issued",
+              "date": "2/12/2020",
+              "person": "LADBS"
+            },
+            {
+              "event": "CofO in Progress",
+              "date": "8/11/2021",
+              "person": "CARLOS MATAMOROS"
+            },
+            {
+              "event": "CofO in Progress",
+              "date": "8/11/2021",
+              "person": "CARLOS MATAMOROS"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "8/18/2021",
+              "person": "VINCENT COTTON"
+            },
+            {
+              "event": "CofO Issued",
+              "date": "8/18/2021",
+              "person": "VINCENT COTTON"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "8/18/2021",
+              "person": "VINCENT COTTON"
+            }
+          ],
+          "status_date": "8/18/2021"
+        }
+      },
+      {
+        "permit_number": "20016-90000-05114",
+        "job_number": "--",
+        "permit_type": "Bldg-Alter/Repair - 1 or 2 Family Dwelling",
+        "Type": "Bldg-Alter/Repair - 1 or 2 Family Dwelling",
+        "Status": "Permit Finaled on 7/15/2021",
+        "status_date": "7/15/2021",
+        "Work_Description": "Reroof with 35 sqrs BUILT UP roofing. Existing solid sheathing. Re-roof with Class A or B material weighing less than 6 pounds per sq. ft. For residential roof replacement > 50% of the total roof area, apply Cool Roof Product labeled and certified by Cool Roof Rating Council (CRRC). Cool Roof may be required for non-residential buildings per Title 24, Part 6, Section 149(b).",
+        "Issued_Date": "Issued on 2/20/2020",
+        "contractor": "Pro Renovation Enterprises Inc; Lic. No.: 989072-B 11306 E 183RD ST 204      CERRITOS, CA 90703",
+        "contractor_license": "989072",
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "20016-90000-05114",
+          "job_number": "--",
+          "group": "Building",
+          "type": "Bldg-Alter/Repair",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "(1) Dwelling - Single Family",
+          "work_description": "Reroof with 35 sqrs BUILT UP roofing. Existing solid sheathing. Re-roof with Class A or B material weighing less than 6 pounds per sq. ft. For residential roof replacement > 50% of the total roof area, apply Cool Roof Product labeled and certified by Cool Roof Rating Council (CRRC). Cool Roof may be required for non-residential buildings per Title 24, Part 6, Section 149(b).",
+          "permit_issued": "Issued on 2/20/2020",
+          "current_status": "Permit Finaled on 7/15/2021",
+          "contact_information": {
+            "Contractor": "Pro Renovation Enterprises Inc; Lic. No.: 989072-B 11306 E 183RD ST 204      CERRITOS, CA 90703"
+          },
+          "status_history": [
+            {
+              "event": "Issued",
+              "date": "2/20/2020",
+              "person": "INTERNET PERMIT"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "7/15/2021",
+              "person": "CARLOS MATAMOROS"
+            }
+          ],
+          "status_date": "7/15/2021"
+        }
+      },
+      {
+        "permit_number": "20016-30000-24111",
+        "job_number": "X20WL05478",
+        "permit_type": "Bldg-Alter/Repair - 1 or 2 Family Dwelling",
+        "Type": "Bldg-Alter/Repair - 1 or 2 Family Dwelling",
+        "Status": "Permit Finaled on 8/11/2021",
+        "status_date": "8/11/2021",
+        "Work_Description": "Re-plaster existing swimming pool (a separate express mechanical permit for new skimmer(s) and a separate express electrical permit for new pool luminaire is required, when applicable, except for one and two family dwelling).",
+        "Issued_Date": "Issued on 9/25/2020",
+        "contractor": "Farahi Construction Inc; Lic. No.: 584288-B 2933 BEVERLY GLEN CIRCLE      LOS ANGELES, CA 90077",
+        "contractor_license": "584288",
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "20016-30000-24111",
+          "job_number": "X20WL05478",
+          "group": "Building",
+          "type": "Bldg-Alter/Repair",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "(1) Dwelling - Single Family",
+          "work_description": "Re-plaster existing swimming pool (a separate express mechanical permit for new skimmer(s) and a separate express electrical permit for new pool luminaire is required, when applicable, except for one and two family dwelling).",
+          "permit_issued": "Issued on 9/25/2020",
+          "current_status": "Permit Finaled on 8/11/2021",
+          "contact_information": {
+            "Contractor": "Farahi Construction Inc; Lic. No.: 584288-B 2933 BEVERLY GLEN CIRCLE      LOS ANGELES, CA 90077"
+          },
+          "status_history": [
+            {
+              "event": "Issued",
+              "date": "9/25/2020",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "8/11/2021",
+              "person": "CARLOS MATAMOROS"
+            }
+          ],
+          "status_date": "8/11/2021"
+        }
+      },
+      {
+        "permit_number": "17041-10000-44751",
+        "job_number": "X17LA21480",
+        "permit_type": "Electrical - 1 or 2 Family Dwelling",
+        "Type": "Electrical - 1 or 2 Family Dwelling",
+        "Status": "Permit Finaled on 8/11/2021",
+        "status_date": "8/11/2021",
+        "Work_Description": "METER RECONNECT - NO FEE DEPARTMENT ERROR.",
+        "Issued_Date": "Issued on 12/13/2017",
+        "contractor": "Owner-Builder ,",
+        "contractor_license": null,
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "17041-10000-44751",
+          "job_number": "X17LA21480",
+          "group": "Electrical",
+          "type": "Electrical",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "METER RECONNECT - NO FEE DEPARTMENT ERROR.",
+          "permit_issued": "Issued on 12/13/2017",
+          "current_status": "Permit Finaled on 8/11/2021",
+          "issuing_office": "Metro",
+          "contact_information": {
+            "Contractor": "Owner-Builder ,"
+          },
+          "status_history": [
+            {
+              "event": "Issued",
+              "date": "12/13/2017",
+              "person": "LADBS"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "8/11/2021",
+              "person": "CARLOS MATAMOROS"
+            }
+          ],
+          "status_date": "8/11/2021"
+        }
+      },
+      {
+        "permit_number": "20041-90000-07729",
+        "job_number": "--",
+        "permit_type": "Electrical - 1 or 2 Family Dwelling",
+        "Type": "Electrical - 1 or 2 Family Dwelling",
+        "Status": "Permit Finaled on 7/15/2021",
+        "status_date": "7/15/2021",
+        "Work_Description": "Upgrade main panel to 200 AMP Service Install 4 Exterior Lights & Install 5 Exterior GFI's",
+        "Issued_Date": "Issued on 2/20/2020",
+        "contractor": "Pro Renovation Enterprises Inc; Lic. No.: 989072-B 11306 E 183RD ST 204      CERRITOS, CA 90703",
+        "contractor_license": "989072",
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "20041-90000-07729",
+          "job_number": "--",
+          "group": "Electrical",
+          "type": "Electrical",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "Upgrade main panel to 200 AMP Service Install 4 Exterior Lights & Install 5 Exterior GFI's",
+          "permit_issued": "Issued on 2/20/2020",
+          "current_status": "Permit Finaled on 7/15/2021",
+          "contact_information": {
+            "Contractor": "Pro Renovation Enterprises Inc; Lic. No.: 989072-B 11306 E 183RD ST 204      CERRITOS, CA 90703"
+          },
+          "status_history": [
+            {
+              "event": "Issued",
+              "date": "2/20/2020",
+              "person": "INTERNET PERMIT"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "7/15/2021",
+              "person": "CARLOS MATAMOROS"
+            }
+          ],
+          "status_date": "7/15/2021"
+        }
+      },
+      {
+        "permit_number": "20042-90000-04250",
+        "job_number": "--",
+        "permit_type": "Plumbing - 1 or 2 Family Dwelling",
+        "Type": "Plumbing - 1 or 2 Family Dwelling",
+        "Status": "Permit Finaled on 7/15/2021",
+        "status_date": "7/15/2021",
+        "Work_Description": "Re-pipe existing water flow drains & Install 2 water heaters & Install 1 Exterior Shower",
+        "Issued_Date": "Issued on 2/20/2020",
+        "contractor": "Pro Renovation Enterprises Inc; Lic. No.: 989072-B 11306 E 183RD ST 204      CERRITOS, CA 90703",
+        "contractor_license": "989072",
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "20042-90000-04250",
+          "job_number": "--",
+          "group": "Mechanical",
+          "type": "Plumbing",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "Re-pipe existing water flow drains & Install 2 water heaters & Install 1 Exterior Shower",
+          "permit_issued": "Issued on 2/20/2020",
+          "current_status": "Permit Finaled on 7/15/2021",
+          "contact_information": {
+            "Contractor": "Pro Renovation Enterprises Inc; Lic. No.: 989072-B 11306 E 183RD ST 204      CERRITOS, CA 90703"
+          },
+          "status_history": [
+            {
+              "event": "Issued",
+              "date": "2/20/2020",
+              "person": "INTERNET PERMIT"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "7/15/2021",
+              "person": "CARLOS MATAMOROS"
+            }
+          ],
+          "status_date": "7/15/2021"
+        }
+      }
+    ],
+    "note": "Found 6 permits with status date >= 2020 via PLR."
+  },
+  "redfin": {
+    "source": "redfin_parsed_v2",
+    "url": "https://www.redfin.com/CA/Los-Angeles/1393-Casiano-Rd-90049/home/6829339",
+    "address": "1393 Casiano Rd,Los Angeles, CA 90049",
+    "listing_beds": 3.0,
+    "listing_baths": 3.0,
+    "listing_building_sf": 2528.0,
+    "listing_year_built": null,
+    "list_price": null,
+    "beds": 3.0,
+    "baths": 3.0,
+    "building_sf": 2528.0,
+    "lot_sf": 6500,
+    "timeline": [
+      {
+        "date": "2019-11-27",
+        "event": "sold",
+        "price": 1200,
+        "raw_status": "Sold (Public Records)"
+      },
+      {
+        "date": "2021-09-22",
+        "event": "listed",
+        "price": 15403,
+        "raw_status": "Listed (Active)"
+      }
+    ],
+    "tax": {
+      "apn": "4368025014",
+      "year": 2023,
+      "assessed_value": 900000
+    },
+    "public_records": {
+      "beds": 3.0,
+      "baths": 4.0,
+      "year_built": 1959
+    },
+    "generated_at": "2025-11-14",
+    "raw_html_path": "C:\\Users\\navid\\comp-intel\\data\\raw\\20251114-204007_redfin_1393_Casiano_Rd_90049.html"
+  },
+  "project_contacts": null,
+  "summary_markdown": "### 1) DEAL SNAPSHOT\n- **Address**: 1393 Casiano Rd, Los Angeles, CA 90049\n- **Current Configuration**: 3 beds, 3 baths, 2,528 SF (from listing)\n- **Original Configuration**: 3 beds, 4 baths, SF unknown, year built 1959 (from public records)\n- **Built Area Change**: Not specified (original SF not available)\n- **Purchase Price**: $1,200,000 (dated 2019-11-27)\n- **Current Listing Price**: $15,403,000 (listed on 2021-09-22)\n- **Hold Period**: 665 days\n- **Gross Spread**: $14,203,000\n- **Gross ROI**: 1183.58%\n\n### 2) SCOPE OF WORK (PERMITS)\n- **Core Building/Addition Permits**:\n  - **Permit 20016-20000-01179**: Interior remodel throughout the single-family dwelling, including window/door replacements and the addition of an attached trellis (CofO issued on 8/18/2021).\n  - **Permit 20016-90000-05114**: Roof replacement with built-up roofing and Cool Roof compliance (permit finaled on 7/15/2021).\n  - **Permit 20016-30000-24111**: Re-plastering of the existing swimming pool (permit finaled on 8/11/2021).\n  - **Permit 17041-10000-44751**: Meter reconnection (finaled on 8/11/2021); marked as Owner-Builder.\n  - **Permit 20041-90000-07729**: Main panel upgrade to 200 AMP service and installation of exterior lighting (finaled on 7/15/2021).\n  - **Permit 20042-90000-04250**: Re-piping of water drain systems, installation of 2 water heaters, and an exterior shower (finaled on 7/15/2021).\n\n- **Major Work Done**: Over the last 5\u201310 years, the property underwent significant interior remodeling, roofing replacement, pool restoration, electrical upgrades, plumbing improvements, and minor structural enhancements.\n- **Open/Active Permits**: No open or active permits noted; all permits are finaled.\n\n### 3) TEAM (COMPETITOR NETWORK)\n- **General Contractor**: \n  - Pro Renovation Enterprises Inc (Flagged as \"Owner-Builder\" for the electrical work)\n- **Architect**: None listed.\n- **Engineer**: \n  - Boranian, Paul Darian (for the addition permit)\n- **Notes**: Pro Renovation Enterprises Inc is a repeat player, being involved in multiple permits.\n\n### 4) PERMIT TIMING (DURATIONS)\n- **Permit 20016-20000-01179 (Main Addition Permit)**:\n  - Submitted \u2192 Plan Check Approved: 6 days (1/15/2020 - 1/21/2020)\n  - Plan Check Approved \u2192 Issued: 22 days (1/21/2020 - 2/12/2020)\n  - Issued \u2192 Finaled: 189 days (2/12/2020 - 8/18/2021)\n\n### 5) VALUE-ADD SUMMARY\nThe property at 1393 Casiano Rd was purchased for $1.2M and has since undergone substantial renovations, including a comprehensive interior remodel and significant upgrades to the exterior and utilities, leading to a current listing price of $15.4M. The value added is notable, with a gross spread of approximately $14.2M achieved over a hold period of 665 days."
+}
