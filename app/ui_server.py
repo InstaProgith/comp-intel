@@ -15,6 +15,7 @@ from app.orchestrator import run_full_comp_pipeline
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LOGS_DIR = Path(BASE_DIR) / "data" / "logs"
 LOGS_DIR.mkdir(parents=True, exist_ok=True)
+MAX_URLS = 5  # Stage 6: limit number of Redfin URLs per request
 
 app = Flask(
     __name__,
@@ -88,38 +89,50 @@ def comp_intel():
             year=datetime.now().year,
         )
 
-    urls = [u.strip() for u in urls_text.splitlines() if u.strip()]
-    
-    # Validate URL count
-    if len(urls) > 10:
-        error_result = _build_error_result(
-            "Multiple URLs",
-            "Too many URLs submitted. Maximum 10 URLs allowed per request."
-        )
+    # Stage 6 input cleaning & validation
+    raw_lines = [u.strip() for u in urls_text.splitlines() if u.strip()]
+    valid_urls = [u for u in raw_lines if u.startswith("https://www.redfin.com/")]
+
+    # Enforce MAX_URLS limit
+    if len(valid_urls) > MAX_URLS:
+        too_many_result = {
+            "address": "Too many URLs",
+            "url": "",
+            "error": f"Please submit at most {MAX_URLS} Redfin URLs at a time.",
+            "summary_markdown": "",
+            "headline_metrics": None,
+        }
         return render_template(
             "comp_intel.html",
-            results=[error_result],
+            results=[too_many_result],
+            urls_text=urls_text,
+            year=datetime.now().year,
+        )
+
+    # Handle zero valid URLs
+    if len(valid_urls) == 0:
+        none_result = {
+            "address": "No valid Redfin URLs",
+            "url": "",
+            "error": "Please paste at least one Redfin URL that starts with https://www.redfin.com/.",
+            "summary_markdown": "",
+            "headline_metrics": None,
+        }
+        return render_template(
+            "comp_intel.html",
+            results=[none_result],
             urls_text=urls_text,
             year=datetime.now().year,
         )
 
     results: List[Dict[str, Any]] = []
 
-    for url in urls:
-        # Validate Redfin URL format
-        if not _is_valid_redfin_url(url):
-            results.append(_build_error_result(
-                url,
-                "Invalid URL format. Please provide a valid Redfin listing URL (e.g., https://www.redfin.com/.../home/...)"
-            ))
-            continue
-
+    for url in valid_urls:
         try:
             comp_data = run_full_comp_pipeline(url)
             results.append(comp_data)
         except Exception as e:
             _log_error(url, e)
-            # User-friendly error message without stack trace
             results.append(_build_error_result(
                 url,
                 "An error occurred while processing this property. The issue has been logged for review."
