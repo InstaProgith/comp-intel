@@ -12,10 +12,12 @@ try:
     from app.redfin_scraper import get_redfin_data  # type: ignore
     from app.ladbs_scraper import get_ladbs_data  # type: ignore
     from app.ai_summarizer import summarize_comp  # type: ignore
+    from app.cslb_lookup import lookup_cslb_license  # type: ignore
 except ImportError:
     from redfin_scraper import get_redfin_data  # type: ignore
     from ladbs_scraper import get_ladbs_data  # type: ignore
     from ai_summarizer import summarize_comp  # type: ignore
+    from cslb_lookup import lookup_cslb_license  # type: ignore
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
@@ -86,8 +88,8 @@ def _build_headline_metrics(redfin: Dict[str, Any]) -> Dict[str, Any]:
     return {
         "purchase_price": purchase_price,
         "purchase_date": purchase_date,
-        "current_price": exit_price,
-        "current_date": exit_date,
+        "exit_price": exit_price,
+        "exit_date": exit_date,
         "spread": spread,
         "roi_pct": roi_pct,
         "hold_days": hold_days,
@@ -144,6 +146,21 @@ def run_full_comp_pipeline(url: str) -> Dict[str, Any]:
     metrics = _build_headline_metrics(redfin_data)
     project_contacts = _extract_basic_project_contacts(ladbs_data)
 
+    # CSLB lookup for primary contractor
+    cslb_contractor = None
+    contractor_info = project_contacts.get("contractor") if project_contacts else None
+    if contractor_info and contractor_info.get("license"):
+        license_num = contractor_info["license"]
+        print(f"[INFO] Looking up CSLB license: {license_num}")
+        try:
+            cslb_contractor = lookup_cslb_license(license_num)
+            if cslb_contractor:
+                print(f"[INFO] CSLB data found: {cslb_contractor.get('business_name')}")
+            else:
+                print(f"[INFO] No CSLB data found for license: {license_num}")
+        except Exception as e:
+            print(f"[WARN] CSLB lookup failed: {e}")
+
     combined: Dict[str, Any] = {
         "url": url,
         "address": redfin_data.get("address"),
@@ -157,7 +174,7 @@ def run_full_comp_pipeline(url: str) -> Dict[str, Any]:
         "ladbs": ladbs_data,
         "redfin": redfin_data,
         "project_contacts": project_contacts or None,
-        "cslb_contractor": None,          # placeholder so template can safely reference r.cslb_contractor
+        "cslb_contractor": cslb_contractor,
     }
 
     try:

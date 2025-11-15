@@ -1,0 +1,95 @@
+{
+  "url": "https://www.redfin.com/CA/Sherman-Oaks/13157-Otsego-St-91423/home/5216364",
+  "address": "13157 Otsego,Sherman Oaks, CA 91423",
+  "headline_metrics": {
+    "purchase_price": 1460000,
+    "purchase_date": "2024-05-30",
+    "exit_price": 3795000,
+    "exit_date": "2025-11-04",
+    "spread": 2335000,
+    "roi_pct": 159.93,
+    "hold_days": 523
+  },
+  "metrics": {
+    "purchase_price": 1460000,
+    "purchase_date": "2024-05-30",
+    "exit_price": 3795000,
+    "exit_date": "2025-11-04",
+    "spread": 2335000,
+    "roi_pct": 159.93,
+    "hold_days": 523
+  },
+  "current_summary": "5 bed, 5.5 bath, 3,864 SF",
+  "public_record_summary": "3 bed, 3.0 bath, 1,662 SF",
+  "lot_summary": "7,425 SF",
+  "permit_summary": "Failed to start Chrome driver.",
+  "permit_count": 0,
+  "ladbs": {
+    "source": "ladbs_stub_driver_error",
+    "apn": "2358004008",
+    "address": "13157 Otsego,Sherman Oaks, CA 91423",
+    "fetched_at": "2025-11-15 21:10:09",
+    "permits": [],
+    "note": "Failed to start Chrome driver."
+  },
+  "redfin": {
+    "source": "redfin_parsed_v2",
+    "url": "https://www.redfin.com/CA/Sherman-Oaks/13157-Otsego-St-91423/home/5216364",
+    "address": "13157 Otsego,Sherman Oaks, CA 91423",
+    "listing_beds": 5.0,
+    "listing_baths": 5.5,
+    "listing_building_sf": 3864.0,
+    "listing_year_built": null,
+    "list_price": null,
+    "beds": 5.0,
+    "baths": 5.5,
+    "building_sf": 3864.0,
+    "lot_sf": 7425.0,
+    "timeline": [
+      {
+        "date": "2024-05-30",
+        "event": "sold",
+        "price": 1460000,
+        "raw_status": "Sold (Public Records)"
+      },
+      {
+        "date": "2024-05-31",
+        "event": "listed",
+        "price": 1460000,
+        "raw_status": "Listed (Active)"
+      },
+      {
+        "date": "2024-05-31",
+        "event": "sold",
+        "price": 1460000,
+        "raw_status": "Sold (MLS)"
+      },
+      {
+        "date": "2025-11-04",
+        "event": "listed",
+        "price": 3795000,
+        "raw_status": "Listed (Active)"
+      }
+    ],
+    "tax": {
+      "apn": "2358004008",
+      "year": 2023,
+      "assessed_value": null
+    },
+    "public_records": {
+      "beds": 3.0,
+      "baths": 3.0,
+      "building_sf": 1662.0,
+      "lot_sf": 7425.0,
+      "year_built": 1950
+    },
+    "generated_at": "2025-11-15",
+    "current_summary": "5 bed, 5.5 bath, 3,864 SF",
+    "public_record_summary": "3 bed, 3.0 bath, 1,662 SF",
+    "lot_summary": "7,425 SF",
+    "raw_html_path": "/workspaces/comp-intel/data/raw/20251115-211009_redfin_13157_Otsego_St_91423.html"
+  },
+  "project_contacts": null,
+  "cslb_contractor": null,
+  "summary_markdown": "## DEAL SNAPSHOT\n- **Address:** 13157 Otsego, Sherman Oaks, CA 91423\n- **Current Configuration:** 5 beds, 5.5 baths, 3,864 SF\n- **Original Configuration (Public Records):** 3 beds, 3 baths, 1,662 SF, Year Built: 1950\n- **SF Changes:** 2,202 SF added (3,864 SF current - 1,662 SF original)\n- **Purchase Price:** $1,460,000 (Date: 2024-05-30)\n- **Current Exit Price:** $3,795,000 (Listed Date: 2025-11-04)\n- **Hold Period:** 523 days\n- **Gross Spread:** $2,335,000 ($3,795,000 exit - $1,460,000 purchase)\n- **Gross ROI:** 159.93% ($2,335,000 spread / $1,460,000 purchase price)\n\n## SCOPE OF WORK (PERMITS)\n- **Permit Summary:** Currently, there are no LADBS permits listed. Therefore, details about any core building or addition permits, major work in the last 5\u201310 years, or any active permits are unavailable. The lack of permits suggests that additional findings or permits may need to be reviewed to assess any construction activities more thoroughly.\n\n## TEAM (COMPETITOR NETWORK)\n- **General Contractor:** No contractor information available due to the absence of permit data.\n- **Architect:** No architect information available due to the absence of permit data.\n- **Structural Engineer:** No engineer information available due to the absence of permit data.\n- **Notes:** No repeated players or patterns identified due to lack of data.\n\n## PERMIT TIMING (DURATIONS)\n- **Permit Timeline:** No permits exist; therefore, permit durations cannot be assessed.\n\n## VALUE-ADD SUMMARY\nThe developer purchased a property with a significant upgrade plan, transforming it from a 3-bedroom, 3-bath configuration of 1,662 SF to a 5-bedroom, 5.5-bath home of 3,864 SF. This major renovation added 2,202 SF of living space, targeting a gross return of approximately $2,335,000, achieved over a hold period of 523 days. The project demonstrates a substantial value enhancement through extensive remodel and expansion efforts."
+}

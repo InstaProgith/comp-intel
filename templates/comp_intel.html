@@ -118,8 +118,8 @@
                 {% else %}—{% endif %}
               </div>
               <div class="metric-sub">
-                {% if r.metrics.gross_roi %}
-                  ROI {{ "{:.1f}%".format(r.metrics.gross_roi * 100) }}
+                {% if r.metrics.roi_pct %}
+                  ROI {{ "{:.1f}%".format(r.metrics.roi_pct) }}
                 {% endif %}
               </div>
             </div>
@@ -152,8 +152,8 @@
             {% for p in permits %}
             <a href="{{ p.detail_url }}" target="_blank" class="permit-row">
               <div class="permit-code">{{ p.permit_number }}</div>
-              <div class="permit-type">{{ p.type }}</div>
-              <div class="permit-status">{{ p.status }}</div>
+              <div class="permit-type">{{ p.permit_type }}</div>
+              <div class="permit-status">{{ p.current_status }}</div>
             </a>
             {% endfor %}
           </div>
@@ -203,6 +203,11 @@
     document.getElementById("loadingOverlay").classList.add("show");
   });
 
+  // Hide loading overlay when page fully loads
+  window.addEventListener("load", () => {
+    document.getElementById("loadingOverlay").classList.remove("show");
+  });
+
   window.addEventListener("DOMContentLoaded", () => {
 
     document.querySelectorAll("[data-price-history]").forEach(c => {
@@ -216,29 +221,64 @@
             label: "Price",
             data: data.map(x => x.price),
             tension: 0.25,
-            borderWidth: 2
+            borderWidth: 2,
+            borderColor: '#3b82f6',
+            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+            pointBackgroundColor: data.map(x => 
+              x.event === 'sold' ? '#ef4444' : '#3b82f6'
+            ),
+            pointRadius: 4
           }]
         },
-        options: { plugins:{legend:{display:false}} }
+        options: { 
+          plugins:{legend:{display:false}},
+          scales: {
+            y: {
+              ticks: {
+                callback: function(value) {
+                  return '$' + value.toLocaleString();
+                }
+              }
+            }
+          }
+        }
       });
     });
 
     document.querySelectorAll("[data-permit-timeline]").forEach(c => {
       const raw = JSON.parse(c.dataset.permitTimeline);
-      const labels = raw.map(x => x.permit_number);
-      const days = raw.map(x => x.duration_days || 0);
+      
+      // FILTER: only include permits with duration_days > 0
+      const withDuration = raw.filter(x => x.duration_days && x.duration_days > 0);
+      
+      if (withDuration.length === 0) {
+        c.style.display = 'none';  // hide chart if no data
+        return;
+      }
+      
+      const labels = withDuration.map(x => x.permit_number);
+      const days = withDuration.map(x => x.duration_days);
 
       new Chart(c, {
         type: "bar",
         data: {
           labels,
           datasets: [{
-            label:"Duration",
+            label:"Duration (days)",
             data:days,
+            backgroundColor: '#3b82f6',
             borderWidth:1
           }]
         },
-        options: { indexAxis: 'y', plugins:{legend:{display:false}} }
+        options: { 
+          indexAxis: 'y', 
+          plugins:{legend:{display:false}},
+          scales: {
+            x: {
+              title: { display: true, text: 'Days' }
+            }
+          }
+        }
       });
     });
   });

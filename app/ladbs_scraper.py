@@ -311,11 +311,14 @@ def get_permit_list(driver) -> List[Dict[str, Any]]:
                 permit_date_str = date_match.group(1) if date_match else None
 
                 permit_dt: Optional[datetime] = None
+                permit_date_iso: Optional[str] = None
                 if permit_date_str:
                     try:
                         permit_dt = datetime.strptime(permit_date_str, "%m/%d/%Y")
+                        permit_date_iso = permit_dt.date().isoformat()  # Convert to YYYY-MM-DD
                     except Exception:
                         permit_dt = None
+                        permit_date_iso = None
 
                 # Filter by cutoff year
                 if permit_dt is not None and permit_dt.year < CUTOFF_YEAR:
@@ -326,7 +329,7 @@ def get_permit_list(driver) -> List[Dict[str, Any]]:
                         "permit_number": permit_number,
                         "url": permit_url,
                         "status_text": status_text,
-                        "status_date": permit_date_str,  # mm/dd/yyyy string
+                        "status_date": permit_date_iso,  # YYYY-MM-DD ISO string
                     }
                 )
             except Exception as e:
@@ -484,23 +487,45 @@ def _summarize_permit(details: Dict[str, Any]) -> Dict[str, Any]:
     )
 
     # Status date from list page, if we carried it through
-    status_date = details.get("status_date")  # expected "mm/dd/yyyy" string
+    status_date = details.get("status_date")  # now ISO "YYYY-MM-DD" string
+
+    # Calculate duration if we have issued and finaled dates
+    duration_days = None
+    issued_str = details.get("permit_issued")
+    status_history = details.get("status_history") or []
+
+    # Find "Finaled" event in status history
+    finaled_date_str = None
+    for event in status_history:
+        if "final" in event.get("event", "").lower():
+            finaled_date_str = event.get("date")
+            break
+
+    if issued_str and finaled_date_str:
+        try:
+            # Parse dates (LADBS uses mm/dd/yyyy format in detail pages)
+            issued_dt = datetime.strptime(issued_str, "%m/%d/%Y")
+            finaled_dt = datetime.strptime(finaled_date_str, "%m/%d/%Y")
+            duration_days = (finaled_dt - issued_dt).days
+        except Exception:
+            duration_days = None
 
     return {
         "permit_number": permit_number,
         "job_number": job_number,
-        "permit_type": full_type,  # used for UI ribbon and metrics
-        "Type": full_type,  # backward compatible label
-        "Status": status,
+        "permit_type": full_type,
+        "current_status": status,
         "status_date": status_date,
-        "Work_Description": work_desc,
-        "Issued_Date": issued,
+        "work_description": work_desc,
+        "issued_date": issued,
         "contractor": contractor_name or None,
         "contractor_license": contractor_license,
         "architect": architect_name or None,
         "architect_license": architect_license,
         "engineer": engineer_name or None,
         "engineer_license": engineer_license,
+        "detail_url": details.get("_detail_url"),
+        "duration_days": duration_days,
         "raw_details": details,
     }
 
@@ -592,6 +617,8 @@ def get_ladbs_data(
             print(f"[LADBS] Processing permit {idx}/{len(permits_basic)}: {pb['permit_number']}")
             details = get_permit_details(driver, pb["url"])
             if details:
+                # Pass the URL through details so _summarize_permit can include it
+                details["_detail_url"] = pb["url"]
                 # Carry status_date from list page into details so summary can keep it
                 if pb.get("status_date"):
                     details.setdefault("status_date", pb["status_date"])
