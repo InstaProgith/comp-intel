@@ -310,14 +310,10 @@ def get_redfin_data(url: str) -> Dict[str, Any]:
     now = datetime.now().strftime("%Y-%m-%d")
     address_label = listing_parsed.get("address") or _guess_address_from_url(url)
 
-    # Listing stats
-    beds = listing_parsed.get("beds") if listing_parsed.get("beds") is not None else 3.0
-    baths = listing_parsed.get("baths") if listing_parsed.get("baths") is not None else 2.0
-    building_sf = (
-        listing_parsed.get("building_sf")
-        if listing_parsed.get("building_sf") is not None
-        else 1450.0
-    )
+    # Listing stats - NO FAKE DATA, use None if missing
+    beds = listing_parsed.get("beds")
+    baths = listing_parsed.get("baths")
+    building_sf = listing_parsed.get("building_sf")
     list_price = listing_parsed.get("list_price")
     listing_year_built = listing_parsed.get("listing_year_built")
 
@@ -334,6 +330,28 @@ def get_redfin_data(url: str) -> Dict[str, Any]:
     if public_parsed.get("public_year_built") is not None:
         public_records["year_built"] = public_parsed["public_year_built"]
 
+    # Build summary strings
+    def _format_summary(beds, baths, sf, label=""):
+        parts = []
+        if beds is not None:
+            parts.append(f"{int(beds)} bed")
+        if baths is not None:
+            parts.append(f"{baths} bath")
+        if sf is not None:
+            parts.append(f"{int(sf):,} SF")
+        return ", ".join(parts) if parts else f"{label}Data not available"
+
+    current_summary = _format_summary(beds, baths, building_sf, "Current: ")
+    public_record_summary = _format_summary(
+        public_records.get("beds"),
+        public_records.get("baths"),
+        public_records.get("building_sf"),
+        "Public Record: "
+    )
+    
+    lot_sf = public_parsed.get("public_lot_sf")
+    lot_summary = f"{int(lot_sf):,} SF" if lot_sf else "Lot: Data not available"
+
     redfin_struct: Dict[str, Any] = {
         "source": "redfin_parsed_v2",
         "url": url,
@@ -348,28 +366,22 @@ def get_redfin_data(url: str) -> Dict[str, Any]:
         "beds": beds,
         "baths": baths,
         "building_sf": building_sf,
-        # placeholder lot_sf, overwritten by public_lot_sf if present
-        "lot_sf": 6500,
-        # timeline: real sale/list history if we got it, else placeholder
-        "timeline": sale_events
-        or [
-            {"date": "2023-01-01", "event": "sold", "price": 950000},
-            {"date": "2024-06-01", "event": "listed", "price": 1295000},
-        ],
+        "lot_sf": lot_sf,
+        # timeline: real sale/list history ONLY, no fake data
+        "timeline": sale_events,
         # tax + APN
         "tax": {
-            "apn": public_parsed.get("apn") or "UNKNOWN-APN",
+            "apn": public_parsed.get("apn"),
             "year": 2023,
-            # we still leave assessed_value as a placeholder; can parse from tax table later
-            "assessed_value": 900000,
+            "assessed_value": None,  # Could parse from tax table later
         },
         "public_records": public_records,
         "generated_at": now,
+        # Summary strings for template
+        "current_summary": current_summary,
+        "public_record_summary": public_record_summary,
+        "lot_summary": lot_summary,
     }
-
-    # If public lot_sf exists, make it canonical
-    if public_parsed.get("public_lot_sf") is not None:
-        redfin_struct["lot_sf"] = public_parsed["public_lot_sf"]
 
     if html_path is not None:
         redfin_struct["raw_html_path"] = str(html_path)
