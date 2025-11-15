@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>BLDGBIT AI · Comp Intelligence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/comp.css') }}">
+</head>
+<body>
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+    <div class="loading-text">Analyzing…</div>
+  </div>
+
+  <div class="bg-layer"></div>
+
+  <main class="shell">
+
+    <header class="hero-card">
+      <div class="logo-wrap">
+        <div class="logo-plate"></div>
+        <img src="{{ url_for('static', filename='LG.png') }}"
+             class="logo-img" alt="BLDGBIT">
+      </div>
+      <div class="hero-text">
+        <div class="eyebrow">BLDGBIT AI</div>
+        <h1 class="hero-title">Comp Intelligence</h1>
+        <p class="hero-subtitle">
+          Investor-grade comp briefs backed by LADBS intelligence.
+        </p>
+      </div>
+    </header>
+
+    <section class="panel">
+      <form method="post" action="{{ url_for('comp_intel') }}" class="comp-form" id="compForm">
+        <label class="field-label" for="urls">Paste Redfin URLs</label>
+        <p class="field-hint">
+          One per line. Example:
+          <span class="hint-url">https://www.redfin.com/...</span>
+        </p>
+
+        <div class="textarea-wrap">
+          <textarea id="urls" name="urls" rows="6">{{ urls_text or "" }}</textarea>
+        </div>
+
+        <div class="form-footer">
+          <div class="foot-note">LADBS Auto Search Enabled</div>
+          <button type="submit" class="btn-primary">
+            <span>Run Analysis</span>
+            <span class="btn-tag">AI</span>
+          </button>
+        </div>
+      </form>
+    </section>
+
+    {% if results %}
+    <section class="results">
+
+      {% for r in results %}
+      {% set pc = r.project_contacts or {} %}
+      {% set cslb = r.cslb_contractor or None %}
+      {% set permits = r.ladbs.permits if r.ladbs and r.ladbs.permits else [] %}
+
+      <article class="comp-card">
+
+        <header class="comp-header">
+          <div class="comp-title-block">
+            <div class="comp-label">COMP</div>
+            <h2 class="comp-address">{{ r.address or "Unknown address" }}</h2>
+            <a href="{{ r.url }}" target="_blank" class="comp-link">{{ r.url }}</a>
+          </div>
+
+          <div class="stat-grid">
+            <div class="stat-pill"><div class="stat-label">CURRENT</div>
+              <div class="stat-value">{{ r.current_summary or "—" }}</div></div>
+            <div class="stat-pill"><div class="stat-label">PUBLIC RECORD</div>
+              <div class="stat-value">{{ r.public_record_summary or "—" }}</div></div>
+            <div class="stat-pill"><div class="stat-label">LOT</div>
+              <div class="stat-value">{{ r.lot_summary or "—" }}</div></div>
+            <div class="stat-pill"><div class="stat-label">LADBS PERMITS</div>
+              <div class="stat-value">{{ r.permit_summary or "—" }}</div></div>
+          </div>
+        </header>
+
+        <section class="comp-body">
+
+          <div class="headline-metrics">
+            <div class="metric-card">
+              <div class="metric-label">Purchase</div>
+              <div class="metric-primary">
+                {% if r.metrics.purchase_price %}
+                  ${{ "{:,.0f}".format(r.metrics.purchase_price) }}
+                {% else %}—{% endif %}
+              </div>
+              <div class="metric-sub">{{ r.metrics.purchase_date or "—" }}</div>
+            </div>
+
+            <div class="metric-card">
+              <div class="metric-label">Exit</div>
+              <div class="metric-primary">
+                {% if r.metrics.exit_price %}
+                  ${{ "{:,.0f}".format(r.metrics.exit_price) }}
+                {% else %}—{% endif %}
+              </div>
+              <div class="metric-sub">{{ r.metrics.exit_date or "—" }}</div>
+            </div>
+
+            <div class="metric-card">
+              <div class="metric-label">Spread</div>
+              <div class="metric-primary">
+                {% if r.metrics.gross_spread %}
+                  ${{ "{:,.0f}".format(r.metrics.gross_spread) }}
+                {% else %}—{% endif %}
+              </div>
+              <div class="metric-sub">
+                {% if r.metrics.gross_roi %}
+                  ROI {{ "{:.1f}%".format(r.metrics.gross_roi * 100) }}
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="metric-card">
+              <div class="metric-label">Hold</div>
+              <div class="metric-primary">{{ r.metrics.hold_days or "—" }}</div>
+              <div class="metric-sub">days</div>
+            </div>
+          </div>
+
+          {% if r.redfin and r.redfin.timeline %}
+          <div class="comp-body-label">Price History</div>
+          <canvas class="chart" height="120"
+            data-price-history='{{ r.redfin.timeline | tojson }}'></canvas>
+          {% endif %}
+
+          {% if permits %}
+          <div class="comp-body-label" style="margin-top:16px;">Permit Durations</div>
+          <canvas class="chart" height="140"
+            data-permit-timeline='{{ permits | tojson }}'></canvas>
+          {% endif %}
+
+          <div class="comp-body-label" style="margin-top:20px;">Summary</div>
+          <div class="comp-summary">{{ r.summary_markdown | safe }}</div>
+
+          {% if permits %}
+          <div class="comp-body-label">All Permits</div>
+          <div class="permit-list">
+            {% for p in permits %}
+            <a href="{{ p.detail_url }}" target="_blank" class="permit-row">
+              <div class="permit-code">{{ p.permit_number }}</div>
+              <div class="permit-type">{{ p.type }}</div>
+              <div class="permit-status">{{ p.status }}</div>
+            </a>
+            {% endfor %}
+          </div>
+          {% endif %}
+
+          {% if cslb %}
+          <div class="comp-body-label project-label">Contractor</div>
+
+          <div class="contacts-grid">
+            <div class="contact-card">
+              <div class="contact-role">Contractor</div>
+              <div class="contact-name">{{ cslb.business_name or "Unknown" }}</div>
+              <div class="contact-line">Lic {{ cslb.license_number or "—" }}</div>
+
+              {% if cslb.phone %}
+              <div class="contact-line">{{ cslb.phone }}</div>
+              {% endif %}
+              {% if cslb.address %}
+              <div class="contact-line">{{ cslb.address }}</div>
+              {% endif %}
+
+              {% if cslb.detail_url %}
+              <a href="{{ cslb.detail_url }}" target="_blank"
+                 class="contact-link">CSLB License Detail</a>
+              {% endif %}
+            </div>
+          </div>
+          {% endif %}
+
+        </section>
+
+      </article>
+      {% endfor %}
+    </section>
+    {% endif %}
+
+    <footer class="footer">
+      <div>© {{ year or 2025 }} BLDGBIT · Internal Tool</div>
+      <div class="footer-tagline">Efficient. Transparent. Investor-exclusive.</div>
+    </footer>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+  document.getElementById("compForm").addEventListener("submit", () => {
+    document.getElementById("loadingOverlay").classList.add("show");
+  });
+
+  window.addEventListener("DOMContentLoaded", () => {
+
+    document.querySelectorAll("[data-price-history]").forEach(c => {
+      const data = JSON.parse(c.dataset.priceHistory);
+
+      new Chart(c, {
+        type: "line",
+        data: {
+          labels: data.map(x => x.date),
+          datasets: [{
+            label: "Price",
+            data: data.map(x => x.price),
+            tension: 0.25,
+            borderWidth: 2
+          }]
+        },
+        options: { plugins:{legend:{display:false}} }
+      });
+    });
+
+    document.querySelectorAll("[data-permit-timeline]").forEach(c => {
+      const raw = JSON.parse(c.dataset.permitTimeline);
+      const labels = raw.map(x => x.permit_number);
+      const days = raw.map(x => x.duration_days || 0);
+
+      new Chart(c, {
+        type: "bar",
+        data: {
+          labels,
+          datasets: [{
+            label:"Duration",
+            data:days,
+            borderWidth:1
+          }]
+        },
+        options: { indexAxis: 'y', plugins:{legend:{display:false}} }
+      });
+    });
+  });
+  </script>
+
+</body>
+</html>
