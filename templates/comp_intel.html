@@ -113,8 +113,8 @@
             <div class="metric-card">
               <div class="metric-label">Spread</div>
               <div class="metric-primary">
-                {% if r.metrics.gross_spread %}
-                  ${{ "{:,.0f}".format(r.metrics.gross_spread) }}
+                {% if r.metrics.spread %}
+                  ${{ "{:,.0f}".format(r.metrics.spread) }}
                 {% else %}—{% endif %}
               </div>
               <div class="metric-sub">
