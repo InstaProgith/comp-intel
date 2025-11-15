@@ -1,0 +1,201 @@
+from __future__ import annotations
+
+from typing import Any, Dict, List, Optional, Tuple
+from pathlib import Path
+from datetime import datetime
+import argparse
+import json
+import re
+
+# Try package-style imports first, fall back to flat files if needed
+try:
+    from app.redfin_scraper import get_redfin_data  # type: ignore
+    from app.ladbs_scraper import get_ladbs_data  # type: ignore
+    from app.ai_summarizer import summarize_comp  # type: ignore
+except ImportError:
+    from redfin_scraper import get_redfin_data  # type: ignore
+    from ladbs_scraper import get_ladbs_data  # type: ignore
+    from ai_summarizer import summarize_comp  # type: ignore
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+DATA_DIR = BASE_DIR / "data"
+SUMMARIES_DIR = DATA_DIR / "summaries"
+SUMMARIES_DIR.mkdir(parents=True, exist_ok=True)
+
+
+def _pick_purchase_and_exit(
+    timeline: List[Dict[str, Any]]
+) -> Tuple[Optional[Dict[str, Any]], Optional[Dict[str, Any]]]:
+    if not timeline:
+        return None, None
+
+    try:
+        timeline = sorted(timeline, key=lambda e: e.get("date") or "")
+    except Exception:
+        pass
+
+    sold_events = [e for e in timeline if e.get("event") == "sold"]
+    listed_events = [e for e in timeline if e.get("event") == "listed"]
+
+    purchase = sold_events[0] if sold_events else None
+
+    exit_event: Optional[Dict[str, Any]] = None
+    if listed_events:
+        exit_event = listed_events[-1]
+    elif sold_events:
+        exit_event = sold_events[-1]
+
+    return purchase, exit_event
+
+
+def _fmt_money(val: Optional[int]) -> str:
+    if val is None:
+        return "—"
+    try:
+        return f"${val:,.0f}"
+    except Exception:
+        return "—"
+
+
+def _build_headline_metrics(redfin: Dict[str, Any]) -> Dict[str, Any]:
+    timeline: List[Dict[str, Any]] = redfin.get("timeline") or []
+    purchase, exit_event = _pick_purchase_and_exit(timeline)
+
+    purchase_price = purchase.get("price") if purchase else None
+    purchase_date = purchase.get("date") if purchase else None
+    exit_price = exit_event.get("price") if exit_event else None
+    exit_date = exit_event.get("date") if exit_event else None
+
+    spread = None
+    roi_pct = None
+    hold_days = None
+
+    if purchase_price is not None and exit_price is not None:
+        spread = exit_price - purchase_price
+        if purchase_price > 0:
+            roi_pct = round(100.0 * spread / purchase_price, 2)
+
+    if purchase_date and exit_date:
+        try:
+            d0 = datetime.fromisoformat(purchase_date)
+            d1 = datetime.fromisoformat(exit_date)
+            hold_days = (d1 - d0).days
+        except Exception:
+            hold_days = None
+
+    return {
+        "purchase_price": purchase_price,
+        "purchase_date": purchase_date,
+        "current_price": exit_price,
+        "current_date": exit_date,
+        "spread": spread,
+        "roi_pct": roi_pct,
+        "hold_days": hold_days,
+    }
+
+
+def _extract_basic_project_contacts(ladbs: Dict[str, Any]) -> Dict[str, Any]:
+    permits = ladbs.get("permits") or []
+    if not permits:
+        return {}
+
+    contractor_text: Optional[str] = None
+    for p in permits:
+        info = (p.get("Contractor_Info") or "").strip()
+        if info and info.upper() != "N/A":
+            contractor_text = info
+            break
+
+    if not contractor_text:
+        return {}
+
+    name = contractor_text
+    if ":" in contractor_text:
+        name = contractor_text.split(":", 1)[1].strip()
+
+    lic_match = re.search(r"\b(\d{6,8})\b", contractor_text)
+    lic = lic_match.group(1) if lic_match else None
+
+    contractor_obj: Dict[str, Any] = {
+        "raw": contractor_text,
+        "business_name": name,
+    }
+    if lic:
+        contractor_obj["license"] = lic
+
+    return {"contractor": contractor_obj}
+
+
+def run_full_comp_pipeline(url: str) -> Dict[str, Any]:
+    print(f"[INFO] Running comp-intel pipeline for: {url}")
+
+    redfin_data = get_redfin_data(url)
+    print("[INFO] Redfin data fetched.")
+
+    apn = None
+    tax = redfin_data.get("tax") or {}
+    if isinstance(tax, dict):
+        apn = tax.get("apn")
+
+    address = redfin_data.get("address")
+    ladbs_data = get_ladbs_data(apn=apn, address=address, redfin_url=url)
+    print("[INFO] LADBS data fetched.")
+
+    metrics = _build_headline_metrics(redfin_data)
+    project_contacts = _extract_basic_project_contacts(ladbs_data)
+
+    combined: Dict[str, Any] = {
+        "url": url,
+        "address": redfin_data.get("address"),
+        "headline_metrics": metrics,
+        "metrics": metrics,               # alias so template can use r.metrics.*
+        "current_summary": redfin_data.get("current_summary"),
+        "public_record_summary": redfin_data.get("public_record_summary"),
+        "lot_summary": redfin_data.get("lot_summary"),
+        "permit_summary": ladbs_data.get("note"),
+        "permit_count": len(ladbs_data.get("permits") or []),
+        "ladbs": ladbs_data,
+        "redfin": redfin_data,
+        "project_contacts": project_contacts or None,
+        "cslb_contractor": None,          # placeholder so template can safely reference r.cslb_contractor
+    }
+
+    try:
+        combined["summary_markdown"] = summarize_comp(combined)
+    except Exception as e:
+        print(f"[WARN] summarize_comp failed: {e}")
+        combined["summary_markdown"] = (
+            "Summary unavailable due to an error in the AI summarizer. "
+            "Raw Redfin and LADBS data are still shown above."
+        )
+
+    now_tag = datetime.now().strftime("%Y%m%d-%H%M%S")
+    out_path = SUMMARIES_DIR / f"comp_{now_tag}.json"
+    try:
+        out_path.write_text(json.dumps(combined, indent=2, default=str), encoding="utf-8")
+        print(f"[INFO] Saved combined output to {out_path}")
+    except Exception as e:
+        print(f"[WARN] Failed to save combined JSON: {e}")
+
+    return combined
+
+
+def orchestrate(url: str) -> None:
+    data = run_full_comp_pipeline(url)
+    print("---")
+    print(f"Address: {data.get('address')}")
+    hm = data.get("headline_metrics") or {}
+    print(f"Purchase: {_fmt_money(hm.get('purchase_price'))} on {hm.get('purchase_date')}")
+    print(f"Exit/Current: {_fmt_money(hm.get('current_price'))} on {hm.get('current_date')}")
+    print(f"Spread: {_fmt_money(hm.get('spread'))}  ROI: {hm.get('roi_pct')}%  Hold: {hm.get('hold_days')} days")
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Run comp-intel pipeline for a single Redfin URL")
+    parser.add_argument("--url", required=True, help="Redfin listing URL")
+    args = parser.parse_args()
+    orchestrate(args.url)
+
+
+if __name__ == "__main__":
+    main()
