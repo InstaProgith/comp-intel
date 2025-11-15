@@ -269,12 +269,26 @@ def run_multiple(urls: List[str]) -> List[Dict[str, Any]]:
             results.append({
                 "address": "Error processing property",
                 "url": url,
-                "error": str(exc),
-                "summary_markdown": "",
+                "summary_markdown": "<p class='error-message'>An error occurred…</p>",
                 "headline_metrics": None,
-                "redfin_data": None,
-                "ladbs_permits": None,
-                "cslb_info": None,
+                "metrics": {
+                    "purchase_price": None,
+                    "purchase_date": None,
+                    "exit_price": None,
+                    "exit_date": None,
+                    "spread": None,
+                    "roi_pct": None,
+                    "hold_days": None,
+                },
+                "current_summary": "—",
+                "public_record_summary": "—",
+                "lot_summary": "—",
+                "permit_summary": "—",
+                "permit_count": 0,
+                "redfin": {"timeline": []},
+                "ladbs": {"permits": []},
+                "project_contacts": None,
+                "cslb_contractor": None,
             })
             # continue to next URL without raising
     return results
@@ -285,7 +299,7 @@ def orchestrate(url: str) -> None:
     print(f"Address: {data.get('address')}")
     hm = data.get("headline_metrics") or {}
     print(f"Purchase: {_fmt_money(hm.get('purchase_price'))} on {hm.get('purchase_date')}")
-    print(f"Exit/Current: {_fmt_money(hm.get('current_price'))} on {hm.get('current_date')}")
+    print(f"Exit/Current: {_fmt_money(hm.get('exit_price'))} on {hm.get('exit_date')}")
     print(f"Spread: {_fmt_money(hm.get('spread'))}  ROI: {hm.get('roi_pct')}%  Hold: {hm.get('hold_days')} days")
 
 
