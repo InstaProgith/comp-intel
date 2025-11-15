@@ -130,9 +130,31 @@ def _extract_basic_project_contacts(ladbs: Dict[str, Any]) -> Dict[str, Any]:
 
 def run_full_comp_pipeline(url: str) -> Dict[str, Any]:
     print(f"[INFO] Running comp-intel pipeline for: {url}")
+    
+    LOGS_DIR = DATA_DIR / "logs"
+    LOGS_DIR.mkdir(parents=True, exist_ok=True)
 
-    redfin_data = get_redfin_data(url)
-    print("[INFO] Redfin data fetched.")
+    # Fetch Redfin data with error handling
+    redfin_data: Dict[str, Any] = {}
+    try:
+        redfin_data = get_redfin_data(url)
+        print("[INFO] Redfin data fetched.")
+    except Exception as e:
+        print(f"[ERROR] Redfin fetch failed: {e}")
+        _log_failure(LOGS_DIR, url, "redfin", e)
+        redfin_data = {
+            "source": "redfin_error",
+            "address": "Unknown (Redfin fetch failed)",
+            "timeline": [],
+            "tax": {},
+            "current_summary": "—",
+            "public_record_summary": "—",
+            "lot_summary": "—",
+        }
+
+    # Validate redfin_data has minimal required structure
+    if not isinstance(redfin_data, dict):
+        redfin_data = {"source": "redfin_invalid", "timeline": [], "tax": {}}
 
     apn = None
     tax = redfin_data.get("tax") or {}
@@ -140,8 +162,26 @@ def run_full_comp_pipeline(url: str) -> Dict[str, Any]:
         apn = tax.get("apn")
 
     address = redfin_data.get("address")
-    ladbs_data = get_ladbs_data(apn=apn, address=address, redfin_url=url)
-    print("[INFO] LADBS data fetched.")
+
+    # Fetch LADBS data with error handling
+    ladbs_data: Dict[str, Any] = {}
+    try:
+        ladbs_data = get_ladbs_data(apn=apn, address=address, redfin_url=url)
+        print("[INFO] LADBS data fetched.")
+    except Exception as e:
+        print(f"[ERROR] LADBS fetch failed: {e}")
+        _log_failure(LOGS_DIR, url, "ladbs", e)
+        ladbs_data = {
+            "source": "ladbs_error",
+            "permits": [],
+            "note": "LADBS data unavailable due to error.",
+        }
+
+    # Validate ladbs_data has minimal required structure
+    if not isinstance(ladbs_data, dict):
+        ladbs_data = {"source": "ladbs_invalid", "permits": [], "note": "Invalid LADBS data."}
+    if "permits" not in ladbs_data:
+        ladbs_data["permits"] = []
 
     metrics = _build_headline_metrics(redfin_data)
     project_contacts = _extract_basic_project_contacts(ladbs_data)
@@ -160,16 +200,17 @@ def run_full_comp_pipeline(url: str) -> Dict[str, Any]:
                 print(f"[INFO] No CSLB data found for license: {license_num}")
         except Exception as e:
             print(f"[WARN] CSLB lookup failed: {e}")
+            _log_failure(LOGS_DIR, url, "cslb", e)
 
     combined: Dict[str, Any] = {
         "url": url,
-        "address": redfin_data.get("address"),
+        "address": redfin_data.get("address", "Unknown address"),
         "headline_metrics": metrics,
         "metrics": metrics,               # alias so template can use r.metrics.*
-        "current_summary": redfin_data.get("current_summary"),
-        "public_record_summary": redfin_data.get("public_record_summary"),
-        "lot_summary": redfin_data.get("lot_summary"),
-        "permit_summary": ladbs_data.get("note"),
+        "current_summary": redfin_data.get("current_summary", "—"),
+        "public_record_summary": redfin_data.get("public_record_summary", "—"),
+        "lot_summary": redfin_data.get("lot_summary", "—"),
+        "permit_summary": ladbs_data.get("note", "—"),
         "permit_count": len(ladbs_data.get("permits") or []),
         "ladbs": ladbs_data,
         "redfin": redfin_data,
@@ -181,6 +222,7 @@ def run_full_comp_pipeline(url: str) -> Dict[str, Any]:
         combined["summary_markdown"] = summarize_comp(combined)
     except Exception as e:
         print(f"[WARN] summarize_comp failed: {e}")
+        _log_failure(LOGS_DIR, url, "summarizer", e)
         combined["summary_markdown"] = (
             "Summary unavailable due to an error in the AI summarizer. "
             "Raw Redfin and LADBS data are still shown above."
@@ -195,6 +237,24 @@ def run_full_comp_pipeline(url: str) -> Dict[str, Any]:
         print(f"[WARN] Failed to save combined JSON: {e}")
 
     return combined
+
+
+def _log_failure(logs_dir: Path, url: str, component: str, error: Exception) -> None:
+    """Log component failures to logs directory."""
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    log_file = logs_dir / f"{component}_error_{timestamp}.log"
+    
+    try:
+        import traceback
+        with open(log_file, "a", encoding="utf-8") as f:
+            f.write(f"Timestamp: {datetime.now().isoformat()}\n")
+            f.write(f"URL: {url}\n")
+            f.write(f"Component: {component}\n")
+            f.write(f"Error: {str(error)}\n")
+            f.write(f"Traceback:\n{traceback.format_exc()}\n")
+            f.write("-" * 80 + "\n")
+    except Exception as log_error:
+        print(f"[ERROR] Failed to write error log: {log_error}")
 
 
 def orchestrate(url: str) -> None:
