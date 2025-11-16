@@ -226,7 +226,7 @@ def parse_public_facts_and_apn(html_text: str) -> Dict[str, Any]:
     return result
 
 
-def parse_sale_history(html_text: str) -> List[Dict[str, Any]]:
+def parse_sale_history(html_text: str, soup: Optional[BeautifulSoup] = None) -> List[Dict[str, Any]]:
     """
     Parse the 'Sale and tax history' section into a list of REAL sale/list events.
     Returns: List of { date: 'YYYY-MM-DD', event: 'listed'|'sold'|'price_changed', price: int, raw_status: str }
@@ -239,27 +239,12 @@ def parse_sale_history(html_text: str) -> List[Dict[str, Any]]:
     - Validate that prices are realistic (>= $100,000) to avoid capturing tax/HOA amounts.
     - NEVER fabricate a sold event.
     
-    The HTML structure we're looking for:
-      <div class="PropertyHistoryEventRow">
-        <div><p>Nov 13, 2025</p></div>
-        <div>Listed (Active)</div>
-        <div class="price-col">$3,849,000</div>
-      </div>
+    FALLBACK: If no PropertyHistoryEventRow found, extract from meta tags (for sold properties).
     """
 
     events: List[Dict[str, Any]] = []
 
-    # Strategy: Look for PropertyHistoryEventRow divs
-    # Pattern matches: date, event type (Sold/Listed/Price changed), status, price
-    sale_history_pattern = re.compile(
-        r'<div[^>]*class="[^"]*PropertyHistoryEventRow[^"]*"[^>]*>.*?'
-        r'<p>([A-Z][a-z]{2} \d{1,2}, \d{4})</p>.*?'
-        r'<div>(?:Sold|Listed|Price\s+changed)\s*\(([^)]+)\)</div>.*?'
-        r'<div[^>]*class="[^"]*price-col[^"]*"[^>]*>\$?([\d,]+|\*)',
-        re.DOTALL | re.IGNORECASE
-    )
-    
-    # Also capture event type more explicitly
+    # Strategy 1: Look for PropertyHistoryEventRow divs
     for match_obj in re.finditer(
         r'<div[^>]*class="[^"]*PropertyHistoryEventRow[^"]*"[^>]*>(.*?)</div>\s*</div>\s*</div>',
         html_text,
@@ -298,8 +283,6 @@ def parse_sale_history(html_text: str) -> List[Dict[str, Any]]:
             price = int(price_str.replace(",", ""))
             
             # STRICT validation: real estate prices should be >= $100,000
-            # This filters out property tax amounts ($1,500-$25,000 range)
-            # and HOA fees ($3-$500/month range)
             if price < 100000:
                 continue
                 
@@ -312,6 +295,34 @@ def parse_sale_history(html_text: str) -> List[Dict[str, Any]]:
             "price": price,
             "raw_status": f"{event_type_raw} ({status})",
         })
+
+    # Strategy 2: FALLBACK - Extract from meta tags (for sold properties with no timeline DOM)
+    if not events and soup:
+        # Look for meta description: "sold for $1,150,000 on Nov 27, 2019"
+        meta_desc = soup.find("meta", attrs={"name": "description"})
+        if meta_desc and meta_desc.get("content"):
+            desc_text = meta_desc["content"]
+            # Pattern: "sold for $1,150,000 on Nov 27, 2019"
+            sold_match = re.search(
+                r'sold for \$?([\d,]+) on ([A-Z][a-z]{2} \d{1,2}, \d{4})',
+                desc_text,
+                re.IGNORECASE
+            )
+            if sold_match:
+                price_str = sold_match.group(1)
+                date_str = sold_match.group(2)
+                try:
+                    price = int(price_str.replace(",", ""))
+                    dt = datetime.strptime(date_str, "%b %d, %Y")
+                    if price >= 100000:  # Validate realistic price
+                        events.append({
+                            "date": dt.date().isoformat(),
+                            "event": "sold",
+                            "price": price,
+                            "raw_status": "Sold (from meta)",
+                        })
+                except (ValueError, AttributeError):
+                    pass
 
     # Sort by date ascending
     events.sort(key=lambda e: e["date"])
@@ -380,7 +391,7 @@ def get_redfin_data(url: str) -> Dict[str, Any]:
     sale_events: List[Dict[str, Any]] = []
     if html_text:
         try:
-            sale_events = parse_sale_history(html_text)
+            sale_events = parse_sale_history(html_text, soup)
         except Exception as e:
             print(f"[WARN] Failed to parse sale history: {e}")
             sale_events = []

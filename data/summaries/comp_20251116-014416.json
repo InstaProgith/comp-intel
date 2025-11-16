@@ -1,0 +1,71 @@
+{
+  "url": "https://www.redfin.com/CA/Los-Angeles/1393-Casiano-Rd-90049/home/6829339",
+  "address": "1393 Casiano Rd,Los Angeles, CA 90049",
+  "headline_metrics": {
+    "purchase_price": null,
+    "purchase_date": null,
+    "exit_price": null,
+    "exit_date": null,
+    "spread": null,
+    "roi_pct": null,
+    "hold_days": null,
+    "list_price": 2804047.0
+  },
+  "metrics": {
+    "purchase_price": null,
+    "purchase_date": null,
+    "exit_price": null,
+    "exit_date": null,
+    "spread": null,
+    "roi_pct": null,
+    "hold_days": null,
+    "list_price": 2804047.0
+  },
+  "current_summary": "3 bed, 3.0 bath, 2,528 SF",
+  "public_record_summary": "3 bed, 4.0 bath",
+  "lot_summary": "Lot: 21,084 SF (0.48 acres)",
+  "permit_summary": "Failed to start Chrome driver.",
+  "permit_count": 0,
+  "ladbs": {
+    "source": "ladbs_stub_driver_error",
+    "apn": "4368025014",
+    "address": "1393 Casiano Rd,Los Angeles, CA 90049",
+    "fetched_at": "2025-11-16 01:44:06",
+    "permits": [],
+    "note": "Failed to start Chrome driver."
+  },
+  "redfin": {
+    "source": "redfin_parsed_v2",
+    "url": "https://www.redfin.com/CA/Los-Angeles/1393-Casiano-Rd-90049/home/6829339",
+    "address": "1393 Casiano Rd,Los Angeles, CA 90049",
+    "listing_beds": 3.0,
+    "listing_baths": 3.0,
+    "listing_building_sf": 2528.0,
+    "listing_year_built": null,
+    "list_price": 2804047.0,
+    "beds": 3.0,
+    "baths": 3.0,
+    "building_sf": 2528.0,
+    "lot_sf": 21084.0,
+    "timeline": [],
+    "tax": {
+      "apn": "4368025014",
+      "year": 2023,
+      "assessed_value": null
+    },
+    "public_records": {
+      "beds": 3.0,
+      "baths": 4.0,
+      "lot_sf": 21084.0,
+      "year_built": 1959
+    },
+    "generated_at": "2025-11-16",
+    "current_summary": "3 bed, 3.0 bath, 2,528 SF",
+    "public_record_summary": "3 bed, 4.0 bath",
+    "lot_summary": "Lot: 21,084 SF (0.48 acres)",
+    "raw_html_path": "/workspaces/comp-intel/data/raw/20251116-014406_redfin_1393_Casiano_Rd_90049.html"
+  },
+  "project_contacts": null,
+  "cslb_contractor": null,
+  "summary_markdown": "**DEAL SNAPSHOT**  \n- **Address**: 1393 Casiano Rd, Los Angeles, CA 90049  \n- **Current Configuration**: 3 beds, 3 baths, 2,528 SF  \n- **Original Configuration**: 3 beds, 4 baths, year built 1959  \n- **SF Added/Changed**: Not specified  \n- **Purchase Price**: Not available  \n- **Purchase Date**: Not available  \n- **Current Listing Price**: $2,804,047  \n- **Listing Date**: Not available  \n- **Hold Period**: Not calculable (purchase data unavailable)  \n- **Gross Spread**: Not calculable (purchase data unavailable)  \n- **Gross ROI**: Not calculable (purchase data unavailable)  \n\n---\n\n**SCOPE OF WORK (PERMITS)**  \n- **Core Building/Addition Permits**: No LADBS permits retrieved (due to system error).  \n- **Major Work Done Last 5-10 Years**: No data available as permits were not fetched.  \n- **Open/Active/Not-Final Permits**: Not applicable due to absence of permit data.  \n\n---\n\n**TEAM (COMPETITOR NETWORK)**  \n- **General Contractor**: Not available  \n- **Architect**: Not available  \n- **Structural Engineer**: Not available  \n- **Notes**: No data retrieved on project contacts or contractors due to system error.  \n\n---\n\n**PERMIT TIMING (DURATIONS)**  \n- **Main Building/Addition Permit**: Not applicable as no permits were fetched.  \n- **Submitted \u2192 Plan Check Approved**: Not applicable  \n- **Plan Check Approved \u2192 Issued**: Not applicable  \n- **Issued \u2192 Finaled**: Not applicable  \n\n---\n\n**VALUE-ADD SUMMARY**  \nThe property at 1393 Casiano Rd is currently listed as a 3-bedroom, 3-bathroom home with 2,528 SF of living space. The original configuration shows 4 bathrooms, indicating a potential remodel was performed. However, the specific improvements and their impact on value cannot be determined due to a lack of detailed permit data and purchase information. The current listing price is set at $2,804,047."
+}
