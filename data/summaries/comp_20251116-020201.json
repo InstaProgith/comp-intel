@@ -1,0 +1,79 @@
+{
+  "url": "https://www.redfin.com/CA/Los-Angeles/7841-Stewart-Ave-90045/home/6618580",
+  "address": "7841 Stewart Ave,Los Angeles, CA 90045",
+  "headline_metrics": {
+    "purchase_price": null,
+    "purchase_date": null,
+    "exit_price": null,
+    "exit_date": null,
+    "spread": null,
+    "roi_pct": null,
+    "hold_days": null,
+    "list_price": 3849000.0
+  },
+  "metrics": {
+    "purchase_price": null,
+    "purchase_date": null,
+    "exit_price": null,
+    "exit_date": null,
+    "spread": null,
+    "roi_pct": null,
+    "hold_days": null,
+    "list_price": 3849000.0
+  },
+  "current_summary": "4 bed, 4.5 bath, 2,890 SF",
+  "public_record_summary": "4 bed, 3.0 bath, 1,965 SF",
+  "lot_summary": "Lot: 6,001 SF (0.14 acres)",
+  "permit_summary": "No permits with status date >= 2020 found for this address.",
+  "permit_count": 0,
+  "ladbs": {
+    "source": "ladbs_no_permits_found",
+    "apn": "4112021016",
+    "address": "7841 Stewart Ave,Los Angeles, CA 90045",
+    "fetched_at": "2025-11-16 02:01:33",
+    "permits": [],
+    "note": "No permits with status date >= 2020 found for this address."
+  },
+  "redfin": {
+    "source": "redfin_parsed_v2",
+    "url": "https://www.redfin.com/CA/Los-Angeles/7841-Stewart-Ave-90045/home/6618580",
+    "address": "7841 Stewart Ave,Los Angeles, CA 90045",
+    "listing_beds": 4.0,
+    "listing_baths": 4.5,
+    "listing_building_sf": 2890.0,
+    "listing_year_built": null,
+    "list_price": 3849000.0,
+    "beds": 4.0,
+    "baths": 4.5,
+    "building_sf": 2890.0,
+    "lot_sf": 6001.0,
+    "timeline": [
+      {
+        "date": "2025-11-13",
+        "event": "listed",
+        "price": 3849000,
+        "raw_status": "Listed (Active)"
+      }
+    ],
+    "tax": {
+      "apn": "4112021016",
+      "year": 2023,
+      "assessed_value": null
+    },
+    "public_records": {
+      "beds": 4.0,
+      "baths": 3.0,
+      "building_sf": 1965.0,
+      "lot_sf": 6001.0,
+      "year_built": 1948
+    },
+    "generated_at": "2025-11-16",
+    "current_summary": "4 bed, 4.5 bath, 2,890 SF",
+    "public_record_summary": "4 bed, 3.0 bath, 1,965 SF",
+    "lot_summary": "Lot: 6,001 SF (0.14 acres)",
+    "raw_html_path": "/workspaces/comp-intel/data/raw/20251116-020133_redfin_7841_Stewart_Ave_90045.html"
+  },
+  "project_contacts": null,
+  "cslb_contractor": null,
+  "summary_markdown": "### DEAL SNAPSHOT\n- **Address:** 7841 Stewart Ave, Los Angeles, CA 90045\n- **Current configuration:** 4 beds, 4.5 baths, 2,890 SF\n- **Original configuration (from PUBLIC RECORDS):** 4 beds, 3.0 baths, 1,965 SF, year built: 1948\n- **SF added/changed:** 925 SF (from 1,965 SF to 2,890 SF)\n- **Purchase price:** Not available\n- **Purchase date:** Not available\n- **Current listing price:** $3,849,000 (listed on 2025-11-13)\n- **Hold period:** Not calculable due to missing purchase date\n- **Gross spread:** Not calculable due to missing purchase price\n- **Gross ROI:** Not calculable due to missing purchase price\n\n### SCOPE OF WORK (PERMITS)\n- **LADBS permits:** No permits found with status date >= 2020. This suggests that no significant renovations or changes have been documented in the last 5\u201310 years.\n- **Major work done:** It can be inferred that an expansion or remodel must have occurred to increase the building size from 1,965 SF to 2,890 SF, but specific details or permits are unavailable.\n- **Open/active permits:** None, indicating that the property may have been developed or changed without formal permit documentation.\n\n### TEAM (COMPETITOR NETWORK)\n- **GC:** Not available\n- **Architect:** Not available\n- **Engineer:** Not available\n- **Notes:** There are no project contacts or contractor information provided, indicating a lack of visible collaboration within the public record.\n\n### PERMIT TIMING (DURATIONS)\n- No permit information is available, so durations for the main building/addition permit cannot be provided.\n\n### VALUE-ADD SUMMARY\nThe property at 7841 Stewart Ave was acquired with an original configuration of 4 bedrooms and 3 bathrooms at a smaller size of 1,965 SF. A significant addition or remodel increased the living space to 2,890 SF, but there is no documentation on the specific value added or timelines for improvements, as all relevant permits are absent. The current listing price is $3,849,000, but without purchase data, the targeted or achieved financial spread remains unspecified."
+}

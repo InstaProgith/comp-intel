@@ -1,0 +1,78 @@
+{
+  "url": "https://www.redfin.com/CA/Los-Angeles/1120-S-Lucerne-Blvd-90019/home/6911003",
+  "address": "1120 S Lucerne Blvd,Los Angeles, CA 90019",
+  "headline_metrics": {
+    "purchase_price": null,
+    "purchase_date": null,
+    "exit_price": null,
+    "exit_date": null,
+    "spread": null,
+    "roi_pct": null,
+    "hold_days": null,
+    "list_price": 800000.0
+  },
+  "metrics": {
+    "purchase_price": null,
+    "purchase_date": null,
+    "exit_price": null,
+    "exit_date": null,
+    "spread": null,
+    "roi_pct": null,
+    "hold_days": null,
+    "list_price": 800000.0
+  },
+  "current_summary": "2 bed, 1.0 bath, 1,008 SF",
+  "public_record_summary": "2 bed, 1.0 bath",
+  "lot_summary": "Lot: 7,197 SF (0.17 acres)",
+  "permit_summary": "Failed to start Chrome driver.",
+  "permit_count": 0,
+  "ladbs": {
+    "source": "ladbs_stub_driver_error",
+    "apn": "5082004025",
+    "address": "1120 S Lucerne Blvd,Los Angeles, CA 90019",
+    "fetched_at": "2025-11-16 01:53:44",
+    "permits": [],
+    "note": "Failed to start Chrome driver."
+  },
+  "redfin": {
+    "source": "redfin_parsed_v2",
+    "url": "https://www.redfin.com/CA/Los-Angeles/1120-S-Lucerne-Blvd-90019/home/6911003",
+    "address": "1120 S Lucerne Blvd,Los Angeles, CA 90019",
+    "listing_beds": 2.0,
+    "listing_baths": 1.0,
+    "listing_building_sf": 1008.0,
+    "listing_year_built": null,
+    "list_price": 800000.0,
+    "beds": 2.0,
+    "baths": 1.0,
+    "building_sf": 1008.0,
+    "lot_sf": 7197.0,
+    "timeline": [
+      {
+        "date": "2025-09-05",
+        "event": "listed",
+        "price": 800000,
+        "raw_status": "Listed (Active)"
+      }
+    ],
+    "tax": {
+      "apn": "5082004025",
+      "year": 2023,
+      "assessed_value": null
+    },
+    "public_records": {
+      "beds": 2.0,
+      "baths": 1.0,
+      "lot_sf": 7197.0,
+      "year_built": 1922
+    },
+    "generated_at": "2025-11-16",
+    "current_summary": "2 bed, 1.0 bath, 1,008 SF",
+    "public_record_summary": "2 bed, 1.0 bath",
+    "lot_summary": "Lot: 7,197 SF (0.17 acres)",
+    "raw_html_path": "/workspaces/comp-intel/data/raw/20251116-015344_redfin_1120_S_Lucerne_Blvd_90019.html"
+  },
+  "project_contacts": null,
+  "cslb_contractor": null,
+  "summary_markdown": "### DEAL SNAPSHOT\n- **Address**: 1120 S Lucerne Blvd, Los Angeles, CA 90019\n- **Current Configuration**: 2 beds, 1.0 bath, 1,008 SF\n- **Original Configuration**: 2 beds, 1.0 bath, 1,008 SF (Year built: 1922)\n- **SF Added/Changed**: No changes reported.\n- **Purchase Price**: Not available\n- **Purchase Date**: Not available\n- **Current Listing Price**: $800,000 (Listing Date: 09/05/2025)\n- **Hold Period**: Not computable (purchase details missing)\n- **Gross Spread**: Not computable (purchase details missing)\n- **Gross ROI**: Not computable (purchase details missing)\n\n### SCOPE OF WORK (PERMITS)\n- **Permits**: There are no LADBS permits available for this property. Thus, there's no core building or addition work documented.\n- **Major Work in Last 5\u201310 Years**: None recorded.\n- **Active/Open/Finalized Permits**: No active or open permits.\n\n### TEAM (COMPETITOR NETWORK)\n- **General Contractor**: Not available\n- **Architect**: Not available\n- **Structural Engineer**: Not available\n- **Notes**: No data on repeated players or networks due to the absence of permit records.\n\n### PERMIT TIMING (DURATIONS)\n- There are no permits to assess timing durations, thus, all metrics are \"not applicable.\"\n\n### VALUE-ADD SUMMARY\nThe developer acquired a 2-bedroom, 1-bath, 1,008 SF property located in Los Angeles. No renovations, additions, or ADUs are documented, and no permits have been issued in recent years. The current listing price is set at $800,000, but without purchase price data, the financial metrics cannot be computed. The property\u2019s overall value potential remains undetermined with respect to previous investment."
+}

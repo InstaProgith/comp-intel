@@ -1,28 +1,4 @@
-"""
-LADBS PLR automation for comp-intel.
-
-Flow:
-1) Open PLR URL and run Single Address Search (Street Number + Street Name).
-2) On results page:
-   - Try to directly locate the permit table(s) by header "Application/Permit #".
-   - If not found, click h3#pcis ("Permit Information found") and h3.accordianAddress,
-     then locate table(s).
-   - For each permit row, capture permit number, detail URL, status text/date.
-   - Keep only permits with status date year >= CUTOFF_YEAR.
-3) For each kept permit:
-   - Open detail page.
-   - Extract general info (from <dt>/<dd>), Contact Information, Status History.
-   - Summarize into a compact record with:
-       - permit_number, job_number
-       - permit_type
-       - current_status
-       - work_description
-       - issued_date
-       - status_date (from list page)
-       - contractor / architect / engineer names
-       - optional contractor/engineer/architect license numbers (if visible)
-"""
-
+# BEGIN FULL FILE REPLACEMENT (overwrite ENTIRE file)
 from __future__ import annotations
 from typing import Dict, Any, Optional, List, Tuple
 from datetime import datetime, timedelta
@@ -54,27 +30,15 @@ RAW_DIR = DATA_DIR / "raw"
 RAW_DIR.mkdir(parents=True, exist_ok=True)
 
 
-# -------------------------------------------------------------------
-# Helpers: address from Redfin URL
-# -------------------------------------------------------------------
-
-
 def extract_address_from_redfin_url(redfin_url: str) -> Tuple[Optional[str], Optional[str]]:
-    """
-    Extract street number + street name from a Redfin URL.
-    Example:
-      https://www.redfin.com/CA/Los-Angeles/1120-S-Lucerne-Blvd-90019/home/6911003
-    -> ('1120', 'Lucerne')
-    """
     try:
         path = urlparse(redfin_url).path
         parts = path.split("/")
-        # ['', 'CA', 'Los-Angeles', '1120-S-Lucerne-Blvd-90019', 'home', '6911003']
         if len(parts) < 4:
             return None, None
         address_part = parts[3]
 
-        address_components = address_part.split("-")[:-1]  # drop ZIP
+        address_components = address_part.split("-")[:-1]
         if not address_components:
             return None, None
 
@@ -84,19 +48,7 @@ def extract_address_from_redfin_url(redfin_url: str) -> Tuple[Optional[str], Opt
         clean_parts: List[str] = []
         for part in street_name_parts:
             if part.upper() not in [
-                "N",
-                "S",
-                "E",
-                "W",
-                "BLVD",
-                "ST",
-                "AVE",
-                "RD",
-                "PL",
-                "DR",
-                "CT",
-                "LN",
-                "WAY",
+                "N","S","E","W","BLVD","ST","AVE","RD","PL","DR","CT","LN","WAY"
             ]:
                 clean_parts.append(part)
 
@@ -107,22 +59,21 @@ def extract_address_from_redfin_url(redfin_url: str) -> Tuple[Optional[str], Opt
         return None, None
 
 
-# -------------------------------------------------------------------
-# Selenium setup
-# -------------------------------------------------------------------
-
-
 def setup_driver() -> Optional[webdriver.Chrome]:
     if not SELENIUM_AVAILABLE:
         print("[LADBS] Selenium not installed. Run: pip install selenium")
         return None
 
     chrome_options = Options()
+    chrome_options.add_argument("--headless=new")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--disable-gpu")
-    # For debugging you usually want to SEE Chrome; for headless, uncomment:
-    # chrome_options.add_argument("--headless=new")
+    chrome_options.add_argument("--disable-software-rasterizer")
+    chrome_options.add_argument("--disable-extensions")
+    chrome_options.add_argument("--disable-setuid-sandbox")
+    chrome_options.add_argument("--window-size=1920,1080")
+    chrome_options.add_argument("--remote-debugging-port=9222")
 
     try:
         driver = webdriver.Chrome(options=chrome_options)
@@ -133,26 +84,13 @@ def setup_driver() -> Optional[webdriver.Chrome]:
         return None
 
 
-# -------------------------------------------------------------------
-# Step 1–2: PLR search
-# -------------------------------------------------------------------
-
-
 def search_plr(driver, street_number: str, street_name: str) -> Optional[str]:
-    """
-    Run Single Address Search and save the results HTML.
-    """
     print(f"[LADBS] Opening PLR page: {LADBS_PLR_URL}")
     driver.get(LADBS_PLR_URL)
 
     wait = WebDriverWait(driver, 20)
+    wait.until(EC.presence_of_element_located((By.XPATH, "//label[contains(., 'Street Number')]")))
 
-    # Wait for "Street Number" label
-    wait.until(
-        EC.presence_of_element_located((By.XPATH, "//label[contains(., 'Street Number')]"))
-    )
-
-    # Street Number input = first input after label "Street Number"
     try:
         street_no_label = driver.find_element(By.XPATH, "//label[contains(., 'Street Number')]")
         street_no_input = street_no_label.find_element(By.XPATH, ".//following::input[1]")
@@ -160,7 +98,6 @@ def search_plr(driver, street_number: str, street_name: str) -> Optional[str]:
         print(f"[LADBS] Could not locate Street Number input: {e}")
         return None
 
-    # Street Name input = first input after label "Street Name"
     try:
         street_name_label = driver.find_element(By.XPATH, "//label[contains(., 'Street Name')]")
         street_name_input = street_name_label.find_element(By.XPATH, ".//following::input[1]")
@@ -175,127 +112,103 @@ def search_plr(driver, street_number: str, street_name: str) -> Optional[str]:
     street_name_input.clear()
     street_name_input.send_keys(street_name)
 
-    # Search button
     try:
         search_button = driver.find_element(
             By.XPATH,
-            "//button[contains(., 'Search')] | "
-            "//input[@type='submit' and contains(@value, 'Search')]",
+            "//button[contains(., 'Search')] | //input[@type='submit' and contains(@value, 'Search')]"
         )
         search_button.click()
     except Exception as e:
         print(f"[LADBS] Could not click Search button: {e}")
         return None
 
-    # Wait for results page
     wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
-
     current_url = driver.current_url
-    print(f"[LADBS] Results page URL: {current_url}")
 
-    # Save raw HTML for debugging/reference
     timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
     safe_street = street_name.replace(" ", "_")
     out_path = RAW_DIR / f"{timestamp}_ladbs_{street_number}_{safe_street}.html"
-    html = driver.page_source
-    out_path.write_text(html, encoding="utf-8", errors="ignore")
-    print(f"[LADBS] Saved PLR results HTML to {out_path}")
+    RAW_DIR.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(driver.page_source, encoding="utf-8", errors="ignore")
 
     return current_url
 
 
-# -------------------------------------------------------------------
-# Step 3: permit table listing
-# -------------------------------------------------------------------
-
-
 def get_permit_list(driver) -> List[Dict[str, Any]]:
-    """
-    From the results page:
-      - Prefer: directly locate the permit table(s) by header "Application/Permit #".
-      - Fallback: expand Permit Information section (h3#pcis) and address rows (h3.accordianAddress),
-        then locate permit table(s).
-      - Return permits where status date year >= CUTOFF_YEAR.
-    """
     print("[LADBS] Extracting permit list ...")
-    wait = WebDriverWait(driver, 10)
+    wait = WebDriverWait(driver, 15)
 
     tables: List[Any] = []
-    # Direct approach
     try:
-        wait.until(
-            EC.presence_of_element_located(
-                (By.XPATH, "//table[.//th[contains(., 'Application/Permit')]]")
-            )
-        )
+        wait.until(EC.presence_of_element_located(
+            (By.XPATH, "//table[.//th[contains(., 'Application/Permit')]]")
+        ))
         tables = driver.find_elements(
             By.XPATH, "//table[.//th[contains(., 'Application/Permit')]]"
         )
-        if tables:
-            print(f"[LADBS] Found {len(tables)} permit table(s) without extra clicks.")
+        print(f"[LADBS] Found {len(tables)} permit tables directly")
     except Exception:
-        print("[LADBS] Direct table lookup failed; will try expanding accordions.")
+        print("[LADBS] Direct table lookup failed; trying to expand accordions")
 
-    # Fallback: expand accordions then search tables again
     if not tables:
-        # Expand "Permit Information found"
-        print("[LADBS] Expanding 'Permit Information found' section via h3#pcis...")
+        # Step 1: Expand main "Permit Information" accordion
         try:
-            permit_header = wait.until(EC.presence_of_element_located((By.ID, "pcis")))
+            permit_header = wait.until(EC.element_to_be_clickable((By.ID, "pcis")))
             header_class = permit_header.get_attribute("class") or ""
             if "ui-state-active" not in header_class:
-                driver.execute_script(
-                    "arguments[0].scrollIntoView({block: 'center'});", permit_header
-                )
+                print("[LADBS] Clicking main permit accordion...")
+                driver.execute_script("arguments[0].scrollIntoView({block:'center'});", permit_header)
+                import time
+                time.sleep(0.5)
                 permit_header.click()
-                print("[LADBS] Clicked 'Permit Information found' (h3#pcis).")
-            else:
-                print("[LADBS] 'Permit Information found' already active; no click needed.")
+                time.sleep(1.5)  # Wait for accordion animation
         except Exception as e:
-            print(f"[LADBS] Failed to find or handle 'Permit Information found': {e}")
+            print(f"[LADBS] Could not expand main accordion: {e}")
 
-        # Expand address rows
-        print("[LADBS] Expanding address rows (h3.accordianAddress)...")
+        # Step 2: Expand address-specific accordions
         try:
-            address_row_xpath = "//h3[contains(@class, 'accordianAddress')]"
-            wait.until(EC.presence_of_element_located((By.XPATH, address_row_xpath)))
-            address_rows = driver.find_elements(By.XPATH, address_row_xpath)
-            print(f"[LADBS] Found {len(address_rows)} address row(s).")
-            for i, row in enumerate(address_rows):
+            wait_short = WebDriverWait(driver, 5)
+            wait_short.until(EC.presence_of_element_located(
+                (By.XPATH, "//h3[contains(@class, 'accordianAddress')]")
+            ))
+            address_rows = driver.find_elements(By.XPATH, "//h3[contains(@class, 'accordianAddress')]")
+            print(f"[LADBS] Found {len(address_rows)} address accordions to expand")
+            for idx, r in enumerate(address_rows):
                 try:
-                    addr_text = row.text.strip().split("\n")[0]
-                    print(f"[LADBS] Clicking address row {i+1}: {addr_text!r}")
-                    driver.execute_script(
-                        "arguments[0].scrollIntoView({block: 'center'});", row
-                    )
-                    row.click()
+                    row_class = r.get_attribute("class") or ""
+                    if "ui-state-active" not in row_class:
+                        driver.execute_script("arguments[0].scrollIntoView({block:'center'});", r)
+                        import time
+                        time.sleep(0.3)
+                        r.click()
+                        time.sleep(1.0)  # Wait for animation
+                        print(f"[LADBS] Expanded address accordion {idx+1}")
                 except Exception as e:
-                    print(f"[LADBS] Could not click address row: {e}")
+                    print(f"[LADBS] Could not expand address accordion {idx+1}: {e}")
         except Exception as e:
-            print(f"[LADBS] Error finding or expanding address rows: {e}")
+            print(f"[LADBS] No address accordions found: {e}")
 
-        # Find tables after expansion
-        print("[LADBS] Locating permit table(s) after expanding sections...")
+        # Step 3: Now try to find tables again
         try:
-            wait.until(
-                EC.presence_of_element_located(
-                    (By.XPATH, "//table[.//th[contains(., 'Application/Permit')]]")
-                )
-            )
+            import time
+            time.sleep(1)  # Final wait for DOM to settle
             tables = driver.find_elements(
                 By.XPATH, "//table[.//th[contains(., 'Application/Permit')]]"
             )
-            print(f"[LADBS] Found {len(tables)} permit table(s) after expansion.")
+            print(f"[LADBS] After expansion, found {len(tables)} permit tables")
         except Exception as e:
-            print(f"[LADBS] Could not find permit table after expanding sections: {e}")
-            driver.save_screenshot(str(RAW_DIR / "debug_table_not_found.png"))
-            print(f"[LADBS] Saved debug screenshot to {RAW_DIR}")
+            print(f"[LADBS] Still no tables after expansion: {e}")
             return []
+
+    if not tables:
+        print("[LADBS] No permit tables found after all attempts")
+        return []
 
     permits: List[Dict[str, Any]] = []
 
-    for table in tables:
-        rows = table.find_elements(By.XPATH, ".//tr[position() > 1]")  # Skip header
+    for table_idx, table in enumerate(tables):
+        print(f"[LADBS] Processing table {table_idx+1}/{len(tables)}")
+        rows = table.find_elements(By.XPATH, ".//tr[position()>1]")
         for row in rows:
             try:
                 cols = row.find_elements(By.TAG_NAME, "td")
@@ -305,72 +218,55 @@ def get_permit_list(driver) -> List[Dict[str, Any]]:
                 link = cols[0].find_element(By.TAG_NAME, "a")
                 permit_number = link.text.strip()
                 permit_url = link.get_attribute("href")
-
                 status_text = cols[3].text.strip()
+
                 date_match = re.search(r"(\d{1,2}/\d{1,2}/\d{4})", status_text)
                 permit_date_str = date_match.group(1) if date_match else None
 
-                permit_dt: Optional[datetime] = None
-                permit_date_iso: Optional[str] = None
+                permit_dt = None
                 if permit_date_str:
                     try:
                         permit_dt = datetime.strptime(permit_date_str, "%m/%d/%Y")
-                        permit_date_iso = permit_dt.date().isoformat()  # Convert to YYYY-MM-DD
-                    except Exception:
-                        permit_dt = None
-                        permit_date_iso = None
+                    except:
+                        pass
 
-                # Filter by cutoff year
-                if permit_dt is not None and permit_dt.year < CUTOFF_YEAR:
+                if permit_dt and permit_dt.year < CUTOFF_YEAR:
+                    print(f"[LADBS] Skipping old permit {permit_number} from {permit_dt.year}")
                     continue
 
+                print(f"[LADBS] Found permit: {permit_number}")
                 permits.append(
                     {
                         "permit_number": permit_number,
                         "url": permit_url,
                         "status_text": status_text,
-                        "status_date": permit_date_iso,  # YYYY-MM-DD ISO string
+                        "status_date": permit_date_str,
                     }
                 )
             except Exception as e:
-                print(f"[LADBS] Error parsing permit row: {e}")
+                print(f"[LADBS] Error parsing row: {e}")
                 continue
 
-    print(f"[LADBS] Found {len(permits)} permits with status date >= {CUTOFF_YEAR}.")
     return permits
 
 
-# -------------------------------------------------------------------
-# Step 4: permit detail pages
-# -------------------------------------------------------------------
-
-
 def _get_detail_value(driver, label_text: str) -> Optional[str]:
-    """
-    Helper to find a <dt> by its text and return the text of the
-    immediately following <dd>.
-    """
     try:
         dt = driver.find_element(
             By.XPATH, f"//dt[contains(normalize-space(), '{label_text}')]"
         )
         dd = dt.find_element(By.XPATH, "./following-sibling::dd[1]")
         return dd.text.strip()
-    except Exception:
+    except:
         return None
 
 
 def get_permit_details(driver, permit_url: str) -> Dict[str, Any]:
-    print(f"[LADBS] -> Details from {permit_url}")
     details: Dict[str, Any] = {}
-
     try:
         driver.get(permit_url)
-        WebDriverWait(driver, 20).until(
-            EC.presence_of_element_located((By.TAG_NAME, "body"))
-        )
-    except Exception as e:
-        print(f"[LADBS] Error loading permit page: {e}")
+        WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.TAG_NAME, "body")))
+    except:
         return details
 
     general_info_map = {
@@ -387,13 +283,12 @@ def get_permit_details(driver, permit_url: str) -> Dict[str, Any]:
         "Certificate of Occupancy": "certificate_of_occupancy",
     }
 
-    for label_text, key in general_info_map.items():
-        value = _get_detail_value(driver, label_text)
-        if value:
-            details[key] = value
+    for lt, key in general_info_map.items():
+        v = _get_detail_value(driver, lt)
+        if v:
+            details[key] = v
 
-    # Contact Information
-    contact_info: Dict[str, str] = {}
+    contact_info = {}
     try:
         header = driver.find_element(By.XPATH, "//h3[contains(., 'Contact Information')]")
         table = header.find_element(By.XPATH, "following-sibling::table[1]")
@@ -401,20 +296,17 @@ def get_permit_details(driver, permit_url: str) -> Dict[str, Any]:
             cols = row.find_elements(By.TAG_NAME, "td")
             if len(cols) >= 2:
                 role = cols[0].text.strip().replace(":", "")
-                info = cols[1].text.strip()
+                value = cols[1].text.strip()
                 if len(cols) > 2:
-                    info += " " + cols[2].text.strip()
-                contact_info[role] = info
-    except Exception:
+                    value += " " + cols[2].text.strip()
+                contact_info[role] = value
+    except:
         pass
     details["contact_information"] = contact_info
 
-    # Status history
-    status_history: List[Dict[str, str]] = []
+    status_history = []
     try:
-        header = driver.find_element(
-            By.XPATH, "//h3[contains(., 'Permit Application Status History')]"
-        )
+        header = driver.find_element(By.XPATH, "//h3[contains(., 'Permit Application Status History')]")
         table = header.find_element(By.XPATH, "following-sibling::table[1]")
         for row in table.find_elements(By.TAG_NAME, "tr"):
             cols = row.find_elements(By.TAG_NAME, "td")
@@ -426,7 +318,7 @@ def get_permit_details(driver, permit_url: str) -> Dict[str, Any]:
                         "person": cols[2].text.strip(),
                     }
                 )
-    except Exception:
+    except:
         pass
     details["status_history"] = status_history
 
@@ -434,23 +326,14 @@ def get_permit_details(driver, permit_url: str) -> Dict[str, Any]:
 
 
 def _extract_name_and_license(info: str) -> Tuple[str, Optional[str]]:
-    """
-    Given a contact info string from LADBS (e.g. "ABC CONST INC LIC 123456"),
-    return (full_string_as_name, license_number_if_any).
-    We do NOT fabricate; license is only taken if digits are present.
-    """
     if not info:
         return "", None
-    # Very simple: first 6+ digit run is treated as license number if present.
     m = re.search(r"(\d{6,})", info)
     lic = m.group(1) if m else None
     return info, lic
 
 
 def _summarize_permit(details: Dict[str, Any]) -> Dict[str, Any]:
-    """
-    Compact summary for each permit with explicit fields used downstream.
-    """
     permit_number = details.get("permit_number", "N/A")
     job_number = details.get("job_number", "N/A")
     typ = details.get("type", "N/A")
@@ -460,20 +343,18 @@ def _summarize_permit(details: Dict[str, Any]) -> Dict[str, Any]:
     work_desc = details.get("work_description", "N/A")
     issued = details.get("permit_issued", "N/A")
 
-    contact_info = details.get("contact_information") or {}
-
+    contact = details.get("contact_information", {})
     contractor_raw = None
     architect_raw = None
     engineer_raw = None
 
-    # Normalize role keys lightly (LADBS uses "Contractor", "Engineer", "Architect").
-    for role_key, value in contact_info.items():
-        role_upper = role_key.upper()
-        if "CONTRACTOR" in role_upper and not contractor_raw:
+    for role_key, value in contact.items():
+        u = role_key.upper()
+        if "CONTRACTOR" in u and not contractor_raw:
             contractor_raw = value
-        elif "ARCHITECT" in role_upper and not architect_raw:
+        elif "ARCHITECT" in u and not architect_raw:
             architect_raw = value
-        elif "ENGINEER" in role_upper and not engineer_raw:
+        elif "ENGINEER" in u and not engineer_raw:
             engineer_raw = value
 
     contractor_name, contractor_license = (
@@ -486,53 +367,25 @@ def _summarize_permit(details: Dict[str, Any]) -> Dict[str, Any]:
         _extract_name_and_license(engineer_raw) if engineer_raw else ("", None)
     )
 
-    # Status date from list page, if we carried it through
-    status_date = details.get("status_date")  # now ISO "YYYY-MM-DD" string
-
-    # Calculate duration if we have issued and finaled dates
-    duration_days = None
-    issued_str = details.get("permit_issued")
-    status_history = details.get("status_history") or []
-
-    # Find "Finaled" event in status history
-    finaled_date_str = None
-    for event in status_history:
-        if "final" in event.get("event", "").lower():
-            finaled_date_str = event.get("date")
-            break
-
-    if issued_str and finaled_date_str:
-        try:
-            # Parse dates (LADBS uses mm/dd/yyyy format in detail pages)
-            issued_dt = datetime.strptime(issued_str, "%m/%d/%Y")
-            finaled_dt = datetime.strptime(finaled_date_str, "%m/%d/%Y")
-            duration_days = (finaled_dt - issued_dt).days
-        except Exception:
-            duration_days = None
+    status_date = details.get("status_date")
 
     return {
         "permit_number": permit_number,
         "job_number": job_number,
         "permit_type": full_type,
-        "current_status": status,
+        "Type": full_type,
+        "Status": status,
         "status_date": status_date,
-        "work_description": work_desc,
-        "issued_date": issued,
+        "Work_Description": work_desc,
+        "Issued_Date": issued,
         "contractor": contractor_name or None,
         "contractor_license": contractor_license,
         "architect": architect_name or None,
         "architect_license": architect_license,
         "engineer": engineer_name or None,
         "engineer_license": engineer_license,
-        "detail_url": details.get("_detail_url"),
-        "duration_days": duration_days,
         "raw_details": details,
     }
-
-
-# -------------------------------------------------------------------
-# Public entry point
-# -------------------------------------------------------------------
 
 
 def get_ladbs_data(
@@ -540,10 +393,7 @@ def get_ladbs_data(
     address: Optional[str],
     redfin_url: Optional[str],
 ) -> Dict[str, Any]:
-    """
-    Main entry used by orchestrator.py.
-    Uses Redfin URL to derive street number/name → searches PLR → gets permit list → gets detail pages.
-    """
+
     fetched_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     if not SELENIUM_AVAILABLE:
@@ -614,12 +464,8 @@ def get_ladbs_data(
             }
 
         for idx, pb in enumerate(permits_basic, start=1):
-            print(f"[LADBS] Processing permit {idx}/{len(permits_basic)}: {pb['permit_number']}")
             details = get_permit_details(driver, pb["url"])
             if details:
-                # Pass the URL through details so _summarize_permit can include it
-                details["_detail_url"] = pb["url"]
-                # Carry status_date from list page into details so summary can keep it
                 if pb.get("status_date"):
                     details.setdefault("status_date", pb["status_date"])
                 permits_slim.append(_summarize_permit(details))
@@ -627,7 +473,7 @@ def get_ladbs_data(
     finally:
         try:
             driver.quit()
-        except Exception:
+        except:
             pass
 
     return {
@@ -651,3 +497,4 @@ if __name__ == "__main__":
             print(f"{k}: {len(v)} permits")
         else:
             print(f"{k}: {v}")
+# END FULL FILE REPLACEMENT

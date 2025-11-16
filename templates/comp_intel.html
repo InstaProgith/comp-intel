@@ -98,27 +98,27 @@
           <div class="headline-metrics">
             <div class="metric-card">
               <div class="metric-label">Purchase</div>
-              <div class="metric-primary">
+              <div class="metric-primary {% if not r.metrics.purchase_price %}dim{% endif %}">
                 {% if r.metrics.purchase_price %}
                   ${{ "{:,.0f}".format(r.metrics.purchase_price) }}
                 {% else %}—{% endif %}
               </div>
-              <div class="metric-sub">{{ r.metrics.purchase_date or "—" }}</div>
+              <div class="metric-sub">{{ r.metrics.purchase_date or "No sale" }}</div>
             </div>
 
             <div class="metric-card">
-              <div class="metric-label">Exit</div>
-              <div class="metric-primary">
+              <div class="metric-label">Exit Sale</div>
+              <div class="metric-primary {% if not r.metrics.exit_price %}dim{% endif %}">
                 {% if r.metrics.exit_price %}
                   ${{ "{:,.0f}".format(r.metrics.exit_price) }}
                 {% else %}—{% endif %}
               </div>
-              <div class="metric-sub">{{ r.metrics.exit_date or "—" }}</div>
+              <div class="metric-sub">{{ r.metrics.exit_date or "No exit" }}</div>
             </div>
 
-            <div class="metric-card">
-              <div class="metric-label">Current List Price</div>
-              <div class="metric-primary">
+            <div class="metric-card listing-card">
+              <div class="metric-label">List Price</div>
+              <div class="metric-primary {% if not r.metrics.list_price %}dim{% endif %}">
                 {% if r.metrics.list_price %}
                   ${{ "{:,.0f}".format(r.metrics.list_price) }}
                 {% else %}—{% endif %}
@@ -126,29 +126,33 @@
               <div class="metric-sub">
                 {% if r.redfin and r.redfin.timeline %}
                   {% set latest_listed = r.redfin.timeline | selectattr('event', 'equalto', 'listed') | list | last %}
-                  {% if latest_listed %}{{ latest_listed.date }}{% endif %}
-                {% endif %}
+                  {% if latest_listed %}{{ latest_listed.date }}{% else %}—{% endif %}
+                {% else %}—{% endif %}
               </div>
             </div>
 
             <div class="metric-card">
               <div class="metric-label">Spread</div>
-              <div class="metric-primary">
+              <div class="metric-primary {% if not r.metrics.spread %}dim{% endif %}">
                 {% if r.metrics.spread %}
                   ${{ "{:,.0f}".format(r.metrics.spread) }}
                 {% else %}—{% endif %}
               </div>
               <div class="metric-sub">
                 {% if r.metrics.roi_pct %}
-                  ROI {{ "{:.1f}%".format(r.metrics.roi_pct) }}
-                {% endif %}
+                  {{ "{:.1f}%".format(r.metrics.roi_pct) }} ROI
+                {% else %}—{% endif %}
               </div>
             </div>
 
             <div class="metric-card">
-              <div class="metric-label">Hold</div>
-              <div class="metric-primary">{{ r.metrics.hold_days or "—" }}</div>
-              <div class="metric-sub">days</div>
+              <div class="metric-label">Hold Days</div>
+              <div class="metric-primary {% if not r.metrics.hold_days %}dim{% endif %}">
+                {{ r.metrics.hold_days or "—" }}
+              </div>
+              <div class="metric-sub">
+                {% if r.metrics.hold_days %}days{% else %}—{% endif %}
+              </div>
             </div>
           </div>
 

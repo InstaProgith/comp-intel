@@ -1,0 +1,79 @@
+{
+  "url": "https://www.redfin.com/CA/Los-Angeles/7841-Stewart-Ave-90045/home/6618580",
+  "address": "7841 Stewart Ave,Los Angeles, CA 90045",
+  "headline_metrics": {
+    "purchase_price": null,
+    "purchase_date": null,
+    "exit_price": null,
+    "exit_date": null,
+    "spread": null,
+    "roi_pct": null,
+    "hold_days": null,
+    "list_price": 3849000.0
+  },
+  "metrics": {
+    "purchase_price": null,
+    "purchase_date": null,
+    "exit_price": null,
+    "exit_date": null,
+    "spread": null,
+    "roi_pct": null,
+    "hold_days": null,
+    "list_price": 3849000.0
+  },
+  "current_summary": "4 bed, 4.5 bath, 2,890 SF",
+  "public_record_summary": "4 bed, 3.0 bath, 1,965 SF",
+  "lot_summary": "Lot: 6,001 SF (0.14 acres)",
+  "permit_summary": "Failed to start Chrome driver.",
+  "permit_count": 0,
+  "ladbs": {
+    "source": "ladbs_stub_driver_error",
+    "apn": "4112021016",
+    "address": "7841 Stewart Ave,Los Angeles, CA 90045",
+    "fetched_at": "2025-11-16 02:00:59",
+    "permits": [],
+    "note": "Failed to start Chrome driver."
+  },
+  "redfin": {
+    "source": "redfin_parsed_v2",
+    "url": "https://www.redfin.com/CA/Los-Angeles/7841-Stewart-Ave-90045/home/6618580",
+    "address": "7841 Stewart Ave,Los Angeles, CA 90045",
+    "listing_beds": 4.0,
+    "listing_baths": 4.5,
+    "listing_building_sf": 2890.0,
+    "listing_year_built": null,
+    "list_price": 3849000.0,
+    "beds": 4.0,
+    "baths": 4.5,
+    "building_sf": 2890.0,
+    "lot_sf": 6001.0,
+    "timeline": [
+      {
+        "date": "2025-11-13",
+        "event": "listed",
+        "price": 3849000,
+        "raw_status": "Listed (Active)"
+      }
+    ],
+    "tax": {
+      "apn": "4112021016",
+      "year": 2023,
+      "assessed_value": null
+    },
+    "public_records": {
+      "beds": 4.0,
+      "baths": 3.0,
+      "building_sf": 1965.0,
+      "lot_sf": 6001.0,
+      "year_built": 1948
+    },
+    "generated_at": "2025-11-16",
+    "current_summary": "4 bed, 4.5 bath, 2,890 SF",
+    "public_record_summary": "4 bed, 3.0 bath, 1,965 SF",
+    "lot_summary": "Lot: 6,001 SF (0.14 acres)",
+    "raw_html_path": "/workspaces/comp-intel/data/raw/20251116-020059_redfin_7841_Stewart_Ave_90045.html"
+  },
+  "project_contacts": null,
+  "cslb_contractor": null,
+  "summary_markdown": "**DEAL SNAPSHOT**  \n- **Address:** 7841 Stewart Ave, Los Angeles, CA 90045  \n- **Current Configuration:** 4 beds, 4.5 baths, 2,890 SF  \n- **Original Configuration:** 4 beds, 3.0 baths, 1,965 SF, Year Built: 1948  \n- **SF Added/Changed:** 925 SF (2,890 SF current - 1,965 SF original)  \n- **Purchase Price:** Not available  \n- **Purchase Date:** Not available  \n- **Current Listing Price:** $3,849,000  \n- **Listing Date:** November 13, 2025  \n- **Hold Period:** Not available  \n- **Gross Spread:** Not available  \n- **Gross ROI:** Not available  \n\n**SCOPE OF WORK (PERMITS)**  \n- **Core Permits:** No permits found in the LADBS, indicating likely no formal major work documented in the last 5\u201310 years.  \n- **Major Work:** As no permits were retrieved, the extent of renovations or additions cannot be confirmed.  \n- **Open/Active Permits:** None reported due to lack of data. \n\n**TEAM (COMPETITOR NETWORK)**  \n- **General Contractor:** Not available  \n- **Architect:** Not available  \n- **Structural Engineer:** Not available  \n- **Notes:** No identifiable contractors or companies due to absence of permit data.\n\n**PERMIT TIMING (DURATIONS)**  \n- **Main Building/Addition Permit Status:** Not available (as no permits were found)\n\n**VALUE-ADD SUMMARY**  \nThe property at 7841 Stewart Ave was purchased with a current configuration of 4 bedrooms and 4.5 bathrooms and has undergone a significant addition of 925 square feet since its original size of 1,965 square feet. While specific financial metrics such as purchase price and hold period are unavailable, the current listing price of $3,849,000 suggests a targeted high-value exit strategy following the recent expansion. The absence of documented permits raises questions about the legality and completeness of the renovations undertaken."
+}
