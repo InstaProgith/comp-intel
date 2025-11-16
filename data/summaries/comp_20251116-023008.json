@@ -1,0 +1,508 @@
+{
+  "url": "https://www.redfin.com/CA/Sherman-Oaks/13157-Otsego-St-91423/home/5216364",
+  "address": "13157 Otsego,Sherman Oaks, CA 91423",
+  "headline_metrics": {
+    "purchase_price": null,
+    "purchase_date": null,
+    "exit_price": null,
+    "exit_date": null,
+    "spread": null,
+    "roi_pct": null,
+    "hold_days": null,
+    "list_price": 3795000.0
+  },
+  "metrics": {
+    "purchase_price": null,
+    "purchase_date": null,
+    "exit_price": null,
+    "exit_date": null,
+    "spread": null,
+    "roi_pct": null,
+    "hold_days": null,
+    "list_price": 3795000.0
+  },
+  "current_summary": "5 bed, 5.5 bath, 3,864 SF",
+  "public_record_summary": "3 bed, 3.0 bath, 1,662 SF",
+  "lot_summary": "Lot: 7,425 SF (0.17 acres)",
+  "permit_summary": "Found 8 permits with status date >= 2020 via PLR.",
+  "permit_count": 8,
+  "ladbs": {
+    "source": "ladbs_plr_v5",
+    "apn": "2358004008",
+    "address": "13157 Otsego,Sherman Oaks, CA 91423",
+    "fetched_at": "2025-11-16 02:29:11",
+    "permits": [
+      {
+        "permit_number": "24014-20000-04401",
+        "job_number": "B24VN18408",
+        "permit_type": "Bldg-Addition - 1 or 2 Family Dwelling",
+        "Type": "Bldg-Addition - 1 or 2 Family Dwelling",
+        "Status": "CofO in Progress on 11/12/2025",
+        "status_date": "11/12/2025",
+        "Work_Description": "REMOVE ENTIRE SINGLE FAMILY DWELLING EXCEPT FOR 3'-0\" OF FOOTING AND BUILD (41'-0\"x63'-6\"), 3154 SQFT SINGLE FAMILY DWELLING W/ ATTACHED 2-CAR GARAGE (371 SQFT) AND COVERED PORCH (11 SQFT), W/NFPA 13D SPRINKLERS THROUGHOUT",
+        "Issued_Date": "Issued on 1/23/2025",
+        "contractor": "Owner-Builder ,",
+        "contractor_license": null,
+        "architect": null,
+        "architect_license": null,
+        "engineer": "Yuzon,, Benigno Sari; Lic. No.: S3454 2511 PEACHWOOD PLACE      WESTLAKE VILLAGE, CA 91361",
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "24014-20000-04401",
+          "job_number": "B24VN18408",
+          "group": "Building",
+          "type": "Bldg-Addition",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "(1) Dwelling - Single Family",
+          "work_description": "REMOVE ENTIRE SINGLE FAMILY DWELLING EXCEPT FOR 3'-0\" OF FOOTING AND BUILD (41'-0\"x63'-6\"), 3154 SQFT SINGLE FAMILY DWELLING W/ ATTACHED 2-CAR GARAGE (371 SQFT) AND COVERED PORCH (11 SQFT), W/NFPA 13D SPRINKLERS THROUGHOUT",
+          "permit_issued": "Issued on 1/23/2025",
+          "current_status": "CofO in Progress on 11/12/2025",
+          "certificate_of_occupancy": "Pending More Information",
+          "contact_information": {
+            "Contractor": "Owner-Builder ,",
+            "Engineer": "Yuzon,, Benigno Sari; Lic. No.: S3454 2511 PEACHWOOD PLACE      WESTLAKE VILLAGE, CA 91361"
+          },
+          "status_history": [
+            {
+              "event": "Submitted",
+              "date": "10/1/2024",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Assigned to Plan Check Engineer",
+              "date": "10/3/2024",
+              "person": "PETER MOSESIAN"
+            },
+            {
+              "event": "Corrections Issued",
+              "date": "10/5/2024",
+              "person": "PETER MOSESIAN"
+            },
+            {
+              "event": "Quality Review Completed",
+              "date": "10/9/2024",
+              "person": "RARES BODEA"
+            },
+            {
+              "event": "Building Plans Picked Up",
+              "date": "10/23/2024",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Plan Check Approved",
+              "date": "1/3/2025",
+              "person": "PETER MOSESIAN"
+            },
+            {
+              "event": "Issued",
+              "date": "1/23/2025",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "CofO in Progress",
+              "date": "11/12/2025",
+              "person": "OGANES TARAKHCHYAN"
+            }
+          ],
+          "status_date": "11/12/2025"
+        }
+      },
+      {
+        "permit_number": "24019-10000-02862",
+        "job_number": "B24LA13676",
+        "permit_type": "Bldg-Demolition - 1 or 2 Family Dwelling",
+        "Type": "Bldg-Demolition - 1 or 2 Family Dwelling",
+        "Status": "Completed on 07/24/2024",
+        "status_date": "7/16/2024",
+        "Work_Description": "**DPI& Posting**For demolition of existing single family dwelling and detached garage.",
+        "Issued_Date": "No",
+        "contractor": null,
+        "contractor_license": null,
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "24019-10000-02862",
+          "job_number": "B24LA13676",
+          "group": "Building",
+          "type": "Bldg-Demolition",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "**DPI& Posting**For demolition of existing single family dwelling and detached garage.",
+          "permit_issued": "No",
+          "current_status": "Completed on 07/24/2024",
+          "contact_information": {},
+          "status_history": [],
+          "status_date": "7/16/2024"
+        }
+      },
+      {
+        "permit_number": "24019-20000-05059",
+        "job_number": "B24VN26731",
+        "permit_type": "Bldg-Demolition - 1 or 2 Family Dwelling",
+        "Type": "Bldg-Demolition - 1 or 2 Family Dwelling",
+        "Status": "Permit Finaled on 2/1/2025",
+        "status_date": "2/1/2025",
+        "Work_Description": "DEMO (E) DET GARAGE (1 OF 2)",
+        "Issued_Date": "Issued on 1/23/2025",
+        "contractor": "Owner-Builder ,",
+        "contractor_license": null,
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "24019-20000-05059",
+          "job_number": "B24VN26731",
+          "group": "Building",
+          "type": "Bldg-Demolition",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "(7) Garage - Private",
+          "work_description": "DEMO (E) DET GARAGE (1 OF 2)",
+          "permit_issued": "Issued on 1/23/2025",
+          "current_status": "Permit Finaled on 2/1/2025",
+          "contact_information": {
+            "Contractor": "Owner-Builder ,"
+          },
+          "status_history": [
+            {
+              "event": "Submitted",
+              "date": "12/24/2024",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Assigned to Plan Check Engineer",
+              "date": "12/24/2024",
+              "person": "KAMYAR EMAMI"
+            },
+            {
+              "event": "Corrections Issued",
+              "date": "12/24/2024",
+              "person": "KAMYAR EMAMI"
+            },
+            {
+              "event": "Plan Check Approved",
+              "date": "1/23/2025",
+              "person": "ANGELICA MARTINEZ"
+            },
+            {
+              "event": "Issued",
+              "date": "1/23/2025",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "1/31/2025",
+              "person": "OGANES TARAKHCHYAN"
+            }
+          ],
+          "status_date": "2/1/2025"
+        }
+      },
+      {
+        "permit_number": "24010-10000-03964",
+        "job_number": "B24LA23507",
+        "permit_type": "Bldg-New - 1 or 2 Family Dwelling",
+        "Type": "Bldg-New - 1 or 2 Family Dwelling",
+        "Status": "Application Pending on 9/18/2024",
+        "status_date": "9/18/2024",
+        "Work_Description": "EPLAN New 2 story single family house",
+        "Issued_Date": "No",
+        "contractor": null,
+        "contractor_license": null,
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "24010-10000-03964",
+          "job_number": "B24LA23507",
+          "group": "Building",
+          "type": "Bldg-New",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "EPLAN New 2 story single family house",
+          "permit_issued": "No",
+          "current_status": "Application Pending on 9/18/2024",
+          "contact_information": {},
+          "status_history": [],
+          "status_date": "9/18/2024"
+        }
+      },
+      {
+        "permit_number": "25041-90000-03309",
+        "job_number": "--",
+        "permit_type": "Electrical - 1 or 2 Family Dwelling",
+        "Type": "Electrical - 1 or 2 Family Dwelling",
+        "Status": "Permit Finaled on 2/5/2025",
+        "status_date": "2/5/2025",
+        "Work_Description": "100 AMP Temporary Power Pole",
+        "Issued_Date": "Issued on 1/28/2025",
+        "contractor": "Bonbon Electric 2021; Lic. No.: 1100225-C10 6924 CANBY AVE UNIT 120      RESEDA, CA 91335",
+        "contractor_license": "1100225",
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "25041-90000-03309",
+          "job_number": "--",
+          "group": "Electrical",
+          "type": "Electrical",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "100 AMP Temporary Power Pole",
+          "permit_issued": "Issued on 1/28/2025",
+          "current_status": "Permit Finaled on 2/5/2025",
+          "contact_information": {
+            "Contractor": "Bonbon Electric 2021; Lic. No.: 1100225-C10 6924 CANBY AVE UNIT 120      RESEDA, CA 91335"
+          },
+          "status_history": [
+            {
+              "event": "Issued",
+              "date": "1/28/2025",
+              "person": "INTERNET PERMIT"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "2/4/2025",
+              "person": "OGANES TARAKHCHYAN"
+            }
+          ],
+          "status_date": "2/5/2025"
+        }
+      },
+      {
+        "permit_number": "25043-10000-01496",
+        "job_number": "M25LA13403",
+        "permit_type": "Fire Sprinkler - 1 or 2 Family Dwelling",
+        "Type": "Fire Sprinkler - 1 or 2 Family Dwelling",
+        "Status": "Permit Finaled on 10/24/2025",
+        "status_date": "10/24/2025",
+        "Work_Description": "New fire sprinkler system per NFPA 13-D system. 1-inch water meter.",
+        "Issued_Date": "Issued on 4/17/2025",
+        "contractor": "Infinity Fire Protection Inc; Lic. No.: 811322-C16 ,",
+        "contractor_license": "811322",
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "25043-10000-01496",
+          "job_number": "M25LA13403",
+          "group": "Mechanical",
+          "type": "Fire Sprinkler",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "New fire sprinkler system per NFPA 13-D system. 1-inch water meter.",
+          "permit_issued": "Issued on 4/17/2025",
+          "current_status": "Permit Finaled on 10/24/2025",
+          "contact_information": {
+            "Contractor": "Infinity Fire Protection Inc; Lic. No.: 811322-C16 ,"
+          },
+          "status_history": [
+            {
+              "event": "Submitted",
+              "date": "4/14/2025",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Assigned to Plan Check Engineer",
+              "date": "4/15/2025",
+              "person": "PAULINA FIGUEROA"
+            },
+            {
+              "event": "Plan Check Approved",
+              "date": "4/16/2025",
+              "person": "PAULINA FIGUEROA"
+            },
+            {
+              "event": "Issued",
+              "date": "4/17/2025",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "10/23/2025",
+              "person": "THOMAS COWAN"
+            }
+          ],
+          "status_date": "10/24/2025"
+        }
+      },
+      {
+        "permit_number": "24030-20000-08204",
+        "job_number": "B24VN26731",
+        "permit_type": "Grading - 1 or 2 Family Dwelling",
+        "Type": "Grading - 1 or 2 Family Dwelling",
+        "Status": "Permit Finaled on 3/5/2025",
+        "status_date": "3/5/2025",
+        "Work_Description": "REMOVE SHELL AND BACKFILL THE (E) POOL (2 OF 2)",
+        "Issued_Date": "Issued on 1/23/2025",
+        "contractor": "Owner-Builder ,",
+        "contractor_license": null,
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "24030-20000-08204",
+          "job_number": "B24VN26731",
+          "group": "Building",
+          "type": "Grading",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "(60) Grading - Non-Hillside",
+          "work_description": "REMOVE SHELL AND BACKFILL THE (E) POOL (2 OF 2)",
+          "permit_issued": "Issued on 1/23/2025",
+          "current_status": "Permit Finaled on 3/5/2025",
+          "contact_information": {
+            "Contractor": "Owner-Builder ,"
+          },
+          "status_history": [
+            {
+              "event": "Submitted",
+              "date": "12/24/2024",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Assigned to Plan Check Engineer",
+              "date": "12/24/2024",
+              "person": "KAMYAR EMAMI"
+            },
+            {
+              "event": "Corrections Issued",
+              "date": "12/24/2024",
+              "person": "KAMYAR EMAMI"
+            },
+            {
+              "event": "Plan Check Approved",
+              "date": "1/23/2025",
+              "person": "ANGELICA MARTINEZ"
+            },
+            {
+              "event": "Issued",
+              "date": "1/23/2025",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "3/4/2025",
+              "person": "MANUEL TEJADA"
+            }
+          ],
+          "status_date": "3/5/2025"
+        }
+      },
+      {
+        "permit_number": "25047-10000-00500",
+        "job_number": "B25LA16552",
+        "permit_type": "Swimming-Pool/Spa - 1 or 2 Family Dwelling",
+        "Type": "Swimming-Pool/Spa - 1 or 2 Family Dwelling",
+        "Status": "Issued on 5/5/2025",
+        "status_date": "5/5/2025",
+        "Work_Description": "Eplan: New pool and spa per standard plan 268",
+        "Issued_Date": "Issued on 5/5/2025",
+        "contractor": "Owner-Builder ,",
+        "contractor_license": null,
+        "architect": null,
+        "architect_license": null,
+        "engineer": "Lacher,, Todd Lee; Lic. No.: C67656 1201 N TUSTIN AVE      ANAHEIM, CA 92807",
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "25047-10000-00500",
+          "job_number": "B25LA16552",
+          "group": "Building",
+          "type": "Swimming-Pool/Spa",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "(20) Pool/Spa - Private",
+          "work_description": "Eplan: New pool and spa per standard plan 268",
+          "permit_issued": "Issued on 5/5/2025",
+          "current_status": "Issued on 5/5/2025",
+          "certificate_of_occupancy": "Pending More Information",
+          "contact_information": {
+            "Contractor": "Owner-Builder ,",
+            "Engineer": "Lacher,, Todd Lee; Lic. No.: C67656 1201 N TUSTIN AVE      ANAHEIM, CA 92807"
+          },
+          "status_history": [
+            {
+              "event": "Submitted",
+              "date": "4/25/2025",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Assigned to Plan Check Engineer",
+              "date": "4/25/2025",
+              "person": "DAVID CASTILLO"
+            },
+            {
+              "event": "Corrections Issued",
+              "date": "4/25/2025",
+              "person": "DAVID CASTILLO"
+            },
+            {
+              "event": "Plan Check Approved",
+              "date": "5/2/2025",
+              "person": "DAVID CASTILLO"
+            },
+            {
+              "event": "Issued",
+              "date": "5/5/2025",
+              "person": "APPLICANT"
+            }
+          ],
+          "status_date": "5/5/2025"
+        }
+      }
+    ],
+    "note": "Found 8 permits with status date >= 2020 via PLR."
+  },
+  "redfin": {
+    "source": "redfin_parsed_v2",
+    "url": "https://www.redfin.com/CA/Sherman-Oaks/13157-Otsego-St-91423/home/5216364",
+    "address": "13157 Otsego,Sherman Oaks, CA 91423",
+    "listing_beds": 5.0,
+    "listing_baths": 5.5,
+    "listing_building_sf": 3864.0,
+    "listing_year_built": null,
+    "list_price": 3795000.0,
+    "beds": 5.0,
+    "baths": 5.5,
+    "building_sf": 3864.0,
+    "lot_sf": 7425.0,
+    "timeline": [
+      {
+        "date": "2024-05-31",
+        "event": "listed",
+        "price": 1460000,
+        "raw_status": "Listed (Active)"
+      },
+      {
+        "date": "2025-11-04",
+        "event": "listed",
+        "price": 3795000,
+        "raw_status": "Listed (Active)"
+      }
+    ],
+    "tax": {
+      "apn": "2358004008",
+      "year": 2023,
+      "assessed_value": null
+    },
+    "public_records": {
+      "beds": 3.0,
+      "baths": 3.0,
+      "building_sf": 1662.0,
+      "lot_sf": 7425.0,
+      "year_built": 1950
+    },
+    "generated_at": "2025-11-16",
+    "current_summary": "5 bed, 5.5 bath, 3,864 SF",
+    "public_record_summary": "3 bed, 3.0 bath, 1,662 SF",
+    "lot_summary": "Lot: 7,425 SF (0.17 acres)",
+    "raw_html_path": "/workspaces/comp-intel/data/raw/20251116-022911_redfin_13157_Otsego_St_91423.html"
+  },
+  "project_contacts": null,
+  "cslb_contractor": null,
+  "summary_markdown": "### DEAL SNAPSHOT\n- **Address**: 13157 Otsego, Sherman Oaks, CA 91423\n- **Current Configuration**: 5 beds, 5.5 baths, 3,864 SF\n- **Original Configuration**: 3 beds, 3.0 baths, 1,662 SF, built in 1950\n- **SF Added/Changed**: 2,202 SF increase (3,864 SF current - 1,662 SF original)\n- **Purchase Price**: Not available\n- **Purchase Date**: Not available\n- **Current Listing Price**: $3,795,000 (listed on 11/04/2025)\n- **Hold Period**: Not available\n- **Gross Spread**: Not available\n- **Gross ROI**: Not available\n\n### SCOPE OF WORK (PERMITS)\nThe property has undergone significant renovation in recent years, involving the following core building permits:\n\n1. **Addition Permit** (Permit #24014-20000-04401): Major work involves demolishing the existing single-family dwelling down to the footing and constructing a new 3,154 SF single-family dwelling with an attached garage and covered porch. This indicates a substantial addition of living space.\n   \n2. **Demolition Permits**: Two permits were issued for demolishing the existing single-family dwelling and a detached garage, confirming the removal of the previous structure, which aligns with the new addition's construction plans.\n\n3. **Grading Permit** (Permit #24030-20000-08204): Finaled for activities related to the removal and backfilling of a pool, indicating site preparation for the new construction.\n\n4. **Electrical Permit** and **Fire Sprinkler Permit**: Ensured that the electrical system and fire safety meet modern standards, crucial for a fully renovated residence.\n\nCurrently, one major building permit (the addition) is open with the Certificate of Occupancy (CofO) in progress.\n\n### TEAM (COMPETITOR NETWORK)\n- **General Contractor**: Owner-Builder\n- **Architect**: Not specified\n- **Structural Engineer**: Benigno Sari Yuzon\n- **Notes**: The involvement of an Owner-Builder indicates that the developer is directly handling construction, which may reduce costs and streamline project management. Benigno Sari Yuzon appears to be a repeat player in structural engineering for similar projects.\n\n### PERMIT TIMING (DURATIONS)\nFor the main building/addition permit (Permit #24014-20000-04401):\n- **Submitted \u2192 Plan Check Approved**: 93 days (10/1/2024 to 1/3/2025)\n- **Plan Check Approved \u2192 Issued**: 20 days (1/3/2025 to 1/23/2025)\n- **Issued \u2192 Finaled**: Not finaled (CofO in progress as of 11/12/2025)\n\n### VALUE-ADD SUMMARY\nThe property was transformed from a 3-bedroom, 3-bathroom single-family structure into a modern 5-bedroom, 5.5-bath residence, significantly increasing its living area by 2,202 square feet. The addition, and various associated permits illustrate a comprehensive renovation strategy that aims to elevate property value. Although the exact financials of the purchase, hold, and expected spread are currently unavailable, the current listing price is strategically positioned at $3,795,000, suggesting a strong target for return on investment given the enhanced features and size."
+}

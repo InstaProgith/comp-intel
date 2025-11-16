@@ -95,109 +95,160 @@
 
         <section class="comp-body">
 
-          <div class="headline-metrics">
-            <div class="metric-card">
-              <div class="metric-label">Purchase</div>
-              <div class="metric-primary {% if not r.metrics.purchase_price %}dim{% endif %}">
-                {% if r.metrics.purchase_price %}
-                  ${{ "{:,.0f}".format(r.metrics.purchase_price) }}
-                {% else %}—{% endif %}
+          <!-- DEAL SNAPSHOT -->
+          <div class="deal-snapshot">
+            <div class="snapshot-row">
+              <div class="snapshot-item">
+                <span class="snapshot-label">Purchase:</span>
+                <span class="snapshot-value">
+                  {% if r.metrics.purchase_price %}
+                    ${{ "{:,.0f}".format(r.metrics.purchase_price) }}
+                    <span class="snapshot-date">{{ r.metrics.purchase_date }}</span>
+                  {% else %}No purchase data{% endif %}
+                </span>
               </div>
-              <div class="metric-sub">{{ r.metrics.purchase_date or "No sale" }}</div>
-            </div>
-
-            <div class="metric-card">
-              <div class="metric-label">Exit Sale</div>
-              <div class="metric-primary {% if not r.metrics.exit_price %}dim{% endif %}">
-                {% if r.metrics.exit_price %}
-                  ${{ "{:,.0f}".format(r.metrics.exit_price) }}
-                {% else %}—{% endif %}
+              <div class="snapshot-item">
+                <span class="snapshot-label">Exit:</span>
+                <span class="snapshot-value">
+                  {% if r.metrics.exit_price %}
+                    ${{ "{:,.0f}".format(r.metrics.exit_price) }}
+                    <span class="snapshot-date">{{ r.metrics.exit_date }}</span>
+                  {% else %}—{% endif %}
+                </span>
               </div>
-              <div class="metric-sub">{{ r.metrics.exit_date or "No exit" }}</div>
-            </div>
-
-            <div class="metric-card listing-card">
-              <div class="metric-label">List Price</div>
-              <div class="metric-primary {% if not r.metrics.list_price %}dim{% endif %}">
-                {% if r.metrics.list_price %}
-                  ${{ "{:,.0f}".format(r.metrics.list_price) }}
-                {% else %}—{% endif %}
-              </div>
-              <div class="metric-sub">
-                {% if r.redfin and r.redfin.timeline %}
-                  {% set latest_listed = r.redfin.timeline | selectattr('event', 'equalto', 'listed') | list | last %}
-                  {% if latest_listed %}{{ latest_listed.date }}{% else %}—{% endif %}
-                {% else %}—{% endif %}
+              <div class="snapshot-item">
+                <span class="snapshot-label">Listing:</span>
+                <span class="snapshot-value snapshot-highlight">
+                  {% if r.metrics.list_price %}
+                    ${{ "{:,.0f}".format(r.metrics.list_price) }}
+                  {% else %}—{% endif %}
+                </span>
               </div>
             </div>
-
-            <div class="metric-card">
-              <div class="metric-label">Spread</div>
-              <div class="metric-primary {% if not r.metrics.spread %}dim{% endif %}">
-                {% if r.metrics.spread %}
-                  ${{ "{:,.0f}".format(r.metrics.spread) }}
-                {% else %}—{% endif %}
+            <div class="snapshot-row">
+              <div class="snapshot-item">
+                <span class="snapshot-label">Spread:</span>
+                <span class="snapshot-value {% if r.metrics.spread %}snapshot-success{% endif %}">
+                  {% if r.metrics.spread %}
+                    ${{ "{:,.0f}".format(r.metrics.spread) }}
+                    ({{ "{:.1f}%".format(r.metrics.roi_pct) }} ROI)
+                  {% else %}—{% endif %}
+                </span>
               </div>
-              <div class="metric-sub">
-                {% if r.metrics.roi_pct %}
-                  {{ "{:.1f}%".format(r.metrics.roi_pct) }} ROI
-                {% else %}—{% endif %}
+              <div class="snapshot-item">
+                <span class="snapshot-label">Hold:</span>
+                <span class="snapshot-value">
+                  {% if r.metrics.hold_days %}{{ r.metrics.hold_days }} days{% else %}—{% endif %}
+                </span>
               </div>
-            </div>
-
-            <div class="metric-card">
-              <div class="metric-label">Hold Days</div>
-              <div class="metric-primary {% if not r.metrics.hold_days %}dim{% endif %}">
-                {{ r.metrics.hold_days or "—" }}
-              </div>
-              <div class="metric-sub">
-                {% if r.metrics.hold_days %}days{% else %}—{% endif %}
+              <div class="snapshot-item">
+                <span class="snapshot-label">Permits:</span>
+                <span class="snapshot-value">{{ permits | length }} filed</span>
               </div>
             </div>
           </div>
 
-          {% if r.redfin and r.redfin.timeline %}
-          <div class="comp-body-label">Price History</div>
-          <canvas class="chart" height="120"
-            data-price-history='{{ r.redfin.timeline | tojson }}'></canvas>
-          {% endif %}
-
+          <!-- WORK PERFORMED -->
           {% if permits %}
-          <div class="comp-body-label" style="margin-top:16px;">Permit Durations</div>
-          <canvas class="chart" height="140"
-            data-permit-timeline='{{ permits | tojson }}'></canvas>
-          {% endif %}
+          <div class="section-header">
+            <h3 class="section-title">Work Performed</h3>
+            <span class="section-count">{{ permits | length }} permits</span>
+          </div>
 
-          <div class="comp-body-label" style="margin-top:20px;">Summary</div>
-          <div class="comp-summary">{{ r.summary_markdown | safe }}</div>
+          {% set building_permits = permits | selectattr('permit_type', 'match', '.*Bldg.*|.*Building.*') | list %}
+          {% set demo_permits = permits | selectattr('permit_type', 'match', '.*Demo.*') | list %}
+          {% set mep_permits = permits | rejectattr('permit_type', 'match', '.*Bldg.*|.*Building.*|.*Demo.*') | list %}
 
-          {% if permits %}
-          <div class="comp-body-label">All Permits</div>
-          <div class="permit-list">
-            {% for p in permits %}
-            <a href="{{ p.detail_url }}" target="_blank" class="permit-row">
-              <div class="permit-code">{{ p.permit_number }}</div>
-              <div class="permit-type">{{ p.permit_type }}</div>
-              <div class="permit-status">{{ p.current_status }}</div>
-            </a>
+          {% if building_permits %}
+          <div class="permit-group">
+            <div class="permit-group-header">Building & Structure ({{ building_permits | length }})</div>
+            {% for p in building_permits %}
+            <div class="permit-compact">
+              <div class="permit-compact-main">
+                <span class="permit-compact-type">{{ p.permit_type }}</span>
+                <span class="permit-compact-number">{{ p.permit_number }}</span>
+              </div>
+              {% if p.Work_Description and p.Work_Description != 'N/A' %}
+              <div class="permit-work-desc">{{ p.Work_Description }}</div>
+              {% endif %}
+              <div class="permit-compact-meta">
+                <span>{{ p.Status }}</span>
+                {% if p.contractor %} • Contractor: {{ p.contractor[:40] }}{% endif %}
+              </div>
+            </div>
             {% endfor %}
           </div>
           {% endif %}
 
-          {% if cslb %}
-          <div class="comp-body-label project-label">Contractor</div>
-
-          <div class="contacts-grid">
-            <div class="contact-card">
-              <div class="contact-role">Contractor</div>
-              <div class="contact-name">{{ cslb.business_name or "Unknown" }}</div>
-              <div class="contact-line">Lic {{ cslb.license_number or "—" }}</div>
-
-              {% if cslb.phone %}
-              <div class="contact-line">{{ cslb.phone }}</div>
+          {% if demo_permits %}
+          <div class="permit-group">
+            <div class="permit-group-header">Demolition ({{ demo_permits | length }})</div>
+            {% for p in demo_permits %}
+            <div class="permit-compact">
+              <div class="permit-compact-main">
+                <span class="permit-compact-type">{{ p.permit_type }}</span>
+                <span class="permit-compact-number">{{ p.permit_number }}</span>
+              </div>
+              {% if p.Work_Description and p.Work_Description != 'N/A' %}
+              <div class="permit-work-desc">{{ p.Work_Description }}</div>
               {% endif %}
-              {% if cslb.address %}
-              <div class="contact-line">{{ cslb.address }}</div>
+            </div>
+            {% endfor %}
+          </div>
+          {% endif %}
+
+          {% if mep_permits %}
+          <div class="permit-group">
+            <div class="permit-group-header">MEP & Other ({{ mep_permits | length }})</div>
+            {% for p in mep_permits %}
+            <div class="permit-compact">
+              <div class="permit-compact-main">
+                <span class="permit-compact-type">{{ p.permit_type }}</span>
+                <span class="permit-compact-number">{{ p.permit_number }}</span>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          {% endif %}
+          {% else %}
+          <div class="no-data-message">
+            {% if r.ladbs and r.ladbs.source and (r.ladbs.source.startswith('ladbs_stub_') or r.ladbs.source == 'ladbs_error') %}
+              ⚠️ LADBS data unavailable - cannot verify permit history
+            {% else %}
+              No permits found for this property
+            {% endif %}
+          </div>
+          {% endif %}
+
+          <!-- TEAM -->
+          {% set has_team = (permits | selectattr('contractor') | list) or (permits | selectattr('architect') | list) %}
+          {% if has_team %}
+          <div class="section-header">
+            <h3 class="section-title">Team</h3>
+          </div>
+          
+          <div class="team-grid">
+            {% set contractors = permits | selectattr('contractor') | map(attribute='contractor') | unique | list %}
+            {% for contractor in contractors %}
+            <div class="team-card">
+              <div class="team-role">Contractor</div>
+              <div class="team-name">{{ contractor }}</div>
+              {% set lic = permits | selectattr('contractor', 'equalto', contractor) | map(attribute='contractor_license') | select | first %}
+              {% if lic %}<div class="team-license">Lic {{ lic }}</div>{% endif %}
+            </div>
+            {% endfor %}
+
+            {% set architects = permits | selectattr('architect') | map(attribute='architect') | unique | list %}
+            {% for architect in architects %}
+            <div class="team-card">
+              <div class="team-role">Architect</div>
+              <div class="team-name">{{ architect }}</div>
+              {% set lic = permits | selectattr('architect', 'equalto', architect) | map(attribute='architect_license') | select | first %}
+              {% if lic %}<div class="team-license">Lic {{ lic }}</div>{% endif %}
+            </div>
+            {% endfor %}
+          </div>
+          {% endif %}
               {% endif %}
 
               {% if cslb.detail_url %}
