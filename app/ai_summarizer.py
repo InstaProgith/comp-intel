@@ -5,8 +5,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 API_KEY = os.getenv("ONE_MIN_API_KEY")
-if not API_KEY:
-    raise SystemExit("Missing ONE_MIN_API_KEY in .env")
 
 URL = "https://api.1min.ai/api/features"
 
@@ -20,6 +18,10 @@ def summarize_comp(combined_data: dict) -> str:
     parsed numbers from Redfin/LADBS; no fabricated prices or
     square footage.
     """
+
+    # Check if API key is available
+    if not API_KEY:
+        return "Summary unavailable: missing ONE_MIN_API_KEY. Raw Redfin and LADBS data are shown above."
 
     # Convert JSON to readable text for the prompt
     input_json_text = json.dumps(combined_data, indent=2)
@@ -125,9 +127,10 @@ Now produce the final summary.
 
     headers = {"API-KEY": API_KEY, "Content-Type": "application/json"}
 
-    resp = requests.post(URL, headers=headers, data=json.dumps(payload), timeout=120)
-
     try:
+        resp = requests.post(URL, headers=headers, data=json.dumps(payload), timeout=120)
+        resp.raise_for_status()
+        
         data = resp.json()
         line = (
             data.get("aiRecord", {})
@@ -137,5 +140,7 @@ Now produce the final summary.
         if isinstance(line, str) and line.strip():
             return line.strip()
         return resp.text
+    except requests.exceptions.RequestException:
+        return "Summary unavailable due to an error calling the AI summarizer. Raw Redfin and LADBS data are shown above."
     except Exception:
-        return resp.text
+        return "Summary unavailable due to an error calling the AI summarizer. Raw Redfin and LADBS data are shown above."

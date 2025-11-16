@@ -34,10 +34,10 @@ def _guess_address_from_url(url: str) -> str:
     return "Unknown address from URL"
 
 
-def fetch_redfin_html(url: str) -> Path:
+def fetch_redfin_html(url: str) -> Optional[Path]:
     """
     Fetch the raw HTML for the given Redfin URL and save it under data/raw/.
-    Returns the path of the saved HTML file.
+    Returns the path of the saved HTML file, or None if fetch fails.
     """
     _ensure_dirs()
 
@@ -51,15 +51,19 @@ def fetch_redfin_html(url: str) -> Path:
         "Accept-Language": "en-US,en;q=0.9",
     }
 
-    resp = requests.get(url, headers=headers, timeout=30)
-    resp.raise_for_status()
+    try:
+        resp = requests.get(url, headers=headers, timeout=30)
+        resp.raise_for_status()
 
-    timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-    safe_name = _guess_address_from_url(url).replace(" ", "_")
-    filename = f"{timestamp}_redfin_{safe_name}.html"
-    out_path = RAW_DIR / filename
-    out_path.write_text(resp.text, encoding="utf-8", errors="ignore")
-    return out_path
+        timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+        safe_name = _guess_address_from_url(url).replace(" ", "_")
+        filename = f"{timestamp}_redfin_{safe_name}.html"
+        out_path = RAW_DIR / filename
+        out_path.write_text(resp.text, encoding="utf-8", errors="ignore")
+        return out_path
+    except requests.exceptions.RequestException as e:
+        print(f"[ERROR] Redfin fetch failed: {e}")
+        return None
 
 
 def _extract_first_number(text: str) -> Optional[float]:
@@ -276,12 +280,26 @@ def get_redfin_data(url: str) -> Dict[str, Any]:
     html_text: Optional[str] = None
     soup: Optional[BeautifulSoup] = None
 
+    html_path = fetch_redfin_html(url)
+    
+    # If fetch failed, return minimal error structure
+    if html_path is None:
+        return {
+            "source": "redfin_fetch_error",
+            "url": url,
+            "address": "Unknown (Redfin fetch failed)",
+            "timeline": [],
+            "tax": {},
+            "current_summary": "—",
+            "public_record_summary": "—",
+            "lot_summary": "—",
+        }
+    
     try:
-        html_path = fetch_redfin_html(url)
         html_text = html_path.read_text(encoding="utf-8", errors="ignore")
         soup = BeautifulSoup(html_text, "lxml")
     except Exception as e:
-        print(f"[WARN] Failed to fetch or read Redfin HTML: {e}")
+        print(f"[WARN] Failed to read Redfin HTML: {e}")
 
     listing_parsed: Dict[str, Any] = {}
     if soup is not None and html_text:

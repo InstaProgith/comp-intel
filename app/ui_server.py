@@ -24,52 +24,6 @@ app = Flask(
 )
 
 
-def _is_valid_redfin_url(url: str) -> bool:
-    """Validate that URL is a Redfin listing URL."""
-    url_lower = url.lower()
-    return "redfin.com" in url_lower and "/home/" in url_lower
-
-
-def _log_error(url: str, error: Exception) -> None:
-    """Log error to logs directory with timestamp and URL."""
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    log_file = LOGS_DIR / f"error_{timestamp}.log"
-    
-    with open(log_file, "a", encoding="utf-8") as f:
-        f.write(f"Timestamp: {datetime.now().isoformat()}\n")
-        f.write(f"URL: {url}\n")
-        f.write(f"Error: {str(error)}\n")
-        f.write(f"Traceback:\n{traceback.format_exc()}\n")
-        f.write("-" * 80 + "\n")
-
-
-def _build_error_result(url: str, error_message: str) -> Dict[str, Any]:
-    """Build a safe error result object matching template schema."""
-    return {
-        "address": "Error",
-        "url": url,
-        "summary_markdown": f"<p class='error-message'>{error_message}</p>",
-        "current_summary": "—",
-        "public_record_summary": "—",
-        "lot_summary": "—",
-        "permit_summary": "—",
-        "permit_count": 0,
-        "metrics": {
-            "purchase_price": None,
-            "purchase_date": None,
-            "exit_price": None,
-            "exit_date": None,
-            "spread": None,
-            "roi_pct": None,
-            "hold_days": None,
-        },
-        "redfin": {"timeline": []},
-        "ladbs": {"permits": []},
-        "cslb_contractor": None,
-        "project_contacts": None,
-    }
-
-
 @app.route("/", methods=["GET", "POST"])
 def comp_intel():
     if request.method == "GET":
@@ -98,9 +52,26 @@ def comp_intel():
         too_many_result = {
             "address": "Too many URLs",
             "url": "",
-            "error": f"Please submit at most {MAX_URLS} Redfin URLs at a time.",
-            "summary_markdown": "",
+            "summary_markdown": f"<p class='error-message'>Please submit at most {MAX_URLS} Redfin URLs at a time.</p>",
             "headline_metrics": None,
+            "metrics": {
+                "purchase_price": None,
+                "purchase_date": None,
+                "exit_price": None,
+                "exit_date": None,
+                "spread": None,
+                "roi_pct": None,
+                "hold_days": None,
+            },
+            "current_summary": "—",
+            "public_record_summary": "—",
+            "lot_summary": "—",
+            "permit_summary": "Too many URLs submitted.",
+            "permit_count": 0,
+            "redfin": {"timeline": []},
+            "ladbs": {"permits": []},
+            "project_contacts": None,
+            "cslb_contractor": None,
         }
         return render_template(
             "comp_intel.html",
@@ -114,9 +85,26 @@ def comp_intel():
         none_result = {
             "address": "No valid Redfin URLs",
             "url": "",
-            "error": "Please paste at least one Redfin URL that starts with https://www.redfin.com/.",
-            "summary_markdown": "",
+            "summary_markdown": "<p class='error-message'>Please paste at least one Redfin URL that starts with https://www.redfin.com/.</p>",
             "headline_metrics": None,
+            "metrics": {
+                "purchase_price": None,
+                "purchase_date": None,
+                "exit_price": None,
+                "exit_date": None,
+                "spread": None,
+                "roi_pct": None,
+                "hold_days": None,
+            },
+            "current_summary": "—",
+            "public_record_summary": "—",
+            "lot_summary": "—",
+            "permit_summary": "No valid Redfin URLs provided.",
+            "permit_count": 0,
+            "redfin": {"timeline": []},
+            "ladbs": {"permits": []},
+            "project_contacts": None,
+            "cslb_contractor": None,
         }
         return render_template(
             "comp_intel.html",
