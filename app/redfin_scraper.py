@@ -10,7 +10,7 @@ from bs4 import BeautifulSoup
 
 
 # Base directories (project root is one level up from this file)
-BASE_DIR = Path(__file__).resolve().parent.parent  # C:\Users\navid\comp-intel
+BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
 RAW_DIR = DATA_DIR / "raw"
 
@@ -42,7 +42,6 @@ def fetch_redfin_html(url: str) -> Optional[Path]:
     _ensure_dirs()
 
     headers = {
-        # Pretend to be Chrome on Windows
         "User-Agent": (
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
             "AppleWebKit/537.36 (KHTML, like Gecko) "
@@ -106,8 +105,8 @@ def parse_redfin_html_listing(soup: BeautifulSoup, html_text: str) -> Dict[str, 
       - current list_price
       - listing_year_built
     
-    CRITICAL: list_price comes from the price banner (data-rf-test-id="abp-price"),
-    NOT from tax amounts or assessed values.
+    CRITICAL: list_price comes ONLY from the price banner (data-rf-test-id="abp-price").
+    NEVER use tax amounts or assessed values as list_price.
     """
     # Address
     address_text: Optional[str] = None
@@ -136,7 +135,7 @@ def parse_redfin_html_listing(soup: BeautifulSoup, html_text: str) -> Dict[str, 
         building_sf_val = _extract_first_number(sqft_el.get_text(strip=True))
 
     # Current list price from price banner
-    # Look for data-rf-test-id="abp-price" which contains the actual listing price
+    # ONLY from data-rf-test-id="abp-price" - NEVER from tax table
     list_price_val: Optional[float] = None
     price_el = soup.select_one('[data-rf-test-id="abp-price"] .statsValue.price')
     if price_el:
@@ -146,15 +145,6 @@ def parse_redfin_html_listing(soup: BeautifulSoup, html_text: str) -> Dict[str, 
         if price_match:
             try:
                 list_price_val = float(price_match.group(1).replace(",", ""))
-            except ValueError:
-                pass
-    
-    # Fallback: Try old "For sale" pattern if abp-price not found
-    if list_price_val is None:
-        m_price = re.search(r"For sale\s*[\r\n]+\s*\$([\d,]+)", html_text, re.DOTALL)
-        if m_price:
-            try:
-                list_price_val = float(m_price.group(1).replace(",", ""))
             except ValueError:
                 pass
 
@@ -187,9 +177,8 @@ def parse_public_facts_and_apn(html_text: str) -> Dict[str, Any]:
       - public_year_built
       - apn
     
-    NOTE: Lot size parsing is brittle and depends on specific HTML patterns.
-    We look for "Lot Size (Sq. Ft.): X" or "Lot Size: X square feet" in the
-    Property Details section, NOT in the tax assessment table.
+    CRITICAL: Lot size must come from Property Details section ONLY.
+    NEVER use tax table values.
     """
     result: Dict[str, Any] = {}
 
@@ -198,11 +187,14 @@ def parse_public_facts_and_apn(html_text: str) -> Dict[str, Any]:
     sf_str = _regex_first_group(r"Finished Sq\. Ft\.\s*:\s*([\d,]+)", html_text)
     
     # Try multiple patterns for lot size to be more robust
-    # Pattern 1: "Lot Size (Sq. Ft.): 21,084"
+    # Pattern 1: "Lot Size (Sq. Ft.): 6,001"
     lot_str = _regex_first_group(r"Lot Size \(Sq\. Ft\.\):\s*([\d,]+)", html_text)
     if not lot_str:
-        # Pattern 2: "Lot Size: 21,084 square feet"
+        # Pattern 2: "Lot Size: 6,001 square feet"
         lot_str = _regex_first_group(r"Lot Size:\s*([\d,]+)\s+square feet", html_text)
+    if not lot_str:
+        # Pattern 3: "Lot Size: 6,001 Sq. Ft."
+        lot_str = _regex_first_group(r"Lot Size:\s*([\d,]+)\s+Sq\. Ft\.", html_text)
     
     year_str = _regex_first_group(r"Year Built:\s*([0-9]{4})", html_text)
     apn_str = _regex_first_group(r"APN:\s*([0-9\-]+)", html_text)
@@ -237,19 +229,15 @@ def parse_public_facts_and_apn(html_text: str) -> Dict[str, Any]:
 def parse_sale_history(html_text: str) -> List[Dict[str, Any]]:
     """
     Parse the 'Sale and tax history' section into a list of REAL sale/list events.
-    Returns: List of { date: 'YYYY-MM-DD', event: 'listed'|'sold', price: int, raw_status: str }
+    Returns: List of { date: 'YYYY-MM-DD', event: 'listed'|'sold'|'price_changed', price: int, raw_status: str }
     
     CRITICAL ANTI-HALLUCINATION RULES:
-    - ONLY parse events labeled "Sold" or "Listed" from the sale history timeline.
+    - ONLY parse events labeled "Sold", "Listed", or "Price changed" from the sale history timeline.
     - NEVER use property tax amounts (e.g. $15,403 annual tax) as prices.
     - NEVER use assessed values from the tax table as sale prices.
     - If a listing event shows "*" or no price, skip it (do NOT invent a price).
     - Validate that prices are realistic (>= $100,000) to avoid capturing tax/HOA amounts.
-    
-    NOTE: Parsing strategy:
-    1. Look for the Sale History tab panel content (avoid Tax History table)
-    2. Extract date + event type + price from PropertyHistoryEventRow divs
-    3. Strict validation on price format and minimum value
+    - NEVER fabricate a sold event.
     
     The HTML structure we're looking for:
       <div class="PropertyHistoryEventRow">
@@ -261,21 +249,45 @@ def parse_sale_history(html_text: str) -> List[Dict[str, Any]]:
 
     events: List[Dict[str, Any]] = []
 
-    # Strategy 1: Try to find the sale history panel and parse row-by-row
-    # Look for PropertyHistoryEventRow divs
+    # Strategy: Look for PropertyHistoryEventRow divs
+    # Pattern matches: date, event type (Sold/Listed/Price changed), status, price
     sale_history_pattern = re.compile(
         r'<div[^>]*class="[^"]*PropertyHistoryEventRow[^"]*"[^>]*>.*?'
         r'<p>([A-Z][a-z]{2} \d{1,2}, \d{4})</p>.*?'
-        r'<div>(Sold|Listed)\s*\(([^)]+)\)</div>.*?'
+        r'<div>(?:Sold|Listed|Price\s+changed)\s*\(([^)]+)\)</div>.*?'
         r'<div[^>]*class="[^"]*price-col[^"]*"[^>]*>\$?([\d,]+|\*)',
-        re.DOTALL
+        re.DOTALL | re.IGNORECASE
     )
     
-    for m in sale_history_pattern.finditer(html_text):
-        date_str = m.group(1)
-        event_type = m.group(2).lower()  # "Sold" or "Listed"
-        status = m.group(3)
-        price_str = m.group(4)
+    # Also capture event type more explicitly
+    for match_obj in re.finditer(
+        r'<div[^>]*class="[^"]*PropertyHistoryEventRow[^"]*"[^>]*>(.*?)</div>\s*</div>\s*</div>',
+        html_text,
+        re.DOTALL
+    ):
+        row_html = match_obj.group(1)
+        
+        # Extract date
+        date_match = re.search(r'<p>([A-Z][a-z]{2} \d{1,2}, \d{4})</p>', row_html)
+        if not date_match:
+            continue
+        date_str = date_match.group(1)
+        
+        # Extract event type and status
+        event_match = re.search(r'<div>(Sold|Listed|Price\s+changed)\s*\(([^)]+)\)</div>', row_html, re.IGNORECASE)
+        if not event_match:
+            continue
+        event_type_raw = event_match.group(1)
+        status = event_match.group(2)
+        
+        # Normalize event type
+        event_type = event_type_raw.lower().replace(" ", "_")
+        
+        # Extract price
+        price_match = re.search(r'<div[^>]*class="[^"]*price-col[^"]*"[^>]*>\$?([\d,]+|\*)', row_html)
+        if not price_match:
+            continue
+        price_str = price_match.group(1)
         
         # Skip if price is "*" (no price listed)
         if price_str == "*":
@@ -296,56 +308,10 @@ def parse_sale_history(html_text: str) -> List[Dict[str, Any]]:
             
         events.append({
             "date": dt.date().isoformat(),
-            "event": event_type,  # "sold" or "listed"
+            "event": event_type,  # "sold", "listed", or "price_changed"
             "price": price,
-            "raw_status": f"{event_type.capitalize()} ({status})",
+            "raw_status": f"{event_type_raw} ({status})",
         })
-
-    # Strategy 2: If no events found via PropertyHistoryEventRow, try broader patterns
-    # but still being very careful to avoid tax table
-    if not events:
-        # Only search within the sale-history-panel section if we can identify it
-        sale_panel_match = re.search(
-            r'<div[^>]*class="[^"]*sale-history-panel[^"]*"[^>]*>(.+?)</div>\s*<div[^>]*class="[^"]*tax-history-panel',
-            html_text,
-            re.DOTALL
-        )
-        
-        if sale_panel_match:
-            sale_panel_text = sale_panel_match.group(1)
-            
-            # Now look for sale/list events within this restricted section
-            # Pattern: Date ... Sold/Listed (status) ... Price
-            pattern = re.compile(
-                r'([A-Z][a-z]{2} \d{1,2}, \d{4}).*?'
-                r'(Sold|Listed)\s*\(([^)]+)\).*?'
-                r'\$([\d,]+)',
-                re.DOTALL
-            )
-            
-            for m in pattern.finditer(sale_panel_text):
-                date_str = m.group(1)
-                event_type = m.group(2).lower()
-                status = m.group(3)
-                price_str = m.group(4)
-                
-                try:
-                    dt = datetime.strptime(date_str, "%b %d, %Y")
-                    price = int(price_str.replace(",", ""))
-                    
-                    # STRICT validation
-                    if price < 100000:
-                        continue
-                        
-                except (ValueError, AttributeError):
-                    continue
-                    
-                events.append({
-                    "date": dt.date().isoformat(),
-                    "event": event_type,
-                    "price": price,
-                    "raw_status": f"{event_type.capitalize()} ({status})",
-                })
 
     # Sort by date ascending
     events.sort(key=lambda e: e["date"])
@@ -358,6 +324,15 @@ def get_redfin_data(url: str) -> Dict[str, Any]:
     2) Parse listing stats (address + beds + baths + SF + list_price + listing_year_built).
     3) Parse public records stats (beds/baths/SF/lot/year built) and APN.
     4) Parse sale history into a real timeline.
+    
+    CRITICAL: All PRICE values come ONLY from:
+      - list_price: from [data-rf-test-id="abp-price"]
+      - timeline[].price: from PropertyHistoryEventRow divs with Sold/Listed events
+      
+    NEVER use:
+      - Property tax amounts
+      - Assessed values
+      - Tax table numbers
     """
     _ensure_dirs()
 
@@ -472,7 +447,7 @@ def get_redfin_data(url: str) -> Dict[str, Any]:
         "listing_baths": baths,
         "listing_building_sf": building_sf,
         "listing_year_built": listing_year_built,
-        "list_price": list_price,  # PRICE: from active listing, NOT from tax table
+        "list_price": list_price,  # PRICE: from active listing banner ONLY
         # backward compatible top-level
         "beds": beds,
         "baths": baths,
@@ -501,7 +476,7 @@ def get_redfin_data(url: str) -> Dict[str, Any]:
 
 
 if __name__ == "__main__":
-    test_url = "https://www.redfin.com/CA/Sherman-Oaks/13157-Otsego-St-91423/home/5216364"
+    test_url = "https://www.redfin.com/CA/Los-Angeles/7841-Stewart-Ave-90045/home/6618580"
     print(f"[TEST] Fetching + parsing Redfin HTML for: {test_url}")
     data = get_redfin_data(test_url)
     print("Structured Redfin data (listing + public records + real sale history):")

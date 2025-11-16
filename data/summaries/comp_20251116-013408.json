@@ -1,0 +1,77 @@
+{
+  "url": "https://www.redfin.com/CA/Los-Angeles/7841-Stewart-Ave-90045/home/6618580",
+  "address": "7841 Stewart Ave,Los Angeles, CA 90045",
+  "headline_metrics": {
+    "purchase_price": null,
+    "purchase_date": null,
+    "exit_price": 3849000,
+    "exit_date": "2025-11-13",
+    "spread": null,
+    "roi_pct": null,
+    "hold_days": null
+  },
+  "metrics": {
+    "purchase_price": null,
+    "purchase_date": null,
+    "exit_price": 3849000,
+    "exit_date": "2025-11-13",
+    "spread": null,
+    "roi_pct": null,
+    "hold_days": null
+  },
+  "current_summary": "4 bed, 4.5 bath, 2,890 SF",
+  "public_record_summary": "4 bed, 3.0 bath, 1,965 SF",
+  "lot_summary": "Lot: 6,001 SF (0.14 acres)",
+  "permit_summary": "Failed to start Chrome driver.",
+  "permit_count": 0,
+  "ladbs": {
+    "source": "ladbs_stub_driver_error",
+    "apn": "4112021016",
+    "address": "7841 Stewart Ave,Los Angeles, CA 90045",
+    "fetched_at": "2025-11-16 01:33:59",
+    "permits": [],
+    "note": "Failed to start Chrome driver."
+  },
+  "redfin": {
+    "source": "redfin_parsed_v2",
+    "url": "https://www.redfin.com/CA/Los-Angeles/7841-Stewart-Ave-90045/home/6618580",
+    "address": "7841 Stewart Ave,Los Angeles, CA 90045",
+    "listing_beds": 4.0,
+    "listing_baths": 4.5,
+    "listing_building_sf": 2890.0,
+    "listing_year_built": null,
+    "list_price": 3849000.0,
+    "beds": 4.0,
+    "baths": 4.5,
+    "building_sf": 2890.0,
+    "lot_sf": 6001.0,
+    "timeline": [
+      {
+        "date": "2025-11-13",
+        "event": "listed",
+        "price": 3849000,
+        "raw_status": "Listed (Active)"
+      }
+    ],
+    "tax": {
+      "apn": "4112021016",
+      "year": 2023,
+      "assessed_value": null
+    },
+    "public_records": {
+      "beds": 4.0,
+      "baths": 3.0,
+      "building_sf": 1965.0,
+      "lot_sf": 6001.0,
+      "year_built": 1948
+    },
+    "generated_at": "2025-11-16",
+    "current_summary": "4 bed, 4.5 bath, 2,890 SF",
+    "public_record_summary": "4 bed, 3.0 bath, 1,965 SF",
+    "lot_summary": "Lot: 6,001 SF (0.14 acres)",
+    "raw_html_path": "/workspaces/comp-intel/data/raw/20251116-013359_redfin_7841_Stewart_Ave_90045.html"
+  },
+  "project_contacts": null,
+  "cslb_contractor": null,
+  "summary_markdown": "===========================================================\n1) DEAL SNAPSHOT\n===========================================================\n- **Address:** 7841 Stewart Ave, Los Angeles, CA 90045\n- **Current configuration:** 4 beds, 4.5 baths, 2,890 SF\n- **Original configuration from PUBLIC RECORDS:** 4 beds, 3 baths, 1,965 SF, year built: 1948\n- **SF Added/Changed:** 925 SF (2,890 SF - 1,965 SF)\n- **Purchase price:** Not available\n- **Purchase date:** Not available\n- **Current listing price:** $3,849,000\n- **Listing date:** November 13, 2025\n- **Hold period:** Not available\n- **Gross spread:** Not calculable (purchase price is missing)\n- **Gross ROI:** Not calculable (purchase price is missing)\n\n===========================================================\n2) SCOPE OF WORK (PERMITS)\n===========================================================\n- No LADBS permits are available in the provided data, indicating no recorded core building or addition permits for this address in the last 5-10 years. As such, significant renovation or structural alterations cannot be assessed.\n- There are no open, active, or final permits.\n\n===========================================================\n3) TEAM (COMPETITOR NETWORK)\n===========================================================\n- **GC:** Not available (no contractors listed in permit data)\n- **Architect:** Not available\n- **Engineer:** Not available\n- **Notes:** No repeated players or interesting patterns can be identified due to the absence of permit data.\n\n===========================================================\n4) PERMIT TIMING (DURATIONS)\n===========================================================\n- Not applicable, as there are no main building or addition permits to analyze for submission, approval, or issuance timelines.\n\n===========================================================\n5) VALUE-ADD SUMMARY\n===========================================================\nThe property at 7841 Stewart Ave was purchased with an expanded configuration, now boasting 4 beds and 4.5 baths totaling 2,890 SF, compared to its original state of 4 beds and 3 baths with 1,965 SF. The developer has added 925 SF of livable space, enhancing the overall value, although the precise value added cannot be quantified due to the missing purchase price. The property is currently listed for $3,849,000, suggesting a strategic target for future returns.\n\n---"
+}

@@ -28,6 +28,18 @@ SUMMARIES_DIR.mkdir(parents=True, exist_ok=True)
 def _pick_purchase_and_exit(
     timeline: List[Dict[str, Any]]
 ) -> Tuple[Optional[Dict[str, Any]], Optional[Dict[str, Any]]]:
+    """
+    Pick purchase and exit events from timeline.
+    
+    CRITICAL RULE: Only SOLD events count as purchase or exit.
+    - Listing events are NOT purchases.
+    - Listing events are NOT exits.
+    - If there are no sold events, return (None, None).
+    
+    Returns: (purchase_event, exit_event)
+      - purchase_event: first sold event or None
+      - exit_event: last sold event or None
+    """
     if not timeline:
         return None, None
 
@@ -36,16 +48,14 @@ def _pick_purchase_and_exit(
     except Exception:
         pass
 
+    # ONLY sold events count as purchase/exit
     sold_events = [e for e in timeline if e.get("event") == "sold"]
-    listed_events = [e for e in timeline if e.get("event") == "listed"]
 
-    purchase = sold_events[0] if sold_events else None
+    if not sold_events:
+        return None, None
 
-    exit_event: Optional[Dict[str, Any]] = None
-    if listed_events:
-        exit_event = listed_events[-1]
-    elif sold_events:
-        exit_event = sold_events[-1]
+    purchase = sold_events[0]
+    exit_event = sold_events[-1] if len(sold_events) > 1 else None
 
     return purchase, exit_event
 
@@ -60,6 +70,16 @@ def _fmt_money(val: Optional[int]) -> str:
 
 
 def _build_headline_metrics(redfin: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Build headline metrics from Redfin timeline.
+    
+    CRITICAL ANTI-HALLUCINATION RULES:
+    - Purchase and exit MUST be actual SOLD events only.
+    - If there are no sold events (e.g., active listing only):
+        ALL metrics return None (purchase, exit, spread, ROI, hold).
+    - Listing prices are NOT used as purchase or exit prices.
+    - list_price field is separate and displayed only in the listing UI slot.
+    """
     timeline: List[Dict[str, Any]] = redfin.get("timeline") or []
     purchase, exit_event = _pick_purchase_and_exit(timeline)
 
@@ -85,6 +105,9 @@ def _build_headline_metrics(redfin: Dict[str, Any]) -> Dict[str, Any]:
         except Exception:
             hold_days = None
 
+    # Include list_price separately (NOT as exit price)
+    list_price = redfin.get("list_price")
+
     return {
         "purchase_price": purchase_price,
         "purchase_date": purchase_date,
@@ -93,6 +116,7 @@ def _build_headline_metrics(redfin: Dict[str, Any]) -> Dict[str, Any]:
         "spread": spread,
         "roi_pct": roi_pct,
         "hold_days": hold_days,
+        "list_price": list_price,  # current listing price (separate from exit)
     }
 
 

@@ -1,0 +1,79 @@
+{
+  "url": "https://www.redfin.com/CA/Los-Angeles/7841-Stewart-Ave-90045/home/6618580",
+  "address": "7841 Stewart Ave,Los Angeles, CA 90045",
+  "headline_metrics": {
+    "purchase_price": null,
+    "purchase_date": null,
+    "exit_price": null,
+    "exit_date": null,
+    "spread": null,
+    "roi_pct": null,
+    "hold_days": null,
+    "list_price": 3849000.0
+  },
+  "metrics": {
+    "purchase_price": null,
+    "purchase_date": null,
+    "exit_price": null,
+    "exit_date": null,
+    "spread": null,
+    "roi_pct": null,
+    "hold_days": null,
+    "list_price": 3849000.0
+  },
+  "current_summary": "4 bed, 4.5 bath, 2,890 SF",
+  "public_record_summary": "4 bed, 3.0 bath, 1,965 SF",
+  "lot_summary": "Lot: 6,001 SF (0.14 acres)",
+  "permit_summary": "Failed to start Chrome driver.",
+  "permit_count": 0,
+  "ladbs": {
+    "source": "ladbs_stub_driver_error",
+    "apn": "4112021016",
+    "address": "7841 Stewart Ave,Los Angeles, CA 90045",
+    "fetched_at": "2025-11-16 01:40:17",
+    "permits": [],
+    "note": "Failed to start Chrome driver."
+  },
+  "redfin": {
+    "source": "redfin_parsed_v2",
+    "url": "https://www.redfin.com/CA/Los-Angeles/7841-Stewart-Ave-90045/home/6618580",
+    "address": "7841 Stewart Ave,Los Angeles, CA 90045",
+    "listing_beds": 4.0,
+    "listing_baths": 4.5,
+    "listing_building_sf": 2890.0,
+    "listing_year_built": null,
+    "list_price": 3849000.0,
+    "beds": 4.0,
+    "baths": 4.5,
+    "building_sf": 2890.0,
+    "lot_sf": 6001.0,
+    "timeline": [
+      {
+        "date": "2025-11-13",
+        "event": "listed",
+        "price": 3849000,
+        "raw_status": "Listed (Active)"
+      }
+    ],
+    "tax": {
+      "apn": "4112021016",
+      "year": 2023,
+      "assessed_value": null
+    },
+    "public_records": {
+      "beds": 4.0,
+      "baths": 3.0,
+      "building_sf": 1965.0,
+      "lot_sf": 6001.0,
+      "year_built": 1948
+    },
+    "generated_at": "2025-11-16",
+    "current_summary": "4 bed, 4.5 bath, 2,890 SF",
+    "public_record_summary": "4 bed, 3.0 bath, 1,965 SF",
+    "lot_summary": "Lot: 6,001 SF (0.14 acres)",
+    "raw_html_path": "/workspaces/comp-intel/data/raw/20251116-014017_redfin_7841_Stewart_Ave_90045.html"
+  },
+  "project_contacts": null,
+  "cslb_contractor": null,
+  "summary_markdown": "### DEAL SNAPSHOT\n- **Address:** 7841 Stewart Ave, Los Angeles, CA 90045\n- **Current Configuration:** 4 beds, 4.5 baths, 2,890 SF\n- **Original Configuration (Public Records):** 4 beds, 3.0 baths, 1,965 SF, Year Built: 1948\n- **Square Footage Added/Changed:** 925 SF (2,890 SF - 1,965 SF)\n- **Purchase Price:** Not available\n- **Purchase Date:** Not available\n- **Current Listing Price:** $3,849,000\n- **Listing Date:** November 13, 2025\n- **Hold Period:** Not calculable (purchase date not available)\n- **Gross Spread:** Not calculable (purchase price not available)\n- **Gross ROI:** Not calculable (purchase price not available)\n\n### SCOPE OF WORK (PERMITS)\n- **Permits Identified:** None found in the LADBS database.\n- **Major Work Analysis:** Without permit records, the scope of work cannot be verified. However, significant changes in configuration suggest that updates or expansions may have occurred, particularly the increase in square footage.\n\n### TEAM (COMPETITOR NETWORK)\n- **GC:** None identified\n- **Architect:** None identified\n- **Engineer:** None identified\n- **Notes:** No contacts available, indicating no apparent competitor network involved in recent work.\n\n### PERMIT TIMING (DURATIONS)\n- **Permit Timing Durations:** Not applicable as there are no permits listed in the LADBS data.\n\n### VALUE-ADD SUMMARY\nThe property at 7841 Stewart Ave was acquired and has undergone significant modifications resulting in an updated configuration of 4 beds and 4.5 baths, increasing its size from 1,965 SF to 2,890 SF. The current listing price of $3,849,000 suggests a strategic market position, although specific value-added metrics cannot be determined due to the absence of purchase data. The property is actively listed as of mid-November 2025."
+}
