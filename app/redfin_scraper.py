@@ -166,16 +166,27 @@ def parse_public_facts_and_apn(html_text: str) -> Dict[str, Any]:
       - public_beds
       - public_baths
       - public_building_sf
-      - public_lot_sf
+      - public_lot_sf  (from Property Details section, NOT from tax table)
       - public_year_built
       - apn
+    
+    NOTE: Lot size parsing is brittle and depends on specific HTML patterns.
+    We look for "Lot Size (Sq. Ft.): X" or "Lot Size: X square feet" in the
+    Property Details section, NOT in the tax assessment table.
     """
     result: Dict[str, Any] = {}
 
     beds_str = _regex_first_group(r"Beds:\s*([0-9\.]+)", html_text)
     baths_str = _regex_first_group(r"Baths:\s*([0-9\.]+)", html_text)
     sf_str = _regex_first_group(r"Finished Sq\. Ft\.\s*:\s*([\d,]+)", html_text)
-    lot_str = _regex_first_group(r"Lot Size:\s*([\d,]+)\s+square feet", html_text)
+    
+    # Try multiple patterns for lot size to be more robust
+    # Pattern 1: "Lot Size (Sq. Ft.): 21,084"
+    lot_str = _regex_first_group(r"Lot Size \(Sq\. Ft\.\):\s*([\d,]+)", html_text)
+    if not lot_str:
+        # Pattern 2: "Lot Size: 21,084 square feet"
+        lot_str = _regex_first_group(r"Lot Size:\s*([\d,]+)\s+square feet", html_text)
+    
     year_str = _regex_first_group(r"Year Built:\s*([0-9]{4})", html_text)
     apn_str = _regex_first_group(r"APN:\s*([0-9\-]+)", html_text)
 
@@ -208,21 +219,37 @@ def parse_public_facts_and_apn(html_text: str) -> Dict[str, Any]:
 
 def parse_sale_history(html_text: str) -> List[Dict[str, Any]]:
     """
-    Parse the 'Sale and tax history' section into a list of events:
-      { date: 'YYYY-MM-DD', event: 'listed'|'sold', price: int, raw_status: str }
+    Parse the 'Sale and tax history' section into a list of REAL sale/list events.
+    Returns: List of { date: 'YYYY-MM-DD', event: 'listed'|'sold', price: int, raw_status: str }
+    
+    CRITICAL ANTI-HALLUCINATION RULES:
+    - ONLY parse events labeled "Sold" or "Listed" from the sale history timeline.
+    - NEVER use property tax amounts (e.g. $15,403 annual tax) as prices.
+    - NEVER use assessed values from the tax table as sale prices.
+    - If a listing event shows "*" or no price, skip it (do NOT invent a price).
+    - Validate that prices are realistic (>= $10,000) to avoid capturing tax amounts.
+    
+    NOTE: This parsing is BRITTLE and depends on specific Redfin HTML structure.
+    The regexes below look for patterns like:
+      "Nov 27, 2019 ... Sold (MLS) ... $1,150,000"
+      "Sep 22, 2021 ... Listed (Active) ... $X,XXX,XXX"
+    We limit the search window between date and price to reduce false matches.
     """
 
     events: List[Dict[str, Any]] = []
 
-    # Pattern for listed events (e.g. Nov 4, 2025 ... Listed (Active) ... $3,795,000)
+    # Pattern for listed events with prices
+    # We look for: Date, then "Listed (status)", then a price within ~150 chars
+    # The tighter window helps avoid matching unrelated numbers (like tax amounts)
     pattern_listed = re.compile(
-        r"([A-Z][a-z]{2} \d{1,2}, \d{4}).{0,200}?Listed\s*\(([^)]+)\).*?\$([\d,]+)",
+        r"([A-Z][a-z]{2} \d{1,2}, \d{4}).{0,150}?Listed\s*\(([^)]+)\).{0,50}?\$([\d,]+)",
         re.DOTALL,
     )
 
-    # Pattern for sold events (e.g. May 31, 2024 ... Sold (MLS) (Closed Sale) ... $1,460,000)
+    # Pattern for sold events
+    # Similar structure: Date, then "Sold (status)", then price
     pattern_sold = re.compile(
-        r"([A-Z][a-z]{2} \d{1,2}, \d{4}).{0,200}?Sold\s*\(([^)]+)\).*?\$([\d,]+)",
+        r"([A-Z][a-z]{2} \d{1,2}, \d{4}).{0,150}?Sold\s*\(([^)]+)\).{0,50}?\$([\d,]+)",
         re.DOTALL,
     )
 
@@ -233,6 +260,9 @@ def parse_sale_history(html_text: str) -> List[Dict[str, Any]]:
         try:
             dt = datetime.strptime(date_str, "%b %d, %Y")
             price = int(price_str.replace(",", ""))
+            # Sanity check: reject prices < $10,000 (likely tax amounts, not real prices)
+            if price < 10000:
+                continue
         except ValueError:
             continue
         events.append(
@@ -251,6 +281,9 @@ def parse_sale_history(html_text: str) -> List[Dict[str, Any]]:
         try:
             dt = datetime.strptime(date_str, "%b %d, %Y")
             price = int(price_str.replace(",", ""))
+            # Sanity check: reject prices < $10,000 (likely tax amounts, not real prices)
+            if price < 10000:
+                continue
         except ValueError:
             continue
         events.append(
@@ -368,7 +401,15 @@ def get_redfin_data(url: str) -> Dict[str, Any]:
     )
     
     lot_sf = public_parsed.get("public_lot_sf")
-    lot_summary = f"{int(lot_sf):,} SF" if lot_sf else "Lot: Data not available"
+    if lot_sf:
+        # Format lot size nicely with acres if available
+        lot_summary = f"Lot: {int(lot_sf):,} SF"
+        # Optionally add acres (1 acre = 43,560 sq ft)
+        acres = lot_sf / 43560.0
+        if acres >= 0.1:
+            lot_summary += f" ({acres:.2f} acres)"
+    else:
+        lot_summary = "Lot: Data not available"
 
     redfin_struct: Dict[str, Any] = {
         "source": "redfin_parsed_v2",
@@ -379,19 +420,19 @@ def get_redfin_data(url: str) -> Dict[str, Any]:
         "listing_baths": baths,
         "listing_building_sf": building_sf,
         "listing_year_built": listing_year_built,
-        "list_price": list_price,
+        "list_price": list_price,  # PRICE: from active listing, NOT from tax table
         # backward compatible top-level
         "beds": beds,
         "baths": baths,
         "building_sf": building_sf,
         "lot_sf": lot_sf,
-        # timeline: real sale/list history ONLY, no fake data
+        # timeline: real sale/list history ONLY - NO tax amounts, NO assessed values
         "timeline": sale_events,
-        # tax + APN
+        # tax + APN: Keep tax/assessed values separate from prices
         "tax": {
             "apn": public_parsed.get("apn"),
             "year": 2023,
-            "assessed_value": None,  # Could parse from tax table later
+            "assessed_value": None,  # Could parse from tax table if needed (but NOT as a price)
         },
         "public_records": public_records,
         "generated_at": now,

@@ -1,0 +1,81 @@
+{
+  "url": "https://www.redfin.com/CA/Los-Angeles/1393-Casiano-Rd-90049/home/6829339",
+  "address": "1393 Casiano Rd,Los Angeles, CA 90049",
+  "headline_metrics": {
+    "purchase_price": 1200,
+    "purchase_date": "2019-11-27",
+    "exit_price": 15403,
+    "exit_date": "2021-09-22",
+    "spread": 14203,
+    "roi_pct": 1183.58,
+    "hold_days": 665
+  },
+  "metrics": {
+    "purchase_price": 1200,
+    "purchase_date": "2019-11-27",
+    "exit_price": 15403,
+    "exit_date": "2021-09-22",
+    "spread": 14203,
+    "roi_pct": 1183.58,
+    "hold_days": 665
+  },
+  "current_summary": "3 bed, 3.0 bath, 2,528 SF",
+  "public_record_summary": "3 bed, 4.0 bath",
+  "lot_summary": "Lot: Data not available",
+  "permit_summary": "Failed to start Chrome driver.",
+  "permit_count": 0,
+  "ladbs": {
+    "source": "ladbs_stub_driver_error",
+    "apn": "4368025014",
+    "address": "1393 Casiano Rd,Los Angeles, CA 90049",
+    "fetched_at": "2025-11-16 01:08:47",
+    "permits": [],
+    "note": "Failed to start Chrome driver."
+  },
+  "redfin": {
+    "source": "redfin_parsed_v2",
+    "url": "https://www.redfin.com/CA/Los-Angeles/1393-Casiano-Rd-90049/home/6829339",
+    "address": "1393 Casiano Rd,Los Angeles, CA 90049",
+    "listing_beds": 3.0,
+    "listing_baths": 3.0,
+    "listing_building_sf": 2528.0,
+    "listing_year_built": null,
+    "list_price": null,
+    "beds": 3.0,
+    "baths": 3.0,
+    "building_sf": 2528.0,
+    "lot_sf": null,
+    "timeline": [
+      {
+        "date": "2019-11-27",
+        "event": "sold",
+        "price": 1200,
+        "raw_status": "Sold (Public Records)"
+      },
+      {
+        "date": "2021-09-22",
+        "event": "listed",
+        "price": 15403,
+        "raw_status": "Listed (Active)"
+      }
+    ],
+    "tax": {
+      "apn": "4368025014",
+      "year": 2023,
+      "assessed_value": null
+    },
+    "public_records": {
+      "beds": 3.0,
+      "baths": 4.0,
+      "year_built": 1959
+    },
+    "generated_at": "2025-11-16",
+    "current_summary": "3 bed, 3.0 bath, 2,528 SF",
+    "public_record_summary": "3 bed, 4.0 bath",
+    "lot_summary": "Lot: Data not available",
+    "raw_html_path": "/workspaces/comp-intel/data/raw/20251116-010847_redfin_1393_Casiano_Rd_90049.html"
+  },
+  "project_contacts": null,
+  "cslb_contractor": null,
+  "summary_markdown": "### DEAL SNAPSHOT\n- **Address:** 1393 Casiano Rd, Los Angeles, CA 90049\n- **Current Configuration:** 3 beds, 3.0 baths, 2,528 SF\n- **Original Configuration:** 3 beds, 4.0 baths, year built 1959\n- **SF Changes:** Configuration reflects a reduction in bathrooms but no explicit SF change data available. \n- **Purchase Price:** $1,200 (November 27, 2019)\n- **Current Listing Price:** $15,403 (Listed on September 22, 2021)\n- **Hold Period:** 665 days\n- **Gross Spread:** $14,203\n- **Gross ROI:** 1183.58%\n\n### SCOPE OF WORK (PERMITS)\n- **Permits:** No LADBS permit data is available due to a driver failure. Thus, I can't provide insights into any core building or addition permits, nor can I assess any major work completed in the last 5\u201310 years. There are no open/active/not-final permits to report.\n\n### TEAM (COMPETITOR NETWORK)\n- **General Contractor:** Not available\n- **Architect:** Not available\n- **Engineer:** Not available\n- **Notes:** Due to the absence of permit data, no contractor or firm patterns can be identified.\n\n### PERMIT TIMING (DURATIONS)\n- **Main Building/Addition Permit:** Not available due to lack of permits/data. No durations can be provided since there are no underlying dates.\n\n### VALUE-ADD SUMMARY\nThe property at 1393 Casiano Rd was acquired for $1,200 and subsequently listed for $15,403 after 665 days of holding. The core development features a change in bathroom configuration, transitioning from 4 to 3 baths. Unfortunately, lacking sufficient detail on permits or structural changes limits the insight into the specifics of the improvements made. The gross ROI indicates a highly speculative upward trend in market value, showcasing a significant growth target."
+}
