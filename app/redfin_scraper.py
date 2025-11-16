@@ -105,6 +105,9 @@ def parse_redfin_html_listing(soup: BeautifulSoup, html_text: str) -> Dict[str, 
       - building_sf
       - current list_price
       - listing_year_built
+    
+    CRITICAL: list_price comes from the price banner (data-rf-test-id="abp-price"),
+    NOT from tax amounts or assessed values.
     """
     # Address
     address_text: Optional[str] = None
@@ -132,14 +135,28 @@ def parse_redfin_html_listing(soup: BeautifulSoup, html_text: str) -> Dict[str, 
     if sqft_el:
         building_sf_val = _extract_first_number(sqft_el.get_text(strip=True))
 
-    # For sale price (block usually shows "For sale" then "$X,XXX,XXX")
+    # Current list price from price banner
+    # Look for data-rf-test-id="abp-price" which contains the actual listing price
     list_price_val: Optional[float] = None
-    m_price = re.search(r"For sale\s*[\r\n]+\s*\$([\d,]+)", html_text, re.DOTALL)
-    if m_price:
-        try:
-            list_price_val = float(m_price.group(1).replace(",", ""))
-        except ValueError:
-            list_price_val = None
+    price_el = soup.select_one('[data-rf-test-id="abp-price"] .statsValue.price')
+    if price_el:
+        price_text = price_el.get_text(strip=True)
+        # Extract numeric value from "$3,849,000" format
+        price_match = re.search(r'\$?([\d,]+)', price_text)
+        if price_match:
+            try:
+                list_price_val = float(price_match.group(1).replace(",", ""))
+            except ValueError:
+                pass
+    
+    # Fallback: Try old "For sale" pattern if abp-price not found
+    if list_price_val is None:
+        m_price = re.search(r"For sale\s*[\r\n]+\s*\$([\d,]+)", html_text, re.DOTALL)
+        if m_price:
+            try:
+                list_price_val = float(m_price.group(1).replace(",", ""))
+            except ValueError:
+                pass
 
     # Listing year built (e.g. "2025 Year Built" in property details)
     listing_year_built: Optional[int] = None
@@ -227,75 +244,110 @@ def parse_sale_history(html_text: str) -> List[Dict[str, Any]]:
     - NEVER use property tax amounts (e.g. $15,403 annual tax) as prices.
     - NEVER use assessed values from the tax table as sale prices.
     - If a listing event shows "*" or no price, skip it (do NOT invent a price).
-    - Validate that prices are realistic (>= $10,000) to avoid capturing tax amounts.
+    - Validate that prices are realistic (>= $100,000) to avoid capturing tax/HOA amounts.
     
-    NOTE: This parsing is BRITTLE and depends on specific Redfin HTML structure.
-    The regexes below look for patterns like:
-      "Nov 27, 2019 ... Sold (MLS) ... $1,150,000"
-      "Sep 22, 2021 ... Listed (Active) ... $X,XXX,XXX"
-    We limit the search window between date and price to reduce false matches.
+    NOTE: Parsing strategy:
+    1. Look for the Sale History tab panel content (avoid Tax History table)
+    2. Extract date + event type + price from PropertyHistoryEventRow divs
+    3. Strict validation on price format and minimum value
+    
+    The HTML structure we're looking for:
+      <div class="PropertyHistoryEventRow">
+        <div><p>Nov 13, 2025</p></div>
+        <div>Listed (Active)</div>
+        <div class="price-col">$3,849,000</div>
+      </div>
     """
 
     events: List[Dict[str, Any]] = []
 
-    # Pattern for listed events with prices
-    # We look for: Date, then "Listed (status)", then a price within ~150 chars
-    # The tighter window helps avoid matching unrelated numbers (like tax amounts)
-    pattern_listed = re.compile(
-        r"([A-Z][a-z]{2} \d{1,2}, \d{4}).{0,150}?Listed\s*\(([^)]+)\).{0,50}?\$([\d,]+)",
-        re.DOTALL,
+    # Strategy 1: Try to find the sale history panel and parse row-by-row
+    # Look for PropertyHistoryEventRow divs
+    sale_history_pattern = re.compile(
+        r'<div[^>]*class="[^"]*PropertyHistoryEventRow[^"]*"[^>]*>.*?'
+        r'<p>([A-Z][a-z]{2} \d{1,2}, \d{4})</p>.*?'
+        r'<div>(Sold|Listed)\s*\(([^)]+)\)</div>.*?'
+        r'<div[^>]*class="[^"]*price-col[^"]*"[^>]*>\$?([\d,]+|\*)',
+        re.DOTALL
     )
-
-    # Pattern for sold events
-    # Similar structure: Date, then "Sold (status)", then price
-    pattern_sold = re.compile(
-        r"([A-Z][a-z]{2} \d{1,2}, \d{4}).{0,150}?Sold\s*\(([^)]+)\).{0,50}?\$([\d,]+)",
-        re.DOTALL,
-    )
-
-    for m in pattern_listed.finditer(html_text):
+    
+    for m in sale_history_pattern.finditer(html_text):
         date_str = m.group(1)
-        status_desc = f"Listed ({m.group(2)})"
-        price_str = m.group(3)
+        event_type = m.group(2).lower()  # "Sold" or "Listed"
+        status = m.group(3)
+        price_str = m.group(4)
+        
+        # Skip if price is "*" (no price listed)
+        if price_str == "*":
+            continue
+            
         try:
             dt = datetime.strptime(date_str, "%b %d, %Y")
             price = int(price_str.replace(",", ""))
-            # Sanity check: reject prices < $10,000 (likely tax amounts, not real prices)
-            if price < 10000:
+            
+            # STRICT validation: real estate prices should be >= $100,000
+            # This filters out property tax amounts ($1,500-$25,000 range)
+            # and HOA fees ($3-$500/month range)
+            if price < 100000:
                 continue
-        except ValueError:
+                
+        except (ValueError, AttributeError):
             continue
-        events.append(
-            {
-                "date": dt.date().isoformat(),
-                "event": "listed",
-                "price": price,
-                "raw_status": status_desc,
-            }
-        )
+            
+        events.append({
+            "date": dt.date().isoformat(),
+            "event": event_type,  # "sold" or "listed"
+            "price": price,
+            "raw_status": f"{event_type.capitalize()} ({status})",
+        })
 
-    for m in pattern_sold.finditer(html_text):
-        date_str = m.group(1)
-        status_desc = f"Sold ({m.group(2)})"
-        price_str = m.group(3)
-        try:
-            dt = datetime.strptime(date_str, "%b %d, %Y")
-            price = int(price_str.replace(",", ""))
-            # Sanity check: reject prices < $10,000 (likely tax amounts, not real prices)
-            if price < 10000:
-                continue
-        except ValueError:
-            continue
-        events.append(
-            {
-                "date": dt.date().isoformat(),
-                "event": "sold",
-                "price": price,
-                "raw_status": status_desc,
-            }
+    # Strategy 2: If no events found via PropertyHistoryEventRow, try broader patterns
+    # but still being very careful to avoid tax table
+    if not events:
+        # Only search within the sale-history-panel section if we can identify it
+        sale_panel_match = re.search(
+            r'<div[^>]*class="[^"]*sale-history-panel[^"]*"[^>]*>(.+?)</div>\s*<div[^>]*class="[^"]*tax-history-panel',
+            html_text,
+            re.DOTALL
         )
+        
+        if sale_panel_match:
+            sale_panel_text = sale_panel_match.group(1)
+            
+            # Now look for sale/list events within this restricted section
+            # Pattern: Date ... Sold/Listed (status) ... Price
+            pattern = re.compile(
+                r'([A-Z][a-z]{2} \d{1,2}, \d{4}).*?'
+                r'(Sold|Listed)\s*\(([^)]+)\).*?'
+                r'\$([\d,]+)',
+                re.DOTALL
+            )
+            
+            for m in pattern.finditer(sale_panel_text):
+                date_str = m.group(1)
+                event_type = m.group(2).lower()
+                status = m.group(3)
+                price_str = m.group(4)
+                
+                try:
+                    dt = datetime.strptime(date_str, "%b %d, %Y")
+                    price = int(price_str.replace(",", ""))
+                    
+                    # STRICT validation
+                    if price < 100000:
+                        continue
+                        
+                except (ValueError, AttributeError):
+                    continue
+                    
+                events.append({
+                    "date": dt.date().isoformat(),
+                    "event": event_type,
+                    "price": price,
+                    "raw_status": f"{event_type.capitalize()} ({status})",
+                })
 
-    # Sort by date ascending so metrics logic can use first sold + first listed cleanly
+    # Sort by date ascending
     events.sort(key=lambda e: e["date"])
     return events
 
