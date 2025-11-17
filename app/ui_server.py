@@ -1,6 +1,7 @@
 # app/ui_server.py
 
 import os
+import re
 import traceback
 from datetime import datetime
 from pathlib import Path
@@ -22,6 +23,20 @@ app = Flask(
     template_folder=os.path.join(BASE_DIR, "templates"),
     static_folder=os.path.join(BASE_DIR, "static"),
 )
+
+
+@app.template_test("match")
+def jinja_match(value, pattern):
+    """
+    Used in Jinja as: selectattr('field', 'match', 'regex')
+    Returns True if regex `pattern` matches `value`.
+    """
+    if value is None:
+        return False
+    try:
+        return re.search(pattern, str(value)) is not None
+    except re.error:
+        return False
 
 
 @app.route("/", methods=["GET", "POST"])

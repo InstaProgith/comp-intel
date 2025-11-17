@@ -1,0 +1,439 @@
+{
+  "url": "https://www.redfin.com/CA/Los-Angeles/7841-Stewart-Ave-90045/home/6618580",
+  "address": "7841 Stewart Ave,Los Angeles, CA 90045",
+  "headline_metrics": {
+    "purchase_price": null,
+    "purchase_date": null,
+    "exit_price": null,
+    "exit_date": null,
+    "spread": null,
+    "roi_pct": null,
+    "hold_days": null,
+    "list_price": 3849000.0
+  },
+  "metrics": {
+    "purchase_price": null,
+    "purchase_date": null,
+    "exit_price": null,
+    "exit_date": null,
+    "spread": null,
+    "roi_pct": null,
+    "hold_days": null,
+    "list_price": 3849000.0
+  },
+  "current_summary": "4 bed, 4.5 bath, 2,890 SF",
+  "public_record_summary": "4 bed, 3.0 bath, 1,965 SF",
+  "lot_summary": "Lot: 6,001 SF (0.14 acres)",
+  "permit_summary": "Found 7 permits with status date >= 2020 via PLR.",
+  "permit_count": 7,
+  "ladbs": {
+    "source": "ladbs_plr_v5",
+    "apn": "4112021016",
+    "address": "7841 Stewart Ave,Los Angeles, CA 90045",
+    "fetched_at": "2025-11-16 02:57:11",
+    "permits": [
+      {
+        "permit_number": "22014-10000-05520",
+        "job_number": "B22LA22636",
+        "permit_type": "Bldg-Addition - 1 or 2 Family Dwelling",
+        "Type": "Bldg-Addition - 1 or 2 Family Dwelling",
+        "Status": "Issued on 12/13/2022",
+        "status_date": "12/13/2022",
+        "Work_Description": "MAJOR REMODEL OF (E) SINGLE FAMILY RESIDENCE WITH GARAGE ADDITION IN THE FRONT AND ON THE NORTH SIDE. NEW WALLS WITH NEW METAL ROOF.",
+        "Issued_Date": "Issued on 12/13/2022",
+        "contractor": "Owner-Builder ,",
+        "contractor_license": null,
+        "architect": null,
+        "architect_license": null,
+        "engineer": "Carrillo,, Jesus Eduardo; Lic. No.: C77737 8207 BROOKGREEN RD      DOWNEY, CA 90240",
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "22014-10000-05520",
+          "job_number": "B22LA22636",
+          "group": "Building",
+          "type": "Bldg-Addition",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "(1) Dwelling - Single Family",
+          "work_description": "MAJOR REMODEL OF (E) SINGLE FAMILY RESIDENCE WITH GARAGE ADDITION IN THE FRONT AND ON THE NORTH SIDE. NEW WALLS WITH NEW METAL ROOF.",
+          "permit_issued": "Issued on 12/13/2022",
+          "current_status": "Issued on 12/13/2022",
+          "issuing_office": "Metro",
+          "certificate_of_occupancy": "Pending More Information",
+          "contact_information": {
+            "Contractor": "Owner-Builder ,",
+            "Engineer": "Carrillo,, Jesus Eduardo; Lic. No.: C77737 8207 BROOKGREEN RD      DOWNEY, CA 90240"
+          },
+          "status_history": [
+            {
+              "event": "Submitted",
+              "date": "11/8/2022",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Assigned to Plan Check Engineer",
+              "date": "11/17/2022",
+              "person": "WEIJIAN HUANG"
+            },
+            {
+              "event": "Building Plans Picked Up",
+              "date": "11/18/2022",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Corrections Issued",
+              "date": "11/22/2022",
+              "person": "WEIJIAN HUANG"
+            },
+            {
+              "event": "Applicant returned to address corrections",
+              "date": "11/28/2022",
+              "person": "JAD BASMA"
+            },
+            {
+              "event": "Applicant returned to address corrections",
+              "date": "12/5/2022",
+              "person": "WEIJIAN HUANG"
+            },
+            {
+              "event": "Plan Check Approved",
+              "date": "12/13/2022",
+              "person": "VICTOR CHEN"
+            },
+            {
+              "event": "Issued",
+              "date": "12/13/2022",
+              "person": "APPLICANT"
+            }
+          ],
+          "status_date": "12/13/2022"
+        }
+      },
+      {
+        "permit_number": "22016-90000-20678",
+        "job_number": "--",
+        "permit_type": "Bldg-Alter/Repair - 1 or 2 Family Dwelling",
+        "Type": "Bldg-Alter/Repair - 1 or 2 Family Dwelling",
+        "Status": "Refund Completed on 3/24/2023",
+        "status_date": "3/24/2023",
+        "Work_Description": "Replace drywall/plaster (patch and paint). Non-structural repair only. Interior kitchen remodel/repair (no changes in walls or openings). Interior bathroom remodel/repair (no changes in walls or openings). Replace damaged wood framing (less than 10%). Same size, spacing, type.",
+        "Issued_Date": "Issued on 7/12/2022",
+        "contractor": "Owner-Builder ,",
+        "contractor_license": null,
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "22016-90000-20678",
+          "job_number": "--",
+          "group": "Building",
+          "type": "Bldg-Alter/Repair",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "(1) Dwelling - Single Family",
+          "work_description": "Replace drywall/plaster (patch and paint). Non-structural repair only. Interior kitchen remodel/repair (no changes in walls or openings). Interior bathroom remodel/repair (no changes in walls or openings). Replace damaged wood framing (less than 10%). Same size, spacing, type.",
+          "permit_issued": "Issued on 7/12/2022",
+          "current_status": "Refund Completed on 3/24/2023",
+          "contact_information": {
+            "Contractor": "Owner-Builder ,"
+          },
+          "status_history": [
+            {
+              "event": "Issued",
+              "date": "7/12/2022",
+              "person": "INTERNET PERMIT"
+            },
+            {
+              "event": "Refund in Progress",
+              "date": "12/13/2022",
+              "person": "TERENCE SHIA"
+            },
+            {
+              "event": "Refund Completed",
+              "date": "3/24/2023",
+              "person": "EMILY HU"
+            }
+          ],
+          "status_date": "3/24/2023"
+        }
+      },
+      {
+        "permit_number": "22016-90000-25592",
+        "job_number": "--",
+        "permit_type": "Bldg-Alter/Repair - 1 or 2 Family Dwelling",
+        "Type": "Bldg-Alter/Repair - 1 or 2 Family Dwelling",
+        "Status": "Refund Completed on 3/24/2023",
+        "status_date": "3/24/2023",
+        "Work_Description": "Interior kitchen remodel/repair (no changes in walls or openings).",
+        "Issued_Date": "Issued on 8/24/2022",
+        "contractor": "Owner-Builder ,",
+        "contractor_license": null,
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "22016-90000-25592",
+          "job_number": "--",
+          "group": "Building",
+          "type": "Bldg-Alter/Repair",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "(1) Dwelling - Single Family",
+          "work_description": "Interior kitchen remodel/repair (no changes in walls or openings).",
+          "permit_issued": "Issued on 8/24/2022",
+          "current_status": "Refund Completed on 3/24/2023",
+          "contact_information": {
+            "Contractor": "Owner-Builder ,"
+          },
+          "status_history": [
+            {
+              "event": "Issued",
+              "date": "8/24/2022",
+              "person": "INTERNET PERMIT"
+            },
+            {
+              "event": "Refund in Progress",
+              "date": "12/8/2022",
+              "person": "TERENCE SHIA"
+            },
+            {
+              "event": "Refund Completed",
+              "date": "3/24/2023",
+              "person": "EMILY HU"
+            }
+          ],
+          "status_date": "3/24/2023"
+        }
+      },
+      {
+        "permit_number": "22014-10001-05520",
+        "job_number": "B23LA00104",
+        "permit_type": "Bldg-Alter/Repair - 1 or 2 Family Dwelling",
+        "Type": "Bldg-Alter/Repair - 1 or 2 Family Dwelling",
+        "Status": "Permit Finaled on 2/14/2023",
+        "status_date": "2/14/2023",
+        "Work_Description": "SUPPLEMENTAL TO 22014-10000-05520 Clarification of demo plan, framing, and foundation plan, and revision of project valuation. Removal of fire-sprinkler requirement per LARC 313.2.",
+        "Issued_Date": "Issued on 1/24/2023",
+        "contractor": "Owner-Builder ,",
+        "contractor_license": null,
+        "architect": null,
+        "architect_license": null,
+        "engineer": "Carrillo,, Jesus Eduardo; Lic. No.: C77737 8207 BROOKGREEN RD      DOWNEY, CA 90240",
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "22014-10001-05520",
+          "job_number": "B23LA00104",
+          "group": "Building",
+          "type": "Bldg-Alter/Repair",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "(1) Dwelling - Single Family",
+          "work_description": "SUPPLEMENTAL TO 22014-10000-05520 Clarification of demo plan, framing, and foundation plan, and revision of project valuation. Removal of fire-sprinkler requirement per LARC 313.2.",
+          "permit_issued": "Issued on 1/24/2023",
+          "current_status": "Permit Finaled on 2/14/2023",
+          "issuing_office": "Metro",
+          "certificate_of_occupancy": "Pending More Information",
+          "contact_information": {
+            "Contractor": "Owner-Builder ,",
+            "Engineer": "Carrillo,, Jesus Eduardo; Lic. No.: C77737 8207 BROOKGREEN RD      DOWNEY, CA 90240"
+          },
+          "status_history": [
+            {
+              "event": "Submitted",
+              "date": "1/5/2023",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Assigned to Plan Check Engineer",
+              "date": "1/5/2023",
+              "person": "DANIEL SMILEY"
+            },
+            {
+              "event": "Corrections Issued",
+              "date": "1/5/2023",
+              "person": "DANIEL SMILEY"
+            },
+            {
+              "event": "Applicant returned to address corrections",
+              "date": "1/19/2023",
+              "person": "CRISTINA SALAZAR"
+            },
+            {
+              "event": "Plan Check Approved",
+              "date": "1/24/2023",
+              "person": "DANIEL SMILEY"
+            },
+            {
+              "event": "Issued",
+              "date": "1/24/2023",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "2/14/2023",
+              "person": "BOBBY KEY"
+            }
+          ],
+          "status_date": "2/14/2023"
+        }
+      },
+      {
+        "permit_number": "22041-90000-44742",
+        "job_number": "--",
+        "permit_type": "Electrical - 1 or 2 Family Dwelling",
+        "Type": "Electrical - 1 or 2 Family Dwelling",
+        "Status": "Permit Closed on 2/15/2023",
+        "status_date": "2/15/2023",
+        "Work_Description": "Remodel",
+        "Issued_Date": "Issued on 9/8/2022",
+        "contractor": "Owner-Builder ,",
+        "contractor_license": null,
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "22041-90000-44742",
+          "job_number": "--",
+          "group": "Electrical",
+          "type": "Electrical",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "Remodel",
+          "permit_issued": "Issued on 9/8/2022",
+          "current_status": "Permit Closed on 2/15/2023",
+          "contact_information": {
+            "Contractor": "Owner-Builder ,"
+          },
+          "status_history": [
+            {
+              "event": "Issued",
+              "date": "9/8/2022",
+              "person": "INTERNET PERMIT"
+            },
+            {
+              "event": "Permit Closed",
+              "date": "2/14/2023",
+              "person": "BOBBY KEY"
+            }
+          ],
+          "status_date": "2/15/2023"
+        }
+      },
+      {
+        "permit_number": "22041-90000-46213",
+        "job_number": "--",
+        "permit_type": "Electrical - 1 or 2 Family Dwelling",
+        "Type": "Electrical - 1 or 2 Family Dwelling",
+        "Status": "Permit Finaled on 9/19/2022",
+        "status_date": "9/19/2022",
+        "Work_Description": "Temporary Power Service",
+        "Issued_Date": "Issued on 9/15/2022",
+        "contractor": "Owner-Builder ,",
+        "contractor_license": null,
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "22041-90000-46213",
+          "job_number": "--",
+          "group": "Electrical",
+          "type": "Electrical",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "Temporary Power Service",
+          "permit_issued": "Issued on 9/15/2022",
+          "current_status": "Permit Finaled on 9/19/2022",
+          "contact_information": {
+            "Contractor": "Owner-Builder ,"
+          },
+          "status_history": [
+            {
+              "event": "Issued",
+              "date": "9/15/2022",
+              "person": "INTERNET PERMIT"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "9/17/2022",
+              "person": "JESUS RODRIGUEZ"
+            }
+          ],
+          "status_date": "9/19/2022"
+        }
+      },
+      {
+        "permit_number": "22030-10000-07425",
+        "job_number": "B22LA21877",
+        "permit_type": "Grading - 1 or 2 Family Dwelling",
+        "Type": "Grading - 1 or 2 Family Dwelling",
+        "Status": "Completed on 11/07/2022",
+        "status_date": "10/28/2022",
+        "Work_Description": "GPI & Posting for proposed addition to (E) SFD",
+        "Issued_Date": "No",
+        "contractor": null,
+        "contractor_license": null,
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "22030-10000-07425",
+          "job_number": "B22LA21877",
+          "group": "Building",
+          "type": "Grading",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "GPI & Posting for proposed addition to (E) SFD",
+          "permit_issued": "No",
+          "current_status": "Completed on 11/07/2022",
+          "contact_information": {},
+          "status_history": [],
+          "status_date": "10/28/2022"
+        }
+      }
+    ],
+    "note": "Found 7 permits with status date >= 2020 via PLR."
+  },
+  "redfin": {
+    "source": "redfin_parsed_v2",
+    "url": "https://www.redfin.com/CA/Los-Angeles/7841-Stewart-Ave-90045/home/6618580",
+    "address": "7841 Stewart Ave,Los Angeles, CA 90045",
+    "listing_beds": 4.0,
+    "listing_baths": 4.5,
+    "listing_building_sf": 2890.0,
+    "listing_year_built": null,
+    "list_price": 3849000.0,
+    "beds": 4.0,
+    "baths": 4.5,
+    "building_sf": 2890.0,
+    "lot_sf": 6001.0,
+    "timeline": [
+      {
+        "date": "2025-11-13",
+        "event": "listed",
+        "price": 3849000,
+        "raw_status": "Listed (Active)"
+      }
+    ],
+    "tax": {
+      "apn": "4112021016",
+      "year": 2023,
+      "assessed_value": null
+    },
+    "public_records": {
+      "beds": 4.0,
+      "baths": 3.0,
+      "building_sf": 1965.0,
+      "lot_sf": 6001.0,
+      "year_built": 1948
+    },
+    "generated_at": "2025-11-16",
+    "current_summary": "4 bed, 4.5 bath, 2,890 SF",
+    "public_record_summary": "4 bed, 3.0 bath, 1,965 SF",
+    "lot_summary": "Lot: 6,001 SF (0.14 acres)",
+    "raw_html_path": "/workspaces/comp-intel/data/raw/20251116-025711_redfin_7841_Stewart_Ave_90045.html"
+  },
+  "project_contacts": null,
+  "cslb_contractor": null,
+  "summary_markdown": "# Due Diligence Summary for 7841 Stewart Ave, Los Angeles, CA 90045\n\n## 1) DEAL SNAPSHOT\n- **Address:** 7841 Stewart Ave, Los Angeles, CA 90045\n- **Current Configuration:** 4 beds, 4.5 baths, 2,890 SF\n- **Original Configuration (Public Records):** 4 beds, 3 baths, 1,965 SF, Year Built: 1948\n- **SF Added/Changed:** 925 SF (2,890 SF - 1,965 SF)\n- **Purchase Price:** Not available\n- **Purchase Date:** Not available\n- **Current Listing Price:** $3,849,000 (Listed on November 13, 2025)\n- **Hold Period:** Not applicable (no purchase date)\n- **Gross Spread:** Not available\n- **Gross ROI:** Not available\n\n## 2) SCOPE OF WORK (PERMITS)\n- A total of **7 permits** were found issued since 2020, indicating significant changes and enhancements to the property.\n- **Core Building/Addition Permits:**\n  - **Permit #22014-10000-05520**: Major remodel with garage addition in front and on the north side. Structural changes included new walls and a metal roof. Issued on December 13, 2022.\n- **Additional Work:**\n  - Other permits include non-structural repairs and remodeling of interior spaces (kitchen and bathrooms), but these do not indicate substantial alterations.\n  - **Active Permits:**\n    - Permit #22041-90000-46213 for temporary power service, finaled on September 19, 2022.\n    - Permit #22041-90000-44742 for remodeling work, closed on February 15, 2023.\n  \n## 3) TEAM (COMPETITOR NETWORK)\n- **General Contractor:** Owner-Builder\n- **Architect:** Not specified\n- **Structural Engineer:** Jesus Eduardo Carrillo, License No.: C77737\n- **Notes:** The Owner-Builder designation indicates that the property owner is directly managing the construction, which is a common approach in remodels. Jesus Carrillo is a repeat player in the permits, having been listed as the engineer on multiple permits.\n\n## 4) PERMIT TIMING (DURATIONS)\n- **Main Building/Addition Permit (Permit #22014-10000-05520):**\n  - Submitted \u2192 Plan Check Approved: 35 days (11/8/2022 to 12/13/2022)\n  - Plan Check Approved \u2192 Issued: 0 days (Plan Check approved and issued on the same day)\n  - Issued \u2192 Finaled: Not finaled\n\n## 5) VALUE-ADD SUMMARY\nThe property at 7841 Stewart Ave was purchased as a single-family residence with 4 beds and 3 baths, originally 1,965 SF. A significant remodel and expansion was executed, adding approximately 925 SF, bringing the total to 2,890 SF, along with structural enhancements such as a garage. While the current listing targets a price of $3,849,000, specific purchase data is unavailable to assess prior investment or total realized value added. The process of remodeling appears robust, with formal permitting steps completed as of December 2022."
+}

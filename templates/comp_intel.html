@@ -150,6 +150,7 @@
 
           <!-- WORK PERFORMED -->
           {% if permits %}
+          {% set permits = r.ladbs.permits if r.ladbs is defined and r.ladbs.permits is defined and r.ladbs.permits is not none else [] %}
           <div class="section-header">
             <h3 class="section-title">Work Performed</h3>
             <span class="section-count">{{ permits | length }} permits</span>
@@ -247,15 +248,6 @@
               {% if lic %}<div class="team-license">Lic {{ lic }}</div>{% endif %}
             </div>
             {% endfor %}
-          </div>
-          {% endif %}
-              {% endif %}
-
-              {% if cslb.detail_url %}
-              <a href="{{ cslb.detail_url }}" target="_blank"
-                 class="contact-link">CSLB License Detail</a>
-              {% endif %}
-            </div>
           </div>
           {% endif %}
 

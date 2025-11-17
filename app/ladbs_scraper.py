@@ -21,7 +21,7 @@ except ImportError:
 LADBS_PLR_URL = (
     "https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr"
 )
-CUTOFF_YEAR = 2020
+CUTOFF_YEAR = 2018  # Changed from 2020 to capture more recent projects
 FIVE_YEARS_AGO = datetime.now() - timedelta(days=5 * 365)
 
 BASE_DIR = Path(__file__).resolve().parent.parent

@@ -1,0 +1,84 @@
+{
+  "url": "https://www.redfin.com/CA/Los-Angeles/3024-Midvale-Ave-90034/home/6752669",
+  "address": "3024 Midvale Ave,Los Angeles, CA 90034",
+  "headline_metrics": {
+    "purchase_price": 2050000,
+    "purchase_date": "2017-04-04",
+    "exit_price": null,
+    "exit_date": null,
+    "spread": null,
+    "roi_pct": null,
+    "hold_days": null,
+    "list_price": 2755424.0
+  },
+  "metrics": {
+    "purchase_price": 2050000,
+    "purchase_date": "2017-04-04",
+    "exit_price": null,
+    "exit_date": null,
+    "spread": null,
+    "roi_pct": null,
+    "hold_days": null,
+    "list_price": 2755424.0
+  },
+  "current_summary": "4 bed, 4.0 bath, 2,780 SF",
+  "public_record_summary": "4 bed, 5.0 bath",
+  "lot_summary": "Lot: 5,256 SF (0.12 acres)",
+  "permit_summary": "No permits with status date >= 2018 found for this address.",
+  "permit_count": 0,
+  "ladbs": {
+    "source": "ladbs_no_permits_found",
+    "apn": "4254008020",
+    "address": "3024 Midvale Ave,Los Angeles, CA 90034",
+    "fetched_at": "2025-11-17 21:13:12",
+    "permits": [],
+    "note": "No permits with status date >= 2018 found for this address."
+  },
+  "redfin": {
+    "source": "redfin_parsed_v2",
+    "url": "https://www.redfin.com/CA/Los-Angeles/3024-Midvale-Ave-90034/home/6752669",
+    "address": "3024 Midvale Ave,Los Angeles, CA 90034",
+    "listing_beds": 4.0,
+    "listing_baths": 4.0,
+    "listing_building_sf": 2780.0,
+    "listing_year_built": null,
+    "list_price": 2755424.0,
+    "beds": 4.0,
+    "baths": 4.0,
+    "building_sf": 2780.0,
+    "lot_sf": 5256.0,
+    "timeline": [
+      {
+        "date": "2017-04-04",
+        "event": "listed",
+        "price": 2050000,
+        "raw_status": "Listed (Active)"
+      },
+      {
+        "date": "2017-04-04",
+        "event": "sold",
+        "price": 2050000,
+        "raw_status": "Sold (Public Records)"
+      }
+    ],
+    "tax": {
+      "apn": "4254008020",
+      "year": 2023,
+      "assessed_value": null
+    },
+    "public_records": {
+      "beds": 4.0,
+      "baths": 5.0,
+      "lot_sf": 5256.0,
+      "year_built": 2013
+    },
+    "generated_at": "2025-11-17",
+    "current_summary": "4 bed, 4.0 bath, 2,780 SF",
+    "public_record_summary": "4 bed, 5.0 bath",
+    "lot_summary": "Lot: 5,256 SF (0.12 acres)",
+    "raw_html_path": "/workspaces/comp-intel/data/raw/20251117-211312_redfin_3024_Midvale_Ave_90034.html"
+  },
+  "project_contacts": null,
+  "cslb_contractor": null,
+  "summary_markdown": "### DEAL SNAPSHOT\n- **Address:** 3024 Midvale Ave, Los Angeles, CA 90034\n- **Current Configuration:** 4 beds, 4.0 baths, 2,780 SF\n- **Original Configuration from Public Records:** 4 beds, 5.0 baths, SF: 2,780 (not specified), Year Built: 2013\n- **SF Added/Changed:** No information on changes or additions available.\n- **Purchase Price:** $2,050,000\n- **Purchase Date:** April 4, 2017\n- **Current Listing Price:** $2,755,424\n- **Listing Date:** Not specified (last sold date used)\n- **Hold Period in Days:** 3,058 days (as of today)\n- **Gross Spread:** $705,424\n- **Gross ROI:** 34.3% (spread / purchase price)\n\n### SCOPE OF WORK (PERMITS)\n- **Permit Analysis:** No permits were found for this address, indicating no significant modifications or construction work has been permitted and documented in the last 5\u201310 years. The absence of permits suggests that the property has not undergone substantial renovations or additions since its construction in 2013.\n\n### TEAM (COMPETITOR NETWORK)\n- **General Contractor:** None available, as there are no permits.\n- **Architect:** None available, as there are no permits.\n- **Structural Engineer:** None available, as there are no permits.\n- **Notes:** No repeated players or interesting patterns noted due to lack of permit activity.\n\n### PERMIT TIMING (DURATIONS)\n- **Main Building/Addition Permit Status:** Not applicable, as no permits were found.\n\n### VALUE-ADD SUMMARY\nThe developer purchased a well-located property at 3024 Midvale Ave for $2,050,000 in 2017, featuring a current configuration of 4 bedrooms and 4 bathrooms. However, no significant improvements or additions have been documented through permits since its construction in 2013. The listing is currently priced at $2,755,424, aiming for a gross spread of approximately $705,424, reflecting a notable appreciation during the hold period of over 8 years."
+}

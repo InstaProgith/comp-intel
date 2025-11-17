@@ -102,11 +102,11 @@ def parse_redfin_html_listing(soup: BeautifulSoup, html_text: str) -> Dict[str, 
       - beds
       - baths
       - building_sf
-      - current list_price
+      - current list_price (ONLY from active listing banner)
       - listing_year_built
     
-    CRITICAL: list_price comes ONLY from the price banner (data-rf-test-id="abp-price").
-    NEVER use tax amounts or assessed values as list_price.
+    CRITICAL RULE: list_price comes ONLY from [data-rf-test-id="abp-price"].
+    NEVER use tax amounts, assessed values, or tax table numbers as list_price.
     """
     # Address
     address_text: Optional[str] = None
@@ -134,10 +134,10 @@ def parse_redfin_html_listing(soup: BeautifulSoup, html_text: str) -> Dict[str, 
     if sqft_el:
         building_sf_val = _extract_first_number(sqft_el.get_text(strip=True))
 
-    # Current list price from price banner
-    # ONLY from data-rf-test-id="abp-price" - NEVER from tax table
+    # Current list price from price banner ONLY
+    # RULE: ONLY from data-rf-test-id="abp-price" - NEVER from tax table
     list_price_val: Optional[float] = None
-    price_el = soup.select_one('[data-rf-test-id="abp-price"] .statsValue.price')
+    price_el = soup.select_one('[data-rf-test-id="abp-price"]')
     if price_el:
         price_text = price_el.get_text(strip=True)
         # Extract numeric value from "$3,849,000" format
@@ -162,7 +162,7 @@ def parse_redfin_html_listing(soup: BeautifulSoup, html_text: str) -> Dict[str, 
         "beds": beds_val,
         "baths": baths_val,
         "building_sf": building_sf_val,
-        "list_price": list_price_val,
+        "list_price": list_price_val,  # PRICE: from active listing banner ONLY
         "listing_year_built": listing_year_built,
     }
 
@@ -173,11 +173,11 @@ def parse_public_facts_and_apn(html_text: str) -> Dict[str, Any]:
       - public_beds
       - public_baths
       - public_building_sf
-      - public_lot_sf  (from Property Details section, NOT from tax table)
+      - public_lot_sf  (from Property Details section ONLY, NOT from tax table)
       - public_year_built
       - apn
     
-    CRITICAL: Lot size must come from Property Details section ONLY.
+    CRITICAL RULE: Lot size MUST come from Property Details section ONLY.
     NEVER use tax table values.
     """
     result: Dict[str, Any] = {}
@@ -195,6 +195,9 @@ def parse_public_facts_and_apn(html_text: str) -> Dict[str, Any]:
     if not lot_str:
         # Pattern 3: "Lot Size: 6,001 Sq. Ft."
         lot_str = _regex_first_group(r"Lot Size:\s*([\d,]+)\s+Sq\. Ft\.", html_text)
+    if not lot_str:
+        # Pattern 4: Just "Lot Size: 6,001"
+        lot_str = _regex_first_group(r"Lot Size:\s*([\d,]+)", html_text)
     
     year_str = _regex_first_group(r"Year Built:\s*([0-9]{4})", html_text)
     apn_str = _regex_first_group(r"APN:\s*([0-9\-]+)", html_text)
@@ -228,7 +231,7 @@ def parse_public_facts_and_apn(html_text: str) -> Dict[str, Any]:
 
 def parse_sale_history(html_text: str, soup: Optional[BeautifulSoup] = None) -> List[Dict[str, Any]]:
     """
-    Parse the 'Sale and tax history' section into a list of REAL sale/list events.
+    Parse the 'Sale and tax history' section into a list of REAL sale/list events ONLY.
     Returns: List of { date: 'YYYY-MM-DD', event: 'listed'|'sold'|'price_changed', price: int, raw_status: str }
     
     CRITICAL ANTI-HALLUCINATION RULES:
@@ -238,6 +241,7 @@ def parse_sale_history(html_text: str, soup: Optional[BeautifulSoup] = None) -> 
     - If a listing event shows "*" or no price, skip it (do NOT invent a price).
     - Validate that prices are realistic (>= $100,000) to avoid capturing tax/HOA amounts.
     - NEVER fabricate a sold event.
+    - Skip rows containing keywords: "tax", "assessment", "assessed", "property tax"
     
     FALLBACK: If no PropertyHistoryEventRow found, extract from meta tags (for sold properties).
     """
@@ -251,6 +255,11 @@ def parse_sale_history(html_text: str, soup: Optional[BeautifulSoup] = None) -> 
         re.DOTALL
     ):
         row_html = match_obj.group(1)
+        
+        # FILTER OUT TAX ROWS - skip if row contains tax-related keywords
+        row_lower = row_html.lower()
+        if any(keyword in row_lower for keyword in ["tax", "assessment", "assessed", "property tax"]):
+            continue
         
         # Extract date
         date_match = re.search(r'<p>([A-Z][a-z]{2} \d{1,2}, \d{4})</p>', row_html)
@@ -283,6 +292,7 @@ def parse_sale_history(html_text: str, soup: Optional[BeautifulSoup] = None) -> 
             price = int(price_str.replace(",", ""))
             
             # STRICT validation: real estate prices should be >= $100,000
+            # This filters out tax amounts (typically $5k-$20k)
             if price < 100000:
                 continue
                 
@@ -331,19 +341,23 @@ def parse_sale_history(html_text: str, soup: Optional[BeautifulSoup] = None) -> 
 
 def get_redfin_data(url: str) -> Dict[str, Any]:
     """
-    1) Fetch & save the real Redfin HTML.
-    2) Parse listing stats (address + beds + baths + SF + list_price + listing_year_built).
-    3) Parse public records stats (beds/baths/SF/lot/year built) and APN.
-    4) Parse sale history into a real timeline.
+    Fetch and parse Redfin property data.
     
-    CRITICAL: All PRICE values come ONLY from:
-      - list_price: from [data-rf-test-id="abp-price"]
-      - timeline[].price: from PropertyHistoryEventRow divs with Sold/Listed events
-      
-    NEVER use:
-      - Property tax amounts
-      - Assessed values
-      - Tax table numbers
+    CRITICAL RULES FOR PRICE DATA:
+    1. list_price comes ONLY from [data-rf-test-id="abp-price"] 
+    2. timeline[].price comes ONLY from PropertyHistoryEventRow divs with Sold/Listed events
+    3. NEVER use:
+       - Property tax amounts
+       - Assessed values
+       - Tax table numbers
+       - HOA fees
+       - Any non-sale/list numeric value
+    
+    Returns a dict with:
+      - listing stats (beds, baths, SF, list_price, year built)
+      - public records (beds, baths, SF, lot_sf, year built, APN)
+      - timeline: list of real sale/list events ONLY
+      - tax: separate tax/assessment data (never used as prices)
     """
     _ensure_dirs()
 
@@ -403,7 +417,7 @@ def get_redfin_data(url: str) -> Dict[str, Any]:
     beds = listing_parsed.get("beds")
     baths = listing_parsed.get("baths")
     building_sf = listing_parsed.get("building_sf")
-    list_price = listing_parsed.get("list_price")
+    list_price = listing_parsed.get("list_price")  # PRICE: from active listing banner ONLY
     listing_year_built = listing_parsed.get("listing_year_built")
 
     # Public records / APN
@@ -450,7 +464,7 @@ def get_redfin_data(url: str) -> Dict[str, Any]:
         lot_summary = "Lot: Data not available"
 
     redfin_struct: Dict[str, Any] = {
-        "source": "redfin_parsed_v2",
+        "source": "redfin_parsed_v3",
         "url": url,
         "address": address_label,
         # listing (current configuration)
@@ -466,7 +480,7 @@ def get_redfin_data(url: str) -> Dict[str, Any]:
         "lot_sf": lot_sf,
         # timeline: real sale/list history ONLY - NO tax amounts, NO assessed values
         "timeline": sale_events,
-        # tax + APN: Keep tax/assessed values separate from prices
+        # tax + APN: Keep tax/assessed values separate from prices (NEVER used as prices)
         "tax": {
             "apn": public_parsed.get("apn"),
             "year": 2023,
