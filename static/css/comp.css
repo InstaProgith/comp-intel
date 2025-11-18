@@ -427,3 +427,36 @@ body {
   font-weight:600;
   opacity:0.7;
 }
+
+/* Developer-focused report styles */
+.snapshot-item-wide {
+  display:flex; flex-direction:row; align-items:baseline; gap:12px;
+  padding:10px 0;
+  border-bottom:1px solid #f0f0f0;
+}
+.snapshot-item-wide:last-child { border-bottom:none; }
+.snapshot-item-wide .snapshot-label {
+  min-width:180px; font-weight:600; font-size:14px; color:#666;
+}
+.snapshot-item-wide .snapshot-value {
+  flex:1; font-size:15px; line-height:1.5;
+}
+.snapshot-item-wide .snapshot-value strong {
+  color:#111; font-weight:700;
+}
+
+.muted { color:#999; font-size:13px; font-weight:400; }
+
+.section-header {
+  margin:24px 0 16px; padding-bottom:8px;
+  border-bottom:2px solid #111;
+}
+.section-header:first-child { margin-top:0; }
+.section-title { font-size:18px; font-weight:700; color:#111; text-transform:uppercase; letter-spacing:0.5px; }
+
+.deal-snapshot {
+  margin-bottom:28px;
+  padding:18px 0;
+}
+
+.snapshot-success { color:#059669; font-weight:600; }

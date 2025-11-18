@@ -1,0 +1,163 @@
+{
+  "url": "https://www.redfin.com/CA/Los-Angeles/1120-S-Lucerne-Blvd-90019/home/6911003",
+  "address": "1120 S Lucerne Blvd,Los Angeles, CA 90019",
+  "headline_metrics": {
+    "purchase_price": null,
+    "purchase_date": null,
+    "exit_price": null,
+    "exit_date": null,
+    "spread": null,
+    "roi_pct": null,
+    "hold_days": null,
+    "list_price": 800000.0
+  },
+  "metrics": {
+    "purchase_price": null,
+    "purchase_date": null,
+    "exit_price": null,
+    "exit_date": null,
+    "spread": null,
+    "roi_pct": null,
+    "hold_days": null,
+    "list_price": 800000.0
+  },
+  "current_summary": "2 bed, 1.0 bath, 1,008 SF",
+  "public_record_summary": "2 bed, 1.0 bath",
+  "lot_summary": "Lot: 7,197 SF (0.17 acres)",
+  "permit_summary": "Found 1 permits with status date >= 2018 via PLR.",
+  "permit_count": 1,
+  "ladbs": {
+    "source": "ladbs_plr_v5",
+    "apn": "5082004025",
+    "address": "1120 S Lucerne Blvd,Los Angeles, CA 90019",
+    "fetched_at": "2025-11-18 06:36:38",
+    "permits": [
+      {
+        "permit_number": "25014-10000-03595",
+        "job_number": "B25LA33094",
+        "permit_type": "Bldg-Addition - 1 or 2 Family Dwelling",
+        "Type": "Bldg-Addition - 1 or 2 Family Dwelling",
+        "Status": "Issued on 11/17/2025",
+        "status_date": "11/17/2025",
+        "Work_Description": "Eplan MAJOR REMODEL AND 1-STORY REAR ADDITION TO EXISTING SINGLE FAMILY DWELLING Dwelling is in Methane Zone, Mitigation required",
+        "Issued_Date": "Issued on 11/17/2025",
+        "contractor": "Stay Forever Construction Corporation; Lic. No.: 986055-B 25000 W AVE STANFORD UNIT 272      VALENCIA, CA 91355",
+        "contractor_license": "986055",
+        "architect": null,
+        "architect_license": null,
+        "engineer": "Mccormick,, Charles Norman; Lic. No.: C32534 15408 E 4TH AVE APT 114      SPOKANE VALLEY, WA 99037",
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "25014-10000-03595",
+          "job_number": "B25LA33094",
+          "group": "Building",
+          "type": "Bldg-Addition",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "(1) Dwelling - Single Family",
+          "work_description": "Eplan MAJOR REMODEL AND 1-STORY REAR ADDITION TO EXISTING SINGLE FAMILY DWELLING Dwelling is in Methane Zone, Mitigation required",
+          "permit_issued": "Issued on 11/17/2025",
+          "current_status": "Issued on 11/17/2025",
+          "contact_information": {
+            "Contractor": "Stay Forever Construction Corporation; Lic. No.: 986055-B 25000 W AVE STANFORD UNIT 272      VALENCIA, CA 91355",
+            "Engineer": "Mccormick,, Charles Norman; Lic. No.: C32534 15408 E 4TH AVE APT 114      SPOKANE VALLEY, WA 99037"
+          },
+          "status_history": [
+            {
+              "event": "Submitted",
+              "date": "8/8/2025",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Assigned to Plan Check Engineer",
+              "date": "8/14/2025",
+              "person": "MIGUEL LOPEZ"
+            },
+            {
+              "event": "Corrections Issued",
+              "date": "9/8/2025",
+              "person": "MIGUEL LOPEZ"
+            },
+            {
+              "event": "Quality Review Completed",
+              "date": "9/12/2025",
+              "person": "KESETE HAREGOT"
+            },
+            {
+              "event": "Applicant returned to address corrections",
+              "date": "9/22/2025",
+              "person": "MIGUEL LOPEZ"
+            },
+            {
+              "event": "Applicant returned to address corrections",
+              "date": "10/14/2025",
+              "person": "MIGUEL LOPEZ"
+            },
+            {
+              "event": "Applicant returned to address corrections",
+              "date": "10/15/2025",
+              "person": "MIGUEL LOPEZ"
+            },
+            {
+              "event": "Applicant returned to address corrections",
+              "date": "10/16/2025",
+              "person": "MIGUEL LOPEZ"
+            },
+            {
+              "event": "Plan Check Approved",
+              "date": "11/10/2025",
+              "person": "MIGUEL LOPEZ"
+            },
+            {
+              "event": "Issued",
+              "date": "11/17/2025",
+              "person": "APPLICANT"
+            }
+          ],
+          "status_date": "11/17/2025"
+        }
+      }
+    ],
+    "note": "Found 1 permits with status date >= 2018 via PLR."
+  },
+  "redfin": {
+    "source": "redfin_parsed_v3",
+    "url": "https://www.redfin.com/CA/Los-Angeles/1120-S-Lucerne-Blvd-90019/home/6911003",
+    "address": "1120 S Lucerne Blvd,Los Angeles, CA 90019",
+    "listing_beds": 2.0,
+    "listing_baths": 1.0,
+    "listing_building_sf": 1008.0,
+    "listing_year_built": null,
+    "list_price": 800000.0,
+    "beds": 2.0,
+    "baths": 1.0,
+    "building_sf": 1008.0,
+    "lot_sf": 7197.0,
+    "timeline": [
+      {
+        "date": "2025-09-05",
+        "event": "listed",
+        "price": 800000,
+        "raw_status": "Listed (Active)"
+      }
+    ],
+    "tax": {
+      "apn": "5082004025",
+      "year": 2023,
+      "assessed_value": null
+    },
+    "public_records": {
+      "beds": 2.0,
+      "baths": 1.0,
+      "lot_sf": 7197.0,
+      "year_built": 1922
+    },
+    "generated_at": "2025-11-18",
+    "current_summary": "2 bed, 1.0 bath, 1,008 SF",
+    "public_record_summary": "2 bed, 1.0 bath",
+    "lot_summary": "Lot: 7,197 SF (0.17 acres)",
+    "raw_html_path": "/workspaces/comp-intel/data/raw/20251118-063638_redfin_1120_S_Lucerne_Blvd_90019.html"
+  },
+  "project_contacts": null,
+  "cslb_contractor": null,
+  "summary_markdown": "===========================================================\n1) DEAL SNAPSHOT\n===========================================================\n- **Address:** 1120 S Lucerne Blvd, Los Angeles, CA 90019\n- **Current Configuration:** 2 beds, 1.0 bath, 1,008 SF\n- **Original Configuration:** 2 beds, 1.0 bath, 1,008 SF, year built: 1922\n- **SF Added/Changed:** No changes in configuration recorded.\n- **Purchase Price:** Not available\n- **Purchase Date:** Not available\n- **Current Listing Price:** $800,000, listed on 09/05/2025\n- **Hold Period:** Not applicable (purchase date missing)\n- **Gross Spread:** Not calculable (purchase price missing)\n- **Gross ROI:** Not calculable (purchase price missing)\n\n===========================================================\n2) SCOPE OF WORK (PERMITS)\n===========================================================\n- **Core Building Permit Identified:** 1 issued permit for a major remodel and 1-story rear addition to the existing single-family dwelling.\n- **Permit Type:** Building-Addition - 1 or 2 Family Dwelling.\n- **Work Description:** Major remodel with a rear addition; note that the dwelling is located in a Methane Zone requiring mitigation.\n- **Recent Major Work (last 5\u201310 years):** The planned work represents a significant upgrade with a major remodel, aiming to enhance the property\u2019s living space.\n- **Open/Active/Not-Finaled Permits:** The permit is currently issued but has not been finaled as of the latest update.\n\n===========================================================\n3) TEAM (COMPETITOR NETWORK)\n===========================================================\n- **GC:** Stay Forever Construction Corporation (Owner-Builder)\n- **Architect:** Not specified\n- **Engineer:** Charles Norman McCormick\n- **Notes:** The general contractor is not a repeated player in the permits identified, and architect details are lacking.\n\n===========================================================\n4) PERMIT TIMING (DURATIONS)\n===========================================================\n- **Submitted to Plan Check Approved:** \n  - Duration: 31 days (08/08/2025 to 11/10/2025)\n- **Plan Check Approved to Issued:** \n  - Duration: 7 days (11/10/2025 to 11/17/2025)\n- **Issued to Finaled:** \n  - Not finaled\n\n===========================================================\n5) VALUE-ADD SUMMARY\n===========================================================\nThe property at 1120 S Lucerne Blvd was targeted for value enhancement via a major remodel and rear addition. The anticipated addition is expected to significantly boost its market appeal, although the precise financials are not finalized yet. The remodel process initiated in August 2025 and culminated with permit issuance in November 2025, with potential for a substantial value spread pending market conditions."
+}

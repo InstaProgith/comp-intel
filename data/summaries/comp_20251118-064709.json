@@ -1,0 +1,546 @@
+{
+  "url": "https://www.redfin.com/CA/Los-Angeles/3025-Midvale-Ave-90034/home/6752642",
+  "address": "3025 Midvale Ave,Los Angeles, CA 90034",
+  "headline_metrics": {
+    "purchase_price": 3496000,
+    "purchase_date": "2024-04-04",
+    "exit_price": null,
+    "exit_date": null,
+    "spread": null,
+    "roi_pct": null,
+    "hold_days": null,
+    "list_price": 4088255.0
+  },
+  "metrics": {
+    "purchase_price": 3496000,
+    "purchase_date": "2024-04-04",
+    "exit_price": null,
+    "exit_date": null,
+    "spread": null,
+    "roi_pct": null,
+    "hold_days": null,
+    "list_price": 4088255.0
+  },
+  "current_summary": "5 bed, 4.5 bath, 3,890 SF",
+  "public_record_summary": "3 bed, 2.0 bath",
+  "lot_summary": "Lot: 5,896 SF (0.14 acres)",
+  "permit_summary": "Found 8 permits with status date >= 2018 via PLR.",
+  "permit_count": 8,
+  "ladbs": {
+    "source": "ladbs_plr_v5",
+    "apn": "4254007027",
+    "address": "3025 Midvale Ave,Los Angeles, CA 90034",
+    "fetched_at": "2025-11-18 06:46:26",
+    "permits": [
+      {
+        "permit_number": "22014-10000-04385",
+        "job_number": "B22LA17480",
+        "permit_type": "Bldg-Addition - 1 or 2 Family Dwelling",
+        "Type": "Bldg-Addition - 1 or 2 Family Dwelling",
+        "Status": "CofO Issued on 9/8/2023",
+        "status_date": "9/8/2023",
+        "Work_Description": "NFPA 13D FIRE SPRINKLERS REQUIRED. ePLAN. Two-story addition and major remodel to existing S.F.R. plus additions to first floor and a new second floor with open decks and with an attached roof trellis roof to the first floor.",
+        "Issued_Date": "Issued on 12/2/2022",
+        "contractor": "Owner-Builder ,",
+        "contractor_license": null,
+        "architect": null,
+        "architect_license": null,
+        "engineer": "Carrillo,, Jesus Eduardo; Lic. No.: NA77737 ,",
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "22014-10000-04385",
+          "job_number": "B22LA17480",
+          "group": "Building",
+          "type": "Bldg-Addition",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "(1) Dwelling - Single Family",
+          "work_description": "NFPA 13D FIRE SPRINKLERS REQUIRED. ePLAN. Two-story addition and major remodel to existing S.F.R. plus additions to first floor and a new second floor with open decks and with an attached roof trellis roof to the first floor.",
+          "permit_issued": "Issued on 12/2/2022",
+          "current_status": "CofO Issued on 9/8/2023",
+          "certificate_of_occupancy": "CofO Issued More Information",
+          "contact_information": {
+            "Contractor": "Owner-Builder ,",
+            "Engineer": "Carrillo,, Jesus Eduardo; Lic. No.: NA77737 ,"
+          },
+          "status_history": [
+            {
+              "event": "Submitted",
+              "date": "9/1/2022",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Assigned to Plan Check Engineer",
+              "date": "9/8/2022",
+              "person": "SAM CHANG"
+            },
+            {
+              "event": "Corrections Issued",
+              "date": "10/4/2022",
+              "person": "SAM CHANG"
+            },
+            {
+              "event": "Quality Review Completed",
+              "date": "10/5/2022",
+              "person": "EUGENE BARBEAU"
+            },
+            {
+              "event": "Applicant returned to address corrections",
+              "date": "11/10/2022",
+              "person": "SAM CHANG"
+            },
+            {
+              "event": "Plan Check Approved",
+              "date": "12/1/2022",
+              "person": "SAM CHANG"
+            },
+            {
+              "event": "No Progress",
+              "date": "12/1/2022",
+              "person": "DANIEL YIP"
+            },
+            {
+              "event": "Plan Check Approved",
+              "date": "12/1/2022",
+              "person": "SAM CHANG"
+            },
+            {
+              "event": "Issued",
+              "date": "12/2/2022",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "CofO in Progress",
+              "date": "8/28/2023",
+              "person": "JESUS PINEDA"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "9/8/2023",
+              "person": "DANIEL ORRANTE"
+            },
+            {
+              "event": "CofO Issued",
+              "date": "9/8/2023",
+              "person": "DANIEL ORRANTE"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "9/8/2023",
+              "person": "DANIEL ORRANTE"
+            }
+          ],
+          "status_date": "9/8/2023"
+        }
+      },
+      {
+        "permit_number": "22010-10000-04819",
+        "job_number": "B22LA18694",
+        "permit_type": "Bldg-New - 1 or 2 Family Dwelling",
+        "Type": "Bldg-New - 1 or 2 Family Dwelling",
+        "Status": "PC Approved on 1/18/2023",
+        "status_date": "1/18/2023",
+        "Work_Description": "VOID",
+        "Issued_Date": "No",
+        "contractor": null,
+        "contractor_license": null,
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "22010-10000-04819",
+          "job_number": "B22LA18694",
+          "group": "Building",
+          "type": "Bldg-New",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "VOID",
+          "permit_issued": "No",
+          "current_status": "PC Approved on 1/18/2023",
+          "contact_information": {},
+          "status_history": [
+            {
+              "event": "Submitted",
+              "date": "9/19/2022",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Assigned to Plan Check Engineer",
+              "date": "9/23/2022",
+              "person": "PRANITA SHAH"
+            },
+            {
+              "event": "Corrections Issued",
+              "date": "9/28/2022",
+              "person": "PRANITA SHAH"
+            }
+          ],
+          "status_date": "1/18/2023"
+        }
+      },
+      {
+        "permit_number": "22041-90000-63138",
+        "job_number": "--",
+        "permit_type": "Electrical - 1 or 2 Family Dwelling",
+        "Type": "Electrical - 1 or 2 Family Dwelling",
+        "Status": "Permit Finaled on 9/6/2023",
+        "status_date": "9/6/2023",
+        "Work_Description": "Temporary Power Pole",
+        "Issued_Date": "Issued on 12/1/2022",
+        "contractor": "Cl Electric; Lic. No.: 1042622-C10 17632 HORACE ST      GRANADA HILLS, CA 91344",
+        "contractor_license": "1042622",
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "22041-90000-63138",
+          "job_number": "--",
+          "group": "Electrical",
+          "type": "Electrical",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "Temporary Power Pole",
+          "permit_issued": "Issued on 12/1/2022",
+          "current_status": "Permit Finaled on 9/6/2023",
+          "contact_information": {
+            "Contractor": "Cl Electric; Lic. No.: 1042622-C10 17632 HORACE ST      GRANADA HILLS, CA 91344"
+          },
+          "status_history": [
+            {
+              "event": "Issued",
+              "date": "12/1/2022",
+              "person": "INTERNET PERMIT"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "9/6/2023",
+              "person": "JESUS PINEDA"
+            }
+          ],
+          "status_date": "9/6/2023"
+        }
+      },
+      {
+        "permit_number": "23043-90000-00504",
+        "job_number": "--",
+        "permit_type": "Fire Sprinkler - 1 or 2 Family Dwelling",
+        "Type": "Fire Sprinkler - 1 or 2 Family Dwelling",
+        "Status": "Issued on 2/6/2023",
+        "status_date": "2/6/2023",
+        "Work_Description": "DESIGN BUILD A NEW OVERHEAD RESIDENTIAL FIRESPRINKLER SYSTEM IN ACCORDANCE WITH 2016 NFPA 13D.",
+        "Issued_Date": "Issued on 2/6/2023",
+        "contractor": "S D L Fire Protection Inc; Lic. No.: 1017716-C16 4354 E LA PALMA AVE      ANAHEIM, CA 92807",
+        "contractor_license": "1017716",
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "23043-90000-00504",
+          "job_number": "--",
+          "group": "Mechanical",
+          "type": "Fire Sprinkler",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "DESIGN BUILD A NEW OVERHEAD RESIDENTIAL FIRESPRINKLER SYSTEM IN ACCORDANCE WITH 2016 NFPA 13D.",
+          "permit_issued": "Issued on 2/6/2023",
+          "current_status": "Issued on 2/6/2023",
+          "contact_information": {
+            "Contractor": "S D L Fire Protection Inc; Lic. No.: 1017716-C16 4354 E LA PALMA AVE      ANAHEIM, CA 92807"
+          },
+          "status_history": [
+            {
+              "event": "Issued",
+              "date": "2/6/2023",
+              "person": "INTERNET PERMIT"
+            }
+          ],
+          "status_date": "2/6/2023"
+        }
+      },
+      {
+        "permit_number": "23043-10000-00731",
+        "job_number": "M23LA00798",
+        "permit_type": "Fire Sprinkler - 1 or 2 Family Dwelling",
+        "Type": "Fire Sprinkler - 1 or 2 Family Dwelling",
+        "Status": "Permit Finaled on 7/5/2023",
+        "status_date": "7/5/2023",
+        "Work_Description": "NEW NFPA 13D SPRINKLER SYSTEM. 1-INCH DOMESTIC WATER METER, NO BACKFLOW PREVENTER.",
+        "Issued_Date": "Issued on 3/3/2023",
+        "contractor": "S D L Fire Protection Inc; Lic. No.: 1017716-C16 ,",
+        "contractor_license": "1017716",
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "23043-10000-00731",
+          "job_number": "M23LA00798",
+          "group": "Mechanical",
+          "type": "Fire Sprinkler",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "NEW NFPA 13D SPRINKLER SYSTEM. 1-INCH DOMESTIC WATER METER, NO BACKFLOW PREVENTER.",
+          "permit_issued": "Issued on 3/3/2023",
+          "current_status": "Permit Finaled on 7/5/2023",
+          "contact_information": {
+            "Contractor": "S D L Fire Protection Inc; Lic. No.: 1017716-C16 ,"
+          },
+          "status_history": [
+            {
+              "event": "Submitted",
+              "date": "2/22/2023",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Assigned to Plan Check Engineer",
+              "date": "2/23/2023",
+              "person": "MATHEW NAJERA"
+            },
+            {
+              "event": "Corrections Issued",
+              "date": "2/23/2023",
+              "person": "MATHEW NAJERA"
+            },
+            {
+              "event": "Plan Check Approved",
+              "date": "3/1/2023",
+              "person": "MATHEW NAJERA"
+            },
+            {
+              "event": "Issued",
+              "date": "3/3/2023",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "7/5/2023",
+              "person": "STANLEY IZUMI"
+            }
+          ],
+          "status_date": "7/5/2023"
+        }
+      },
+      {
+        "permit_number": "23043-10001-00731",
+        "job_number": "M23LA01108",
+        "permit_type": "Fire Sprinkler - 1 or 2 Family Dwelling",
+        "Type": "Fire Sprinkler - 1 or 2 Family Dwelling",
+        "Status": "PC Approved on 3/14/2023",
+        "status_date": "3/14/2023",
+        "Work_Description": "PLAN CHECK ONLY. REVISION TO APPROVED PLANS. SHOW SPRINKLER COVERAGE, RELOCATE RISER. PERMIT FEE PAID UNDER 23043-10000-00731.",
+        "Issued_Date": "No",
+        "contractor": "S D L Fire Protection Inc; Lic. No.: 1017716-C16 ,",
+        "contractor_license": "1017716",
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "23043-10001-00731",
+          "job_number": "M23LA01108",
+          "group": "Mechanical",
+          "type": "Fire Sprinkler",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "PLAN CHECK ONLY. REVISION TO APPROVED PLANS. SHOW SPRINKLER COVERAGE, RELOCATE RISER. PERMIT FEE PAID UNDER 23043-10000-00731.",
+          "permit_issued": "No",
+          "current_status": "PC Approved on 3/14/2023",
+          "contact_information": {
+            "Contractor": "S D L Fire Protection Inc; Lic. No.: 1017716-C16 ,"
+          },
+          "status_history": [
+            {
+              "event": "Submitted",
+              "date": "3/13/2023",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Assigned to Plan Check Engineer",
+              "date": "3/13/2023",
+              "person": "TIMOTHY SMITH"
+            },
+            {
+              "event": "Corrections Issued",
+              "date": "3/14/2023",
+              "person": "TIMOTHY SMITH"
+            }
+          ],
+          "status_date": "3/14/2023"
+        }
+      },
+      {
+        "permit_number": "22042-90000-15042",
+        "job_number": "--",
+        "permit_type": "Plumbing - 1 or 2 Family Dwelling",
+        "Type": "Plumbing - 1 or 2 Family Dwelling",
+        "Status": "Permit Finaled on 7/27/2022",
+        "status_date": "7/27/2022",
+        "Work_Description": "Installed (1) Gas shut off valve",
+        "Issued_Date": "Issued on 7/22/2022",
+        "contractor": "L A Low Flush Toilets Inc; Lic. No.: 770481-C36 203 S VIRGIL AVENUE      LOS ANGELES, CA 90004",
+        "contractor_license": "770481",
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "22042-90000-15042",
+          "job_number": "--",
+          "group": "Mechanical",
+          "type": "Plumbing",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "Installed (1) Gas shut off valve",
+          "permit_issued": "Issued on 7/22/2022",
+          "current_status": "Permit Finaled on 7/27/2022",
+          "contact_information": {
+            "Contractor": "L A Low Flush Toilets Inc; Lic. No.: 770481-C36 203 S VIRGIL AVENUE      LOS ANGELES, CA 90004"
+          },
+          "status_history": [
+            {
+              "event": "Issued",
+              "date": "7/22/2022",
+              "person": "INTERNET PERMIT"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "7/26/2022",
+              "person": "JOHNNY MIRANDA"
+            }
+          ],
+          "status_date": "7/27/2022"
+        }
+      },
+      {
+        "permit_number": "22047-10000-01913",
+        "job_number": "B22LA18694",
+        "permit_type": "Swimming-Pool/Spa - 1 or 2 Family Dwelling",
+        "Type": "Swimming-Pool/Spa - 1 or 2 Family Dwelling",
+        "Status": "CofO Issued on 9/8/2023",
+        "status_date": "9/8/2023",
+        "Work_Description": "ePLAN. NEW 28'x10' SWIMMING POOL WITH WATERFALL PER STANDARD PLAN 268 AND ENGR DETAIL.",
+        "Issued_Date": "Issued on 1/25/2023",
+        "contractor": "Owner-Builder ,",
+        "contractor_license": null,
+        "architect": null,
+        "architect_license": null,
+        "engineer": "Biedenbach,, Christopher James; Lic. No.: C74003 1201 N TUSTIN AVE      ANAHEIM, CA 92807",
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "22047-10000-01913",
+          "job_number": "B22LA18694",
+          "group": "Building",
+          "type": "Swimming-Pool/Spa",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "(20) Pool/Spa - Private",
+          "work_description": "ePLAN. NEW 28'x10' SWIMMING POOL WITH WATERFALL PER STANDARD PLAN 268 AND ENGR DETAIL.",
+          "permit_issued": "Issued on 1/25/2023",
+          "current_status": "CofO Issued on 9/8/2023",
+          "certificate_of_occupancy": "CofO Issued More Information",
+          "contact_information": {
+            "Contractor": "Owner-Builder ,",
+            "Engineer": "Biedenbach,, Christopher James; Lic. No.: C74003 1201 N TUSTIN AVE      ANAHEIM, CA 92807"
+          },
+          "status_history": [
+            {
+              "event": "Submitted",
+              "date": "9/19/2022",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Assigned to Plan Check Engineer",
+              "date": "9/23/2022",
+              "person": "PRANITA SHAH"
+            },
+            {
+              "event": "Corrections Issued",
+              "date": "9/28/2022",
+              "person": "PRANITA SHAH"
+            },
+            {
+              "event": "Plan Check Approved",
+              "date": "1/18/2023",
+              "person": "KEVIN MORALES"
+            },
+            {
+              "event": "Issued",
+              "date": "1/25/2023",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "CofO in Progress",
+              "date": "9/6/2023",
+              "person": "JESUS PINEDA"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "9/8/2023",
+              "person": "DANIEL ORRANTE"
+            },
+            {
+              "event": "CofO Issued",
+              "date": "9/8/2023",
+              "person": "DANIEL ORRANTE"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "9/8/2023",
+              "person": "DANIEL ORRANTE"
+            }
+          ],
+          "status_date": "9/8/2023"
+        }
+      }
+    ],
+    "note": "Found 8 permits with status date >= 2018 via PLR."
+  },
+  "redfin": {
+    "source": "redfin_parsed_v3",
+    "url": "https://www.redfin.com/CA/Los-Angeles/3025-Midvale-Ave-90034/home/6752642",
+    "address": "3025 Midvale Ave,Los Angeles, CA 90034",
+    "listing_beds": 5.0,
+    "listing_baths": 4.5,
+    "listing_building_sf": 3890.0,
+    "listing_year_built": null,
+    "list_price": 4088255.0,
+    "beds": 5.0,
+    "baths": 4.5,
+    "building_sf": 3890.0,
+    "lot_sf": 5896.0,
+    "timeline": [
+      {
+        "date": "2024-04-04",
+        "event": "listed",
+        "price": 3496000,
+        "raw_status": "Listed (Active)"
+      },
+      {
+        "date": "2024-04-04",
+        "event": "sold",
+        "price": 3496000,
+        "raw_status": "Sold (Public Records)"
+      }
+    ],
+    "tax": {
+      "apn": "4254007027",
+      "year": 2023,
+      "assessed_value": null
+    },
+    "public_records": {
+      "beds": 3.0,
+      "baths": 2.0,
+      "lot_sf": 5896.0,
+      "year_built": 1940
+    },
+    "generated_at": "2025-11-18",
+    "current_summary": "5 bed, 4.5 bath, 3,890 SF",
+    "public_record_summary": "3 bed, 2.0 bath",
+    "lot_summary": "Lot: 5,896 SF (0.14 acres)",
+    "raw_html_path": "/workspaces/comp-intel/data/raw/20251118-064626_redfin_3025_Midvale_Ave_90034.html"
+  },
+  "project_contacts": null,
+  "cslb_contractor": null,
+  "summary_markdown": "## DEAL SNAPSHOT\n- **Address:** 3025 Midvale Ave, Los Angeles, CA 90034\n- **Current Configuration:** 5 beds, 4.5 baths, 3,890 SF\n- **Original Configuration:** 3 beds, 2 baths, year built: 1940\n- **SF Added or Changed:** Data not provided on specific SF changes, but a significant addition and remodel indicates reconfiguration.\n- **Purchase Price:** $3,496,000\n- **Purchase Date:** April 4, 2024\n- **Current Listing Price:** $4,088,255\n- **Hold Period:** Data not available (property not yet sold)\n- **Gross Spread:** Data not computable (pending exit price)\n- **Gross ROI:** Data not computable (pending exit price)\n\n## SCOPE OF WORK (PERMITS)\nThe property has undergone significant renovations involving major additions and remodels in the last 5\u201310 years. Key findings from the LADBS permit records include:\n\n- **Major Work Executed:**\n  - **Building Addition** (Permit #22014-10000-04385): A two-story addition and major remodel were completed, including new first and second floors with open decks. A Certificate of Occupancy (CofO) was issued on September 8, 2023.\n  - **Swimming Pool** (Permit #22047-10000-01913): A new swimming pool was constructed, completed with a CofO also issued on September 8, 2023.\n  \n- **Open/Active Permits:** \n  - There are no open or active permits as of the last status updates.\n\n## TEAM (COMPETITOR NETWORK)\n- **GC:** Owner-Builder (noted as GC), indicating a self-managed project\n- **Architect:** Not listed\n- **Engineer:** Jesus Eduardo Carrillo (Lic. No.: NA77737) for the building addition\n- **Notes:** The Engineer Carrillo appears on the significant work done, suggesting a repeat collaboration on multiple projects.\n\n## PERMIT TIMING (DURATIONS)\nFor the main building/addition permit (Permit #22014-10000-04385):\n- **Submitted \u2192 Plan Check Approved:** 9/1/2022 to 12/1/2022 = 91 days\n- **Plan Check Approved \u2192 Issued:** 12/1/2022 to 12/2/2022 = 1 day\n- **Issued \u2192 Finaled:** 12/2/2022 to 9/8/2023 = 280 days\n\n## VALUE-ADD SUMMARY\nThe developer acquired a property initially configured as a 3-bedroom, 2-bathroom home. Following extensive renovations, including a substantial two-story addition and the construction of a new swimming pool, the property is now configured with 5 bedrooms and 4.5 bathrooms. This transformation adds considerable value, with a current listing price that expresses a potential gross spread of roughly $592,255; the exact ROI calculation is pending final sale."
+}

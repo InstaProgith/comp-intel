@@ -1,0 +1,84 @@
+{
+  "url": "https://www.redfin.com/CA/Los-Angeles/3024-Midvale-Ave-90034/home/6752669",
+  "address": "3024 Midvale Ave,Los Angeles, CA 90034",
+  "headline_metrics": {
+    "purchase_price": 2050000,
+    "purchase_date": "2017-04-04",
+    "exit_price": null,
+    "exit_date": null,
+    "spread": null,
+    "roi_pct": null,
+    "hold_days": null,
+    "list_price": 2755424.0
+  },
+  "metrics": {
+    "purchase_price": 2050000,
+    "purchase_date": "2017-04-04",
+    "exit_price": null,
+    "exit_date": null,
+    "spread": null,
+    "roi_pct": null,
+    "hold_days": null,
+    "list_price": 2755424.0
+  },
+  "current_summary": "4 bed, 4.0 bath, 2,780 SF",
+  "public_record_summary": "4 bed, 5.0 bath",
+  "lot_summary": "Lot: 5,256 SF (0.12 acres)",
+  "permit_summary": "No permits with status date >= 2018 found for this address.",
+  "permit_count": 0,
+  "ladbs": {
+    "source": "ladbs_no_permits_found",
+    "apn": "4254008020",
+    "address": "3024 Midvale Ave,Los Angeles, CA 90034",
+    "fetched_at": "2025-11-18 06:38:39",
+    "permits": [],
+    "note": "No permits with status date >= 2018 found for this address."
+  },
+  "redfin": {
+    "source": "redfin_parsed_v3",
+    "url": "https://www.redfin.com/CA/Los-Angeles/3024-Midvale-Ave-90034/home/6752669",
+    "address": "3024 Midvale Ave,Los Angeles, CA 90034",
+    "listing_beds": 4.0,
+    "listing_baths": 4.0,
+    "listing_building_sf": 2780.0,
+    "listing_year_built": null,
+    "list_price": 2755424.0,
+    "beds": 4.0,
+    "baths": 4.0,
+    "building_sf": 2780.0,
+    "lot_sf": 5256.0,
+    "timeline": [
+      {
+        "date": "2017-04-04",
+        "event": "listed",
+        "price": 2050000,
+        "raw_status": "Listed (Active)"
+      },
+      {
+        "date": "2017-04-04",
+        "event": "sold",
+        "price": 2050000,
+        "raw_status": "Sold (Public Records)"
+      }
+    ],
+    "tax": {
+      "apn": "4254008020",
+      "year": 2023,
+      "assessed_value": null
+    },
+    "public_records": {
+      "beds": 4.0,
+      "baths": 5.0,
+      "lot_sf": 5256.0,
+      "year_built": 2013
+    },
+    "generated_at": "2025-11-18",
+    "current_summary": "4 bed, 4.0 bath, 2,780 SF",
+    "public_record_summary": "4 bed, 5.0 bath",
+    "lot_summary": "Lot: 5,256 SF (0.12 acres)",
+    "raw_html_path": "/workspaces/comp-intel/data/raw/20251118-063838_redfin_3024_Midvale_Ave_90034.html"
+  },
+  "project_contacts": null,
+  "cslb_contractor": null,
+  "summary_markdown": "### DEAL SNAPSHOT\n- **Address:** 3024 Midvale Ave, Los Angeles, CA 90034\n- **Current Configuration:** 4 beds, 4 baths, 2,780 SF\n- **Original Configuration from Public Records:** 4 beds, 5 baths, year built 2013\n- **SF Changed:** No change in total building size (2,780 SF remains consistent).\n- **Purchase Price:** $2,050,000 (purchased on 2017-04-04)\n- **Current Listing Price:** $2,755,424 (listed in 2025)\n- **Hold Period:** 2,897 days (from purchase to listing date)\n- **Gross Spread:** $705,424 (listing price - purchase price)\n- **Gross ROI:** 34.3% (gross spread / purchase price)\n\n---\n\n### SCOPE OF WORK (PERMITS)\nThere are no LADBS permits found for this address since 2018. As such, there are no records of additional major work such as building additions, renovations, or new structures. The absence of permits implies that the property has not undergone significant alterations or expansions in the recent past, which could indicate stability in its current configuration or a potential opportunity for future development.\n\n---\n\n### TEAM (COMPETITOR NETWORK)\nNo team members or contractors can be provided due to the absence of any permits for the property. \n\n---\n\n### PERMIT TIMING (DURATIONS)\nNot applicable as there are no building or addition permits available for review.\n\n---\n\n### VALUE-ADD SUMMARY\nThe property at 3024 Midvale Ave was purchased for $2,050,000 and currently listed for $2,755,424, indicating a potential value increase of approximately $705,424. No permits indicate that the property has remained in its original state since its construction in 2013, suggesting a lower risk profile. The developer may target the identified spread of approximately 34.3% once the property is sold."
+}

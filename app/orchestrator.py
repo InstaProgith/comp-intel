@@ -69,6 +69,135 @@ def _fmt_money(val: Optional[int]) -> str:
         return "—"
 
 
+def _parse_permit_timeline(permits: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """
+    Extract key permit timeline milestones from LADBS permits.
+    
+    Returns:
+        - plans_submitted_date: earliest permit application date
+        - plans_approved_date: earliest plan check approval date
+        - construction_completed_date: earliest finaled/CO date
+        - main_permit: the core building permit dict
+    """
+    if not permits:
+        return {}
+    
+    # Find building permits (not electrical/mechanical/plumbing)
+    building_permits = []
+    for p in permits:
+        permit_type = (p.get("permit_type") or p.get("Type") or "").upper()
+        if any(keyword in permit_type for keyword in ["BLDG", "BUILDING", "ADDITION", "NEW"]):
+            building_permits.append(p)
+    
+    if not building_permits:
+        building_permits = permits  # fallback to all permits
+    
+    main_permit = building_permits[0] if building_permits else None
+    
+    # Extract dates from status history
+    plans_submitted = None
+    plans_approved = None
+    construction_completed = None
+    
+    for permit in building_permits:
+        status_history = permit.get("status_history") or permit.get("raw_details", {}).get("status_history") or []
+        
+        for event in status_history:
+            event_name = (event.get("event") or "").upper()
+            date_str = event.get("date") or ""
+            
+            if not date_str:
+                continue
+                
+            try:
+                # Parse date - could be "MM/DD/YYYY" or other formats
+                if "/" in date_str:
+                    event_date = datetime.strptime(date_str, "%m/%d/%Y")
+                else:
+                    event_date = datetime.fromisoformat(date_str)
+                
+                # Plans submitted (application event)
+                if "APPLICATION" in event_name or "SUBMIT" in event_name:
+                    if not plans_submitted or event_date < plans_submitted:
+                        plans_submitted = event_date
+                
+                # Plans approved (plan check approved)
+                if "PLAN CHECK APPROV" in event_name or "PC APPROV" in event_name:
+                    if not plans_approved or event_date < plans_approved:
+                        plans_approved = event_date
+                
+                # Construction completed (finaled/CO)
+                if "FINAL" in event_name or "CERTIFICATE OF OCCUPANCY" in event_name:
+                    if not construction_completed or event_date < construction_completed:
+                        construction_completed = event_date
+            except Exception:
+                continue
+    
+    return {
+        "main_permit": main_permit,
+        "plans_submitted_date": plans_submitted.date().isoformat() if plans_submitted else None,
+        "plans_approved_date": plans_approved.date().isoformat() if plans_approved else None,
+        "construction_completed_date": construction_completed.date().isoformat() if construction_completed else None,
+    }
+
+
+def _calculate_project_durations(purchase_date: Optional[str], permit_timeline: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Calculate durations between project milestones.
+    
+    Returns dict with:
+        - days_to_submit: purchase → plans submitted
+        - days_to_approve: plans submitted → approved
+        - days_to_complete: plans approved → construction completed
+        - total_project_days: purchase → construction completed
+    """
+    if not purchase_date:
+        return {}
+    
+    try:
+        purchase_dt = datetime.fromisoformat(purchase_date)
+    except Exception:
+        return {}
+    
+    submitted_str = permit_timeline.get("plans_submitted_date")
+    approved_str = permit_timeline.get("plans_approved_date")
+    completed_str = permit_timeline.get("construction_completed_date")
+    
+    durations = {}
+    
+    if submitted_str:
+        try:
+            submitted_dt = datetime.fromisoformat(submitted_str)
+            durations["days_to_submit"] = (submitted_dt - purchase_dt).days
+        except Exception:
+            pass
+    
+    if submitted_str and approved_str:
+        try:
+            submitted_dt = datetime.fromisoformat(submitted_str)
+            approved_dt = datetime.fromisoformat(approved_str)
+            durations["days_to_approve"] = (approved_dt - submitted_dt).days
+        except Exception:
+            pass
+    
+    if approved_str and completed_str:
+        try:
+            approved_dt = datetime.fromisoformat(approved_str)
+            completed_dt = datetime.fromisoformat(completed_str)
+            durations["days_to_complete"] = (completed_dt - approved_dt).days
+        except Exception:
+            pass
+    
+    if completed_str:
+        try:
+            completed_dt = datetime.fromisoformat(completed_str)
+            durations["total_project_days"] = (completed_dt - purchase_dt).days
+        except Exception:
+            pass
+    
+    return durations
+
+
 def _build_headline_metrics(redfin: Dict[str, Any]) -> Dict[str, Any]:
     """
     Build headline metrics from Redfin timeline.
@@ -107,6 +236,21 @@ def _build_headline_metrics(redfin: Dict[str, Any]) -> Dict[str, Any]:
 
     # Include list_price separately (NOT as exit price)
     list_price = redfin.get("list_price")
+    
+    # Calculate SF changes (original vs new)
+    original_sf = None
+    new_sf = None
+    sf_added = None
+    sf_pct_change = None
+    
+    public_records = redfin.get("public_records") or {}
+    original_sf = public_records.get("building_sf")
+    new_sf = redfin.get("building_sf") or redfin.get("listing_building_sf")
+    
+    if original_sf and new_sf and original_sf != new_sf:
+        sf_added = new_sf - original_sf
+        if original_sf > 0:
+            sf_pct_change = round(100.0 * sf_added / original_sf, 1)
 
     return {
         "purchase_price": purchase_price,
@@ -117,6 +261,10 @@ def _build_headline_metrics(redfin: Dict[str, Any]) -> Dict[str, Any]:
         "roi_pct": roi_pct,
         "hold_days": hold_days,
         "list_price": list_price,  # current listing price (separate from exit)
+        "original_sf": original_sf,
+        "new_sf": new_sf,
+        "sf_added": sf_added,
+        "sf_pct_change": sf_pct_change,
     }
 
 
@@ -209,6 +357,14 @@ def run_full_comp_pipeline(url: str) -> Dict[str, Any]:
 
     metrics = _build_headline_metrics(redfin_data)
     project_contacts = _extract_basic_project_contacts(ladbs_data)
+    
+    # Parse permit timeline
+    permits = ladbs_data.get("permits") or []
+    permit_timeline = _parse_permit_timeline(permits)
+    
+    # Calculate project durations
+    purchase_date = metrics.get("purchase_date")
+    project_durations = _calculate_project_durations(purchase_date, permit_timeline)
 
     # CSLB lookup for primary contractor
     cslb_contractor = None
@@ -231,6 +387,8 @@ def run_full_comp_pipeline(url: str) -> Dict[str, Any]:
         "address": redfin_data.get("address", "Unknown address"),
         "headline_metrics": metrics,
         "metrics": metrics,               # alias so template can use r.metrics.*
+        "permit_timeline": permit_timeline,
+        "project_durations": project_durations,
         "current_summary": redfin_data.get("current_summary", "—"),
         "public_record_summary": redfin_data.get("public_record_summary", "—"),
         "lot_summary": redfin_data.get("lot_summary", "—"),

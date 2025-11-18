@@ -95,55 +95,201 @@
 
         <section class="comp-body">
 
-          <!-- DEAL SNAPSHOT -->
+          <!-- PROJECT SNAPSHOT -->
           <div class="deal-snapshot">
+            <div class="section-header">
+              <h3 class="section-title">Project Snapshot</h3>
+            </div>
+            
+            <!-- Purchase Info -->
             <div class="snapshot-row">
-              <div class="snapshot-item">
-                <span class="snapshot-label">Purchase:</span>
+              <div class="snapshot-item-wide">
+                <span class="snapshot-label">Purchased:</span>
                 <span class="snapshot-value">
-                  {% if r.metrics.purchase_price %}
-                    ${{ "{:,.0f}".format(r.metrics.purchase_price) }}
-                    <span class="snapshot-date">{{ r.metrics.purchase_date }}</span>
-                  {% else %}No purchase data{% endif %}
+                  {% if r.metrics.purchase_date and r.metrics.purchase_price %}
+                    <strong>{{ r.metrics.purchase_date }}</strong> for <strong>${{ "{:,.0f}".format(r.metrics.purchase_price) }}</strong>
+                  {% else %}
+                    <span class="muted">—</span>
+                  {% endif %}
                 </span>
               </div>
-              <div class="snapshot-item">
-                <span class="snapshot-label">Exit:</span>
+            </div>
+            
+            <!-- Size Change -->
+            {% if r.metrics.original_sf or r.metrics.new_sf %}
+            <div class="snapshot-row">
+              <div class="snapshot-item-wide">
+                <span class="snapshot-label">Size change:</span>
                 <span class="snapshot-value">
-                  {% if r.metrics.exit_price %}
-                    ${{ "{:,.0f}".format(r.metrics.exit_price) }}
-                    <span class="snapshot-date">{{ r.metrics.exit_date }}</span>
-                  {% else %}—{% endif %}
+                  {% if r.metrics.original_sf %}{{ "{:,.0f}".format(r.metrics.original_sf) }} SF{% else %}—{% endif %}
+                  →
+                  {% if r.metrics.new_sf %}{{ "{:,.0f}".format(r.metrics.new_sf) }} SF{% else %}—{% endif %}
+                  {% if r.metrics.sf_added %}
+                    <span class="snapshot-success">(+{{ "{:,.0f}".format(r.metrics.sf_added) }} SF / +{{ "{:.0f}%".format(r.metrics.sf_pct_change) }})</span>
+                  {% endif %}
                 </span>
               </div>
-              <div class="snapshot-item">
-                <span class="snapshot-label">Listing:</span>
-                <span class="snapshot-value snapshot-highlight">
-                  {% if r.metrics.list_price %}
-                    ${{ "{:,.0f}".format(r.metrics.list_price) }}
+            </div>
+            {% endif %}
+            
+            <!-- Permit Timeline -->
+            {% if r.permit_timeline %}
+            {% set pt = r.permit_timeline %}
+            {% if pt.plans_submitted_date %}
+            <div class="snapshot-row">
+              <div class="snapshot-item-wide">
+                <span class="snapshot-label">Plans submitted:</span>
+                <span class="snapshot-value">
+                  <strong>{{ pt.plans_submitted_date }}</strong>
+                  {% if r.project_durations and r.project_durations.days_to_submit %}
+                    <span class="muted">({{ r.project_durations.days_to_submit }} days after purchase)</span>
+                  {% endif %}
+                </span>
+              </div>
+            </div>
+            {% endif %}
+            
+            {% if pt.plans_approved_date %}
+            <div class="snapshot-row">
+              <div class="snapshot-item-wide">
+                <span class="snapshot-label">Plans approved:</span>
+                <span class="snapshot-value">
+                  <strong>{{ pt.plans_approved_date }}</strong>
+                  {% if r.project_durations and r.project_durations.days_to_approve %}
+                    <span class="muted">({{ r.project_durations.days_to_approve }} days after submission)</span>
+                  {% endif %}
+                </span>
+              </div>
+            </div>
+            {% endif %}
+            
+            {% if pt.construction_completed_date %}
+            <div class="snapshot-row">
+              <div class="snapshot-item-wide">
+                <span class="snapshot-label">Construction completed:</span>
+                <span class="snapshot-value">
+                  <strong>{{ pt.construction_completed_date }}</strong>
+                  {% if r.project_durations and r.project_durations.days_to_complete %}
+                    <span class="muted">({{ r.project_durations.days_to_complete }} days after approval)</span>
+                  {% endif %}
+                </span>
+              </div>
+            </div>
+            {% endif %}
+            
+            {% if r.project_durations and r.project_durations.total_project_days %}
+            <div class="snapshot-row">
+              <div class="snapshot-item-wide">
+                <span class="snapshot-label">Total project time:</span>
+                <span class="snapshot-value snapshot-success">
+                  <strong>{{ r.project_durations.total_project_days }} days</strong> (purchase → completion)
+                </span>
+              </div>
+            </div>
+            {% endif %}
+            {% endif %}
+          </div>
+          
+          <!-- TEAM -->
+          <div class="deal-snapshot">
+            <div class="section-header">
+              <h3 class="section-title">Team</h3>
+            </div>
+            
+            {% set permits = r.ladbs.permits if r.ladbs is defined and r.ladbs.permits is defined and r.ladbs.permits is not none else [] %}
+            {% set contractors = [] %}
+            {% set architects = [] %}
+            {% set engineers = [] %}
+            
+            {% for p in permits %}
+              {% if p.contractor and p.contractor not in contractors %}
+                {% set _ = contractors.append(p.contractor) %}
+              {% endif %}
+              {% if p.architect and p.architect not in architects %}
+                {% set _ = architects.append(p.architect) %}
+              {% endif %}
+              {% if p.engineer and p.engineer not in engineers %}
+                {% set _ = engineers.append(p.engineer) %}
+              {% endif %}
+            {% endfor %}
+            
+            <div class="snapshot-row">
+              <div class="snapshot-item-wide">
+                <span class="snapshot-label">Contractor:</span>
+                <span class="snapshot-value">
+                  {% if contractors %}
+                    {{ contractors[0] }}
+                    {% if 'OWNER' in contractors[0].upper() %}<span class="muted">(owner-builder)</span>{% endif %}
                   {% else %}—{% endif %}
                 </span>
               </div>
             </div>
+            
+            <div class="snapshot-row">
+              <div class="snapshot-item-wide">
+                <span class="snapshot-label">Architect:</span>
+                <span class="snapshot-value">
+                  {% if architects %}{{ architects[0] }}{% else %}<span class="muted">None on record</span>{% endif %}
+                </span>
+              </div>
+            </div>
+            
+            <div class="snapshot-row">
+              <div class="snapshot-item-wide">
+                <span class="snapshot-label">Engineer:</span>
+                <span class="snapshot-value">
+                  {% if engineers %}{{ engineers[0] }}{% else %}<span class="muted">None on record</span>{% endif %}
+                </span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- DEAL METRICS -->
+          <div class="deal-snapshot">
+            <div class="section-header">
+              <h3 class="section-title">Deal Metrics</h3>
+            </div>
+            
             <div class="snapshot-row">
               <div class="snapshot-item">
-                <span class="snapshot-label">Spread:</span>
-                <span class="snapshot-value {% if r.metrics.spread %}snapshot-success{% endif %}">
-                  {% if r.metrics.spread %}
-                    ${{ "{:,.0f}".format(r.metrics.spread) }}
-                    ({{ "{:.1f}%".format(r.metrics.roi_pct) }} ROI)
+                <span class="snapshot-label">Purchase price:</span>
+                <span class="snapshot-value">
+                  {% if r.metrics.purchase_price %}${{ "{:,.0f}".format(r.metrics.purchase_price) }}{% else %}—{% endif %}
+                </span>
+              </div>
+              <div class="snapshot-item">
+                <span class="snapshot-label">Exit/List price:</span>
+                <span class="snapshot-value">
+                  {% if r.metrics.exit_price %}
+                    ${{ "{:,.0f}".format(r.metrics.exit_price) }}
+                  {% elif r.metrics.list_price %}
+                    ${{ "{:,.0f}".format(r.metrics.list_price) }} <span class="muted">(current listing)</span>
                   {% else %}—{% endif %}
                 </span>
               </div>
+            </div>
+            
+            <div class="snapshot-row">
               <div class="snapshot-item">
-                <span class="snapshot-label">Hold:</span>
-                <span class="snapshot-value">
-                  {% if r.metrics.hold_days %}{{ r.metrics.hold_days }} days{% else %}—{% endif %}
+                <span class="snapshot-label">Gross spread:</span>
+                <span class="snapshot-value {% if r.metrics.spread %}snapshot-success{% endif %}">
+                  {% if r.metrics.spread %}${{ "{:,.0f}".format(r.metrics.spread) }}{% else %}—{% endif %}
                 </span>
               </div>
               <div class="snapshot-item">
-                <span class="snapshot-label">Permits:</span>
-                <span class="snapshot-value">{{ permits | length }} filed</span>
+                <span class="snapshot-label">ROI:</span>
+                <span class="snapshot-value {% if r.metrics.roi_pct %}snapshot-success{% endif %}">
+                  {% if r.metrics.roi_pct %}{{ "{:.1f}%".format(r.metrics.roi_pct) }}{% else %}—{% endif %}
+                </span>
+              </div>
+            </div>
+            
+            <div class="snapshot-row">
+              <div class="snapshot-item">
+                <span class="snapshot-label">Hold period:</span>
+                <span class="snapshot-value">
+                  {% if r.metrics.hold_days %}{{ r.metrics.hold_days }} days{% else %}—{% endif %}
+                </span>
               </div>
             </div>
           </div>
