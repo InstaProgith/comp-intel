@@ -1,0 +1,1416 @@
+{
+  "url": "https://www.redfin.com/CA/Los-Angeles/540-N-Gardner-St-90036/home/198348544",
+  "address": "540 N Gardner St,Los Angeles, CA 90036",
+  "headline_metrics": {
+    "purchase_price": null,
+    "purchase_date": null,
+    "exit_price": null,
+    "exit_date": null,
+    "spread": null,
+    "roi_pct": null,
+    "hold_days": null,
+    "list_price": 3811000.0,
+    "original_sf": null,
+    "new_sf": 3864.0,
+    "sf_added": null,
+    "sf_pct_change": null
+  },
+  "metrics": {
+    "purchase_price": null,
+    "purchase_date": null,
+    "exit_price": null,
+    "exit_date": null,
+    "spread": null,
+    "roi_pct": null,
+    "hold_days": null,
+    "list_price": 3811000.0,
+    "original_sf": null,
+    "new_sf": 3864.0,
+    "sf_added": null,
+    "sf_pct_change": null
+  },
+  "permit_timeline": {
+    "main_permit": {
+      "permit_number": "19016-10000-15145",
+      "job_number": "X19LA08964",
+      "permit_type": "Bldg-Alter/Repair - 1 or 2 Family Dwelling",
+      "Type": "Bldg-Alter/Repair - 1 or 2 Family Dwelling",
+      "Status": "Permit Finaled on 10/30/2019",
+      "status_date": "10/30/2019",
+      "Work_Description": "Window change-out (same size & type) for residential buildings. Dual glazing, labeled and certified by National Fenestration Rating Council (NFRC), is required for doors and windows replaced in all residential buildings, three stories or less, per Section 152(b) of Title 24. Kitchen/bathroom remodel for residential buildings (no structural changes).Replace drywall (no new walls added) for single family dwellings and duplexes only. \"COMPLY WITH DEPARTMENT ORDER effective date 05/14/2019. PERMIT WILL EXPIRE 30 DAYS FROM ISSUANCE DATE\"",
+      "Issued_Date": "Issued on 5/21/2019",
+      "contractor": "China Pacific Inc; Lic. No.: 510628-B 1777 NORTH MAIN STREET      LOS ANGELES, CA 90031",
+      "contractor_license": "510628",
+      "architect": null,
+      "architect_license": null,
+      "engineer": null,
+      "engineer_license": null,
+      "raw_details": {
+        "permit_number": "19016-10000-15145",
+        "job_number": "X19LA08964",
+        "group": "Building",
+        "type": "Bldg-Alter/Repair",
+        "sub_type": "1 or 2 Family Dwelling",
+        "primary_use": "(2) Duplex",
+        "work_description": "Window change-out (same size & type) for residential buildings. Dual glazing, labeled and certified by National Fenestration Rating Council (NFRC), is required for doors and windows replaced in all residential buildings, three stories or less, per Section 152(b) of Title 24. Kitchen/bathroom remodel for residential buildings (no structural changes).Replace drywall (no new walls added) for single family dwellings and duplexes only. \"COMPLY WITH DEPARTMENT ORDER effective date 05/14/2019. PERMIT WILL EXPIRE 30 DAYS FROM ISSUANCE DATE\"",
+        "permit_issued": "Issued on 5/21/2019",
+        "current_status": "Permit Finaled on 10/30/2019",
+        "issuing_office": "Metro",
+        "contact_information": {
+          "Contractor": "China Pacific Inc; Lic. No.: 510628-B 1777 NORTH MAIN STREET      LOS ANGELES, CA 90031"
+        },
+        "status_history": [
+          {
+            "event": "Issued",
+            "date": "5/21/2019",
+            "person": "LADBS"
+          },
+          {
+            "event": "Permit Finaled",
+            "date": "10/30/2019",
+            "person": "ARTHUR SARGSYAN"
+          }
+        ],
+        "status_date": "10/30/2019"
+      }
+    },
+    "plans_submitted_date": "2019-09-27",
+    "plans_approved_date": "2020-06-12",
+    "construction_completed_date": "2019-10-30"
+  },
+  "project_durations": {},
+  "current_summary": "5 bed, 5.0 bath, 3,864 SF",
+  "public_record_summary": "Public Record: Data not available",
+  "lot_summary": "Lot: Data not available",
+  "permit_summary": "Found 22 permits with status date >= 2018 via PLR.",
+  "permit_count": 22,
+  "ladbs": {
+    "source": "ladbs_plr_v5",
+    "apn": "5526025023",
+    "address": "540 N Gardner St,Los Angeles, CA 90036",
+    "fetched_at": "2025-11-27 07:50:22",
+    "permits": [
+      {
+        "permit_number": "19016-10000-15145",
+        "job_number": "X19LA08964",
+        "permit_type": "Bldg-Alter/Repair - 1 or 2 Family Dwelling",
+        "Type": "Bldg-Alter/Repair - 1 or 2 Family Dwelling",
+        "Status": "Permit Finaled on 10/30/2019",
+        "status_date": "10/30/2019",
+        "Work_Description": "Window change-out (same size & type) for residential buildings. Dual glazing, labeled and certified by National Fenestration Rating Council (NFRC), is required for doors and windows replaced in all residential buildings, three stories or less, per Section 152(b) of Title 24. Kitchen/bathroom remodel for residential buildings (no structural changes).Replace drywall (no new walls added) for single family dwellings and duplexes only. \"COMPLY WITH DEPARTMENT ORDER effective date 05/14/2019. PERMIT WILL EXPIRE 30 DAYS FROM ISSUANCE DATE\"",
+        "Issued_Date": "Issued on 5/21/2019",
+        "contractor": "China Pacific Inc; Lic. No.: 510628-B 1777 NORTH MAIN STREET      LOS ANGELES, CA 90031",
+        "contractor_license": "510628",
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "19016-10000-15145",
+          "job_number": "X19LA08964",
+          "group": "Building",
+          "type": "Bldg-Alter/Repair",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "(2) Duplex",
+          "work_description": "Window change-out (same size & type) for residential buildings. Dual glazing, labeled and certified by National Fenestration Rating Council (NFRC), is required for doors and windows replaced in all residential buildings, three stories or less, per Section 152(b) of Title 24. Kitchen/bathroom remodel for residential buildings (no structural changes).Replace drywall (no new walls added) for single family dwellings and duplexes only. \"COMPLY WITH DEPARTMENT ORDER effective date 05/14/2019. PERMIT WILL EXPIRE 30 DAYS FROM ISSUANCE DATE\"",
+          "permit_issued": "Issued on 5/21/2019",
+          "current_status": "Permit Finaled on 10/30/2019",
+          "issuing_office": "Metro",
+          "contact_information": {
+            "Contractor": "China Pacific Inc; Lic. No.: 510628-B 1777 NORTH MAIN STREET      LOS ANGELES, CA 90031"
+          },
+          "status_history": [
+            {
+              "event": "Issued",
+              "date": "5/21/2019",
+              "person": "LADBS"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "10/30/2019",
+              "person": "ARTHUR SARGSYAN"
+            }
+          ],
+          "status_date": "10/30/2019"
+        }
+      },
+      {
+        "permit_number": "19010-30001-04316",
+        "job_number": "B20WL05246",
+        "permit_type": "Bldg-Alter/Repair - 1 or 2 Family Dwelling",
+        "Type": "Bldg-Alter/Repair - 1 or 2 Family Dwelling",
+        "Status": "Permit Finaled on 12/15/2021",
+        "status_date": "12/15/2021",
+        "Work_Description": "SUPPLEMENTAL TO PERMIT NO. 19010-30000-04316 TO ADD POWDER ROOM WITHIN PERMITTED ENVELOPE OF POOL CABANA (NO ADDITIONAL AREA PROPOSED).",
+        "Issued_Date": "Issued on 12/1/2020",
+        "contractor": "P&M Construction And Management Inc; Lic. No.: 1031514-B 15915 VENTURA BLVD STE 304      ENCINO, CA 91436",
+        "contractor_license": "1031514",
+        "architect": null,
+        "architect_license": null,
+        "engineer": "Pirbadian,, Amir; Lic. No.: C72413 5435 BALBOA BLVD 214      ENCINO, CA 91342",
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "19010-30001-04316",
+          "job_number": "B20WL05246",
+          "group": "Building",
+          "type": "Bldg-Alter/Repair",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "(23) Recreation Room",
+          "work_description": "SUPPLEMENTAL TO PERMIT NO. 19010-30000-04316 TO ADD POWDER ROOM WITHIN PERMITTED ENVELOPE OF POOL CABANA (NO ADDITIONAL AREA PROPOSED).",
+          "permit_issued": "Issued on 12/1/2020",
+          "current_status": "Permit Finaled on 12/15/2021",
+          "certificate_of_occupancy": "CofO Issued More Information",
+          "contact_information": {
+            "Contractor": "P&M Construction And Management Inc; Lic. No.: 1031514-B 15915 VENTURA BLVD STE 304      ENCINO, CA 91436",
+            "Engineer": "Pirbadian,, Amir; Lic. No.: C72413 5435 BALBOA BLVD 214      ENCINO, CA 91342",
+            "Geologist": "Siskowic,, John Gary; Lic. No.: GEO8255 515 S CATALINA AVE APT A      REDONDO BEACH, CA 90277"
+          },
+          "status_history": [
+            {
+              "event": "Plan Check Approved",
+              "date": "12/1/2020",
+              "person": "SERGIO SILVA"
+            },
+            {
+              "event": "Issued",
+              "date": "12/1/2020",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Building Plans Picked Up",
+              "date": "12/4/2020",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "12/15/2021",
+              "person": "CHRIS CHRISTENSEN"
+            }
+          ],
+          "status_date": "12/15/2021"
+        }
+      },
+      {
+        "permit_number": "19019-30000-04946",
+        "job_number": "B19WL05484",
+        "permit_type": "Bldg-Demolition - 1 or 2 Family Dwelling",
+        "Type": "Bldg-Demolition - 1 or 2 Family Dwelling",
+        "Status": "Completed on 10/03/2019",
+        "status_date": "9/27/2019",
+        "Work_Description": "DPI WITH POSTING FOR DEMO (E) SFD & GARAGE",
+        "Issued_Date": "No",
+        "contractor": null,
+        "contractor_license": null,
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "19019-30000-04946",
+          "job_number": "B19WL05484",
+          "group": "Building",
+          "type": "Bldg-Demolition",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "DPI WITH POSTING FOR DEMO (E) SFD & GARAGE",
+          "permit_issued": "No",
+          "current_status": "Completed on 10/03/2019",
+          "contact_information": {},
+          "status_history": [],
+          "status_date": "9/27/2019"
+        }
+      },
+      {
+        "permit_number": "19019-30000-04945",
+        "job_number": "--",
+        "permit_type": "Bldg-Demolition - 1 or 2 Family Dwelling",
+        "Type": "Bldg-Demolition - 1 or 2 Family Dwelling",
+        "Status": "Application Pending on 9/27/2019",
+        "status_date": "9/27/2019",
+        "Work_Description": "DEMOLISH EXISTING 1-STORY TYPE VB DUPLEX AND DETACHED 1-STORY TYPE VB 2-CAR GARAGE TO CLEAR LOT BY HANDWRECKING METHOD. SEWER CAP AND PEDESTRIAN PROTECTION FENCE REQUIRED. COMPLY WITH DEPARTMENT ORDER effective date 05/14/2019. PERMIT WILL EXPIRE 30 DAYS FROM ISSUANCE DATE\". CEIS Case Number is 860678.",
+        "Issued_Date": "No",
+        "contractor": null,
+        "contractor_license": null,
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "19019-30000-04945",
+          "job_number": "--",
+          "group": "Building",
+          "type": "Bldg-Demolition",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "(2) Duplex",
+          "work_description": "DEMOLISH EXISTING 1-STORY TYPE VB DUPLEX AND DETACHED 1-STORY TYPE VB 2-CAR GARAGE TO CLEAR LOT BY HANDWRECKING METHOD. SEWER CAP AND PEDESTRIAN PROTECTION FENCE REQUIRED. COMPLY WITH DEPARTMENT ORDER effective date 05/14/2019. PERMIT WILL EXPIRE 30 DAYS FROM ISSUANCE DATE\". CEIS Case Number is 860678.",
+          "permit_issued": "No",
+          "current_status": "Application Pending on 9/27/2019",
+          "contact_information": {},
+          "status_history": [],
+          "status_date": "9/27/2019"
+        }
+      },
+      {
+        "permit_number": "19019-10000-05170",
+        "job_number": "B19LA21505",
+        "permit_type": "Bldg-Demolition - 1 or 2 Family Dwelling",
+        "Type": "Bldg-Demolition - 1 or 2 Family Dwelling",
+        "Status": "Permit Finaled on 8/7/2020",
+        "status_date": "8/7/2020",
+        "Work_Description": "DEMOLITION OF EXISTING GARAGE BY HANDWRECK METHOD. FENCE AND CLEAR LOT",
+        "Issued_Date": "Issued on 6/12/2020",
+        "contractor": "Owner-Builder ,",
+        "contractor_license": null,
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "19019-10000-05170",
+          "job_number": "B19LA21505",
+          "group": "Building",
+          "type": "Bldg-Demolition",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "(7) Garage - Private",
+          "work_description": "DEMOLITION OF EXISTING GARAGE BY HANDWRECK METHOD. FENCE AND CLEAR LOT",
+          "permit_issued": "Issued on 6/12/2020",
+          "current_status": "Permit Finaled on 8/7/2020",
+          "contact_information": {
+            "Contractor": "Owner-Builder ,"
+          },
+          "status_history": [
+            {
+              "event": "Submitted",
+              "date": "10/11/2019",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Assigned to Plan Check Engineer",
+              "date": "10/11/2019",
+              "person": "ADAM HEGAZI"
+            },
+            {
+              "event": "Corrections Issued",
+              "date": "10/11/2019",
+              "person": "ADAM HEGAZI"
+            },
+            {
+              "event": "Applicant returned to address corrections",
+              "date": "2/13/2020",
+              "person": "CRISTINA SALAZAR"
+            },
+            {
+              "event": "Plan Check Approved",
+              "date": "6/12/2020",
+              "person": "RICARDO RAMIREZ"
+            },
+            {
+              "event": "Issued",
+              "date": "6/12/2020",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "8/7/2020",
+              "person": "ELMER BLAND"
+            }
+          ],
+          "status_date": "8/7/2020"
+        }
+      },
+      {
+        "permit_number": "19019-10000-05125",
+        "job_number": "B19LA21505",
+        "permit_type": "Bldg-Demolition - 1 or 2 Family Dwelling",
+        "Type": "Bldg-Demolition - 1 or 2 Family Dwelling",
+        "Status": "Permit Finaled on 8/7/2020",
+        "status_date": "8/7/2020",
+        "Work_Description": "DEMO DUPLEX BY HANDWRECK METHOD. FENCE AND CLEAR LOT",
+        "Issued_Date": "Issued on 6/12/2020",
+        "contractor": "Owner-Builder ,",
+        "contractor_license": null,
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "19019-10000-05125",
+          "job_number": "B19LA21505",
+          "group": "Building",
+          "type": "Bldg-Demolition",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "(2) Duplex",
+          "work_description": "DEMO DUPLEX BY HANDWRECK METHOD. FENCE AND CLEAR LOT",
+          "permit_issued": "Issued on 6/12/2020",
+          "current_status": "Permit Finaled on 8/7/2020",
+          "contact_information": {
+            "Contractor": "Owner-Builder ,"
+          },
+          "status_history": [
+            {
+              "event": "Submitted",
+              "date": "10/11/2019",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Assigned to Plan Check Engineer",
+              "date": "10/11/2019",
+              "person": "ADAM HEGAZI"
+            },
+            {
+              "event": "Corrections Issued",
+              "date": "10/11/2019",
+              "person": "ADAM HEGAZI"
+            },
+            {
+              "event": "Applicant returned to address corrections",
+              "date": "2/13/2020",
+              "person": "CRISTINA SALAZAR"
+            },
+            {
+              "event": "Plan Check Approved",
+              "date": "6/12/2020",
+              "person": "RICARDO RAMIREZ"
+            },
+            {
+              "event": "Issued",
+              "date": "6/12/2020",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "8/7/2020",
+              "person": "ELMER BLAND"
+            }
+          ],
+          "status_date": "8/7/2020"
+        }
+      },
+      {
+        "permit_number": "20019-30000-02120",
+        "job_number": "B20WL02205",
+        "permit_type": "Bldg-Demolition - 1 or 2 Family Dwelling",
+        "Type": "Bldg-Demolition - 1 or 2 Family Dwelling",
+        "Status": "Completed on 06/30/2020",
+        "status_date": "5/27/2020",
+        "Work_Description": "demo pre-nspection with posting is required for demolish (e) duplex and detached garage",
+        "Issued_Date": "No",
+        "contractor": null,
+        "contractor_license": null,
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "20019-30000-02120",
+          "job_number": "B20WL02205",
+          "group": "Building",
+          "type": "Bldg-Demolition",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "demo pre-nspection with posting is required for demolish (e) duplex and detached garage",
+          "permit_issued": "No",
+          "current_status": "Completed on 06/30/2020",
+          "contact_information": {},
+          "status_history": [],
+          "status_date": "5/27/2020"
+        }
+      },
+      {
+        "permit_number": "20019-20000-01992",
+        "job_number": "B20VN06737",
+        "permit_type": "Bldg-Demolition - 1 or 2 Family Dwelling",
+        "Type": "Bldg-Demolition - 1 or 2 Family Dwelling",
+        "Status": "Pending",
+        "status_date": "9/4/2020",
+        "Work_Description": "VOID -- Duplicate Permit Application",
+        "Issued_Date": "No",
+        "contractor": null,
+        "contractor_license": null,
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "20019-20000-01992",
+          "job_number": "B20VN06737",
+          "group": "Building",
+          "type": "Bldg-Demolition",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "VOID -- Duplicate Permit Application",
+          "permit_issued": "No",
+          "current_status": "Pending",
+          "contact_information": {},
+          "status_history": [
+            {
+              "event": "Application Withdrawn",
+              "date": "9/4/2020",
+              "person": "ALDO UBAU"
+            }
+          ],
+          "status_date": "9/4/2020"
+        }
+      },
+      {
+        "permit_number": "19010-30000-04315",
+        "job_number": "B19WL05483",
+        "permit_type": "Bldg-New - 1 or 2 Family Dwelling",
+        "Type": "Bldg-New - 1 or 2 Family Dwelling",
+        "Status": "CofO Issued on 2/10/2022",
+        "status_date": "2/10/2022",
+        "Work_Description": "NEW 2-STORY TYPE VB SINGLE FAMILY DWELLING WITH ATTACHED 2-CAR GARAGE, EQUIPPED WITH NFPA 13D FIRE SPRINKLERS.",
+        "Issued_Date": "Issued on 7/30/2020",
+        "contractor": "P&M Construction And Management Inc; Lic. No.: 1031514-B 15915 VENTURA BLVD STE 304      ENCINO, CA 91436",
+        "contractor_license": "1031514",
+        "architect": null,
+        "architect_license": null,
+        "engineer": "Pirbadian,, Amir; Lic. No.: C72413 5435 BALBOA BLVD 214      ENCINO, CA 91342",
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "19010-30000-04315",
+          "job_number": "B19WL05483",
+          "group": "Building",
+          "type": "Bldg-New",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "(1) Dwelling - Single Family",
+          "work_description": "NEW 2-STORY TYPE VB SINGLE FAMILY DWELLING WITH ATTACHED 2-CAR GARAGE, EQUIPPED WITH NFPA 13D FIRE SPRINKLERS.",
+          "permit_issued": "Issued on 7/30/2020",
+          "current_status": "CofO Issued on 2/10/2022",
+          "issuing_office": "West Los Angeles",
+          "certificate_of_occupancy": "CofO Issued More Information",
+          "contact_information": {
+            "Contractor": "P&M Construction And Management Inc; Lic. No.: 1031514-B 15915 VENTURA BLVD STE 304      ENCINO, CA 91436",
+            "Engineer": "Pirbadian,, Amir; Lic. No.: C72413 5435 BALBOA BLVD 214      ENCINO, CA 91342",
+            "Geologist": "Siskowic,, John Gary; Lic. No.: GEO8255 515 S CATALINA AVE APT A      REDONDO BEACH, CA 90277"
+          },
+          "status_history": [
+            {
+              "event": "Submitted",
+              "date": "9/27/2019",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Assigned to Plan Check Engineer",
+              "date": "10/10/2019",
+              "person": "SERGIO SILVA"
+            },
+            {
+              "event": "Corrections Issued",
+              "date": "10/17/2019",
+              "person": "SERGIO SILVA"
+            },
+            {
+              "event": "Quality Review Completed",
+              "date": "10/31/2019",
+              "person": "KAMRAN GHOTBI RAVANDI"
+            },
+            {
+              "event": "Green Plans Picked Up",
+              "date": "11/4/2019",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Applicant returned to address corrections",
+              "date": "2/3/2020",
+              "person": "SERGIO SILVA"
+            },
+            {
+              "event": "Applicant returned to address corrections",
+              "date": "2/12/2020",
+              "person": "SERGIO SILVA"
+            },
+            {
+              "event": "Applicant returned to address corrections",
+              "date": "4/9/2020",
+              "person": "SERGIO SILVA"
+            },
+            {
+              "event": "Plan Check Approved",
+              "date": "7/23/2020",
+              "person": "SERGIO SILVA"
+            },
+            {
+              "event": "Issued",
+              "date": "7/30/2020",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Building Plans Picked Up",
+              "date": "7/30/2020",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "CofO in Progress",
+              "date": "12/14/2021",
+              "person": "CHRIS CHRISTENSEN"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "2/10/2022",
+              "person": "DEROLD HAUFF"
+            },
+            {
+              "event": "CofO Issued",
+              "date": "2/10/2022",
+              "person": "DEROLD HAUFF"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "2/10/2022",
+              "person": "DEROLD HAUFF"
+            }
+          ],
+          "status_date": "2/10/2022"
+        }
+      },
+      {
+        "permit_number": "19010-30000-04316",
+        "job_number": "B19WL05483",
+        "permit_type": "Bldg-New - 1 or 2 Family Dwelling",
+        "Type": "Bldg-New - 1 or 2 Family Dwelling",
+        "Status": "CofO Issued on 2/10/2022",
+        "status_date": "2/10/2022",
+        "Work_Description": "NEW 1-STORY TYPE VB POOL CABANA, EQUIPPED WITH NFPA 13D FIRE SPRINKLERS.",
+        "Issued_Date": "Issued on 7/30/2020",
+        "contractor": "P&M Construction And Management Inc; Lic. No.: 1031514-B 15915 VENTURA BLVD STE 304      ENCINO, CA 91436",
+        "contractor_license": "1031514",
+        "architect": null,
+        "architect_license": null,
+        "engineer": "Pirbadian,, Amir; Lic. No.: C72413 5435 BALBOA BLVD 214      ENCINO, CA 91342",
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "19010-30000-04316",
+          "job_number": "B19WL05483",
+          "group": "Building",
+          "type": "Bldg-New",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "(23) Recreation Room",
+          "work_description": "NEW 1-STORY TYPE VB POOL CABANA, EQUIPPED WITH NFPA 13D FIRE SPRINKLERS.",
+          "permit_issued": "Issued on 7/30/2020",
+          "current_status": "CofO Issued on 2/10/2022",
+          "issuing_office": "West Los Angeles",
+          "certificate_of_occupancy": "CofO Issued More Information",
+          "contact_information": {
+            "Contractor": "P&M Construction And Management Inc; Lic. No.: 1031514-B 15915 VENTURA BLVD STE 304      ENCINO, CA 91436",
+            "Engineer": "Pirbadian,, Amir; Lic. No.: C72413 5435 BALBOA BLVD 214      ENCINO, CA 91342",
+            "Geologist": "Siskowic,, John Gary; Lic. No.: GEO8255 515 S CATALINA AVE APT A      REDONDO BEACH, CA 90277"
+          },
+          "status_history": [
+            {
+              "event": "Submitted",
+              "date": "9/27/2019",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Assigned to Plan Check Engineer",
+              "date": "10/10/2019",
+              "person": "SERGIO SILVA"
+            },
+            {
+              "event": "Corrections Issued",
+              "date": "10/17/2019",
+              "person": "SERGIO SILVA"
+            },
+            {
+              "event": "Quality Review Completed",
+              "date": "10/31/2019",
+              "person": "KAMRAN GHOTBI RAVANDI"
+            },
+            {
+              "event": "Green Plans Picked Up",
+              "date": "11/4/2019",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Applicant returned to address corrections",
+              "date": "2/3/2020",
+              "person": "SERGIO SILVA"
+            },
+            {
+              "event": "Applicant returned to address corrections",
+              "date": "2/12/2020",
+              "person": "SERGIO SILVA"
+            },
+            {
+              "event": "Applicant returned to address corrections",
+              "date": "4/9/2020",
+              "person": "SERGIO SILVA"
+            },
+            {
+              "event": "Plan Check Approved",
+              "date": "7/23/2020",
+              "person": "SERGIO SILVA"
+            },
+            {
+              "event": "Issued",
+              "date": "7/30/2020",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Building Plans Picked Up",
+              "date": "7/30/2020",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "CofO in Progress",
+              "date": "12/15/2021",
+              "person": "CHRIS CHRISTENSEN"
+            },
+            {
+              "event": "CofO Issued",
+              "date": "2/10/2022",
+              "person": "DEROLD HAUFF"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "2/10/2022",
+              "person": "DEROLD HAUFF"
+            }
+          ],
+          "status_date": "2/10/2022"
+        }
+      },
+      {
+        "permit_number": "03041-30000-11380",
+        "job_number": "--",
+        "permit_type": "Electrical - 1 or 2 Family Dwelling",
+        "Type": "Electrical - 1 or 2 Family Dwelling",
+        "Status": "Permit Expired on 4/15/2025",
+        "status_date": "4/15/2025",
+        "Work_Description": "rewire existing circuits. adding new branch circuits. (NOTE: TITLE 24 MAY BE REQUIRED, TO BE DETERMINED BY FIELD INSPECTOR.)",
+        "Issued_Date": "Issued on 5/27/2003",
+        "contractor": null,
+        "contractor_license": null,
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "03041-30000-11380",
+          "job_number": "--",
+          "group": "Electrical",
+          "type": "Electrical",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "rewire existing circuits. adding new branch circuits. (NOTE: TITLE 24 MAY BE REQUIRED, TO BE DETERMINED BY FIELD INSPECTOR.)",
+          "permit_issued": "Issued on 5/27/2003",
+          "current_status": "Permit Expired on 4/15/2025",
+          "issuing_office": "West Los Angeles",
+          "contact_information": {},
+          "status_history": [
+            {
+              "event": "Issued",
+              "date": "5/27/2003",
+              "person": "KERMIT YOUNG"
+            },
+            {
+              "event": "Permit Expired",
+              "date": "4/15/2025",
+              "person": "RAUL BARAJAS"
+            }
+          ],
+          "status_date": "4/15/2025"
+        }
+      },
+      {
+        "permit_number": "19041-10000-19196",
+        "job_number": "X19LA08975",
+        "permit_type": "Electrical - 1 or 2 Family Dwelling",
+        "Type": "Electrical - 1 or 2 Family Dwelling",
+        "Status": "Permit Finaled on 10/30/2019",
+        "status_date": "10/30/2019",
+        "Work_Description": "11REESES LIGHTS. 6 3 WAYS, 2 4 WAYS. REPLACE ALL AND SWITCHES AROUND THE HOUSE. \"COMPLY WITH DEPARTMENT ORDER effective date 05/14/2019. PERMIT WILL EXPIRE 30 DAYS FROM ISSUANCE DATE\".",
+        "Issued_Date": "Issued on 5/21/2019",
+        "contractor": "China Pacific Inc; Lic. No.: 510628-B 1777 NORTH MAIN STREET      LOS ANGELES, CA 90031",
+        "contractor_license": "510628",
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "19041-10000-19196",
+          "job_number": "X19LA08975",
+          "group": "Electrical",
+          "type": "Electrical",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "11REESES LIGHTS. 6 3 WAYS, 2 4 WAYS. REPLACE ALL AND SWITCHES AROUND THE HOUSE. \"COMPLY WITH DEPARTMENT ORDER effective date 05/14/2019. PERMIT WILL EXPIRE 30 DAYS FROM ISSUANCE DATE\".",
+          "permit_issued": "Issued on 5/21/2019",
+          "current_status": "Permit Finaled on 10/30/2019",
+          "issuing_office": "Metro",
+          "contact_information": {
+            "Contractor": "China Pacific Inc; Lic. No.: 510628-B 1777 NORTH MAIN STREET      LOS ANGELES, CA 90031"
+          },
+          "status_history": [
+            {
+              "event": "Issued",
+              "date": "5/21/2019",
+              "person": "LADBS"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "10/30/2019",
+              "person": "ARTHUR SARGSYAN"
+            }
+          ],
+          "status_date": "10/30/2019"
+        }
+      },
+      {
+        "permit_number": "20041-10000-25681",
+        "job_number": "X20LA08480",
+        "permit_type": "Electrical - 1 or 2 Family Dwelling",
+        "Type": "Electrical - 1 or 2 Family Dwelling",
+        "Status": "Permit Finaled on 11/5/2021",
+        "status_date": "11/5/2021",
+        "Work_Description": "100 AMP TEMPORARY POWER POLE",
+        "Issued_Date": "Issued on 8/4/2020",
+        "contractor": null,
+        "contractor_license": null,
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "20041-10000-25681",
+          "job_number": "X20LA08480",
+          "group": "Electrical",
+          "type": "Electrical",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "100 AMP TEMPORARY POWER POLE",
+          "permit_issued": "Issued on 8/4/2020",
+          "current_status": "Permit Finaled on 11/5/2021",
+          "contact_information": {},
+          "status_history": [
+            {
+              "event": "Issued",
+              "date": "8/4/2020",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "11/5/2021",
+              "person": "CHRIS CHRISTENSEN"
+            }
+          ],
+          "status_date": "11/5/2021"
+        }
+      },
+      {
+        "permit_number": "21041-90000-07110",
+        "job_number": "--",
+        "permit_type": "Electrical - 1 or 2 Family Dwelling",
+        "Type": "Electrical - 1 or 2 Family Dwelling",
+        "Status": "Permit Finaled on 1/20/2022",
+        "status_date": "1/20/2022",
+        "Work_Description": "Installation of roof-mounted solar PV system, not exceeding a total AC output of 10 kW, in a 1 or 2 family dwelling",
+        "Issued_Date": "Issued on 2/25/2021",
+        "contractor": "Smart Solar Llc; Lic. No.: 998255-C46 1736 COUNTRY OAKS LANE      THOUSAND OAKS, CA 91362",
+        "contractor_license": "998255",
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "21041-90000-07110",
+          "job_number": "--",
+          "group": "Electrical",
+          "type": "Electrical",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "Installation of roof-mounted solar PV system, not exceeding a total AC output of 10 kW, in a 1 or 2 family dwelling",
+          "permit_issued": "Issued on 2/25/2021",
+          "current_status": "Permit Finaled on 1/20/2022",
+          "contact_information": {
+            "Contractor": "Smart Solar Llc; Lic. No.: 998255-C46 1736 COUNTRY OAKS LANE      THOUSAND OAKS, CA 91362"
+          },
+          "status_history": [
+            {
+              "event": "Issued",
+              "date": "2/25/2021",
+              "person": "INTERNET PERMIT"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "1/19/2022",
+              "person": "CHRIS CHRISTENSEN"
+            }
+          ],
+          "status_date": "1/20/2022"
+        }
+      },
+      {
+        "permit_number": "20043-20000-04496",
+        "job_number": "M20VN02771",
+        "permit_type": "Fire Sprinkler - 1 or 2 Family Dwelling",
+        "Type": "Fire Sprinkler - 1 or 2 Family Dwelling",
+        "Status": "Permit Finaled on 12/1/2021",
+        "status_date": "12/1/2021",
+        "Work_Description": "New fire sprinkler system per NFPA-13D. 1\" Domestic usage meter.",
+        "Issued_Date": "Issued on 9/11/2020",
+        "contractor": "Flame Master Sprinkler Company Inc; Lic. No.: 956944-C16 7532 SEDGEWICK COURT      WEST HILLS, CA 91304",
+        "contractor_license": "956944",
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "20043-20000-04496",
+          "job_number": "M20VN02771",
+          "group": "Mechanical",
+          "type": "Fire Sprinkler",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "New fire sprinkler system per NFPA-13D. 1\" Domestic usage meter.",
+          "permit_issued": "Issued on 9/11/2020",
+          "current_status": "Permit Finaled on 12/1/2021",
+          "contact_information": {
+            "Contractor": "Flame Master Sprinkler Company Inc; Lic. No.: 956944-C16 7532 SEDGEWICK COURT      WEST HILLS, CA 91304"
+          },
+          "status_history": [
+            {
+              "event": "Submitted",
+              "date": "9/11/2020",
+              "person": "HAGOP MERTEKHANIAN"
+            },
+            {
+              "event": "Assigned to Plan Check Engineer",
+              "date": "9/11/2020",
+              "person": "HAGOP MERTEKHANIAN"
+            },
+            {
+              "event": "Issued",
+              "date": "9/11/2020",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "11/30/2021",
+              "person": "THOMAS COWAN"
+            }
+          ],
+          "status_date": "12/1/2021"
+        }
+      },
+      {
+        "permit_number": "20043-20000-04497",
+        "job_number": "M20VN02772",
+        "permit_type": "Fire Sprinkler - 1 or 2 Family Dwelling",
+        "Type": "Fire Sprinkler - 1 or 2 Family Dwelling",
+        "Status": "Permit Finaled on 12/1/2021",
+        "status_date": "12/1/2021",
+        "Work_Description": "New fire sprinkler system per NFPA-13D. 1\" Domestic usage meter.",
+        "Issued_Date": "Issued on 12/21/2020",
+        "contractor": "Flame Master Sprinkler Company Inc; Lic. No.: 956944-C16 7532 SEDGEWICK COURT      WEST HILLS, CA 91304",
+        "contractor_license": "956944",
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "20043-20000-04497",
+          "job_number": "M20VN02772",
+          "group": "Mechanical",
+          "type": "Fire Sprinkler",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "New fire sprinkler system per NFPA-13D. 1\" Domestic usage meter.",
+          "permit_issued": "Issued on 12/21/2020",
+          "current_status": "Permit Finaled on 12/1/2021",
+          "contact_information": {
+            "Contractor": "Flame Master Sprinkler Company Inc; Lic. No.: 956944-C16 7532 SEDGEWICK COURT      WEST HILLS, CA 91304"
+          },
+          "status_history": [
+            {
+              "event": "Submitted",
+              "date": "9/11/2020",
+              "person": "HAGOP MERTEKHANIAN"
+            },
+            {
+              "event": "Assigned to Plan Check Engineer",
+              "date": "9/11/2020",
+              "person": "HAGOP MERTEKHANIAN"
+            },
+            {
+              "event": "Issued",
+              "date": "12/21/2020",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "11/30/2021",
+              "person": "THOMAS COWAN"
+            }
+          ],
+          "status_date": "12/1/2021"
+        }
+      },
+      {
+        "permit_number": "19030-30000-06284",
+        "job_number": "B19WL05483",
+        "permit_type": "Grading - 1 or 2 Family Dwelling",
+        "Type": "Grading - 1 or 2 Family Dwelling",
+        "Status": "Permit Finaled on 12/2/2021",
+        "status_date": "12/2/2021",
+        "Work_Description": "REMOVAL AND RECOMPACTION GRADING FOR NEW SINGLE FAMILY DWELLING AND DETACHED ACCESSORY STRUCTURE, AND GRADING FOR NEW SWIMMING POOL, SPA AND BAJA.",
+        "Issued_Date": "Issued on 7/30/2020",
+        "contractor": "P&M Construction And Management Inc; Lic. No.: 1031514-B 15915 VENTURA BLVD STE 304      ENCINO, CA 91436",
+        "contractor_license": "1031514",
+        "architect": null,
+        "architect_license": null,
+        "engineer": "Pirbadian,, Amir; Lic. No.: C72413 5435 BALBOA BLVD 214      ENCINO, CA 91342",
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "19030-30000-06284",
+          "job_number": "B19WL05483",
+          "group": "Building",
+          "type": "Grading",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "(60) Grading - Non-Hillside",
+          "work_description": "REMOVAL AND RECOMPACTION GRADING FOR NEW SINGLE FAMILY DWELLING AND DETACHED ACCESSORY STRUCTURE, AND GRADING FOR NEW SWIMMING POOL, SPA AND BAJA.",
+          "permit_issued": "Issued on 7/30/2020",
+          "current_status": "Permit Finaled on 12/2/2021",
+          "issuing_office": "West Los Angeles",
+          "contact_information": {
+            "Contractor": "P&M Construction And Management Inc; Lic. No.: 1031514-B 15915 VENTURA BLVD STE 304      ENCINO, CA 91436",
+            "Engineer": "Pirbadian,, Amir; Lic. No.: C72413 5435 BALBOA BLVD 214      ENCINO, CA 91342",
+            "Geologist": "Siskowic,, John Gary; Lic. No.: GEO8255 515 S CATALINA AVE APT A      REDONDO BEACH, CA 90277"
+          },
+          "status_history": [
+            {
+              "event": "Submitted",
+              "date": "9/27/2019",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Assigned to Plan Check Engineer",
+              "date": "10/10/2019",
+              "person": "SERGIO SILVA"
+            },
+            {
+              "event": "Corrections Issued",
+              "date": "10/17/2019",
+              "person": "SERGIO SILVA"
+            },
+            {
+              "event": "Quality Review Completed",
+              "date": "10/31/2019",
+              "person": "KAMRAN GHOTBI RAVANDI"
+            },
+            {
+              "event": "Green Plans Picked Up",
+              "date": "11/4/2019",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Applicant returned to address corrections",
+              "date": "2/3/2020",
+              "person": "SERGIO SILVA"
+            },
+            {
+              "event": "Applicant returned to address corrections",
+              "date": "2/12/2020",
+              "person": "SERGIO SILVA"
+            },
+            {
+              "event": "Applicant returned to address corrections",
+              "date": "4/9/2020",
+              "person": "SERGIO SILVA"
+            },
+            {
+              "event": "Plan Check Approved",
+              "date": "7/23/2020",
+              "person": "SERGIO SILVA"
+            },
+            {
+              "event": "Issued",
+              "date": "7/30/2020",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Building Plans Picked Up",
+              "date": "7/30/2020",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "12/1/2021",
+              "person": "LANNY MERRICK"
+            }
+          ],
+          "status_date": "12/2/2021"
+        }
+      },
+      {
+        "permit_number": "03044-30000-04860",
+        "job_number": "--",
+        "permit_type": "HVAC - 1 or 2 Family Dwelling",
+        "Type": "HVAC - 1 or 2 Family Dwelling",
+        "Status": "Permit Expired on 12/10/2024",
+        "status_date": "12/10/2024",
+        "Work_Description": "install new rooftop heater/a/c and new ducts.",
+        "Issued_Date": "Issued on 5/27/2003",
+        "contractor": null,
+        "contractor_license": null,
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "03044-30000-04860",
+          "job_number": "--",
+          "group": "Mechanical",
+          "type": "HVAC",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "install new rooftop heater/a/c and new ducts.",
+          "permit_issued": "Issued on 5/27/2003",
+          "current_status": "Permit Expired on 12/10/2024",
+          "issuing_office": "West Los Angeles",
+          "contact_information": {},
+          "status_history": [
+            {
+              "event": "Issued",
+              "date": "5/27/2003",
+              "person": "KERMIT YOUNG"
+            },
+            {
+              "event": "Permit Expired",
+              "date": "12/10/2024",
+              "person": "JOAQUIN GREENOUGH"
+            }
+          ],
+          "status_date": "12/10/2024"
+        }
+      },
+      {
+        "permit_number": "19020-30000-02654",
+        "job_number": "B19WL05483",
+        "permit_type": "Nonbldg-New - 1 or 2 Family Dwelling",
+        "Type": "Nonbldg-New - 1 or 2 Family Dwelling",
+        "Status": "Permit Finaled on 1/7/2022",
+        "status_date": "1/7/2022",
+        "Work_Description": "NEW 6'-0\" HT MASONRY FENCE WALL",
+        "Issued_Date": "Issued on 7/30/2020",
+        "contractor": "P&M Construction And Management Inc; Lic. No.: 1031514-B 15915 VENTURA BLVD STE 304      ENCINO, CA 91436",
+        "contractor_license": "1031514",
+        "architect": null,
+        "architect_license": null,
+        "engineer": "Pirbadian,, Amir; Lic. No.: C72413 5435 BALBOA BLVD 214      ENCINO, CA 91342",
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "19020-30000-02654",
+          "job_number": "B19WL05483",
+          "group": "Building",
+          "type": "Nonbldg-New",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "(23) Fence Wall",
+          "work_description": "NEW 6'-0\" HT MASONRY FENCE WALL",
+          "permit_issued": "Issued on 7/30/2020",
+          "current_status": "Permit Finaled on 1/7/2022",
+          "issuing_office": "West Los Angeles",
+          "contact_information": {
+            "Contractor": "P&M Construction And Management Inc; Lic. No.: 1031514-B 15915 VENTURA BLVD STE 304      ENCINO, CA 91436",
+            "Engineer": "Pirbadian,, Amir; Lic. No.: C72413 5435 BALBOA BLVD 214      ENCINO, CA 91342",
+            "Geologist": "Siskowic,, John Gary; Lic. No.: GEO8255 515 S CATALINA AVE APT A      REDONDO BEACH, CA 90277"
+          },
+          "status_history": [
+            {
+              "event": "Submitted",
+              "date": "9/27/2019",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Assigned to Plan Check Engineer",
+              "date": "10/10/2019",
+              "person": "SERGIO SILVA"
+            },
+            {
+              "event": "Corrections Issued",
+              "date": "10/17/2019",
+              "person": "SERGIO SILVA"
+            },
+            {
+              "event": "Quality Review Completed",
+              "date": "10/31/2019",
+              "person": "KAMRAN GHOTBI RAVANDI"
+            },
+            {
+              "event": "Green Plans Picked Up",
+              "date": "11/4/2019",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Applicant returned to address corrections",
+              "date": "2/3/2020",
+              "person": "SERGIO SILVA"
+            },
+            {
+              "event": "Applicant returned to address corrections",
+              "date": "2/12/2020",
+              "person": "SERGIO SILVA"
+            },
+            {
+              "event": "Applicant returned to address corrections",
+              "date": "4/9/2020",
+              "person": "SERGIO SILVA"
+            },
+            {
+              "event": "Plan Check Approved",
+              "date": "7/23/2020",
+              "person": "SERGIO SILVA"
+            },
+            {
+              "event": "Issued",
+              "date": "7/30/2020",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Building Plans Picked Up",
+              "date": "7/30/2020",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "1/6/2022",
+              "person": "CHRIS CHRISTENSEN"
+            }
+          ],
+          "status_date": "1/7/2022"
+        }
+      },
+      {
+        "permit_number": "03042-30000-16766",
+        "job_number": "--",
+        "permit_type": "Plumbing - 1 or 2 Family Dwelling",
+        "Type": "Plumbing - 1 or 2 Family Dwelling",
+        "Status": "Permit Expired on 4/15/2025",
+        "status_date": "4/15/2025",
+        "Work_Description": "install fixtures for bathrooms(3) and kitchen. install eq gas shut off valve. replace and relocate water heater and vent. relocate gas lines.",
+        "Issued_Date": "Issued on 5/27/2003",
+        "contractor": null,
+        "contractor_license": null,
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "03042-30000-16766",
+          "job_number": "--",
+          "group": "Mechanical",
+          "type": "Plumbing",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "install fixtures for bathrooms(3) and kitchen. install eq gas shut off valve. replace and relocate water heater and vent. relocate gas lines.",
+          "permit_issued": "Issued on 5/27/2003",
+          "current_status": "Permit Expired on 4/15/2025",
+          "issuing_office": "West Los Angeles",
+          "contact_information": {},
+          "status_history": [
+            {
+              "event": "Issued",
+              "date": "5/27/2003",
+              "person": "KERMIT YOUNG"
+            },
+            {
+              "event": "Permit Expired",
+              "date": "4/15/2025",
+              "person": "RAUL BARAJAS"
+            }
+          ],
+          "status_date": "4/15/2025"
+        }
+      },
+      {
+        "permit_number": "19042-10000-11874",
+        "job_number": "X19LA08972",
+        "permit_type": "Plumbing - 1 or 2 Family Dwelling",
+        "Type": "Plumbing - 1 or 2 Family Dwelling",
+        "Status": "Permit Finaled on 10/30/2019",
+        "status_date": "10/30/2019",
+        "Work_Description": "REPLACE KITCHEN SINK AND SHUT OFF VALVES, GARBAGE DISPOSAL AND DISH WASHER. \"COMPLY WITH DEPARTMENT ORDER effective date 05/14/2019. PERMIT WILL EXPIRE 30 DAYS FROM ISSUANCE DATE\"",
+        "Issued_Date": "Issued on 5/21/2019",
+        "contractor": "China Pacific Inc; Lic. No.: 510628-B 1777 NORTH MAIN STREET      LOS ANGELES, CA 90031",
+        "contractor_license": "510628",
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "19042-10000-11874",
+          "job_number": "X19LA08972",
+          "group": "Mechanical",
+          "type": "Plumbing",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "REPLACE KITCHEN SINK AND SHUT OFF VALVES, GARBAGE DISPOSAL AND DISH WASHER. \"COMPLY WITH DEPARTMENT ORDER effective date 05/14/2019. PERMIT WILL EXPIRE 30 DAYS FROM ISSUANCE DATE\"",
+          "permit_issued": "Issued on 5/21/2019",
+          "current_status": "Permit Finaled on 10/30/2019",
+          "issuing_office": "Metro",
+          "contact_information": {
+            "Contractor": "China Pacific Inc; Lic. No.: 510628-B 1777 NORTH MAIN STREET      LOS ANGELES, CA 90031"
+          },
+          "status_history": [
+            {
+              "event": "Issued",
+              "date": "5/21/2019",
+              "person": "LADBS"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "10/30/2019",
+              "person": "ARTHUR SARGSYAN"
+            }
+          ],
+          "status_date": "10/30/2019"
+        }
+      },
+      {
+        "permit_number": "19047-30000-01660",
+        "job_number": "B19WL05483",
+        "permit_type": "Swimming-Pool/Spa - 1 or 2 Family Dwelling",
+        "Type": "Swimming-Pool/Spa - 1 or 2 Family Dwelling",
+        "Status": "CofO Issued on 2/10/2022",
+        "status_date": "2/10/2022",
+        "Work_Description": "(N) SWIMMING POOL, SPA, AND BAJA SHELF PER L.A. CITY STANDARD PLAN 270",
+        "Issued_Date": "Issued on 7/30/2020",
+        "contractor": "P&M Construction And Management Inc; Lic. No.: 1031514-B 15915 VENTURA BLVD STE 304      ENCINO, CA 91436",
+        "contractor_license": "1031514",
+        "architect": null,
+        "architect_license": null,
+        "engineer": "Pirbadian,, Amir; Lic. No.: C72413 5435 BALBOA BLVD 214      ENCINO, CA 91342",
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "19047-30000-01660",
+          "job_number": "B19WL05483",
+          "group": "Building",
+          "type": "Swimming-Pool/Spa",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "(20) Pool/Spa - Private",
+          "work_description": "(N) SWIMMING POOL, SPA, AND BAJA SHELF PER L.A. CITY STANDARD PLAN 270",
+          "permit_issued": "Issued on 7/30/2020",
+          "current_status": "CofO Issued on 2/10/2022",
+          "issuing_office": "West Los Angeles",
+          "certificate_of_occupancy": "CofO Issued More Information",
+          "contact_information": {
+            "Contractor": "P&M Construction And Management Inc; Lic. No.: 1031514-B 15915 VENTURA BLVD STE 304      ENCINO, CA 91436",
+            "Engineer": "Pirbadian,, Amir; Lic. No.: C72413 5435 BALBOA BLVD 214      ENCINO, CA 91342",
+            "Geologist": "Siskowic,, John Gary; Lic. No.: GEO8255 515 S CATALINA AVE APT A      REDONDO BEACH, CA 90277"
+          },
+          "status_history": [
+            {
+              "event": "Submitted",
+              "date": "9/27/2019",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Assigned to Plan Check Engineer",
+              "date": "10/10/2019",
+              "person": "SERGIO SILVA"
+            },
+            {
+              "event": "Corrections Issued",
+              "date": "10/17/2019",
+              "person": "SERGIO SILVA"
+            },
+            {
+              "event": "Quality Review Completed",
+              "date": "10/31/2019",
+              "person": "KAMRAN GHOTBI RAVANDI"
+            },
+            {
+              "event": "Green Plans Picked Up",
+              "date": "11/4/2019",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Applicant returned to address corrections",
+              "date": "2/3/2020",
+              "person": "SERGIO SILVA"
+            },
+            {
+              "event": "Applicant returned to address corrections",
+              "date": "2/12/2020",
+              "person": "SERGIO SILVA"
+            },
+            {
+              "event": "Applicant returned to address corrections",
+              "date": "4/9/2020",
+              "person": "SERGIO SILVA"
+            },
+            {
+              "event": "Plan Check Approved",
+              "date": "7/23/2020",
+              "person": "SERGIO SILVA"
+            },
+            {
+              "event": "Issued",
+              "date": "7/30/2020",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Building Plans Picked Up",
+              "date": "7/30/2020",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "CofO in Progress",
+              "date": "1/7/2022",
+              "person": "CHRIS CHRISTENSEN"
+            },
+            {
+              "event": "CofO Issued",
+              "date": "2/10/2022",
+              "person": "DEROLD HAUFF"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "2/10/2022",
+              "person": "DEROLD HAUFF"
+            }
+          ],
+          "status_date": "2/10/2022"
+        }
+      }
+    ],
+    "note": "Found 22 permits with status date >= 2018 via PLR."
+  },
+  "redfin": {
+    "source": "redfin_parsed_v3",
+    "url": "https://www.redfin.com/CA/Los-Angeles/540-N-Gardner-St-90036/home/198348544",
+    "address": "540 N Gardner St,Los Angeles, CA 90036",
+    "listing_beds": 5.0,
+    "listing_baths": 5.0,
+    "listing_building_sf": 3864.0,
+    "listing_year_built": null,
+    "list_price": 3811000.0,
+    "beds": 5.0,
+    "baths": 5.0,
+    "building_sf": 3864.0,
+    "lot_sf": null,
+    "timeline": [
+      {
+        "date": "2025-11-21",
+        "event": "listed",
+        "price": 3811000,
+        "raw_status": "Listed (Active)"
+      }
+    ],
+    "tax": {
+      "apn": "5526025023",
+      "year": 2023,
+      "assessed_value": null
+    },
+    "public_records": {},
+    "generated_at": "2025-11-27",
+    "current_summary": "5 bed, 5.0 bath, 3,864 SF",
+    "public_record_summary": "Public Record: Data not available",
+    "lot_summary": "Lot: Data not available",
+    "raw_html_path": "/workspaces/comp-intel/data/raw/20251127-075022_redfin_540_N_Gardner_St_90036.html"
+  },
+  "project_contacts": null,
+  "cslb_contractor": null,
+  "summary_markdown": "### 1) DEAL SNAPSHOT\n\n- **Address:** 540 N Gardner St, Los Angeles, CA 90036\n- **Current Configuration:** 5 beds, 5 baths, 3,864 SF\n- **Original Configuration:** Data not available from public records.\n- **SF Added/Changed:** Data not available.\n- **Purchase Price:** Data not available.\n- **Purchase Date:** Data not available.\n- **Current Listing Price:** $3,811,000 (Listed on 11/21/2025)\n- **Hold Period:** Data not available.\n- **Gross Spread:** Data not available.\n- **Gross ROI:** Data not available.\n\n### 2) SCOPE OF WORK (PERMITS)\n\nThe analysis of LADBS permits shows that the major modifications to the property occurred mainly in the last 5\u201310 years, focusing on window changes, kitchen and bathroom remodeling, and grading for the addition of a swimming pool.\n\n- **Core building permits identified:**\n  - **Permit #:** 19016-10000-15145 (Finaled on 10/30/2019)\n    - **Scope:** Window change-outs and kitchen/bathroom remodeling (no structural changes).\n  - **Permit #:** 19010-30000-04316 (Finaled on 12/15/2021)\n    - **Scope:** Add powder room within the permitted envelope of pool cabana (no additional area proposed).\n  - **Permit #:** 19030-30000-06284 (Finaled on 12/2/2021)\n    - **Scope:** Grading for new single-family dwelling, accessory structures, and pool.\n  - **Permit #:** 19047-30000-01660 (CofO Issued on 2/10/2022)\n    - **Scope:** New swimming pool, spa, and baja shelf.\n\n- **Major updates indicate that the property has undergone remodels and substantial improvements, including new pools, grading, and structural renovations.**\n- **Open/active/not-finaled permits:** No active or open permits visible in permits data available.\n\n### 3) TEAM (COMPETITOR NETWORK)\n\n- **GC:** P&M Construction And Management Inc (License No.: 1031514)\n- **GC:** China Pacific Inc (License No.: 510628) - Owner-Builder on a demolition permit.\n- **Engineer:** Amir Pirbadian (License No.: C72413).\n- **Repeat Players:** P&M Construction And Management and Amir Pirbadian appear multiple times across permits.\n\n### 4) PERMIT TIMING (DURATIONS)\n\nFor the main building permit (19016-10000-15145):\n- **Submitted \u2192 Plan Check Approved:** Not applicable.\n- **Plan Check Approved \u2192 Issued:** Not applicable.\n- **Issued \u2192 Finaled:** 162 days (Issued on 5/21/2019 to Finaled on 10/30/2019).\n\nThe durations for additional permits are not included due to the lack of detailed initial submission dates.\n\n### 5) VALUE-ADD SUMMARY\n\nThe property at 540 N Gardner St in Los Angeles features high-end renovations, including notable kitchen and bathroom remodels, and the installation of a luxurious swimming pool and spa. The renovations have modernized the dwelling, enhancing its market appeal significantly. Given the current listing price of $3,811,000, it remains unknown if any previous purchase details exist or the exact value added through these upgrades."
+}
