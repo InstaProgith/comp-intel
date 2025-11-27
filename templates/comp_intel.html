@@ -7,7 +7,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="{{ url_for('static', filename='css/comp.css') }}">
 </head>
@@ -451,6 +451,8 @@ https://www.redfin.com/CA/Los-Angeles/123-Main-St-90012/home/12345678">{{ urls_t
           <div class="permit-chart-container">
             <div class="permit-chart-title">Permit Summary</div>
             <canvas id="permitChart{{ loop.index }}" class="permit-chart" 
+                    role="img"
+                    aria-label="Permit summary chart showing {{ building_permits | length }} building permits, {{ demo_permits | length }} demolition permits, and {{ mep_permits | length }} MEP/other permits"
                     data-building="{{ building_permits | length }}" 
                     data-demo="{{ demo_permits | length }}" 
                     data-mep="{{ mep_permits | length }}"></canvas>
@@ -567,6 +569,12 @@ https://www.redfin.com/CA/Los-Angeles/123-Main-St-90012/home/12345678">{{ urls_t
       </article>
       {% endfor %}
     </section>
+    {% endif %}
+
+    {% if results %}
+    <div style="text-align: center; margin-bottom: 24px;">
+      <button onclick="printReport()" class="btn-download">Download as PDF</button>
+    </div>
     {% endif %}
 
     <footer class="footer">
