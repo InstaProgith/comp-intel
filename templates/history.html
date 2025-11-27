@@ -31,15 +31,15 @@
       </div>
     </header>
 
-    <div style="margin-bottom: 20px;">
-      <a href="{{ url_for('comp_intel') }}" class="btn-primary" style="display: inline-flex;">
+    <section class="panel">
+      <a href="{{ url_for('comp_intel') }}" class="btn-primary">
         ← Back to Analysis
       </a>
-    </div>
+    </section>
 
     <!-- SEARCH HISTORY TABLE -->
     {% if search_log %}
-    <section class="history-section panel">
+    <section class="panel">
       <div class="section-header">
         <h3 class="section-title">Search History</h3>
         <span class="section-count">{{ search_log | length }} comps logged</span>
@@ -94,7 +94,7 @@
     
     <!-- REPEAT PLAYERS SECTION -->
     {% if repeat_players and (repeat_players.top_gcs or repeat_players.top_architects or repeat_players.top_engineers) %}
-    <section class="repeat-players-section panel">
+    <section class="panel">
       <div class="section-header">
         <h3 class="section-title">Repeat Players</h3>
       </div>
