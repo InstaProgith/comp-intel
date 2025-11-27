@@ -7,10 +7,10 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 
 # Always import using the package path
-from app.orchestrator import run_full_comp_pipeline, run_multiple
+from app.orchestrator import run_full_comp_pipeline, run_multiple, get_search_log, get_repeat_players
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -41,12 +41,18 @@ def jinja_match(value, pattern):
 
 @app.route("/", methods=["GET", "POST"])
 def comp_intel():
+    # Get search history and repeat players for display
+    search_log = get_search_log()
+    repeat_players = get_repeat_players()
+    
     if request.method == "GET":
         return render_template(
             "comp_intel.html",
             results=None,
             urls_text="",
             year=datetime.now().year,
+            search_log=search_log,
+            repeat_players=repeat_players,
         )
 
     urls_text = (request.form.get("urls") or "").strip()
@@ -56,6 +62,8 @@ def comp_intel():
             results=None,
             urls_text="",
             year=datetime.now().year,
+            search_log=search_log,
+            repeat_players=repeat_players,
         )
 
     # Stage 6 input cleaning & validation
@@ -93,6 +101,8 @@ def comp_intel():
             results=[too_many_result],
             urls_text=urls_text,
             year=datetime.now().year,
+            search_log=search_log,
+            repeat_players=repeat_players,
         )
 
     # Handle zero valid URLs
@@ -126,16 +136,48 @@ def comp_intel():
             results=[none_result],
             urls_text=urls_text,
             year=datetime.now().year,
+            search_log=search_log,
+            repeat_players=repeat_players,
         )
 
     results = run_multiple(valid_urls)
+    
+    # Refresh search log and repeat players after new results
+    search_log = get_search_log()
+    repeat_players = get_repeat_players()
 
     return render_template(
         "comp_intel.html",
         results=results,
         urls_text=urls_text,
         year=datetime.now().year,
+        search_log=search_log,
+        repeat_players=repeat_players,
     )
+
+
+@app.route("/history")
+def history():
+    """Dedicated route for viewing search history and repeat players."""
+    search_log = get_search_log()
+    repeat_players = get_repeat_players()
+    return render_template(
+        "history.html",
+        search_log=search_log,
+        repeat_players=repeat_players,
+        year=datetime.now().year,
+    )
+
+
+@app.route("/api/history")
+def api_history():
+    """API endpoint for search history data."""
+    search_log = get_search_log()
+    repeat_players = get_repeat_players()
+    return jsonify({
+        "search_log": search_log,
+        "repeat_players": repeat_players,
+    })
 
 
 if __name__ == "__main__":

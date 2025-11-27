@@ -65,6 +65,8 @@
       {% set pc = r.project_contacts or {} %}
       {% set cslb = r.cslb_contractor or None %}
       {% set permits = r.ladbs.permits if r.ladbs and r.ladbs.permits else [] %}
+      {% set team = r.team_network or {} %}
+      {% set cats = r.permit_categories or {} %}
 
       <article class="comp-card">
 
@@ -73,6 +75,60 @@
             <div class="comp-label">COMP</div>
             <h2 class="comp-address">{{ r.address or "Unknown address" }}</h2>
             <a href="{{ r.url }}" target="_blank" class="comp-link">{{ r.url }}</a>
+          </div>
+
+          <!-- DEVELOPER SNAPSHOT HEADER BAND -->
+          <div class="developer-snapshot-band">
+            <!-- Timeline -->
+            <div class="snapshot-band-section">
+              <div class="band-label">TIMELINE</div>
+              <div class="band-value">
+                {% if r.metrics.purchase_date %}{{ r.metrics.purchase_date }}{% else %}N/A{% endif %}
+                →
+                {% if r.metrics.exit_date %}{{ r.metrics.exit_date }}{% elif r.metrics.list_price %}Current{% else %}N/A{% endif %}
+                {% if r.metrics.hold_days %}<span class="band-highlight">({{ r.metrics.hold_days }} days)</span>{% endif %}
+              </div>
+            </div>
+            
+            <!-- Financial -->
+            <div class="snapshot-band-section">
+              <div class="band-label">FINANCIALS</div>
+              <div class="band-value">
+                {% if r.metrics.purchase_price %}${{ "{:,.0f}".format(r.metrics.purchase_price) }}{% else %}N/A{% endif %}
+                →
+                {% if r.metrics.exit_price %}${{ "{:,.0f}".format(r.metrics.exit_price) }}{% elif r.metrics.list_price %}${{ "{:,.0f}".format(r.metrics.list_price) }} (list){% else %}N/A{% endif %}
+                {% if r.metrics.spread %}<span class="band-success">+${{ "{:,.0f}".format(r.metrics.spread) }}</span>{% endif %}
+                {% if r.metrics.roi_pct %}<span class="band-success">({{ "{:.1f}%".format(r.metrics.roi_pct) }} ROI)</span>{% endif %}
+              </div>
+            </div>
+            
+            <!-- Area + FAR -->
+            <div class="snapshot-band-section">
+              <div class="band-label">AREA + FAR</div>
+              <div class="band-value">
+                {% if r.metrics.land_sf %}Land: {{ "{:,.0f}".format(r.metrics.land_sf) }} SF{% else %}Land: N/A{% endif %} |
+                {% if r.metrics.far_before %}FAR: {{ r.metrics.far_before }}{% else %}FAR: N/A{% endif %}
+                {% if r.metrics.far_after and r.metrics.far_after != r.metrics.far_before %}→ {{ r.metrics.far_after }}{% endif %}
+              </div>
+            </div>
+            
+            <!-- Team Snapshot -->
+            <div class="snapshot-band-section">
+              <div class="band-label">PRIMARY GC</div>
+              <div class="band-value">
+                {% if team.primary_gc %}
+                  {{ team.primary_gc.name[:30] }}{% if team.primary_gc.name|length > 30 %}...{% endif %}
+                  {% if team.primary_gc.license %}
+                    <span class="band-license">#{{ team.primary_gc.license }}</span>
+                    {% if team.primary_gc.cslb_url %}
+                      <a href="{{ team.primary_gc.cslb_url }}" target="_blank" class="band-link">CSLB</a>
+                    {% endif %}
+                  {% endif %}
+                {% else %}
+                  <span class="muted">N/A</span>
+                {% endif %}
+              </div>
+            </div>
           </div>
 
           <div class="stat-grid">
@@ -84,57 +140,384 @@
               <div class="stat-value">{{ r.lot_summary or "—" }}</div></div>
             <div class="stat-pill"><div class="stat-label">LADBS PERMITS</div>
               <div class="stat-value">
-                {% if r.ladbs and r.ladbs.source and (r.ladbs.source.startswith('ladbs_stub_') or r.ladbs.source == 'ladbs_error') %}
-                  No LADBS permit data available
+                {% if not r.ladbs_ok %}
+                  <span class="error-indicator">⚠️ {{ r.ladbs_error or "No LADBS data" }}</span>
                 {% else %}
                   {{ r.permit_summary or "—" }}
                 {% endif %}
               </div></div>
           </div>
+          
+          <!-- Data Quality Indicators -->
+          {% if not r.redfin_ok or not r.ladbs_ok or not r.cslb_ok %}
+          <div class="data-quality-alerts">
+            {% if not r.redfin_ok %}
+              <div class="alert-badge alert-warning">⚠️ Redfin: {{ r.redfin_error or "Data unavailable" }}</div>
+            {% endif %}
+            {% if not r.ladbs_ok %}
+              <div class="alert-badge alert-warning">⚠️ LADBS: {{ r.ladbs_error or "No permits found" }}</div>
+            {% endif %}
+            {% if not r.cslb_ok and r.cslb_error %}
+              <div class="alert-badge alert-info">ℹ️ CSLB: {{ r.cslb_error }}</div>
+            {% endif %}
+          </div>
+          {% endif %}
         </header>
 
         <section class="comp-body">
 
-          <!-- PROJECT SNAPSHOT -->
+          <!-- DEVELOPER SNAPSHOT (ABOVE THE FOLD) -->
           <div class="deal-snapshot">
             <div class="section-header">
-              <h3 class="section-title">Project Snapshot</h3>
+              <h3 class="section-title">Developer Snapshot</h3>
             </div>
             
-            <!-- Purchase Info -->
+            <!-- Timeline Row -->
             <div class="snapshot-row">
-              <div class="snapshot-item-wide">
-                <span class="snapshot-label">Purchased:</span>
+              <div class="snapshot-item">
+                <span class="snapshot-label">Purchase Date:</span>
                 <span class="snapshot-value">
-                  {% if r.metrics.purchase_date and r.metrics.purchase_price %}
-                    <strong>{{ r.metrics.purchase_date }}</strong> for <strong>${{ "{:,.0f}".format(r.metrics.purchase_price) }}</strong>
+                  {% if r.metrics.purchase_date %}<strong>{{ r.metrics.purchase_date }}</strong>{% else %}<span class="muted">N/A</span>{% endif %}
+                </span>
+              </div>
+              <div class="snapshot-item">
+                <span class="snapshot-label">Exit/List Date:</span>
+                <span class="snapshot-value">
+                  {% if r.metrics.exit_date %}<strong>{{ r.metrics.exit_date }}</strong>{% elif r.metrics.list_price %}<strong>Current</strong>{% else %}<span class="muted">N/A</span>{% endif %}
+                </span>
+              </div>
+              <div class="snapshot-item">
+                <span class="snapshot-label">Hold Duration:</span>
+                <span class="snapshot-value">
+                  {% if r.metrics.hold_days %}<strong>{{ r.metrics.hold_days }} days</strong>{% else %}<span class="muted">N/A</span>{% endif %}
+                </span>
+              </div>
+            </div>
+            
+            <!-- Financial Metrics Row -->
+            <div class="snapshot-row">
+              <div class="snapshot-item">
+                <span class="snapshot-label">Purchase Price:</span>
+                <span class="snapshot-value">
+                  {% if r.metrics.purchase_price %}<strong>${{ "{:,.0f}".format(r.metrics.purchase_price) }}</strong>{% else %}<span class="muted">N/A</span>{% endif %}
+                </span>
+              </div>
+              <div class="snapshot-item">
+                <span class="snapshot-label">Exit/List Price:</span>
+                <span class="snapshot-value">
+                  {% if r.metrics.exit_price %}
+                    <strong>${{ "{:,.0f}".format(r.metrics.exit_price) }}</strong>
+                  {% elif r.metrics.list_price %}
+                    <strong>${{ "{:,.0f}".format(r.metrics.list_price) }}</strong> <span class="muted">(list)</span>
                   {% else %}
-                    <span class="muted">—</span>
+                    <span class="muted">N/A</span>
+                  {% endif %}
+                </span>
+              </div>
+              <div class="snapshot-item">
+                <span class="snapshot-label">Spread:</span>
+                <span class="snapshot-value">
+                  {% if r.metrics.spread %}
+                    <strong class="snapshot-success">${{ "{:,.0f}".format(r.metrics.spread) }}</strong>
+                  {% else %}
+                    <span class="muted">N/A</span>
                   {% endif %}
                 </span>
               </div>
             </div>
             
-            <!-- Size Change -->
-            {% if r.metrics.original_sf or r.metrics.new_sf %}
+            <!-- $/SF and ROI Row -->
+            <div class="snapshot-row">
+              <div class="snapshot-item">
+                <span class="snapshot-label">Purchase $/SF:</span>
+                <span class="snapshot-value">
+                  {% if r.metrics.purchase_psf %}<strong>${{ "{:,.0f}".format(r.metrics.purchase_psf) }}</strong>{% else %}<span class="muted">N/A</span>{% endif %}
+                </span>
+              </div>
+              <div class="snapshot-item">
+                <span class="snapshot-label">Exit $/SF:</span>
+                <span class="snapshot-value">
+                  {% if r.metrics.exit_psf %}
+                    <strong>${{ "{:,.0f}".format(r.metrics.exit_psf) }}</strong>
+                  {% elif r.metrics.list_psf %}
+                    <strong>${{ "{:,.0f}".format(r.metrics.list_psf) }}</strong> <span class="muted">(list)</span>
+                  {% else %}
+                    <span class="muted">N/A</span>
+                  {% endif %}
+                </span>
+              </div>
+              <div class="snapshot-item">
+                <span class="snapshot-label">ROI %:</span>
+                <span class="snapshot-value">
+                  {% if r.metrics.roi_pct %}
+                    <strong class="snapshot-success">{{ "{:.1f}%".format(r.metrics.roi_pct) }}</strong>
+                  {% else %}
+                    <span class="muted">N/A</span>
+                  {% endif %}
+                </span>
+              </div>
+            </div>
+            
+            <!-- Spread per day -->
+            {% if r.metrics.spread_per_day %}
+            <div class="snapshot-row">
+              <div class="snapshot-item">
+                <span class="snapshot-label">Spread/Day:</span>
+                <span class="snapshot-value">
+                  <strong class="snapshot-success">${{ "{:,.0f}".format(r.metrics.spread_per_day) }}</strong>/day
+                </span>
+              </div>
+            </div>
+            {% endif %}
+          </div>
+          
+          <!-- AREA + FAR SECTION -->
+          <div class="deal-snapshot">
+            <div class="section-header">
+              <h3 class="section-title">Area + FAR</h3>
+            </div>
+            
+            <div class="snapshot-row">
+              <div class="snapshot-item">
+                <span class="snapshot-label">Land SF:</span>
+                <span class="snapshot-value">
+                  {% if r.metrics.land_sf %}<strong>{{ "{:,.0f}".format(r.metrics.land_sf) }} SF</strong>{% else %}<span class="muted">N/A</span>{% endif %}
+                </span>
+              </div>
+              <div class="snapshot-item">
+                <span class="snapshot-label">Building SF (Before):</span>
+                <span class="snapshot-value">
+                  {% if r.metrics.building_sf_before %}<strong>{{ "{:,.0f}".format(r.metrics.building_sf_before) }} SF</strong>{% else %}<span class="muted">N/A</span>{% endif %}
+                </span>
+              </div>
+              <div class="snapshot-item">
+                <span class="snapshot-label">Existing FAR:</span>
+                <span class="snapshot-value">
+                  {% if r.metrics.far_before %}<strong>{{ r.metrics.far_before }}</strong>{% else %}<span class="muted">N/A</span>{% endif %}
+                </span>
+              </div>
+            </div>
+            
+            {% if r.metrics.building_sf_after and r.metrics.building_sf_after != r.metrics.building_sf_before %}
+            <div class="snapshot-row">
+              <div class="snapshot-item">
+                <span class="snapshot-label">SF Added:</span>
+                <span class="snapshot-value">
+                  {% if r.metrics.sf_added %}
+                    <strong class="snapshot-success">+{{ "{:,.0f}".format(r.metrics.sf_added) }} SF</strong>
+                    {% if r.metrics.sf_pct_change %}(+{{ "{:.0f}%".format(r.metrics.sf_pct_change) }}){% endif %}
+                  {% else %}
+                    <span class="muted">N/A</span>
+                  {% endif %}
+                </span>
+              </div>
+              <div class="snapshot-item">
+                <span class="snapshot-label">Building SF (After):</span>
+                <span class="snapshot-value">
+                  {% if r.metrics.building_sf_after %}<strong>{{ "{:,.0f}".format(r.metrics.building_sf_after) }} SF</strong>{% else %}<span class="muted">N/A</span>{% endif %}
+                </span>
+              </div>
+              <div class="snapshot-item">
+                <span class="snapshot-label">Post-Project FAR:</span>
+                <span class="snapshot-value">
+                  {% if r.metrics.far_after %}<strong>{{ r.metrics.far_after }}</strong>{% else %}<span class="muted">N/A</span>{% endif %}
+                </span>
+              </div>
+            </div>
+            {% endif %}
+          </div>
+          
+          <!-- TEAM NETWORK SECTION -->
+          <div class="deal-snapshot">
+            <div class="section-header">
+              <h3 class="section-title">Team Network</h3>
+            </div>
+            
+            <!-- Primary GC -->
             <div class="snapshot-row">
               <div class="snapshot-item-wide">
-                <span class="snapshot-label">Size change:</span>
+                <span class="snapshot-label">Primary GC:</span>
                 <span class="snapshot-value">
-                  {% if r.metrics.original_sf %}{{ "{:,.0f}".format(r.metrics.original_sf) }} SF{% else %}—{% endif %}
-                  →
-                  {% if r.metrics.new_sf %}{{ "{:,.0f}".format(r.metrics.new_sf) }} SF{% else %}—{% endif %}
-                  {% if r.metrics.sf_added %}
-                    <span class="snapshot-success">(+{{ "{:,.0f}".format(r.metrics.sf_added) }} SF / +{{ "{:.0f}%".format(r.metrics.sf_pct_change) }})</span>
+                  {% if team.primary_gc %}
+                    <strong>{{ team.primary_gc.name }}</strong>
+                    {% if team.primary_gc.license %}
+                      <span class="team-license">(CSLB #{{ team.primary_gc.license }})</span>
+                      {% if team.primary_gc.cslb_url %}
+                        <a href="{{ team.primary_gc.cslb_url }}" target="_blank" class="team-cslb-link">View CSLB Profile →</a>
+                      {% endif %}
+                    {% endif %}
+                    {% if cslb and cslb.business_name %}
+                      <span class="cslb-verified">✓ CSLB Verified</span>
+                    {% endif %}
+                  {% else %}
+                    <span class="muted">N/A</span>
                   {% endif %}
+                </span>
+              </div>
+            </div>
+            
+            <!-- Also on permits: Other Contractors -->
+            {% if team.other_contractors %}
+            <div class="snapshot-row">
+              <div class="snapshot-item-wide">
+                <span class="snapshot-label">Also on permits (GC):</span>
+                <span class="snapshot-value muted">
+                  {% for c in team.other_contractors %}{{ c.name }}{% if c.license %} (#{{ c.license }}){% endif %}{% if not loop.last %}, {% endif %}{% endfor %}
                 </span>
               </div>
             </div>
             {% endif %}
             
-            <!-- Permit Timeline -->
-            {% if r.permit_timeline %}
-            {% set pt = r.permit_timeline %}
+            <!-- Primary Architect -->
+            <div class="snapshot-row">
+              <div class="snapshot-item-wide">
+                <span class="snapshot-label">Primary Architect:</span>
+                <span class="snapshot-value">
+                  {% if team.primary_architect %}
+                    <strong>{{ team.primary_architect.name }}</strong>
+                    {% if team.primary_architect.license %}<span class="team-license">(#{{ team.primary_architect.license }})</span>{% endif %}
+                  {% else %}
+                    <span class="muted">None on record</span>
+                  {% endif %}
+                </span>
+              </div>
+            </div>
+            
+            {% if team.other_architects %}
+            <div class="snapshot-row">
+              <div class="snapshot-item-wide">
+                <span class="snapshot-label">Also on permits (Arch):</span>
+                <span class="snapshot-value muted">
+                  {% for a in team.other_architects %}{{ a.name }}{% if a.license %} (#{{ a.license }}){% endif %}{% if not loop.last %}, {% endif %}{% endfor %}
+                </span>
+              </div>
+            </div>
+            {% endif %}
+            
+            <!-- Primary Engineer -->
+            <div class="snapshot-row">
+              <div class="snapshot-item-wide">
+                <span class="snapshot-label">Primary Engineer:</span>
+                <span class="snapshot-value">
+                  {% if team.primary_engineer %}
+                    <strong>{{ team.primary_engineer.name }}</strong>
+                    {% if team.primary_engineer.license %}<span class="team-license">(#{{ team.primary_engineer.license }})</span>{% endif %}
+                  {% else %}
+                    <span class="muted">None on record</span>
+                  {% endif %}
+                </span>
+              </div>
+            </div>
+            
+            {% if team.other_engineers %}
+            <div class="snapshot-row">
+              <div class="snapshot-item-wide">
+                <span class="snapshot-label">Also on permits (Eng):</span>
+                <span class="snapshot-value muted">
+                  {% for e in team.other_engineers %}{{ e.name }}{% if e.license %} (#{{ e.license }}){% endif %}{% if not loop.last %}, {% endif %}{% endfor %}
+                </span>
+              </div>
+            </div>
+            {% endif %}
+          </div>
+
+          <!-- WORK PERFORMED / PERMIT SCOPE SUMMARY -->
+          <div class="deal-snapshot">
+            <div class="section-header">
+              <h3 class="section-title">Work Performed</h3>
+              {% if cats.scope_level %}
+              <span class="scope-badge scope-{{ cats.scope_level|lower }}">{{ cats.scope_level }}</span>
+              {% endif %}
+            </div>
+            
+            <!-- Permit Summary Line -->
+            <div class="permit-summary-line">
+              <strong>Permits:</strong>
+              Building ({{ cats.building_count or 0 }}),
+              Demo ({{ cats.demo_count or 0 }}),
+              MEP ({{ cats.mep_count or 0 }}),
+              Other ({{ cats.other_count or 0 }})
+              {% if cats.scope_details and cats.scope_details != "No permits found" %}
+                — <span class="scope-detail">{{ cats.scope_details }}</span>
+              {% endif %}
+            </div>
+            
+            <!-- Detailed Permits -->
+            {% if permits %}
+            {% set building_permits = permits | selectattr('permit_type', 'match', '.*Bldg.*|.*Building.*') | list %}
+            {% set demo_permits = permits | selectattr('permit_type', 'match', '.*Demo.*') | list %}
+            {% set mep_permits = permits | rejectattr('permit_type', 'match', '.*Bldg.*|.*Building.*|.*Demo.*') | list %}
+
+            {% if building_permits %}
+            <div class="permit-group">
+              <div class="permit-group-header">Building & Structure ({{ building_permits | length }})</div>
+              {% for p in building_permits %}
+              <div class="permit-compact">
+                <div class="permit-compact-main">
+                  <span class="permit-compact-type">{{ p.permit_type }}</span>
+                  <span class="permit-compact-number">{{ p.permit_number }}</span>
+                </div>
+                {% if p.Work_Description and p.Work_Description != 'N/A' %}
+                <div class="permit-work-desc">{{ p.Work_Description }}</div>
+                {% endif %}
+                <div class="permit-compact-meta">
+                  <span>{{ p.Status }}</span>
+                  {% if p.contractor %} • Contractor: {{ p.contractor[:40] }}{% endif %}
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if demo_permits %}
+            <div class="permit-group">
+              <div class="permit-group-header">Demolition ({{ demo_permits | length }})</div>
+              {% for p in demo_permits %}
+              <div class="permit-compact">
+                <div class="permit-compact-main">
+                  <span class="permit-compact-type">{{ p.permit_type }}</span>
+                  <span class="permit-compact-number">{{ p.permit_number }}</span>
+                </div>
+                {% if p.Work_Description and p.Work_Description != 'N/A' %}
+                <div class="permit-work-desc">{{ p.Work_Description }}</div>
+                {% endif %}
+              </div>
+              {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if mep_permits %}
+            <div class="permit-group">
+              <div class="permit-group-header">MEP & Other ({{ mep_permits | length }})</div>
+              {% for p in mep_permits %}
+              <div class="permit-compact">
+                <div class="permit-compact-main">
+                  <span class="permit-compact-type">{{ p.permit_type }}</span>
+                  <span class="permit-compact-number">{{ p.permit_number }}</span>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+            {% endif %}
+            {% else %}
+            <div class="no-data-message">
+              {% if not r.ladbs_ok %}
+                ⚠️ {{ r.ladbs_error or "LADBS data unavailable - cannot verify permit history" }}
+              {% else %}
+                No permits found for this property
+              {% endif %}
+            </div>
+            {% endif %}
+          </div>
+
+          <!-- Permit Timeline (existing) -->
+          {% if r.permit_timeline %}
+          {% set pt = r.permit_timeline %}
+          <div class="deal-snapshot">
+            <div class="section-header">
+              <h3 class="section-title">Permit Timeline</h3>
+            </div>
+            
             {% if pt.plans_submitted_date %}
             <div class="snapshot-row">
               <div class="snapshot-item-wide">
@@ -187,220 +570,183 @@
               </div>
             </div>
             {% endif %}
-            {% endif %}
-          </div>
-          
-          <!-- TEAM -->
-          <div class="deal-snapshot">
-            <div class="section-header">
-              <h3 class="section-title">Team</h3>
-            </div>
-            
-            {% set permits = r.ladbs.permits if r.ladbs is defined and r.ladbs.permits is defined and r.ladbs.permits is not none else [] %}
-            {% set contractors = [] %}
-            {% set architects = [] %}
-            {% set engineers = [] %}
-            
-            {% for p in permits %}
-              {% if p.contractor and p.contractor not in contractors %}
-                {% set _ = contractors.append(p.contractor) %}
-              {% endif %}
-              {% if p.architect and p.architect not in architects %}
-                {% set _ = architects.append(p.architect) %}
-              {% endif %}
-              {% if p.engineer and p.engineer not in engineers %}
-                {% set _ = engineers.append(p.engineer) %}
-              {% endif %}
-            {% endfor %}
-            
-            <div class="snapshot-row">
-              <div class="snapshot-item-wide">
-                <span class="snapshot-label">Contractor:</span>
-                <span class="snapshot-value">
-                  {% if contractors %}
-                    {{ contractors[0] }}
-                    {% if 'OWNER' in contractors[0].upper() %}<span class="muted">(owner-builder)</span>{% endif %}
-                  {% else %}—{% endif %}
-                </span>
-              </div>
-            </div>
-            
-            <div class="snapshot-row">
-              <div class="snapshot-item-wide">
-                <span class="snapshot-label">Architect:</span>
-                <span class="snapshot-value">
-                  {% if architects %}{{ architects[0] }}{% else %}<span class="muted">None on record</span>{% endif %}
-                </span>
-              </div>
-            </div>
-            
-            <div class="snapshot-row">
-              <div class="snapshot-item-wide">
-                <span class="snapshot-label">Engineer:</span>
-                <span class="snapshot-value">
-                  {% if engineers %}{{ engineers[0] }}{% else %}<span class="muted">None on record</span>{% endif %}
-                </span>
-              </div>
-            </div>
-          </div>
-          
-          <!-- DEAL METRICS -->
-          <div class="deal-snapshot">
-            <div class="section-header">
-              <h3 class="section-title">Deal Metrics</h3>
-            </div>
-            
-            <div class="snapshot-row">
-              <div class="snapshot-item">
-                <span class="snapshot-label">Purchase price:</span>
-                <span class="snapshot-value">
-                  {% if r.metrics.purchase_price %}${{ "{:,.0f}".format(r.metrics.purchase_price) }}{% else %}—{% endif %}
-                </span>
-              </div>
-              <div class="snapshot-item">
-                <span class="snapshot-label">Exit/List price:</span>
-                <span class="snapshot-value">
-                  {% if r.metrics.exit_price %}
-                    ${{ "{:,.0f}".format(r.metrics.exit_price) }}
-                  {% elif r.metrics.list_price %}
-                    ${{ "{:,.0f}".format(r.metrics.list_price) }} <span class="muted">(current listing)</span>
-                  {% else %}—{% endif %}
-                </span>
-              </div>
-            </div>
-            
-            <div class="snapshot-row">
-              <div class="snapshot-item">
-                <span class="snapshot-label">Gross spread:</span>
-                <span class="snapshot-value {% if r.metrics.spread %}snapshot-success{% endif %}">
-                  {% if r.metrics.spread %}${{ "{:,.0f}".format(r.metrics.spread) }}{% else %}—{% endif %}
-                </span>
-              </div>
-              <div class="snapshot-item">
-                <span class="snapshot-label">ROI:</span>
-                <span class="snapshot-value {% if r.metrics.roi_pct %}snapshot-success{% endif %}">
-                  {% if r.metrics.roi_pct %}{{ "{:.1f}%".format(r.metrics.roi_pct) }}{% else %}—{% endif %}
-                </span>
-              </div>
-            </div>
-            
-            <div class="snapshot-row">
-              <div class="snapshot-item">
-                <span class="snapshot-label">Hold period:</span>
-                <span class="snapshot-value">
-                  {% if r.metrics.hold_days %}{{ r.metrics.hold_days }} days{% else %}—{% endif %}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <!-- WORK PERFORMED -->
-          {% if permits %}
-          {% set permits = r.ladbs.permits if r.ladbs is defined and r.ladbs.permits is defined and r.ladbs.permits is not none else [] %}
-          <div class="section-header">
-            <h3 class="section-title">Work Performed</h3>
-            <span class="section-count">{{ permits | length }} permits</span>
-          </div>
-
-          {% set building_permits = permits | selectattr('permit_type', 'match', '.*Bldg.*|.*Building.*') | list %}
-          {% set demo_permits = permits | selectattr('permit_type', 'match', '.*Demo.*') | list %}
-          {% set mep_permits = permits | rejectattr('permit_type', 'match', '.*Bldg.*|.*Building.*|.*Demo.*') | list %}
-
-          {% if building_permits %}
-          <div class="permit-group">
-            <div class="permit-group-header">Building & Structure ({{ building_permits | length }})</div>
-            {% for p in building_permits %}
-            <div class="permit-compact">
-              <div class="permit-compact-main">
-                <span class="permit-compact-type">{{ p.permit_type }}</span>
-                <span class="permit-compact-number">{{ p.permit_number }}</span>
-              </div>
-              {% if p.Work_Description and p.Work_Description != 'N/A' %}
-              <div class="permit-work-desc">{{ p.Work_Description }}</div>
-              {% endif %}
-              <div class="permit-compact-meta">
-                <span>{{ p.Status }}</span>
-                {% if p.contractor %} • Contractor: {{ p.contractor[:40] }}{% endif %}
-              </div>
-            </div>
-            {% endfor %}
           </div>
           {% endif %}
 
-          {% if demo_permits %}
-          <div class="permit-group">
-            <div class="permit-group-header">Demolition ({{ demo_permits | length }})</div>
-            {% for p in demo_permits %}
-            <div class="permit-compact">
-              <div class="permit-compact-main">
-                <span class="permit-compact-type">{{ p.permit_type }}</span>
-                <span class="permit-compact-number">{{ p.permit_number }}</span>
+          <!-- RAW JSON / DEBUG TOGGLE -->
+          <div class="debug-section">
+            <button class="debug-toggle" onclick="toggleDebug('debug-{{ loop.index }}')">
+              📋 Raw JSON / Debug View
+            </button>
+            <div id="debug-{{ loop.index }}" class="debug-content" style="display: none;">
+              <div class="debug-tabs">
+                <button class="debug-tab active" onclick="switchDebugTab('debug-{{ loop.index }}', 'json')">Raw JSON</button>
+                <button class="debug-tab" onclick="switchDebugTab('debug-{{ loop.index }}', 'timeline')">Timeline</button>
+                <button class="debug-tab" onclick="switchDebugTab('debug-{{ loop.index }}', 'durations')">Durations</button>
               </div>
-              {% if p.Work_Description and p.Work_Description != 'N/A' %}
-              <div class="permit-work-desc">{{ p.Work_Description }}</div>
-              {% endif %}
-            </div>
-            {% endfor %}
-          </div>
-          {% endif %}
-
-          {% if mep_permits %}
-          <div class="permit-group">
-            <div class="permit-group-header">MEP & Other ({{ mep_permits | length }})</div>
-            {% for p in mep_permits %}
-            <div class="permit-compact">
-              <div class="permit-compact-main">
-                <span class="permit-compact-type">{{ p.permit_type }}</span>
-                <span class="permit-compact-number">{{ p.permit_number }}</span>
+              
+              <div class="debug-panel debug-json" data-tab="json">
+                <pre>{{ r | tojson(indent=2) }}</pre>
+              </div>
+              
+              <div class="debug-panel debug-timeline" data-tab="timeline" style="display: none;">
+                <h4>Parsed Timeline</h4>
+                {% if r.redfin and r.redfin.timeline %}
+                <table class="debug-table">
+                  <tr><th>Date</th><th>Event</th><th>Price</th></tr>
+                  {% for t in r.redfin.timeline %}
+                  <tr>
+                    <td>{{ t.date }}</td>
+                    <td>{{ t.event }}</td>
+                    <td>{% if t.price %}${{ "{:,.0f}".format(t.price) }}{% else %}—{% endif %}</td>
+                  </tr>
+                  {% endfor %}
+                </table>
+                {% else %}
+                <p class="muted">No timeline data</p>
+                {% endif %}
+                
+                <h4>Permit Timeline</h4>
+                {% if r.permit_timeline %}
+                <table class="debug-table">
+                  <tr><th>Milestone</th><th>Date</th></tr>
+                  <tr><td>Plans Submitted</td><td>{{ r.permit_timeline.plans_submitted_date or "N/A" }}</td></tr>
+                  <tr><td>Plans Approved</td><td>{{ r.permit_timeline.plans_approved_date or "N/A" }}</td></tr>
+                  <tr><td>Construction Completed</td><td>{{ r.permit_timeline.construction_completed_date or "N/A" }}</td></tr>
+                </table>
+                {% else %}
+                <p class="muted">No permit timeline data</p>
+                {% endif %}
+              </div>
+              
+              <div class="debug-panel debug-durations" data-tab="durations" style="display: none;">
+                <h4>Project Durations</h4>
+                {% if r.project_durations %}
+                <table class="debug-table">
+                  <tr><th>Metric</th><th>Value</th></tr>
+                  <tr><td>Days to Submit Plans</td><td>{{ r.project_durations.days_to_submit or "N/A" }}</td></tr>
+                  <tr><td>Days to Approve Plans</td><td>{{ r.project_durations.days_to_approve or "N/A" }}</td></tr>
+                  <tr><td>Days to Complete</td><td>{{ r.project_durations.days_to_complete or "N/A" }}</td></tr>
+                  <tr><td>Total Project Days</td><td>{{ r.project_durations.total_project_days or "N/A" }}</td></tr>
+                </table>
+                {% else %}
+                <p class="muted">No duration data</p>
+                {% endif %}
+                
+                <h4>Computed Metrics Verification</h4>
+                <table class="debug-table">
+                  <tr><th>Metric</th><th>Value</th><th>Source</th></tr>
+                  <tr><td>Spread</td><td>{% if r.metrics.spread %}${{ "{:,.0f}".format(r.metrics.spread) }}{% else %}N/A{% endif %}</td><td>exit_price - purchase_price</td></tr>
+                  <tr><td>ROI %</td><td>{% if r.metrics.roi_pct %}{{ r.metrics.roi_pct }}%{% else %}N/A{% endif %}</td><td>spread / purchase_price * 100</td></tr>
+                  <tr><td>Hold Days</td><td>{{ r.metrics.hold_days or "N/A" }}</td><td>exit_date - purchase_date</td></tr>
+                  <tr><td>FAR Before</td><td>{{ r.metrics.far_before or "N/A" }}</td><td>building_sf_before / land_sf</td></tr>
+                  <tr><td>FAR After</td><td>{{ r.metrics.far_after or "N/A" }}</td><td>building_sf_after / land_sf</td></tr>
+                  <tr><td>Scope Level</td><td>{{ cats.scope_level or "N/A" }}</td><td>Based on permit analysis</td></tr>
+                </table>
               </div>
             </div>
-            {% endfor %}
           </div>
-          {% endif %}
-          {% else %}
-          <div class="no-data-message">
-            {% if r.ladbs and r.ladbs.source and (r.ladbs.source.startswith('ladbs_stub_') or r.ladbs.source == 'ladbs_error') %}
-              ⚠️ LADBS data unavailable - cannot verify permit history
-            {% else %}
-              No permits found for this property
-            {% endif %}
-          </div>
-          {% endif %}
-
-          <!-- TEAM -->
-          {% set has_team = (permits | selectattr('contractor') | list) or (permits | selectattr('architect') | list) %}
-          {% if has_team %}
-          <div class="section-header">
-            <h3 class="section-title">Team</h3>
-          </div>
-          
-          <div class="team-grid">
-            {% set contractors = permits | selectattr('contractor') | map(attribute='contractor') | unique | list %}
-            {% for contractor in contractors %}
-            <div class="team-card">
-              <div class="team-role">Contractor</div>
-              <div class="team-name">{{ contractor }}</div>
-              {% set lic = permits | selectattr('contractor', 'equalto', contractor) | map(attribute='contractor_license') | select | first %}
-              {% if lic %}<div class="team-license">Lic {{ lic }}</div>{% endif %}
-            </div>
-            {% endfor %}
-
-            {% set architects = permits | selectattr('architect') | map(attribute='architect') | unique | list %}
-            {% for architect in architects %}
-            <div class="team-card">
-              <div class="team-role">Architect</div>
-              <div class="team-name">{{ architect }}</div>
-              {% set lic = permits | selectattr('architect', 'equalto', architect) | map(attribute='architect_license') | select | first %}
-              {% if lic %}<div class="team-license">Lic {{ lic }}</div>{% endif %}
-            </div>
-            {% endfor %}
-          </div>
-          {% endif %}
 
         </section>
 
       </article>
       {% endfor %}
+    </section>
+    {% endif %}
+
+    <!-- SEARCH HISTORY / LOG SECTION -->
+    {% if search_log %}
+    <section class="history-section panel">
+      <div class="section-header">
+        <h3 class="section-title">Search History</h3>
+        <span class="section-count">{{ search_log | length }} comps logged</span>
+      </div>
+      
+      <div class="history-table-wrap">
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>Address</th>
+              <th>Purchase</th>
+              <th>Exit/List</th>
+              <th>Spread</th>
+              <th>ROI</th>
+              <th>Hold</th>
+              <th>Scope</th>
+              <th>Primary GC</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for entry in search_log | reverse %}
+            <tr>
+              <td class="history-timestamp">{{ entry.timestamp[:16] if entry.timestamp else "—" }}</td>
+              <td class="history-address">{{ entry.address[:30] if entry.address else "—" }}{% if entry.address and entry.address|length > 30 %}...{% endif %}</td>
+              <td>{% if entry.purchase_price %}${{ "{:,.0f}".format(entry.purchase_price) }}{% else %}—{% endif %}</td>
+              <td>{% if entry.exit_price %}${{ "{:,.0f}".format(entry.exit_price) }}{% else %}—{% endif %}</td>
+              <td class="{% if entry.spread and entry.spread > 0 %}history-positive{% endif %}">{% if entry.spread %}${{ "{:,.0f}".format(entry.spread) }}{% else %}—{% endif %}</td>
+              <td class="{% if entry.roi_pct and entry.roi_pct > 0 %}history-positive{% endif %}">{% if entry.roi_pct %}{{ "{:.1f}%".format(entry.roi_pct) }}{% else %}—{% endif %}</td>
+              <td>{% if entry.hold_days %}{{ entry.hold_days }}d{% else %}—{% endif %}</td>
+              <td><span class="scope-badge-sm scope-{{ (entry.scope_level or 'unknown')|lower }}">{{ entry.scope_level or "?" }}</span></td>
+              <td class="history-gc">{{ (entry.primary_gc_name or "—")[:20] }}{% if entry.primary_gc_name and entry.primary_gc_name|length > 20 %}...{% endif %}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+    {% endif %}
+    
+    <!-- REPEAT PLAYERS SECTION -->
+    {% if repeat_players and (repeat_players.top_gcs or repeat_players.top_architects or repeat_players.top_engineers) %}
+    <section class="repeat-players-section panel">
+      <div class="section-header">
+        <h3 class="section-title">Repeat Players</h3>
+      </div>
+      
+      <div class="repeat-players-grid">
+        {% if repeat_players.top_gcs %}
+        <div class="repeat-player-group">
+          <h4>Top GCs</h4>
+          <ul class="repeat-player-list">
+            {% for gc in repeat_players.top_gcs[:5] %}
+            <li>
+              <strong>{{ gc.name }}</strong> <span class="repeat-count">({{ gc.count }} comps)</span>
+              <div class="repeat-addresses muted">{{ gc.addresses | join(", ") | truncate(60) }}</div>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+        
+        {% if repeat_players.top_architects %}
+        <div class="repeat-player-group">
+          <h4>Top Architects</h4>
+          <ul class="repeat-player-list">
+            {% for arch in repeat_players.top_architects[:5] %}
+            <li>
+              <strong>{{ arch.name }}</strong> <span class="repeat-count">({{ arch.count }} comps)</span>
+              <div class="repeat-addresses muted">{{ arch.addresses | join(", ") | truncate(60) }}</div>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+        
+        {% if repeat_players.top_engineers %}
+        <div class="repeat-player-group">
+          <h4>Top Engineers</h4>
+          <ul class="repeat-player-list">
+            {% for eng in repeat_players.top_engineers[:5] %}
+            <li>
+              <strong>{{ eng.name }}</strong> <span class="repeat-count">({{ eng.count }} comps)</span>
+              <div class="repeat-addresses muted">{{ eng.addresses | join(", ") | truncate(60) }}</div>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+      </div>
     </section>
     {% endif %}
 
@@ -421,6 +767,29 @@
   window.addEventListener("load", () => {
     document.getElementById("loadingOverlay").classList.remove("show");
   });
+
+  // Debug toggle function
+  function toggleDebug(id) {
+    const el = document.getElementById(id);
+    if (el) {
+      el.style.display = el.style.display === 'none' ? 'block' : 'none';
+    }
+  }
+  
+  // Debug tab switching
+  function switchDebugTab(containerId, tabName) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    
+    // Hide all panels
+    container.querySelectorAll('.debug-panel').forEach(p => p.style.display = 'none');
+    // Show selected panel
+    container.querySelector('[data-tab="' + tabName + '"]').style.display = 'block';
+    
+    // Update tab buttons
+    container.querySelectorAll('.debug-tab').forEach(t => t.classList.remove('active'));
+    event.target.classList.add('active');
+  }
 
   window.addEventListener("DOMContentLoaded", () => {
 
