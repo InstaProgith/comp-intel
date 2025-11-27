@@ -788,7 +788,10 @@
     
     // Update tab buttons
     container.querySelectorAll('.debug-tab').forEach(t => t.classList.remove('active'));
-    event.target.classList.add('active');
+    // Get the clicked button from window.event for cross-browser support
+    if (window.event && window.event.target) {
+      window.event.target.classList.add('active');
+    }
   }
 
   window.addEventListener("DOMContentLoaded", () => {

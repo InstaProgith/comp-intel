@@ -82,11 +82,11 @@ def get_repeat_players() -> Dict[str, Any]:
             arch = entry.get("primary_architect_name")
             eng = entry.get("primary_engineer_name")
 
-            if gc and gc.strip() and gc.upper() != "N/A":
+            if _is_valid_name(gc):
                 gc_map.setdefault(gc, []).append(addr)
-            if arch and arch.strip() and arch.upper() != "N/A":
+            if _is_valid_name(arch):
                 arch_map.setdefault(arch, []).append(addr)
-            if eng and eng.strip() and eng.upper() != "N/A":
+            if _is_valid_name(eng):
                 eng_map.setdefault(eng, []).append(addr)
 
         def _top_n(m: Dict[str, List[str]], n: int = 10) -> List[Dict[str, Any]]:
@@ -98,6 +98,18 @@ def get_repeat_players() -> Dict[str, Any]:
             "top_architects": _top_n(arch_map),
             "top_engineers": _top_n(eng_map),
         }
+
+
+def _is_valid_name(name: Optional[str]) -> bool:
+    """Check if a name is valid (not empty, not N/A, not blank)."""
+    if not name:
+        return False
+    stripped = name.strip()
+    if not stripped:
+        return False
+    # Common invalid/placeholder values
+    invalid_values = {"N/A", "NA", "NONE", "UNKNOWN", "-", "--", ""}
+    return stripped.upper() not in invalid_values
 
 
 # Load search log on module import
@@ -553,7 +565,7 @@ def _extract_team_network(permits: List[Dict[str, Any]]) -> Dict[str, Any]:
         # Contractor
         c_name = p.get("contractor")
         c_lic = p.get("contractor_license")
-        if c_name and c_name.strip() and c_name.upper() != "N/A":
+        if _is_valid_name(c_name):
             key = c_name.strip()
             if key not in contractors:
                 contractors[key] = {"name": key, "license": c_lic, "count": 0}
@@ -564,7 +576,7 @@ def _extract_team_network(permits: List[Dict[str, Any]]) -> Dict[str, Any]:
         # Architect
         a_name = p.get("architect")
         a_lic = p.get("architect_license")
-        if a_name and a_name.strip() and a_name.upper() != "N/A":
+        if _is_valid_name(a_name):
             key = a_name.strip()
             if key not in architects:
                 architects[key] = {"name": key, "license": a_lic, "count": 0}
@@ -575,7 +587,7 @@ def _extract_team_network(permits: List[Dict[str, Any]]) -> Dict[str, Any]:
         # Engineer
         e_name = p.get("engineer")
         e_lic = p.get("engineer_license")
-        if e_name and e_name.strip() and e_name.upper() != "N/A":
+        if _is_valid_name(e_name):
             key = e_name.strip()
             if key not in engineers:
                 engineers[key] = {"name": key, "license": e_lic, "count": 0}
