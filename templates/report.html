@@ -555,39 +555,26 @@
             </div>
           </div>
           {% endif %}
-          
-          <div class="metric-item">
-            <div class="metric-label">Land SF</div>
-            <div class="metric-value">
-              {% if m.land_sf %}{{ "{:,.0f}".format(m.land_sf) }} SF{% else %}<span class="muted">Unknown</span>{% endif %}
-            </div>
-          </div>
-          
-          <div class="metric-item">
-            <div class="metric-label">Existing SF</div>
-            <div class="metric-value">
-              {% if cs.is_new_construction %}<span class="muted">0 (New)</span>{% elif cs.existing_sf %}{{ "{:,.0f}".format(cs.existing_sf) }} SF{% else %}<span class="muted">Unknown</span>{% endif %}
-            </div>
-          </div>
-          
-          <div class="metric-item">
-            <div class="metric-label">Added SF</div>
-            <div class="metric-value">
-              {% if cs.added_sf %}+{{ "{:,.0f}".format(cs.added_sf) }} SF{% else %}<span class="muted">0</span>{% endif %}
-            </div>
-          </div>
-          
-          <div class="metric-item">
-            <div class="metric-label">Final SF</div>
-            <div class="metric-value">
-              {% if cs.final_sf %}{{ "{:,.0f}".format(cs.final_sf) }} SF{% else %}<span class="muted">Unknown</span>{% endif %}
-            </div>
-          </div>
-          
-          <div class="metric-item">
-            <div class="metric-label">FAR (before → after)</div>
-            <div class="metric-value">
-              {% if m.far_before %}{{ m.far_before }}{% else %}<span class="muted">N/A</span>{% endif %}
+          <tr>
+            <td>Land SF</td>
+            <td>{% if m.land_sf %}{{ "{:,.0f}".format(m.land_sf) }} SF{% else %}<span class="value-muted">Unknown</span>{% endif %}</td>
+          </tr>
+          <tr>
+            <td>Existing SF</td>
+            <td>{% if cs.is_new_construction %}<span class="value-muted">0 (New Construction)</span>{% elif cs.existing_sf %}{{ "{:,.0f}".format(cs.existing_sf) }} SF{% else %}<span class="value-muted">Unknown</span>{% endif %}</td>
+          </tr>
+          <tr>
+            <td>Added SF</td>
+            <td>{% if cs.added_sf %}+{{ "{:,.0f}".format(cs.added_sf) }} SF{% else %}<span class="value-muted">0</span>{% endif %}</td>
+          </tr>
+          <tr>
+            <td>Final SF</td>
+            <td>{% if cs.final_sf %}{{ "{:,.0f}".format(cs.final_sf) }} SF{% else %}<span class="value-muted">Unknown</span>{% endif %}</td>
+          </tr>
+          <tr>
+            <td>FAR (before → after)</td>
+            <td>
+              {% if m.far_before %}{{ m.far_before }}{% else %}<span class="value-muted">N/A</span>{% endif %}
               {% if m.far_after and m.far_after != m.far_before %} → {{ m.far_after }}{% endif %}
             </div>
           </div>
@@ -636,42 +623,28 @@
       <!-- 4. CONSTRUCTION SUMMARY -->
       <div class="report-section">
         <div class="report-section-header">Construction Summary</div>
-        <div class="metrics-grid">
-          <div class="metric-item">
-            <div class="metric-label">Existing SF</div>
-            <div class="metric-value">
-              {% if cs.is_new_construction %}<span class="muted">0 (New)</span>{% elif cs.existing_sf %}{{ "{:,.0f}".format(cs.existing_sf) }} SF{% else %}<span class="muted">Unknown</span>{% endif %}
-            </div>
-          </div>
-          
-          <div class="metric-item">
-            <div class="metric-label">Added SF</div>
-            <div class="metric-value">
-              {% if cs.added_sf %}+{{ "{:,.0f}".format(cs.added_sf) }} SF{% else %}0{% endif %}
-            </div>
-          </div>
-          
-          <div class="metric-item">
-            <div class="metric-label">Final SF</div>
-            <div class="metric-value">
-              {% if cs.final_sf %}{{ "{:,.0f}".format(cs.final_sf) }} SF{% else %}<span class="muted">Unknown</span>{% endif %}
-            </div>
-          </div>
-          
-          <div class="metric-item">
-            <div class="metric-label">Lot SF</div>
-            <div class="metric-value">
-              {% if cs.lot_sf %}{{ "{:,.0f}".format(cs.lot_sf) }} SF{% else %}<span class="muted">Unknown</span>{% endif %}
-            </div>
-          </div>
-          
-          <div class="metric-item full-width">
-            <div class="metric-label">Scope Level</div>
-            <div class="metric-value">
-              <span class="scope-indicator scope-{{ (cs.scope_level or 'unknown')|lower }}">{{ cs.scope_level or "UNKNOWN" }}</span>
-            </div>
-          </div>
-        </div>
+        <table class="metrics-table">
+          <tr>
+            <td>Existing SF</td>
+            <td>{% if cs.is_new_construction %}<span class="value-muted">0 (New Construction)</span>{% elif cs.existing_sf %}{{ "{:,.0f}".format(cs.existing_sf) }} SF{% else %}<span class="value-muted">Unknown</span>{% endif %}</td>
+          </tr>
+          <tr>
+            <td>Added SF</td>
+            <td>{% if cs.added_sf %}+{{ "{:,.0f}".format(cs.added_sf) }} SF{% else %}0{% endif %}</td>
+          </tr>
+          <tr>
+            <td>Final SF</td>
+            <td>{% if cs.final_sf %}{{ "{:,.0f}".format(cs.final_sf) }} SF{% else %}<span class="value-muted">Unknown</span>{% endif %}</td>
+          </tr>
+          <tr>
+            <td>Lot SF</td>
+            <td>{% if cs.lot_sf %}{{ "{:,.0f}".format(cs.lot_sf) }} SF{% else %}<span class="value-muted">Unknown</span>{% endif %}</td>
+          </tr>
+          <tr>
+            <td>Scope Level</td>
+            <td><span class="scope-indicator scope-{{ (cs.scope_level or 'unknown')|lower }}">{{ cs.scope_level or "UNKNOWN" }}</span></td>
+          </tr>
+        </table>
       </div>
       
       <!-- 5. COST MODEL -->
@@ -756,7 +729,7 @@
         {% set other_permits = permits | rejectattr('permit_type', 'match', '.*Bldg.*|.*Building.*|.*Demo.*|.*Electrical.*|.*Plumbing.*|.*Mechanical.*') | list %}
 
         {% if building_permits %}
-        <div style="font-size:10px; font-weight:800; color:#111; margin:12px 0 8px; text-transform:uppercase; letter-spacing:0.8px; border-left:3px solid #111; padding-left:8px;">Building Permits ({{ pc.building_count or building_permits | length }})</div>
+        <div style="font-size:11px; font-weight:700; color:#666; margin:16px 0 10px; text-transform:uppercase; letter-spacing:0.5px;">Building Permits ({{ pc.building_count or building_permits | length }})</div>
         {% for p in building_permits %}
         <div class="permit-item">
           <div class="permit-header">
@@ -771,7 +744,7 @@
         {% endif %}
 
         {% if demo_permits %}
-        <div style="font-size:10px; font-weight:800; color:#111; margin:12px 0 8px; text-transform:uppercase; letter-spacing:0.8px; border-left:3px solid #111; padding-left:8px;">Demolition ({{ pc.demo_count or demo_permits | length }})</div>
+        <div style="font-size:11px; font-weight:700; color:#666; margin:16px 0 10px; text-transform:uppercase; letter-spacing:0.5px;">Demolition ({{ pc.demo_count or demo_permits | length }})</div>
         {% for p in demo_permits %}
         <div class="permit-item">
           <div class="permit-header">
@@ -786,7 +759,7 @@
         {% endif %}
 
         {% if mep_permits %}
-        <div style="font-size:10px; font-weight:800; color:#111; margin:12px 0 8px; text-transform:uppercase; letter-spacing:0.8px; border-left:3px solid #111; padding-left:8px;">MEP ({{ pc.mep_count or mep_permits | length }})</div>
+        <div style="font-size:11px; font-weight:700; color:#666; margin:16px 0 10px; text-transform:uppercase; letter-spacing:0.5px;">MEP ({{ pc.mep_count or mep_permits | length }})</div>
         {% for p in mep_permits %}
         <div class="permit-item">
           <div class="permit-header">
@@ -798,7 +771,7 @@
         {% endif %}
 
         {% if other_permits %}
-        <div style="font-size:10px; font-weight:800; color:#111; margin:12px 0 8px; text-transform:uppercase; letter-spacing:0.8px; border-left:3px solid #111; padding-left:8px;">Other ({{ pc.other_count or other_permits | length }})</div>
+        <div style="font-size:11px; font-weight:700; color:#666; margin:16px 0 10px; text-transform:uppercase; letter-spacing:0.5px;">Other ({{ pc.other_count or other_permits | length }})</div>
         {% for p in other_permits %}
         <div class="permit-item">
           <div class="permit-header">

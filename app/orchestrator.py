@@ -1063,12 +1063,6 @@ def _build_timeline_summary(
     - Any duration < 0 days is treated as INVALID and skipped.
     - Purchase-dependent rows are omitted when purchase is unknown/invalid.
     - Total project time is only computed when purchase is valid.
-    - All 5 stages are attempted:
-      1. Purchase → Plans Submitted
-      2. Plans Submitted → Approval
-      3. Plans Approved → Construction Start
-      4. Construction Duration (Start → End/CofO)
-      5. CofO → Sale
     """
     purchase_date = metrics.get("purchase_date")
     exit_date = metrics.get("exit_date")
@@ -1094,7 +1088,7 @@ def _build_timeline_summary(
     
     stages = []
     
-    # STAGE 1: Purchase → Plans Submitted (only if purchase is known)
+    # Purchase → Plans Submitted (only if purchase is known)
     if purchase_date and plans_submitted_date:
         days = project_durations.get("days_to_submit")
         if days is not None and days >= 0:  # Skip negative durations
@@ -1105,7 +1099,7 @@ def _build_timeline_summary(
                 "end_date": plans_submitted_date,
             })
     
-    # STAGE 2: Plans Submitted → Approval (permit-based, no purchase needed)
+    # Plans Submitted → Approval (permit-based, no purchase needed)
     if plans_submitted_date and plans_approved_date:
         days = project_durations.get("days_to_approve")
         if days is not None and days >= 0:  # Skip negative durations
@@ -1116,9 +1110,9 @@ def _build_timeline_summary(
                 "end_date": plans_approved_date,
             })
     
-    # STAGE 3: Plans Approved → Construction Start (NEW)
-    if plans_approved_date and construction_start_date:
-        days = project_durations.get("days_approval_to_start")
+    # Plans Approved → Construction Complete (permit-based, no purchase needed)
+    if plans_approved_date and construction_completed_date:
+        days = project_durations.get("days_to_complete")
         if days is not None and days >= 0:  # Skip negative durations
             stages.append({
                 "name": "Plans Approved → Construction Start",
@@ -1197,18 +1191,16 @@ def _build_data_notes(
     if not ladbs_ok:
         notes.append("LADBS data unavailable; permit history not verified.")
     
-    # CRITICAL: Purchase price unknown or found
-    purchase_price = metrics.get("purchase_price")
-    purchase_date = metrics.get("purchase_date")
-    
-    if purchase_price and purchase_date:
-        # Purchase was found - note which sale was used
-        notes.append(f"Developer purchase inferred from Redfin sale on {purchase_date} at ${purchase_price:,.0f}.")
-    elif not purchase_price:
-        # Purchase unknown
+    # CRITICAL: Purchase price unknown
+    if not metrics.get("purchase_price"):
         notes.append("Purchase price unknown (no prior developer sale in Redfin history); spread, ROI, and profit not computed.")
     
+    # Purchase date unknown
+    if not metrics.get("purchase_date") and metrics.get("purchase_price"):
+        notes.append("Purchase date unknown; timeline durations may be incomplete.")
+    
     # Timeline issues: check if any purchase-dependent stages were skipped
+    purchase_date = metrics.get("purchase_date")
     plans_submitted = permit_timeline.get("plans_submitted_date")
     
     if plans_submitted and purchase_date:
@@ -1216,14 +1208,9 @@ def _build_data_notes(
             p_dt = datetime.fromisoformat(purchase_date)
             s_dt = datetime.fromisoformat(plans_submitted)
             if p_dt > s_dt:
-                notes.append("Purchase → plans duration omitted because purchase date occurs after permit submission.")
+                notes.append("Purchase → plans duration omitted because available purchase date is after permit dates.")
         except Exception:
             pass
-    
-    # Check if timeline stages are sparse
-    stages = timeline_summary.get("stages") or []
-    if len(stages) < 2 and purchase_date:
-        notes.append("Timeline incomplete; some permit milestones not found in LADBS records.")
     
     # Lot size / FAR missing
     if not metrics.get("land_sf"):
@@ -1231,7 +1218,7 @@ def _build_data_notes(
     
     # CofO date not found
     if not permit_timeline.get("construction_completed_date"):
-        notes.append("Certificate of Occupancy date not found in permits; construction completion timing uncertain.")
+        notes.append("Certificate of Occupancy date not found; construction completion timing uncertain.")
     
     # Building SF not available
     if not property_snapshot.get("building_sf"):
