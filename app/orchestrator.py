@@ -241,6 +241,7 @@ def _parse_permit_timeline(permits: List[Dict[str, Any]]) -> Dict[str, Any]:
     Returns:
         - plans_submitted_date: earliest permit application date
         - plans_approved_date: earliest plan check approval date
+        - construction_start_date: earliest permit issued date (construction start)
         - construction_completed_date: earliest finaled/CO date
         - main_permit: the core building permit dict
     """
@@ -262,6 +263,7 @@ def _parse_permit_timeline(permits: List[Dict[str, Any]]) -> Dict[str, Any]:
     # Extract dates from status history
     plans_submitted = None
     plans_approved = None
+    construction_start = None
     construction_completed = None
     
     for permit in building_permits:
@@ -291,6 +293,11 @@ def _parse_permit_timeline(permits: List[Dict[str, Any]]) -> Dict[str, Any]:
                     if not plans_approved or event_date < plans_approved:
                         plans_approved = event_date
                 
+                # Construction start (permit issued)
+                if "ISSUED" in event_name or "PERMIT ISSUED" in event_name:
+                    if not construction_start or event_date < construction_start:
+                        construction_start = event_date
+                
                 # Construction completed (finaled/CO)
                 if "FINAL" in event_name or "CERTIFICATE OF OCCUPANCY" in event_name:
                     if not construction_completed or event_date < construction_completed:
@@ -302,6 +309,7 @@ def _parse_permit_timeline(permits: List[Dict[str, Any]]) -> Dict[str, Any]:
         "main_permit": main_permit,
         "plans_submitted_date": plans_submitted.date().isoformat() if plans_submitted else None,
         "plans_approved_date": plans_approved.date().isoformat() if plans_approved else None,
+        "construction_start_date": construction_start.date().isoformat() if construction_start else None,
         "construction_completed_date": construction_completed.date().isoformat() if construction_completed else None,
     }
 
@@ -313,7 +321,8 @@ def _calculate_project_durations(purchase_date: Optional[str], permit_timeline: 
     Returns dict with:
         - days_to_submit: purchase → plans submitted
         - days_to_approve: plans submitted → approved
-        - days_to_complete: plans approved → construction completed
+        - days_approval_to_start: plans approved → construction start
+        - days_construction: construction start → construction completed
         - total_project_days: purchase → construction completed
     """
     if not purchase_date:
@@ -326,6 +335,7 @@ def _calculate_project_durations(purchase_date: Optional[str], permit_timeline: 
     
     submitted_str = permit_timeline.get("plans_submitted_date")
     approved_str = permit_timeline.get("plans_approved_date")
+    start_str = permit_timeline.get("construction_start_date")
     completed_str = permit_timeline.get("construction_completed_date")
     
     durations = {}
@@ -345,11 +355,19 @@ def _calculate_project_durations(purchase_date: Optional[str], permit_timeline: 
         except Exception:
             pass
     
-    if approved_str and completed_str:
+    if approved_str and start_str:
         try:
             approved_dt = datetime.fromisoformat(approved_str)
+            start_dt = datetime.fromisoformat(start_str)
+            durations["days_approval_to_start"] = (start_dt - approved_dt).days
+        except Exception:
+            pass
+    
+    if start_str and completed_str:
+        try:
+            start_dt = datetime.fromisoformat(start_str)
             completed_dt = datetime.fromisoformat(completed_str)
-            durations["days_to_complete"] = (completed_dt - approved_dt).days
+            durations["days_construction"] = (completed_dt - start_dt).days
         except Exception:
             pass
     
@@ -921,12 +939,19 @@ def _build_timeline_summary(
     - Any duration < 0 days is treated as INVALID and skipped.
     - Purchase-dependent rows are omitted when purchase is unknown/invalid.
     - Total project time is only computed when purchase is valid.
+    - All 5 stages are attempted:
+      1. Purchase → Plans Submitted
+      2. Plans Submitted → Approval
+      3. Plans Approved → Construction Start
+      4. Construction Duration (Start → End/CofO)
+      5. CofO → Sale
     """
     purchase_date = metrics.get("purchase_date")
     exit_date = metrics.get("exit_date")
     
     plans_submitted_date = permit_timeline.get("plans_submitted_date")
     plans_approved_date = permit_timeline.get("plans_approved_date")
+    construction_start_date = permit_timeline.get("construction_start_date")
     construction_completed_date = permit_timeline.get("construction_completed_date")
     
     # Calculate total time only if purchase is known
@@ -945,7 +970,7 @@ def _build_timeline_summary(
     
     stages = []
     
-    # Purchase → Plans Submitted (only if purchase is known)
+    # STAGE 1: Purchase → Plans Submitted (only if purchase is known)
     if purchase_date and plans_submitted_date:
         days = project_durations.get("days_to_submit")
         if days is not None and days >= 0:  # Skip negative durations
@@ -956,7 +981,7 @@ def _build_timeline_summary(
                 "end_date": plans_submitted_date,
             })
     
-    # Plans Submitted → Approval (permit-based, no purchase needed)
+    # STAGE 2: Plans Submitted → Approval (permit-based, no purchase needed)
     if plans_submitted_date and plans_approved_date:
         days = project_durations.get("days_to_approve")
         if days is not None and days >= 0:  # Skip negative durations
@@ -967,18 +992,29 @@ def _build_timeline_summary(
                 "end_date": plans_approved_date,
             })
     
-    # Plans Approved → Construction Complete (permit-based, no purchase needed)
-    if plans_approved_date and construction_completed_date:
-        days = project_durations.get("days_to_complete")
+    # STAGE 3: Plans Approved → Construction Start (NEW)
+    if plans_approved_date and construction_start_date:
+        days = project_durations.get("days_approval_to_start")
+        if days is not None and days >= 0:  # Skip negative durations
+            stages.append({
+                "name": "Plans Approved → Construction Start",
+                "days": days,
+                "start_date": plans_approved_date,
+                "end_date": construction_start_date,
+            })
+    
+    # STAGE 4: Construction Duration (Start → Completion)
+    if construction_start_date and construction_completed_date:
+        days = project_durations.get("days_construction")
         if days is not None and days >= 0:  # Skip negative durations
             stages.append({
                 "name": "Construction Duration",
                 "days": days,
-                "start_date": plans_approved_date,
+                "start_date": construction_start_date,
                 "end_date": construction_completed_date,
             })
     
-    # CofO → Sale (if both known)
+    # STAGE 5: CofO → Sale (if both known)
     if construction_completed_date and exit_date:
         try:
             cofo_dt = datetime.fromisoformat(construction_completed_date)
@@ -1002,6 +1038,7 @@ def _build_timeline_summary(
         "exit_date": exit_date,
         "plans_submitted_date": plans_submitted_date,
         "plans_approved_date": plans_approved_date,
+        "construction_start_date": construction_start_date,
         "construction_completed_date": construction_completed_date,
         "cofo_date": construction_completed_date,  # alias
     }
