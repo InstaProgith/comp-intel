@@ -1015,7 +1015,6 @@ def _build_data_notes(
     
     if plans_submitted and purchase_date:
         try:
-            from datetime import datetime
             p_dt = datetime.fromisoformat(purchase_date)
             s_dt = datetime.fromisoformat(plans_submitted)
             if p_dt > s_dt:
@@ -1026,11 +1025,6 @@ def _build_data_notes(
     # Lot size / FAR missing
     if not metrics.get("land_sf"):
         notes.append("Lot size not found; FAR calculations not available.")
-    
-    # Profit not computed
-    if cost_model.get("purchase_unknown"):
-        # Already covered in purchase price unknown note
-        pass
     
     # CofO date not found
     if not permit_timeline.get("construction_completed_date"):
