@@ -1,0 +1,1127 @@
+{
+  "url": "https://www.redfin.com/CA/Los-Angeles/7518-Westlawn-Ave-90045/home/6616728",
+  "address": "7518 Westlawn Ave,Los Angeles, CA 90045",
+  "headline_metrics": {
+    "purchase_price": 3800000,
+    "purchase_date": "2025-02-20",
+    "exit_price": null,
+    "exit_date": null,
+    "spread": null,
+    "roi_pct": null,
+    "hold_days": null,
+    "list_price": 4343441.0,
+    "original_sf": null,
+    "new_sf": 3792.0,
+    "sf_added": null,
+    "sf_pct_change": null
+  },
+  "metrics": {
+    "purchase_price": 3800000,
+    "purchase_date": "2025-02-20",
+    "exit_price": null,
+    "exit_date": null,
+    "spread": null,
+    "roi_pct": null,
+    "hold_days": null,
+    "list_price": 4343441.0,
+    "original_sf": null,
+    "new_sf": 3792.0,
+    "sf_added": null,
+    "sf_pct_change": null
+  },
+  "permit_timeline": {
+    "main_permit": {
+      "permit_number": "24014-20000-01240",
+      "job_number": "B24VN04185",
+      "permit_type": "Bldg-Addition - 1 or 2 Family Dwelling",
+      "Type": "Bldg-Addition - 1 or 2 Family Dwelling",
+      "Status": "CofO Issued on 1/30/2025",
+      "status_date": "1/30/2025",
+      "Work_Description": "Addition and Major Remodel to existing 1-story Single Family Dwelling, only (14' 3\" + 14' 8\" + 14') linear feet of exterior wall and foundation to remain . Rebuilt as 2-story (59' 6\" x 42' 3\" Irregular Shape) Single Family Dwelling with an attached garage and attached trellis. NFPA 13D Fire Sprinklers Throughout. All work done per engineer.",
+      "Issued_Date": "Issued on 6/7/2024",
+      "contractor": "Local Construction Remodeling; Lic. No.: 966738-B 14901 TUBA STREET      MISSION HILLS, CA 91345",
+      "contractor_license": "966738",
+      "architect": null,
+      "architect_license": null,
+      "engineer": "Motavvef,, Nasser; Lic. No.: C40977 15335 MORRISON ST 370      SHERMAN OAKS, CA 91403",
+      "engineer_license": null,
+      "raw_details": {
+        "permit_number": "24014-20000-01240",
+        "job_number": "B24VN04185",
+        "group": "Building",
+        "type": "Bldg-Addition",
+        "sub_type": "1 or 2 Family Dwelling",
+        "primary_use": "(1) Dwelling - Single Family",
+        "work_description": "Addition and Major Remodel to existing 1-story Single Family Dwelling, only (14' 3\" + 14' 8\" + 14') linear feet of exterior wall and foundation to remain . Rebuilt as 2-story (59' 6\" x 42' 3\" Irregular Shape) Single Family Dwelling with an attached garage and attached trellis. NFPA 13D Fire Sprinklers Throughout. All work done per engineer.",
+        "permit_issued": "Issued on 6/7/2024",
+        "current_status": "CofO Issued on 1/30/2025",
+        "issuing_office": "West Los Angeles",
+        "certificate_of_occupancy": "CofO Issued More Information",
+        "contact_information": {
+          "Contractor": "Local Construction Remodeling; Lic. No.: 966738-B 14901 TUBA STREET      MISSION HILLS, CA 91345",
+          "Engineer": "Motavvef,, Nasser; Lic. No.: C40977 15335 MORRISON ST 370      SHERMAN OAKS, CA 91403"
+        },
+        "status_history": [
+          {
+            "event": "Submitted",
+            "date": "3/29/2024",
+            "person": "APPLICANT"
+          },
+          {
+            "event": "Assigned to Plan Check Engineer",
+            "date": "4/4/2024",
+            "person": "NAREG ATARIAN"
+          },
+          {
+            "event": "Corrections Issued",
+            "date": "4/9/2024",
+            "person": "NAREG ATARIAN"
+          },
+          {
+            "event": "Quality Review Completed",
+            "date": "4/10/2024",
+            "person": "OMID HEDAYAT"
+          },
+          {
+            "event": "Quality Review Completed",
+            "date": "4/10/2024",
+            "person": "OMID HEDAYAT"
+          },
+          {
+            "event": "Building Plans Picked Up",
+            "date": "4/12/2024",
+            "person": "APPLICANT"
+          },
+          {
+            "event": "Plan Check Approved",
+            "date": "6/3/2024",
+            "person": "NAREG ATARIAN"
+          },
+          {
+            "event": "Issued",
+            "date": "6/7/2024",
+            "person": "APPLICANT"
+          },
+          {
+            "event": "CofO in Progress",
+            "date": "1/29/2025",
+            "person": "TEMISTOCLES CAAL"
+          },
+          {
+            "event": "Permit Finaled",
+            "date": "1/30/2025",
+            "person": "RICHARD STEINBACH"
+          },
+          {
+            "event": "CofO Issued",
+            "date": "1/30/2025",
+            "person": "RICHARD STEINBACH"
+          },
+          {
+            "event": "Permit Finaled",
+            "date": "1/30/2025",
+            "person": "RICHARD STEINBACH"
+          }
+        ],
+        "status_date": "1/30/2025"
+      }
+    },
+    "plans_submitted_date": "2024-03-29",
+    "plans_approved_date": "2024-06-03",
+    "construction_completed_date": "2024-07-09"
+  },
+  "project_durations": {
+    "days_to_submit": -328,
+    "days_to_approve": 66,
+    "days_to_complete": 36,
+    "total_project_days": -226
+  },
+  "current_summary": "5 bed, 5.5 bath, 3,792 SF",
+  "public_record_summary": "5 bed, 5.5 bath",
+  "lot_summary": "Lot: 6,545 SF (0.15 acres)",
+  "permit_summary": "Found 18 permits with status date >= 2018 via PLR.",
+  "permit_count": 18,
+  "ladbs": {
+    "source": "ladbs_plr_v5",
+    "apn": "4110026024",
+    "address": "7518 Westlawn Ave,Los Angeles, CA 90045",
+    "fetched_at": "2025-11-29 01:06:11",
+    "permits": [
+      {
+        "permit_number": "24014-20000-01240",
+        "job_number": "B24VN04185",
+        "permit_type": "Bldg-Addition - 1 or 2 Family Dwelling",
+        "Type": "Bldg-Addition - 1 or 2 Family Dwelling",
+        "Status": "CofO Issued on 1/30/2025",
+        "status_date": "1/30/2025",
+        "Work_Description": "Addition and Major Remodel to existing 1-story Single Family Dwelling, only (14' 3\" + 14' 8\" + 14') linear feet of exterior wall and foundation to remain . Rebuilt as 2-story (59' 6\" x 42' 3\" Irregular Shape) Single Family Dwelling with an attached garage and attached trellis. NFPA 13D Fire Sprinklers Throughout. All work done per engineer.",
+        "Issued_Date": "Issued on 6/7/2024",
+        "contractor": "Local Construction Remodeling; Lic. No.: 966738-B 14901 TUBA STREET      MISSION HILLS, CA 91345",
+        "contractor_license": "966738",
+        "architect": null,
+        "architect_license": null,
+        "engineer": "Motavvef,, Nasser; Lic. No.: C40977 15335 MORRISON ST 370      SHERMAN OAKS, CA 91403",
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "24014-20000-01240",
+          "job_number": "B24VN04185",
+          "group": "Building",
+          "type": "Bldg-Addition",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "(1) Dwelling - Single Family",
+          "work_description": "Addition and Major Remodel to existing 1-story Single Family Dwelling, only (14' 3\" + 14' 8\" + 14') linear feet of exterior wall and foundation to remain . Rebuilt as 2-story (59' 6\" x 42' 3\" Irregular Shape) Single Family Dwelling with an attached garage and attached trellis. NFPA 13D Fire Sprinklers Throughout. All work done per engineer.",
+          "permit_issued": "Issued on 6/7/2024",
+          "current_status": "CofO Issued on 1/30/2025",
+          "issuing_office": "West Los Angeles",
+          "certificate_of_occupancy": "CofO Issued More Information",
+          "contact_information": {
+            "Contractor": "Local Construction Remodeling; Lic. No.: 966738-B 14901 TUBA STREET      MISSION HILLS, CA 91345",
+            "Engineer": "Motavvef,, Nasser; Lic. No.: C40977 15335 MORRISON ST 370      SHERMAN OAKS, CA 91403"
+          },
+          "status_history": [
+            {
+              "event": "Submitted",
+              "date": "3/29/2024",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Assigned to Plan Check Engineer",
+              "date": "4/4/2024",
+              "person": "NAREG ATARIAN"
+            },
+            {
+              "event": "Corrections Issued",
+              "date": "4/9/2024",
+              "person": "NAREG ATARIAN"
+            },
+            {
+              "event": "Quality Review Completed",
+              "date": "4/10/2024",
+              "person": "OMID HEDAYAT"
+            },
+            {
+              "event": "Quality Review Completed",
+              "date": "4/10/2024",
+              "person": "OMID HEDAYAT"
+            },
+            {
+              "event": "Building Plans Picked Up",
+              "date": "4/12/2024",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Plan Check Approved",
+              "date": "6/3/2024",
+              "person": "NAREG ATARIAN"
+            },
+            {
+              "event": "Issued",
+              "date": "6/7/2024",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "CofO in Progress",
+              "date": "1/29/2025",
+              "person": "TEMISTOCLES CAAL"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "1/30/2025",
+              "person": "RICHARD STEINBACH"
+            },
+            {
+              "event": "CofO Issued",
+              "date": "1/30/2025",
+              "person": "RICHARD STEINBACH"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "1/30/2025",
+              "person": "RICHARD STEINBACH"
+            }
+          ],
+          "status_date": "1/30/2025"
+        }
+      },
+      {
+        "permit_number": "24019-10000-01223",
+        "job_number": "B24LA05399",
+        "permit_type": "Bldg-Demolition - 1 or 2 Family Dwelling",
+        "Type": "Bldg-Demolition - 1 or 2 Family Dwelling",
+        "Status": "Completed on 04/02/2024",
+        "status_date": "3/25/2024",
+        "Work_Description": "**DPI & Posting** For demolition of (E) one story single family dwelling.",
+        "Issued_Date": "No",
+        "contractor": null,
+        "contractor_license": null,
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "24019-10000-01223",
+          "job_number": "B24LA05399",
+          "group": "Building",
+          "type": "Bldg-Demolition",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "**DPI & Posting** For demolition of (E) one story single family dwelling.",
+          "permit_issued": "No",
+          "current_status": "Completed on 04/02/2024",
+          "contact_information": {},
+          "status_history": [],
+          "status_date": "3/25/2024"
+        }
+      },
+      {
+        "permit_number": "24019-10000-01403",
+        "job_number": "B24LA06296",
+        "permit_type": "Bldg-Demolition - 1 or 2 Family Dwelling",
+        "Type": "Bldg-Demolition - 1 or 2 Family Dwelling",
+        "Status": "Completed on 04/11/2024",
+        "status_date": "4/8/2024",
+        "Work_Description": "Demo Pre-Inspection (DPI) for an (E) detached 2 car garage.",
+        "Issued_Date": "No",
+        "contractor": null,
+        "contractor_license": null,
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "24019-10000-01403",
+          "job_number": "B24LA06296",
+          "group": "Building",
+          "type": "Bldg-Demolition",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "Demo Pre-Inspection (DPI) for an (E) detached 2 car garage.",
+          "permit_issued": "No",
+          "current_status": "Completed on 04/11/2024",
+          "contact_information": {},
+          "status_history": [],
+          "status_date": "4/8/2024"
+        }
+      },
+      {
+        "permit_number": "24019-10000-01318",
+        "job_number": "B24LA05914",
+        "permit_type": "Bldg-Demolition - 1 or 2 Family Dwelling",
+        "Type": "Bldg-Demolition - 1 or 2 Family Dwelling",
+        "Status": "Permit Finaled on 7/10/2024",
+        "status_date": "7/10/2024",
+        "Work_Description": "Demolish existing one story detached garage by handwreck",
+        "Issued_Date": "Issued on 6/7/2024",
+        "contractor": "Owner-Builder ,",
+        "contractor_license": null,
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "24019-10000-01318",
+          "job_number": "B24LA05914",
+          "group": "Building",
+          "type": "Bldg-Demolition",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "(7) Garage - Private",
+          "work_description": "Demolish existing one story detached garage by handwreck",
+          "permit_issued": "Issued on 6/7/2024",
+          "current_status": "Permit Finaled on 7/10/2024",
+          "contact_information": {
+            "Contractor": "Owner-Builder ,"
+          },
+          "status_history": [
+            {
+              "event": "Submitted",
+              "date": "4/2/2024",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Assigned to Plan Check Engineer",
+              "date": "4/2/2024",
+              "person": "SHANGQIN XIE"
+            },
+            {
+              "event": "Corrections Issued",
+              "date": "4/3/2024",
+              "person": "SHANGQIN XIE"
+            },
+            {
+              "event": "Applicant returned to address corrections",
+              "date": "4/16/2024",
+              "person": "AUNG SOE"
+            },
+            {
+              "event": "Plan Check Approved",
+              "date": "6/6/2024",
+              "person": "JOHN MESIAS"
+            },
+            {
+              "event": "Issued",
+              "date": "6/7/2024",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "7/9/2024",
+              "person": "BOBBY KEY"
+            }
+          ],
+          "status_date": "7/10/2024"
+        }
+      },
+      {
+        "permit_number": "24010-10000-01252",
+        "job_number": "B24LA05661",
+        "permit_type": "Bldg-New - 1 or 2 Family Dwelling",
+        "Type": "Bldg-New - 1 or 2 Family Dwelling",
+        "Status": "CofO Issued on 4/21/2025",
+        "status_date": "4/21/2025",
+        "Work_Description": "NEW 13' X 17'8\" DETACHED, FULLY ELECTRIC RECREATION ROOM WITH HALF BATHROOM. WORK DONE PER ENGINEER DESIGN. **NFPA-13D FIRE SPRINKLERS TO BE INSTALLED**",
+        "Issued_Date": "Issued on 6/11/2024",
+        "contractor": "Owner-Builder ,",
+        "contractor_license": null,
+        "architect": "Samson,, Charles Andrew H; Lic. No.: C22979 6119 MARY ELLEN AVENUE      VAN NUYS, CA 91401",
+        "architect_license": null,
+        "engineer": "Motavvef,, Nasser; Lic. No.: C40977 15335 MORRISON ST 370      SHERMAN OAKS, CA 91403",
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "24010-10000-01252",
+          "job_number": "B24LA05661",
+          "group": "Building",
+          "type": "Bldg-New",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "(23) Recreation Room",
+          "work_description": "NEW 13' X 17'8\" DETACHED, FULLY ELECTRIC RECREATION ROOM WITH HALF BATHROOM. WORK DONE PER ENGINEER DESIGN. **NFPA-13D FIRE SPRINKLERS TO BE INSTALLED**",
+          "permit_issued": "Issued on 6/11/2024",
+          "current_status": "CofO Issued on 4/21/2025",
+          "certificate_of_occupancy": "CofO Issued More Information",
+          "contact_information": {
+            "Architect": "Samson,, Charles Andrew H; Lic. No.: C22979 6119 MARY ELLEN AVENUE      VAN NUYS, CA 91401",
+            "Contractor": "Owner-Builder ,",
+            "Engineer": "Motavvef,, Nasser; Lic. No.: C40977 15335 MORRISON ST 370      SHERMAN OAKS, CA 91403"
+          },
+          "status_history": [
+            {
+              "event": "Submitted",
+              "date": "3/29/2024",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Assigned to Plan Check Engineer",
+              "date": "4/2/2024",
+              "person": "MADISON ODELL"
+            },
+            {
+              "event": "Corrections Issued",
+              "date": "4/3/2024",
+              "person": "MADISON ODELL"
+            },
+            {
+              "event": "Applicant returned to address corrections",
+              "date": "6/7/2024",
+              "person": "MADISON ODELL"
+            },
+            {
+              "event": "Plan Check Approved",
+              "date": "6/11/2024",
+              "person": "MADISON O'DELL"
+            },
+            {
+              "event": "Issued",
+              "date": "6/11/2024",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "CofO in Progress",
+              "date": "4/17/2025",
+              "person": "BOBBY KEY"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "4/21/2025",
+              "person": "RICHARD STEINBACH"
+            },
+            {
+              "event": "CofO Issued",
+              "date": "4/21/2025",
+              "person": "RICHARD STEINBACH"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "4/21/2025",
+              "person": "RICHARD STEINBACH"
+            }
+          ],
+          "status_date": "4/21/2025"
+        }
+      },
+      {
+        "permit_number": "24041-90000-24444",
+        "job_number": "--",
+        "permit_type": "Electrical - 1 or 2 Family Dwelling",
+        "Type": "Electrical - 1 or 2 Family Dwelling",
+        "Status": "Permit Finaled on 6/12/2024",
+        "status_date": "6/12/2024",
+        "Work_Description": "Install 100 amp temporary power pole",
+        "Issued_Date": "Issued on 5/19/2024",
+        "contractor": "Local Construction Remodeling; Lic. No.: 966738-C10 14901 TUBA STREET      MISSION HILLS, CA 91345",
+        "contractor_license": "966738",
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "24041-90000-24444",
+          "job_number": "--",
+          "group": "Electrical",
+          "type": "Electrical",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "Install 100 amp temporary power pole",
+          "permit_issued": "Issued on 5/19/2024",
+          "current_status": "Permit Finaled on 6/12/2024",
+          "contact_information": {
+            "Contractor": "Local Construction Remodeling; Lic. No.: 966738-C10 14901 TUBA STREET      MISSION HILLS, CA 91345"
+          },
+          "status_history": [
+            {
+              "event": "Issued",
+              "date": "5/19/2024",
+              "person": "INTERNET PERMIT"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "6/11/2024",
+              "person": "BOBBY KEY"
+            }
+          ],
+          "status_date": "6/12/2024"
+        }
+      },
+      {
+        "permit_number": "25041-90000-02328",
+        "job_number": "--",
+        "permit_type": "Electrical - 1 or 2 Family Dwelling",
+        "Type": "Electrical - 1 or 2 Family Dwelling",
+        "Status": "Permit Finaled on 1/29/2025",
+        "status_date": "1/29/2025",
+        "Work_Description": "BBQ outlet",
+        "Issued_Date": "Issued on 1/21/2025",
+        "contractor": "Local Construction Remodeling; Lic. No.: 966738-B 14901 TUBA STREET      MISSION HILLS, CA 91345",
+        "contractor_license": "966738",
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "25041-90000-02328",
+          "job_number": "--",
+          "group": "Electrical",
+          "type": "Electrical",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "BBQ outlet",
+          "permit_issued": "Issued on 1/21/2025",
+          "current_status": "Permit Finaled on 1/29/2025",
+          "contact_information": {
+            "Contractor": "Local Construction Remodeling; Lic. No.: 966738-B 14901 TUBA STREET      MISSION HILLS, CA 91345"
+          },
+          "status_history": [
+            {
+              "event": "Issued",
+              "date": "1/21/2025",
+              "person": "INTERNET PERMIT"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "1/28/2025",
+              "person": "TEMISTOCLES CAAL"
+            }
+          ],
+          "status_date": "1/29/2025"
+        }
+      },
+      {
+        "permit_number": "25041-90000-02132",
+        "job_number": "--",
+        "permit_type": "Electrical - 1 or 2 Family Dwelling",
+        "Type": "Electrical - 1 or 2 Family Dwelling",
+        "Status": "Permit Finaled on 1/26/2025",
+        "status_date": "1/26/2025",
+        "Work_Description": "BBQ circuit",
+        "Issued_Date": "Issued on 1/19/2025",
+        "contractor": "Local Construction Remodeling; Lic. No.: 966738-B 14901 TUBA STREET      MISSION HILLS, CA 91345",
+        "contractor_license": "966738",
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "25041-90000-02132",
+          "job_number": "--",
+          "group": "Electrical",
+          "type": "Electrical",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "BBQ circuit",
+          "permit_issued": "Issued on 1/19/2025",
+          "current_status": "Permit Finaled on 1/26/2025",
+          "contact_information": {
+            "Contractor": "Local Construction Remodeling; Lic. No.: 966738-B 14901 TUBA STREET      MISSION HILLS, CA 91345"
+          },
+          "status_history": [
+            {
+              "event": "Issued",
+              "date": "1/19/2025",
+              "person": "INTERNET PERMIT"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "1/24/2025",
+              "person": "TEMISTOCLES CAAL"
+            }
+          ],
+          "status_date": "1/26/2025"
+        }
+      },
+      {
+        "permit_number": "24043-20000-04076",
+        "job_number": "M24VN18784",
+        "permit_type": "Fire Sprinkler - 1 or 2 Family Dwelling",
+        "Type": "Fire Sprinkler - 1 or 2 Family Dwelling",
+        "Status": "Permit Finaled on 1/22/2025",
+        "status_date": "1/22/2025",
+        "Work_Description": "NFPA 13D FIRE SPRINKLER SYSTEM (RECREATION ROOM). 1\" DOMESTIC WATER METER.",
+        "Issued_Date": "Issued on 10/4/2024",
+        "contractor": "Protech Fire Protection Co; Lic. No.: 909063-C16 4535 SAN FELICIANO DR      WOODLAND HILLS, CA 91364",
+        "contractor_license": "909063",
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "24043-20000-04076",
+          "job_number": "M24VN18784",
+          "group": "Mechanical",
+          "type": "Fire Sprinkler",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "NFPA 13D FIRE SPRINKLER SYSTEM (RECREATION ROOM). 1\" DOMESTIC WATER METER.",
+          "permit_issued": "Issued on 10/4/2024",
+          "current_status": "Permit Finaled on 1/22/2025",
+          "contact_information": {
+            "Contractor": "Protech Fire Protection Co; Lic. No.: 909063-C16 4535 SAN FELICIANO DR      WOODLAND HILLS, CA 91364"
+          },
+          "status_history": [
+            {
+              "event": "Submitted",
+              "date": "10/4/2024",
+              "person": "JASON TRAN"
+            },
+            {
+              "event": "Assigned to Plan Check Engineer",
+              "date": "10/4/2024",
+              "person": "JASON TRAN"
+            },
+            {
+              "event": "Issued",
+              "date": "10/4/2024",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "1/22/2025",
+              "person": "STANLEY IZUMI"
+            }
+          ],
+          "status_date": "1/22/2025"
+        }
+      },
+      {
+        "permit_number": "24043-20000-04074",
+        "job_number": "M24VN18782",
+        "permit_type": "Fire Sprinkler - 1 or 2 Family Dwelling",
+        "Type": "Fire Sprinkler - 1 or 2 Family Dwelling",
+        "Status": "Permit Finaled on 1/22/2025",
+        "status_date": "1/22/2025",
+        "Work_Description": "NFPA 13D FIRE SPRINKLER SYSTEM (MAIN HOUSE). 1\" DOMESTIC WATER METER.",
+        "Issued_Date": "Issued on 10/4/2024",
+        "contractor": "Protech Fire Protection Co; Lic. No.: 909063-C16 4535 SAN FELICIANO DR      WOODLAND HILLS, CA 91364",
+        "contractor_license": "909063",
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "24043-20000-04074",
+          "job_number": "M24VN18782",
+          "group": "Mechanical",
+          "type": "Fire Sprinkler",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "NFPA 13D FIRE SPRINKLER SYSTEM (MAIN HOUSE). 1\" DOMESTIC WATER METER.",
+          "permit_issued": "Issued on 10/4/2024",
+          "current_status": "Permit Finaled on 1/22/2025",
+          "contact_information": {
+            "Contractor": "Protech Fire Protection Co; Lic. No.: 909063-C16 4535 SAN FELICIANO DR      WOODLAND HILLS, CA 91364"
+          },
+          "status_history": [
+            {
+              "event": "Submitted",
+              "date": "10/4/2024",
+              "person": "JASON TRAN"
+            },
+            {
+              "event": "Assigned to Plan Check Engineer",
+              "date": "10/4/2024",
+              "person": "JASON TRAN"
+            },
+            {
+              "event": "Issued",
+              "date": "10/4/2024",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "1/22/2025",
+              "person": "STANLEY IZUMI"
+            }
+          ],
+          "status_date": "1/22/2025"
+        }
+      },
+      {
+        "permit_number": "24030-20000-07295",
+        "job_number": "B24VN23165",
+        "permit_type": "Grading - 1 or 2 Family Dwelling",
+        "Type": "Grading - 1 or 2 Family Dwelling",
+        "Status": "Completed on 12/03/2024",
+        "status_date": "11/15/2024",
+        "Work_Description": "GPI FOR SWIMMING POOL/ SPA",
+        "Issued_Date": "No",
+        "contractor": null,
+        "contractor_license": null,
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "24030-20000-07295",
+          "job_number": "B24VN23165",
+          "group": "Building",
+          "type": "Grading",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "GPI FOR SWIMMING POOL/ SPA",
+          "permit_issued": "No",
+          "current_status": "Completed on 12/03/2024",
+          "contact_information": {},
+          "status_history": [],
+          "status_date": "11/15/2024"
+        }
+      },
+      {
+        "permit_number": "24030-10000-01379",
+        "job_number": "B24LA04301",
+        "permit_type": "Grading - 1 or 2 Family Dwelling",
+        "Type": "Grading - 1 or 2 Family Dwelling",
+        "Status": "Completed on 03/26/2024",
+        "status_date": "3/8/2024",
+        "Work_Description": "**** Grading Pre-Inspection**** for new detached one story Cabana, 230 s.f.",
+        "Issued_Date": "No",
+        "contractor": null,
+        "contractor_license": null,
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "24030-10000-01379",
+          "job_number": "B24LA04301",
+          "group": "Building",
+          "type": "Grading",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "**** Grading Pre-Inspection**** for new detached one story Cabana, 230 s.f.",
+          "permit_issued": "No",
+          "current_status": "Completed on 03/26/2024",
+          "contact_information": {},
+          "status_history": [],
+          "status_date": "3/8/2024"
+        }
+      },
+      {
+        "permit_number": "24030-10000-01756",
+        "job_number": "B24LA05448",
+        "permit_type": "Grading - 1 or 2 Family Dwelling",
+        "Type": "Grading - 1 or 2 Family Dwelling",
+        "Status": "Completed on 04/04/2024",
+        "status_date": "3/26/2024",
+        "Work_Description": "**GPI & POSTING **For proposed first and second story addition & renovation to (E) one story SFD.",
+        "Issued_Date": "No",
+        "contractor": null,
+        "contractor_license": null,
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "24030-10000-01756",
+          "job_number": "B24LA05448",
+          "group": "Building",
+          "type": "Grading",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "**GPI & POSTING **For proposed first and second story addition & renovation to (E) one story SFD.",
+          "permit_issued": "No",
+          "current_status": "Completed on 04/04/2024",
+          "contact_information": {},
+          "status_history": [],
+          "status_date": "3/26/2024"
+        }
+      },
+      {
+        "permit_number": "24030-20000-07299",
+        "job_number": "B24VN23170",
+        "permit_type": "Grading - 1 or 2 Family Dwelling",
+        "Type": "Grading - 1 or 2 Family Dwelling",
+        "Status": "Permit Finaled on 7/24/2025",
+        "status_date": "7/24/2025",
+        "Work_Description": "GRADING EXCAVATION FOR THE NEW POOL AND SPA AND AUTOMATIC POOL COVER.",
+        "Issued_Date": "Issued on 2/25/2025",
+        "contractor": "Coastal Aquatic Creations; Lic. No.: 697943-C53 11730 GATEWAY BLVD      LOS ANGELES, CA 90064",
+        "contractor_license": "697943",
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "24030-20000-07299",
+          "job_number": "B24VN23170",
+          "group": "Building",
+          "type": "Grading",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "(60) Grading - Non-Hillside",
+          "work_description": "GRADING EXCAVATION FOR THE NEW POOL AND SPA AND AUTOMATIC POOL COVER.",
+          "permit_issued": "Issued on 2/25/2025",
+          "current_status": "Permit Finaled on 7/24/2025",
+          "issuing_office": "Valley",
+          "contact_information": {
+            "Contractor": "Coastal Aquatic Creations; Lic. No.: 697943-C53 11730 GATEWAY BLVD      LOS ANGELES, CA 90064"
+          },
+          "status_history": [
+            {
+              "event": "Submitted",
+              "date": "11/15/2024",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Assigned to Plan Check Engineer",
+              "date": "11/15/2024",
+              "person": "GIOVANNY CHAVEZ"
+            },
+            {
+              "event": "Corrections Issued",
+              "date": "11/15/2024",
+              "person": "GIOVANNY CHAVEZ"
+            },
+            {
+              "event": "Plan Check Approved",
+              "date": "2/25/2025",
+              "person": "ISIS ARGUETA"
+            },
+            {
+              "event": "Issued",
+              "date": "2/25/2025",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "7/23/2025",
+              "person": "MATTHEW JENKINS"
+            }
+          ],
+          "status_date": "7/24/2025"
+        }
+      },
+      {
+        "permit_number": "25042-90000-00808",
+        "job_number": "--",
+        "permit_type": "Plumbing - 1 or 2 Family Dwelling",
+        "Type": "Plumbing - 1 or 2 Family Dwelling",
+        "Status": "Permit Finaled on 1/26/2025",
+        "status_date": "1/26/2025",
+        "Work_Description": "Install gas outlet",
+        "Issued_Date": "Issued on 1/19/2025",
+        "contractor": "Local Construction Remodeling; Lic. No.: 966738-B 14901 TUBA STREET      MISSION HILLS, CA 91345",
+        "contractor_license": "966738",
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "25042-90000-00808",
+          "job_number": "--",
+          "group": "Mechanical",
+          "type": "Plumbing",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "Install gas outlet",
+          "permit_issued": "Issued on 1/19/2025",
+          "current_status": "Permit Finaled on 1/26/2025",
+          "contact_information": {
+            "Contractor": "Local Construction Remodeling; Lic. No.: 966738-B 14901 TUBA STREET      MISSION HILLS, CA 91345"
+          },
+          "status_history": [
+            {
+              "event": "Issued",
+              "date": "1/19/2025",
+              "person": "INTERNET PERMIT"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "1/24/2025",
+              "person": "TEMISTOCLES CAAL"
+            }
+          ],
+          "status_date": "1/26/2025"
+        }
+      },
+      {
+        "permit_number": "25042-90000-00881",
+        "job_number": "--",
+        "permit_type": "Plumbing - 1 or 2 Family Dwelling",
+        "Type": "Plumbing - 1 or 2 Family Dwelling",
+        "Status": "Permit Finaled on 1/29/2025",
+        "status_date": "1/29/2025",
+        "Work_Description": "BBQ gas outlet",
+        "Issued_Date": "Issued on 1/21/2025",
+        "contractor": "Local Construction Remodeling; Lic. No.: 966738-B 14901 TUBA STREET      MISSION HILLS, CA 91345",
+        "contractor_license": "966738",
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "25042-90000-00881",
+          "job_number": "--",
+          "group": "Mechanical",
+          "type": "Plumbing",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "BBQ gas outlet",
+          "permit_issued": "Issued on 1/21/2025",
+          "current_status": "Permit Finaled on 1/29/2025",
+          "contact_information": {
+            "Contractor": "Local Construction Remodeling; Lic. No.: 966738-B 14901 TUBA STREET      MISSION HILLS, CA 91345"
+          },
+          "status_history": [
+            {
+              "event": "Issued",
+              "date": "1/21/2025",
+              "person": "INTERNET PERMIT"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "1/28/2025",
+              "person": "TEMISTOCLES CAAL"
+            }
+          ],
+          "status_date": "1/29/2025"
+        }
+      },
+      {
+        "permit_number": "24047-20000-01602",
+        "job_number": "B24VN23170",
+        "permit_type": "Swimming-Pool/Spa - 1 or 2 Family Dwelling",
+        "Type": "Swimming-Pool/Spa - 1 or 2 Family Dwelling",
+        "Status": "CofO Issued on 7/29/2025",
+        "status_date": "7/29/2025",
+        "Work_Description": "NEW POOL AND SPA PER LA CITY STANDARD PLAN #268 AND AUTOMATIC POOL COVER PER DETAIL #672.",
+        "Issued_Date": "Issued on 2/25/2025",
+        "contractor": "Coastal Aquatic Creations; Lic. No.: 697943-C53 11730 GATEWAY BLVD      LOS ANGELES, CA 90064",
+        "contractor_license": "697943",
+        "architect": null,
+        "architect_license": null,
+        "engineer": "Biedenbach,, Christopher James; Lic. No.: C74003 1201 N TUSTIN AVE      ANAHEIM, CA 92807",
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "24047-20000-01602",
+          "job_number": "B24VN23170",
+          "group": "Building",
+          "type": "Swimming-Pool/Spa",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "(20) Pool/Spa - Private",
+          "work_description": "NEW POOL AND SPA PER LA CITY STANDARD PLAN #268 AND AUTOMATIC POOL COVER PER DETAIL #672.",
+          "permit_issued": "Issued on 2/25/2025",
+          "current_status": "CofO Issued on 7/29/2025",
+          "issuing_office": "Valley",
+          "certificate_of_occupancy": "CofO Issued More Information",
+          "contact_information": {
+            "Contractor": "Coastal Aquatic Creations; Lic. No.: 697943-C53 11730 GATEWAY BLVD      LOS ANGELES, CA 90064",
+            "Engineer": "Biedenbach,, Christopher James; Lic. No.: C74003 1201 N TUSTIN AVE      ANAHEIM, CA 92807"
+          },
+          "status_history": [
+            {
+              "event": "Submitted",
+              "date": "11/15/2024",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Assigned to Plan Check Engineer",
+              "date": "11/15/2024",
+              "person": "GIOVANNY CHAVEZ"
+            },
+            {
+              "event": "Corrections Issued",
+              "date": "11/15/2024",
+              "person": "GIOVANNY CHAVEZ"
+            },
+            {
+              "event": "Plan Check Approved",
+              "date": "2/25/2025",
+              "person": "ISIS ARGUETA"
+            },
+            {
+              "event": "Issued",
+              "date": "2/25/2025",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "CofO in Progress",
+              "date": "7/29/2025",
+              "person": "DAVID FEILER"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "7/29/2025",
+              "person": "RICHARD STEINBACH"
+            },
+            {
+              "event": "CofO Issued",
+              "date": "7/29/2025",
+              "person": "RICHARD STEINBACH"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "7/29/2025",
+              "person": "RICHARD STEINBACH"
+            }
+          ],
+          "status_date": "7/29/2025"
+        }
+      },
+      {
+        "permit_number": "24047-20001-01602",
+        "job_number": "B25VN07104",
+        "permit_type": "Swimming-Pool/Spa - 1 or 2 Family Dwelling",
+        "Type": "Swimming-Pool/Spa - 1 or 2 Family Dwelling",
+        "Status": "Permit Finaled on 7/3/2025",
+        "status_date": "7/3/2025",
+        "Work_Description": "SUPPLEMENTAL TO 24047-20000-01602 TO CHANGE POOL SIZE, SPA LOCATION AND POOL COVER REVISE BAJA TO STEPS.",
+        "Issued_Date": "Issued on 3/17/2025",
+        "contractor": "Coastal Aquatic Creations; Lic. No.: 697943-C53 11730 GATEWAY BLVD      LOS ANGELES, CA 90064",
+        "contractor_license": "697943",
+        "architect": null,
+        "architect_license": null,
+        "engineer": "Biedenbach,, Christopher James; Lic. No.: C74003 1201 N TUSTIN AVE      ANAHEIM, CA 92807",
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "24047-20001-01602",
+          "job_number": "B25VN07104",
+          "group": "Building",
+          "type": "Swimming-Pool/Spa",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "(20) Pool/Spa - Private",
+          "work_description": "SUPPLEMENTAL TO 24047-20000-01602 TO CHANGE POOL SIZE, SPA LOCATION AND POOL COVER REVISE BAJA TO STEPS.",
+          "permit_issued": "Issued on 3/17/2025",
+          "current_status": "Permit Finaled on 7/3/2025",
+          "issuing_office": "Valley",
+          "certificate_of_occupancy": "CofO Issued More Information",
+          "contact_information": {
+            "Contractor": "Coastal Aquatic Creations; Lic. No.: 697943-C53 11730 GATEWAY BLVD      LOS ANGELES, CA 90064",
+            "Engineer": "Biedenbach,, Christopher James; Lic. No.: C74003 1201 N TUSTIN AVE      ANAHEIM, CA 92807"
+          },
+          "status_history": [
+            {
+              "event": "Submitted",
+              "date": "3/17/2025",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Assigned to Plan Check Engineer",
+              "date": "3/17/2025",
+              "person": "YAQUB MIRZA"
+            },
+            {
+              "event": "Plan Check Approved",
+              "date": "3/17/2025",
+              "person": "YAQUB MIRZA"
+            },
+            {
+              "event": "Issued",
+              "date": "3/17/2025",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "7/3/2025",
+              "person": "BOBBY KEY"
+            }
+          ],
+          "status_date": "7/3/2025"
+        }
+      }
+    ],
+    "note": "Found 18 permits with status date >= 2018 via PLR."
+  },
+  "redfin": {
+    "source": "redfin_parsed_v3",
+    "url": "https://www.redfin.com/CA/Los-Angeles/7518-Westlawn-Ave-90045/home/6616728",
+    "address": "7518 Westlawn Ave,Los Angeles, CA 90045",
+    "listing_beds": 5.0,
+    "listing_baths": 5.5,
+    "listing_building_sf": 3792.0,
+    "listing_year_built": null,
+    "list_price": 4343441.0,
+    "beds": 5.0,
+    "baths": 5.5,
+    "building_sf": 3792.0,
+    "lot_sf": 6545.0,
+    "timeline": [
+      {
+        "date": "2025-02-20",
+        "event": "listed",
+        "price": 3800000,
+        "raw_status": "Listed (Active)"
+      },
+      {
+        "date": "2025-02-20",
+        "event": "sold",
+        "price": 3800000,
+        "raw_status": "Sold (Public Records)"
+      }
+    ],
+    "tax": {
+      "apn": "4110026024",
+      "year": 2023,
+      "assessed_value": null
+    },
+    "public_records": {
+      "beds": 5.0,
+      "baths": 5.5,
+      "lot_sf": 6545.0,
+      "year_built": 1949
+    },
+    "generated_at": "2025-11-29",
+    "current_summary": "5 bed, 5.5 bath, 3,792 SF",
+    "public_record_summary": "5 bed, 5.5 bath",
+    "lot_summary": "Lot: 6,545 SF (0.15 acres)",
+    "raw_html_path": "/workspaces/comp-intel/data/raw/20251129-010611_redfin_7518_Westlawn_Ave_90045.html"
+  },
+  "project_contacts": null,
+  "cslb_contractor": null,
+  "summary_markdown": "### DEAL SNAPSHOT\n- **Address**: 7518 Westlawn Ave, Los Angeles, CA 90045\n- **Current Configuration**: 5 beds, 5.5 baths, 3,792 SF\n- **Original Configuration**: 5 beds, 5.5 baths (Year Built: 1949)\n- **SF Added / Changed**: Data not available\n- **Purchase Price**: $3,800,000 (Purchase Date: 2025-02-20)\n- **Current Listing Price**: $4,343,441 (Listing Date: 2025-02-20)\n- **Hold Period**: Data not available (since exit details are not provided)\n- **Gross Spread**: Data not available\n- **Gross ROI**: Data not available\n\n### SCOPE OF WORK (PERMITS)\n- **Major Work Done in Last 5-10 Years**: \n   - Significant renovation and addition transforming a 1-story single-family dwelling into a 2-story structure with approximately 3,792 SF.\n   - The main permit details a major remodel with a specification of existing foundation and wall retention.\n\n- **Open/Active/Not-Final Permits**: \n   - All permit tasks have been finalized and have received a Certificate of Occupancy (CofO) as of January 30, 2025.\n\n### TEAM (COMPETITOR NETWORK)\n- **General Contractor**: Local Construction Remodeling (Owner-Builder)\n- **Engineer**: Nasser Motavvef\n- **Architect**: Not listed\n- **Notes**: The general contractor is identified as an owner-builder, indicating that they are managing the renovation themselves. Nasser Motavvef appears to be the key engineering resource involved in both permitted projects.\n\n### PERMIT TIMING (DURATIONS)\n- **Main Building/Addition Permit Timeline**:\n  - **Submitted \u2192 Plan Check Approved**: 66 days (3/29/2024 to 6/3/2024)\n  - **Plan Check Approved \u2192 Issued**: 4 days (6/3/2024 to 6/7/2024)\n  - **Issued \u2192 Finaled**: Not finaled.\n\n### VALUE-ADD SUMMARY\nThe developer acquired a dated single-family home for $3.8 million and undertook a comprehensive renovation that transformed it into a modern 2-story home spanning 3,792 SF. The value uplift is targeted at over $4.34 million, reflective of significant enhancement achieved through major additions and modernization efforts. The holding period until the completion of construction and listing for sale has been shaped by permitting processes indicating timely execution relative to typical timelines for such extensive projects."
+}
