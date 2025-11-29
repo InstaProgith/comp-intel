@@ -6,6 +6,7 @@ from datetime import datetime
 import argparse
 import json
 import re
+import threading
 
 # Try package-style imports first, fall back to flat files if needed
 try:
@@ -23,6 +24,96 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
 SUMMARIES_DIR = DATA_DIR / "summaries"
 SUMMARIES_DIR.mkdir(parents=True, exist_ok=True)
+
+# ----- SEARCH HISTORY SYSTEM -----
+# Thread-safe in-memory + disk-backed search log
+_search_log_lock = threading.Lock()
+_search_log: List[Dict[str, Any]] = []
+SEARCH_LOG_PATH = DATA_DIR / "search_log.json"
+
+
+def _load_search_log() -> None:
+    """Load search log from disk on startup."""
+    global _search_log
+    if SEARCH_LOG_PATH.exists():
+        try:
+            with open(SEARCH_LOG_PATH, "r", encoding="utf-8") as f:
+                _search_log = json.load(f)
+        except Exception:
+            _search_log = []
+
+
+def _save_search_log() -> None:
+    """Persist search log to disk."""
+    try:
+        DATA_DIR.mkdir(parents=True, exist_ok=True)
+        with open(SEARCH_LOG_PATH, "w", encoding="utf-8") as f:
+            json.dump(_search_log, f, indent=2, default=str)
+    except Exception as e:
+        print(f"[WARN] Failed to save search log: {e}")
+
+
+def append_to_search_log(entry: Dict[str, Any]) -> None:
+    """Thread-safe append to search log with persistence."""
+    with _search_log_lock:
+        _search_log.append(entry)
+        _save_search_log()
+
+
+def get_search_log() -> List[Dict[str, Any]]:
+    """Get a copy of the current search log."""
+    with _search_log_lock:
+        return list(_search_log)
+
+
+def get_repeat_players() -> Dict[str, Any]:
+    """
+    Compute repeat player stats from search log.
+    Returns dict with top GCs, architects, engineers by count with addresses.
+    """
+    with _search_log_lock:
+        gc_map: Dict[str, List[str]] = {}
+        arch_map: Dict[str, List[str]] = {}
+        eng_map: Dict[str, List[str]] = {}
+
+        for entry in _search_log:
+            addr = entry.get("address", "Unknown")
+            gc = entry.get("primary_gc_name")
+            arch = entry.get("primary_architect_name")
+            eng = entry.get("primary_engineer_name")
+
+            if _is_valid_name(gc):
+                gc_map.setdefault(gc, []).append(addr)
+            if _is_valid_name(arch):
+                arch_map.setdefault(arch, []).append(addr)
+            if _is_valid_name(eng):
+                eng_map.setdefault(eng, []).append(addr)
+
+        def _top_n(m: Dict[str, List[str]], n: int = 10) -> List[Dict[str, Any]]:
+            sorted_items = sorted(m.items(), key=lambda x: len(x[1]), reverse=True)[:n]
+            return [{"name": k, "count": len(v), "addresses": v} for k, v in sorted_items]
+
+        return {
+            "top_gcs": _top_n(gc_map),
+            "top_architects": _top_n(arch_map),
+            "top_engineers": _top_n(eng_map),
+        }
+
+
+def _is_valid_name(name: Optional[str]) -> bool:
+    """Check if a name is valid (not empty, not N/A, not blank)."""
+    if not name:
+        return False
+    stripped = name.strip()
+    if not stripped:
+        return False
+    # Common invalid/placeholder values
+    invalid_values = {"N/A", "NA", "NONE", "UNKNOWN", "-", "--", ""}
+    return stripped.upper() not in invalid_values
+
+
+# Load search log on module import
+_load_search_log()
 
 
 def _pick_purchase_and_exit(
@@ -220,6 +311,7 @@ def _build_headline_metrics(redfin: Dict[str, Any]) -> Dict[str, Any]:
     spread = None
     roi_pct = None
     hold_days = None
+    spread_per_day = None
 
     if purchase_price is not None and exit_price is not None:
         spread = exit_price - purchase_price
@@ -231,6 +323,9 @@ def _build_headline_metrics(redfin: Dict[str, Any]) -> Dict[str, Any]:
             d0 = datetime.fromisoformat(purchase_date)
             d1 = datetime.fromisoformat(exit_date)
             hold_days = (d1 - d0).days
+            # Calculate spread per day
+            if hold_days and hold_days > 0 and spread is not None:
+                spread_per_day = round(spread / hold_days, 2)
         except Exception:
             hold_days = None
 
@@ -252,6 +347,35 @@ def _build_headline_metrics(redfin: Dict[str, Any]) -> Dict[str, Any]:
         if original_sf > 0:
             sf_pct_change = round(100.0 * sf_added / original_sf, 1)
 
+    # Land SF and FAR calculations
+    land_sf = public_records.get("lot_sf") or redfin.get("lot_sf")
+    building_sf_before = original_sf
+    building_sf_after = new_sf
+    far_before = None
+    far_after = None
+
+    if land_sf and land_sf > 0:
+        if building_sf_before:
+            far_before = round(building_sf_before / land_sf, 2)
+        if building_sf_after:
+            far_after = round(building_sf_after / land_sf, 2)
+
+    # $/SF calculations
+    purchase_psf = None
+    exit_psf = None
+    if purchase_price and building_sf_before and building_sf_before > 0:
+        purchase_psf = round(purchase_price / building_sf_before, 2)
+    if exit_price and building_sf_after and building_sf_after > 0:
+        exit_psf = round(exit_price / building_sf_after, 2)
+    elif exit_price and building_sf_before and building_sf_before > 0:
+        exit_psf = round(exit_price / building_sf_before, 2)
+    # If no exit price, try list price for $/SF
+    list_psf = None
+    if list_price and building_sf_after and building_sf_after > 0:
+        list_psf = round(list_price / building_sf_after, 2)
+    elif list_price and building_sf_before and building_sf_before > 0:
+        list_psf = round(list_price / building_sf_before, 2)
+
     return {
         "purchase_price": purchase_price,
         "purchase_date": purchase_date,
@@ -260,11 +384,22 @@ def _build_headline_metrics(redfin: Dict[str, Any]) -> Dict[str, Any]:
         "spread": spread,
         "roi_pct": roi_pct,
         "hold_days": hold_days,
+        "spread_per_day": spread_per_day,
         "list_price": list_price,  # current listing price (separate from exit)
         "original_sf": original_sf,
         "new_sf": new_sf,
         "sf_added": sf_added,
         "sf_pct_change": sf_pct_change,
+        # Land and FAR
+        "land_sf": land_sf,
+        "building_sf_before": building_sf_before,
+        "building_sf_after": building_sf_after,
+        "far_before": far_before,
+        "far_after": far_after,
+        # $/SF metrics
+        "purchase_psf": purchase_psf,
+        "exit_psf": exit_psf,
+        "list_psf": list_psf,
     }
 
 
@@ -298,6 +433,194 @@ def _extract_basic_project_contacts(ladbs: Dict[str, Any]) -> Dict[str, Any]:
         contractor_obj["license"] = lic
 
     return {"contractor": contractor_obj}
+
+
+def _categorize_permits(permits: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """
+    Categorize permits into Building, Demo, MEP, Other.
+    Also classify scope level based on permit patterns.
+    
+    Returns:
+        - building_count: count of building/addition permits
+        - demo_count: count of demolition permits
+        - mep_count: count of mechanical/electrical/plumbing permits
+        - other_count: count of other permits
+        - scope_level: 'LIGHT', 'MEDIUM', or 'HEAVY'
+        - scope_details: explanation of classification
+    """
+    if not permits:
+        return {
+            "building_count": 0,
+            "demo_count": 0,
+            "mep_count": 0,
+            "other_count": 0,
+            "scope_level": "UNKNOWN",
+            "scope_details": "No permits found",
+        }
+
+    building_count = 0
+    demo_count = 0
+    mep_count = 0
+    other_count = 0
+    
+    has_adu = False
+    has_new_structure = False
+    has_addition = False
+    has_major_remodel = False
+    total_permits = len(permits)
+
+    for p in permits:
+        permit_type = (p.get("permit_type") or p.get("Type") or "").upper()
+        work_desc = (p.get("Work_Description") or p.get("work_description") or "").upper()
+        sub_type = (p.get("sub_type") or "").upper()
+        
+        combined = f"{permit_type} {work_desc} {sub_type}"
+        
+        # Classify permit
+        if any(kw in combined for kw in ["DEMO", "DEMOLITION"]):
+            demo_count += 1
+        elif any(kw in combined for kw in ["ELECTRICAL", "PLUMBING", "MECHANICAL", "HVAC"]):
+            mep_count += 1
+        elif any(kw in combined for kw in ["BLDG", "BUILDING", "ADDITION", "NEW", "CONSTRUCT", "ADU", "REMODEL"]):
+            building_count += 1
+            # Check for scope indicators
+            if "ADU" in combined or "ACCESSORY" in combined:
+                has_adu = True
+            if "NEW" in combined or "NEW CONSTRUCTION" in combined:
+                has_new_structure = True
+            if "ADDITION" in combined:
+                has_addition = True
+            if "MAJOR" in combined or "SUBSTANTIAL" in combined or "REMODEL" in combined:
+                has_major_remodel = True
+        else:
+            other_count += 1
+
+    # Classify scope level
+    scope_level = "LIGHT"
+    scope_details = "Cosmetic or minor work"
+    
+    if has_new_structure or has_adu or building_count >= 3:
+        scope_level = "HEAVY"
+        details = []
+        if has_new_structure:
+            details.append("new structure")
+        if has_adu:
+            details.append("ADU")
+        if building_count >= 3:
+            details.append(f"{building_count} building permits")
+        scope_details = "Major: " + ", ".join(details)
+    elif has_addition or has_major_remodel or building_count >= 2 or mep_count >= 3:
+        scope_level = "MEDIUM"
+        details = []
+        if has_addition:
+            details.append("addition")
+        if has_major_remodel:
+            details.append("major remodel")
+        if mep_count >= 3:
+            details.append(f"{mep_count} MEP permits")
+        scope_details = "Moderate: " + ", ".join(details) if details else "Moderate work"
+    elif total_permits <= 2 and building_count == 0:
+        scope_level = "LIGHT"
+        scope_details = "Minor or cosmetic work only"
+
+    return {
+        "building_count": building_count,
+        "demo_count": demo_count,
+        "mep_count": mep_count,
+        "other_count": other_count,
+        "scope_level": scope_level,
+        "scope_details": scope_details,
+    }
+
+
+def _extract_team_network(permits: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """
+    Extract full team network from permits.
+    Identifies primary GC/Architect/Engineer and also-on-permits participants.
+    
+    Returns:
+        - primary_gc: dict with name, license, cslb_url
+        - primary_architect: dict with name, license
+        - primary_engineer: dict with name, license
+        - other_contractors: list of other contractors on permits
+        - other_architects: list of other architects on permits
+        - other_engineers: list of other engineers on permits
+    """
+    if not permits:
+        return {
+            "primary_gc": None,
+            "primary_architect": None,
+            "primary_engineer": None,
+            "other_contractors": [],
+            "other_architects": [],
+            "other_engineers": [],
+        }
+
+    # Collect all team members with frequency counts
+    contractors: Dict[str, Dict[str, Any]] = {}
+    architects: Dict[str, Dict[str, Any]] = {}
+    engineers: Dict[str, Dict[str, Any]] = {}
+
+    for p in permits:
+        # Contractor
+        c_name = p.get("contractor")
+        c_lic = p.get("contractor_license")
+        if _is_valid_name(c_name):
+            key = c_name.strip()
+            if key not in contractors:
+                contractors[key] = {"name": key, "license": c_lic, "count": 0}
+            contractors[key]["count"] += 1
+            if c_lic and not contractors[key].get("license"):
+                contractors[key]["license"] = c_lic
+
+        # Architect
+        a_name = p.get("architect")
+        a_lic = p.get("architect_license")
+        if _is_valid_name(a_name):
+            key = a_name.strip()
+            if key not in architects:
+                architects[key] = {"name": key, "license": a_lic, "count": 0}
+            architects[key]["count"] += 1
+            if a_lic and not architects[key].get("license"):
+                architects[key]["license"] = a_lic
+
+        # Engineer
+        e_name = p.get("engineer")
+        e_lic = p.get("engineer_license")
+        if _is_valid_name(e_name):
+            key = e_name.strip()
+            if key not in engineers:
+                engineers[key] = {"name": key, "license": e_lic, "count": 0}
+            engineers[key]["count"] += 1
+            if e_lic and not engineers[key].get("license"):
+                engineers[key]["license"] = e_lic
+
+    # Sort by count and pick primary + others
+    def _pick_primary_and_others(d: Dict[str, Dict[str, Any]]) -> Tuple[Optional[Dict[str, Any]], List[Dict[str, Any]]]:
+        if not d:
+            return None, []
+        sorted_list = sorted(d.values(), key=lambda x: x["count"], reverse=True)
+        primary = sorted_list[0] if sorted_list else None
+        others = sorted_list[1:] if len(sorted_list) > 1 else []
+        return primary, [o for o in others]
+
+    primary_gc, other_contractors = _pick_primary_and_others(contractors)
+    primary_architect, other_architects = _pick_primary_and_others(architects)
+    primary_engineer, other_engineers = _pick_primary_and_others(engineers)
+
+    # Build CSLB URL for primary GC if license available
+    if primary_gc and primary_gc.get("license"):
+        lic = primary_gc["license"]
+        primary_gc["cslb_url"] = f"https://www2.cslb.ca.gov/OnlineServices/CheckLicenseII/LicenseDetail.aspx?LicNum={lic}"
+
+    return {
+        "primary_gc": primary_gc,
+        "primary_architect": primary_architect,
+        "primary_engineer": primary_engineer,
+        "other_contractors": other_contractors,
+        "other_architects": other_architects,
+        "other_engineers": other_engineers,
+    }
 
 
 def run_full_comp_pipeline(url: str) -> Dict[str, Any]:
@@ -368,6 +691,8 @@ def run_full_comp_pipeline(url: str) -> Dict[str, Any]:
 
     # CSLB lookup for primary contractor
     cslb_contractor = None
+    cslb_ok = True
+    cslb_error = None
     contractor_info = project_contacts.get("contractor") if project_contacts else None
     if contractor_info and contractor_info.get("license"):
         license_num = contractor_info["license"]
@@ -378,9 +703,28 @@ def run_full_comp_pipeline(url: str) -> Dict[str, Any]:
                 print(f"[INFO] CSLB data found: {cslb_contractor.get('business_name')}")
             else:
                 print(f"[INFO] No CSLB data found for license: {license_num}")
+                cslb_ok = False
+                cslb_error = "No data found for license"
         except Exception as e:
             print(f"[WARN] CSLB lookup failed: {e}")
             _log_failure(LOGS_DIR, url, "cslb", e)
+            cslb_ok = False
+            cslb_error = str(e)
+
+    # Permit categorization and scope level
+    permit_categories = _categorize_permits(permits)
+    
+    # Team network extraction
+    team_network = _extract_team_network(permits)
+
+    # Data quality / error state indicators
+    redfin_source = redfin_data.get("source", "")
+    redfin_ok = not (redfin_source.startswith("redfin_error") or redfin_source == "redfin_invalid" or redfin_source == "redfin_fetch_error")
+    redfin_error = None if redfin_ok else "Redfin data unavailable (scrape error or no match)"
+    
+    ladbs_source = ladbs_data.get("source", "")
+    ladbs_ok = not (ladbs_source.startswith("ladbs_stub_") or ladbs_source == "ladbs_error" or ladbs_source == "ladbs_invalid")
+    ladbs_error = None if ladbs_ok else ladbs_data.get("note", "LADBS data unavailable")
 
     combined: Dict[str, Any] = {
         "url": url,
@@ -398,6 +742,16 @@ def run_full_comp_pipeline(url: str) -> Dict[str, Any]:
         "redfin": redfin_data,
         "project_contacts": project_contacts or None,
         "cslb_contractor": cslb_contractor,
+        # New fields
+        "permit_categories": permit_categories,
+        "team_network": team_network,
+        # Data quality indicators
+        "redfin_ok": redfin_ok,
+        "redfin_error": redfin_error,
+        "ladbs_ok": ladbs_ok,
+        "ladbs_error": ladbs_error,
+        "cslb_ok": cslb_ok,
+        "cslb_error": cslb_error,
     }
 
     try:
@@ -418,7 +772,47 @@ def run_full_comp_pipeline(url: str) -> Dict[str, Any]:
     except Exception as e:
         print(f"[WARN] Failed to save combined JSON: {e}")
 
+    # Append to search log for history tracking
+    city_zip = _extract_city_zip(redfin_data.get("address", ""))
+    log_entry = {
+        "timestamp": datetime.now().isoformat(),
+        "address": redfin_data.get("address", "Unknown"),
+        "city_zip": city_zip,
+        "purchase_date": metrics.get("purchase_date"),
+        "exit_date": metrics.get("exit_date") or metrics.get("list_price") and "current",
+        "hold_days": metrics.get("hold_days"),
+        "purchase_price": metrics.get("purchase_price"),
+        "exit_price": metrics.get("exit_price") or metrics.get("list_price"),
+        "spread": metrics.get("spread"),
+        "roi_pct": metrics.get("roi_pct"),
+        "spread_per_day": metrics.get("spread_per_day"),
+        "land_sf": metrics.get("land_sf"),
+        "building_sf_before": metrics.get("building_sf_before"),
+        "building_sf_after": metrics.get("building_sf_after"),
+        "far_before": metrics.get("far_before"),
+        "far_after": metrics.get("far_after"),
+        "primary_gc_name": team_network.get("primary_gc", {}).get("name") if team_network.get("primary_gc") else None,
+        "primary_gc_license": team_network.get("primary_gc", {}).get("license") if team_network.get("primary_gc") else None,
+        "primary_architect_name": team_network.get("primary_architect", {}).get("name") if team_network.get("primary_architect") else None,
+        "primary_engineer_name": team_network.get("primary_engineer", {}).get("name") if team_network.get("primary_engineer") else None,
+        "scope_level": permit_categories.get("scope_level"),
+    }
+    append_to_search_log(log_entry)
+
     return combined
+
+
+def _extract_city_zip(address: str) -> str:
+    """Extract city and ZIP from address string."""
+    if not address:
+        return ""
+    # Try to find ZIP code pattern
+    zip_match = re.search(r"(\d{5}(?:-\d{4})?)", address)
+    zip_code = zip_match.group(1) if zip_match else ""
+    # Try to find city (usually before state abbreviation)
+    city_match = re.search(r",\s*([^,]+),\s*[A-Z]{2}", address)
+    city = city_match.group(1).strip() if city_match else ""
+    return f"{city} {zip_code}".strip()
 
 
 def _log_failure(logs_dir: Path, url: str, component: str, error: Exception) -> None:

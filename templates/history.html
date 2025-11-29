@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>BLDGBIT AI · Search History</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/comp.css') }}">
+</head>
+<body>
+  <div class="bg-layer"></div>
+
+  <main class="shell">
+
+    <header class="hero-card">
+      <div class="logo-wrap">
+        <div class="logo-plate"></div>
+        <img src="{{ url_for('static', filename='LG.png') }}"
+             class="logo-img" alt="BLDGBIT">
+      </div>
+      <div class="hero-text">
+        <div class="eyebrow">BLDGBIT AI</div>
+        <h1 class="hero-title">Search History</h1>
+        <p class="hero-subtitle">
+          Running log of all analyzed comps and repeat players.
+        </p>
+      </div>
+    </header>
+
+    <section class="panel">
+      <a href="{{ url_for('comp_intel') }}" class="btn-primary">
+        ← Back to Analysis
+      </a>
+    </section>
+
+    <!-- SEARCH HISTORY TABLE -->
+    {% if search_log %}
+    <section class="panel">
+      <div class="section-header">
+        <h3 class="section-title">Search History</h3>
+        <span class="section-count">{{ search_log | length }} comps logged</span>
+      </div>
+      
+      <div class="history-table-wrap">
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>Address</th>
+              <th>City/ZIP</th>
+              <th>Purchase</th>
+              <th>Exit/List</th>
+              <th>Spread</th>
+              <th>ROI</th>
+              <th>Hold</th>
+              <th>Land SF</th>
+              <th>FAR</th>
+              <th>Scope</th>
+              <th>Primary GC</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for entry in search_log | reverse %}
+            <tr>
+              <td class="history-timestamp">{{ entry.timestamp[:16] if entry.timestamp else "—" }}</td>
+              <td class="history-address">{{ entry.address[:40] if entry.address else "—" }}{% if entry.address and entry.address|length > 40 %}...{% endif %}</td>
+              <td>{{ entry.city_zip or "—" }}</td>
+              <td>{% if entry.purchase_price %}${{ "{:,.0f}".format(entry.purchase_price) }}{% else %}—{% endif %}</td>
+              <td>{% if entry.exit_price %}${{ "{:,.0f}".format(entry.exit_price) }}{% else %}—{% endif %}</td>
+              <td class="{% if entry.spread and entry.spread > 0 %}history-positive{% endif %}">{% if entry.spread %}${{ "{:,.0f}".format(entry.spread) }}{% else %}—{% endif %}</td>
+              <td class="{% if entry.roi_pct and entry.roi_pct > 0 %}history-positive{% endif %}">{% if entry.roi_pct %}{{ "{:.1f}%".format(entry.roi_pct) }}{% else %}—{% endif %}</td>
+              <td>{% if entry.hold_days %}{{ entry.hold_days }}d{% else %}—{% endif %}</td>
+              <td>{% if entry.land_sf %}{{ "{:,.0f}".format(entry.land_sf) }}{% else %}—{% endif %}</td>
+              <td>{% if entry.far_before %}{{ entry.far_before }}{% else %}—{% endif %}{% if entry.far_after and entry.far_after != entry.far_before %} → {{ entry.far_after }}{% endif %}</td>
+              <td><span class="scope-badge-sm scope-{{ (entry.scope_level or 'unknown')|lower }}">{{ entry.scope_level or "?" }}</span></td>
+              <td class="history-gc">{{ (entry.primary_gc_name or "—")[:25] }}{% if entry.primary_gc_name and entry.primary_gc_name|length > 25 %}...{% endif %}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+    {% else %}
+    <section class="panel">
+      <div class="no-data-message">
+        No search history yet. Run some analyses to build up your log.
+      </div>
+    </section>
+    {% endif %}
+    
+    <!-- REPEAT PLAYERS SECTION -->
+    {% if repeat_players and (repeat_players.top_gcs or repeat_players.top_architects or repeat_players.top_engineers) %}
+    <section class="panel">
+      <div class="section-header">
+        <h3 class="section-title">Repeat Players</h3>
+      </div>
+      
+      <div class="repeat-players-grid">
+        {% if repeat_players.top_gcs %}
+        <div class="repeat-player-group">
+          <h4>Top GCs</h4>
+          <ul class="repeat-player-list">
+            {% for gc in repeat_players.top_gcs %}
+            <li>
+              <strong>{{ gc.name }}</strong> <span class="repeat-count">({{ gc.count }} comps)</span>
+              <div class="repeat-addresses muted">{{ gc.addresses | join(", ") }}</div>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+        
+        {% if repeat_players.top_architects %}
+        <div class="repeat-player-group">
+          <h4>Top Architects</h4>
+          <ul class="repeat-player-list">
+            {% for arch in repeat_players.top_architects %}
+            <li>
+              <strong>{{ arch.name }}</strong> <span class="repeat-count">({{ arch.count }} comps)</span>
+              <div class="repeat-addresses muted">{{ arch.addresses | join(", ") }}</div>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+        
+        {% if repeat_players.top_engineers %}
+        <div class="repeat-player-group">
+          <h4>Top Engineers</h4>
+          <ul class="repeat-player-list">
+            {% for eng in repeat_players.top_engineers %}
+            <li>
+              <strong>{{ eng.name }}</strong> <span class="repeat-count">({{ eng.count }} comps)</span>
+              <div class="repeat-addresses muted">{{ eng.addresses | join(", ") }}</div>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+      </div>
+    </section>
+    {% endif %}
+
+    <footer class="footer">
+      <div>© {{ year or 2025 }} BLDGBIT · Internal Tool</div>
+      <div class="footer-tagline">Efficient. Transparent. Investor-exclusive.</div>
+    </footer>
+  </main>
+
+</body>
+</html>
