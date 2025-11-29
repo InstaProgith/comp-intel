@@ -38,6 +38,12 @@ SOFT_COST_RATE = 0.06
 FINANCING_RATE = 0.10
 FINANCING_TERM_MONTHS = 15
 FINANCING_POINTS = 0.01
+DEFAULT_GARAGE_SF = 400  # Default garage size estimate when mentioned in permits
+
+# ============================================================================
+# EXTERNAL URLS
+# ============================================================================
+LADBS_PLR_URL = "https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr"
 
 
 def _pick_purchase_and_exit(
@@ -467,8 +473,8 @@ def _build_cost_model(
     for p in permits:
         work_desc = (p.get("Work_Description") or "").upper()
         if "GARAGE" in work_desc:
-            # Estimate garage size at 400 SF if mentioned
-            garage_sf = 400
+            # Estimate garage size if mentioned in permits
+            garage_sf = DEFAULT_GARAGE_SF
             break
     
     # Calculate costs
@@ -660,12 +666,9 @@ def _build_links(
     if isinstance(tax, dict):
         apn = tax.get("apn")
     
-    # LADBS permit search URL
-    ladbs_url = "https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr"
-    
     return {
         "redfin_url": redfin_url,
-        "ladbs_url": ladbs_url,
+        "ladbs_url": LADBS_PLR_URL,
         "cslb_url": cslb_data.get("detail_url") if cslb_data else None,
     }
 
