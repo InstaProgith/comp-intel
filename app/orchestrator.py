@@ -117,19 +117,24 @@ _load_search_log()
 
 
 def _pick_purchase_and_exit(
-    timeline: List[Dict[str, Any]]
+    timeline: List[Dict[str, Any]],
+    earliest_permit_date: Optional[str] = None
 ) -> Tuple[Optional[Dict[str, Any]], Optional[Dict[str, Any]]]:
     """
     Pick purchase and exit events from timeline.
     
-    CRITICAL RULE: Only SOLD events count as purchase or exit.
-    - Listing events are NOT purchases.
-    - Listing events are NOT exits.
-    - If there are no sold events, return (None, None).
+    NEW RULES (Issue Fix):
+    1. EXIT is always the MOST RECENT event:
+       - If there's a sold event, use the LAST sale as exit.
+       - Otherwise, use the latest list (Active/Pending) as exit.
+    2. PURCHASE is only valid if:
+       - There is a sale event BEFORE the exit event.
+       - The purchase_date is NOT after the earliest LADBS permit date.
+       - If there is only one sold event, it is the EXIT (not purchase).
     
     Returns: (purchase_event, exit_event)
-      - purchase_event: first sold event or None
-      - exit_event: last sold event or None
+      - purchase_event: prior sale event before exit, or None
+      - exit_event: most recent sale or listing event
     """
     if not timeline:
         return None, None
@@ -139,16 +144,50 @@ def _pick_purchase_and_exit(
     except Exception:
         pass
 
-    # ONLY sold events count as purchase/exit
+    # Find sold events
     sold_events = [e for e in timeline if e.get("event") == "sold"]
-
-    if not sold_events:
-        return None, None
-
-    purchase = sold_events[0]
-    exit_event = sold_events[-1] if len(sold_events) > 1 else None
-
-    return purchase, exit_event
+    
+    # Find listing events (for exit if no sale)
+    listing_events = [e for e in timeline if e.get("event") in ("listed", "active", "pending")]
+    
+    exit_event = None
+    purchase_event = None
+    
+    if sold_events:
+        # Sort sold events by date
+        sold_events = sorted(sold_events, key=lambda e: e.get("date") or "")
+        
+        # EXIT is the LAST (most recent) sold event
+        exit_event = sold_events[-1]
+        
+        # PURCHASE is the prior sold event (if exists)
+        if len(sold_events) > 1:
+            # Take the second-to-last sold event as purchase candidate
+            purchase_candidate = sold_events[-2]
+            
+            # Validate purchase: must be before earliest permit date (if known)
+            purchase_date_str = purchase_candidate.get("date")
+            is_valid_purchase = True
+            
+            if earliest_permit_date and purchase_date_str:
+                try:
+                    purchase_dt = datetime.fromisoformat(purchase_date_str)
+                    permit_dt = datetime.fromisoformat(earliest_permit_date)
+                    # If purchase is AFTER earliest permit, it's invalid
+                    if purchase_dt > permit_dt:
+                        is_valid_purchase = False
+                except Exception:
+                    pass
+            
+            if is_valid_purchase:
+                purchase_event = purchase_candidate
+    else:
+        # No sold events - use latest listing as exit (no purchase)
+        if listing_events:
+            listing_events = sorted(listing_events, key=lambda e: e.get("date") or "")
+            exit_event = listing_events[-1]
+    
+    return purchase_event, exit_event
 
 
 def _fmt_money(val: Optional[int]) -> str:
@@ -289,24 +328,29 @@ def _calculate_project_durations(purchase_date: Optional[str], permit_timeline: 
     return durations
 
 
-def _build_headline_metrics(redfin: Dict[str, Any]) -> Dict[str, Any]:
+def _build_headline_metrics(redfin: Dict[str, Any], earliest_permit_date: Optional[str] = None) -> Dict[str, Any]:
     """
     Build headline metrics from Redfin timeline.
     
-    CRITICAL ANTI-HALLUCINATION RULES:
-    - Purchase and exit MUST be actual SOLD events only.
-    - If there are no sold events (e.g., active listing only):
-        ALL metrics return None (purchase, exit, spread, ROI, hold).
-    - Listing prices are NOT used as purchase or exit prices.
-    - list_price field is separate and displayed only in the listing UI slot.
+    NEW RULES (Issue Fix):
+    - EXIT is the most recent event (sale or listing).
+    - PURCHASE is only valid if there's a prior sale before exit AND
+      the purchase date is not after the earliest permit date.
+    - If PURCHASE is unknown, spread/ROI/hold metrics are not computed.
+    - list_price is separate from exit_price.
     """
     timeline: List[Dict[str, Any]] = redfin.get("timeline") or []
-    purchase, exit_event = _pick_purchase_and_exit(timeline)
+    purchase, exit_event = _pick_purchase_and_exit(timeline, earliest_permit_date)
 
     purchase_price = purchase.get("price") if purchase else None
     purchase_date = purchase.get("date") if purchase else None
-    exit_price = exit_event.get("price") if exit_event else None
-    exit_date = exit_event.get("date") if exit_event else None
+    
+    # Exit event could be a sale or a listing
+    exit_price = None
+    exit_date = None
+    if exit_event:
+        exit_price = exit_event.get("price")
+        exit_date = exit_event.get("date")
 
     spread = None
     roi_pct = None
@@ -679,6 +723,13 @@ def _build_construction_summary(
 ) -> Dict[str, Any]:
     """
     Build construction summary with SF logic.
+    
+    NEW RULES (Issue Fix):
+    - When project is NEW construction (no meaningful existing SF):
+      - existing_sf = 0 (not None/Unknown)
+      - is_new_construction = True
+      - added_sf = final_sf
+    - Display "0 (New Construction)" consistently in all sections.
     """
     existing_sf = metrics.get("building_sf_before") or 0
     final_sf = metrics.get("building_sf_after") or metrics.get("building_sf_before") or 0
@@ -686,14 +737,15 @@ def _build_construction_summary(
     lot_sf = metrics.get("land_sf")
     scope_level = permit_categories.get("scope_level", "UNKNOWN")
     
-    # If we have no existing SF info but have final SF, treat as new construction
+    # Determine if this is new construction
     is_new_construction = False
     if existing_sf == 0 and final_sf > 0:
         is_new_construction = True
         added_sf = final_sf
+        existing_sf = 0  # Explicitly set to 0, not None
     
     return {
-        "existing_sf": existing_sf if existing_sf > 0 else None,
+        "existing_sf": existing_sf,  # Will be 0 for new construction, not None
         "added_sf": added_sf if added_sf > 0 else None,
         "final_sf": final_sf if final_sf > 0 else None,
         "lot_sf": lot_sf,
@@ -719,6 +771,13 @@ def _build_cost_model(
     - Pool: $70,000 flat
     - Soft costs: 6% of hard construction cost
     - Financing: 10% annual, 15 months, 1 point
+    
+    NEW RULES (Issue Fix):
+    - Only compute total_project_cost and estimated_profit when PURCHASE is known.
+    - When purchase is unknown:
+      - Show construction cost breakdown (hard costs) + soft costs only.
+      - Do NOT show total_project_cost or estimated_profit.
+      - Set financing_cost based on hard_cost_total (construction loan only).
     """
     purchase_price = metrics.get("purchase_price")
     exit_price = metrics.get("exit_price") or metrics.get("list_price")
@@ -771,13 +830,20 @@ def _build_cost_model(
     
     soft_costs = round(hard_cost_total * 0.06)
     
-    # Simple financing: 10% annual rate, 15 months, 1 point
-    # Assume loan is on purchase price or hard cost, whichever is smaller
-    loan_base = purchase_price if purchase_price else hard_cost_total
+    # Financing cost calculation
+    # When purchase is UNKNOWN: compute financing only on construction costs
+    # When purchase is KNOWN: compute financing on purchase price
+    if purchase_price:
+        loan_base = purchase_price
+    else:
+        # No purchase known - use hard cost total as loan base (construction loan only)
+        loan_base = hard_cost_total
+    
     interest_cost = round(loan_base * 0.10 * (15 / 12)) if loan_base else 0
     points_cost = round(loan_base * 0.01) if loan_base else 0
     financing_cost = interest_cost + points_cost
     
+    # CRITICAL FIX: Only compute total_project_cost and estimated_profit when purchase is KNOWN
     total_project_cost = None
     estimated_profit = None
     
@@ -785,6 +851,7 @@ def _build_cost_model(
         total_project_cost = purchase_price + hard_cost_total + soft_costs + financing_cost
         if exit_price:
             estimated_profit = exit_price - total_project_cost
+    # When purchase is unknown: do NOT compute total_project_cost or estimated_profit
     
     return {
         "remodel_sf": remodel_sf,
@@ -803,6 +870,7 @@ def _build_cost_model(
         "financing_cost": financing_cost,
         "total_project_cost": total_project_cost,
         "estimated_profit": estimated_profit,
+        "purchase_unknown": purchase_price is None,  # Flag for template
     }
 
 
@@ -813,6 +881,11 @@ def _build_timeline_summary(
 ) -> Dict[str, Any]:
     """
     Build timeline summary with stage durations.
+    
+    NEW RULES (Issue Fix):
+    - Any duration < 0 days is treated as INVALID and skipped.
+    - Purchase-dependent rows are omitted when purchase is unknown/invalid.
+    - Total project time is only computed when purchase is valid.
     """
     purchase_date = metrics.get("purchase_date")
     exit_date = metrics.get("exit_date")
@@ -821,16 +894,26 @@ def _build_timeline_summary(
     plans_approved_date = permit_timeline.get("plans_approved_date")
     construction_completed_date = permit_timeline.get("construction_completed_date")
     
-    # Calculate total time
-    total_days = metrics.get("hold_days")
-    total_months = round(total_days / 30.44, 1) if total_days else None
+    # Calculate total time only if purchase is known
+    total_days = None
+    total_months = None
+    if purchase_date and exit_date:
+        try:
+            p_dt = datetime.fromisoformat(purchase_date)
+            e_dt = datetime.fromisoformat(exit_date)
+            td = (e_dt - p_dt).days
+            if td >= 0:  # Only valid if non-negative
+                total_days = td
+                total_months = round(td / 30.44, 1)
+        except Exception:
+            pass
     
     stages = []
     
-    # Purchase → Plans Submitted
+    # Purchase → Plans Submitted (only if purchase is known)
     if purchase_date and plans_submitted_date:
         days = project_durations.get("days_to_submit")
-        if days is not None:
+        if days is not None and days >= 0:  # Skip negative durations
             stages.append({
                 "name": "Purchase → Plans Submitted",
                 "days": days,
@@ -838,10 +921,10 @@ def _build_timeline_summary(
                 "end_date": plans_submitted_date,
             })
     
-    # Plans Submitted → Approval
+    # Plans Submitted → Approval (permit-based, no purchase needed)
     if plans_submitted_date and plans_approved_date:
         days = project_durations.get("days_to_approve")
-        if days is not None:
+        if days is not None and days >= 0:  # Skip negative durations
             stages.append({
                 "name": "Plans Submitted → Approval",
                 "days": days,
@@ -849,10 +932,10 @@ def _build_timeline_summary(
                 "end_date": plans_approved_date,
             })
     
-    # Plans Approved → Construction Complete
+    # Plans Approved → Construction Complete (permit-based, no purchase needed)
     if plans_approved_date and construction_completed_date:
         days = project_durations.get("days_to_complete")
-        if days is not None:
+        if days is not None and days >= 0:  # Skip negative durations
             stages.append({
                 "name": "Construction Duration",
                 "days": days,
@@ -866,7 +949,7 @@ def _build_timeline_summary(
             cofo_dt = datetime.fromisoformat(construction_completed_date)
             exit_dt = datetime.fromisoformat(exit_date)
             cofo_to_sale_days = (exit_dt - cofo_dt).days
-            if cofo_to_sale_days >= 0:
+            if cofo_to_sale_days >= 0:  # Skip negative durations
                 stages.append({
                     "name": "CofO → Sale",
                     "days": cofo_to_sale_days,
@@ -893,11 +976,22 @@ def _build_data_notes(
     metrics: Dict[str, Any],
     property_snapshot: Dict[str, Any],
     permit_timeline: Dict[str, Any],
+    timeline_summary: Dict[str, Any],
+    cost_model: Dict[str, Any],
+    construction_summary: Dict[str, Any],
     redfin_ok: bool,
     ladbs_ok: bool
 ) -> List[str]:
     """
     Build list of data notes explaining missing/weak data.
+    
+    NEW RULES (Issue Fix):
+    - Add entries for each actual data issue:
+      - Missing or unknown purchase price
+      - Invalid/skipped timeline durations
+      - Profit not computed due to missing purchase
+      - Missing lot size or FAR calculations
+    - Only show "No major data issues detected" when list is empty.
     """
     notes = []
     
@@ -907,21 +1001,36 @@ def _build_data_notes(
     if not ladbs_ok:
         notes.append("LADBS data unavailable; permit history not verified.")
     
-    if not metrics.get("land_sf"):
-        notes.append("Lot size not found in Redfin/public record; FAR not calculated.")
-    
+    # CRITICAL: Purchase price unknown
     if not metrics.get("purchase_price"):
-        notes.append("Purchase price not found; spread and ROI omitted.")
+        notes.append("Purchase price unknown (no prior developer sale in Redfin history); spread, ROI, and profit not computed.")
     
-    if not metrics.get("purchase_date"):
+    # Purchase date unknown
+    if not metrics.get("purchase_date") and metrics.get("purchase_price"):
         notes.append("Purchase date unknown; timeline durations may be incomplete.")
     
+    # Timeline issues: check if any purchase-dependent stages were skipped
+    purchase_date = metrics.get("purchase_date")
+    plans_submitted = permit_timeline.get("plans_submitted_date")
+    
+    if plans_submitted and purchase_date:
+        try:
+            p_dt = datetime.fromisoformat(purchase_date)
+            s_dt = datetime.fromisoformat(plans_submitted)
+            if p_dt > s_dt:
+                notes.append("Purchase → plans duration omitted because available purchase date is after permit dates.")
+        except Exception:
+            pass
+    
+    # Lot size / FAR missing
+    if not metrics.get("land_sf"):
+        notes.append("Lot size not found; FAR calculations not available.")
+    
+    # CofO date not found
     if not permit_timeline.get("construction_completed_date"):
-        notes.append("CofO date not found; construction completion inferred from last inspection or marked as Not Final.")
+        notes.append("Certificate of Occupancy date not found; construction completion timing uncertain.")
     
-    if not property_snapshot.get("beds"):
-        notes.append("Bedroom count not available from listing data.")
-    
+    # Building SF not available
     if not property_snapshot.get("building_sf"):
         notes.append("Building SF not available from listing data.")
     
@@ -1001,12 +1110,14 @@ def run_full_comp_pipeline(url: str) -> Dict[str, Any]:
     if "permits" not in ladbs_data:
         ladbs_data["permits"] = []
 
-    metrics = _build_headline_metrics(redfin_data)
-    project_contacts = _extract_basic_project_contacts(ladbs_data)
-    
-    # Parse permit timeline
+    # Parse permit timeline FIRST to get earliest permit date
     permits = ladbs_data.get("permits") or []
     permit_timeline = _parse_permit_timeline(permits)
+    earliest_permit_date = permit_timeline.get("plans_submitted_date")
+    
+    # Build metrics with earliest permit date for purchase validation
+    metrics = _build_headline_metrics(redfin_data, earliest_permit_date)
+    project_contacts = _extract_basic_project_contacts(ladbs_data)
     
     # Calculate project durations
     purchase_date = metrics.get("purchase_date")
@@ -1054,7 +1165,10 @@ def run_full_comp_pipeline(url: str) -> Dict[str, Any]:
     construction_summary = _build_construction_summary(redfin_data, metrics, permit_categories)
     cost_model = _build_cost_model(metrics, construction_summary, permit_categories)
     timeline_summary = _build_timeline_summary(metrics, permit_timeline, project_durations)
-    data_notes = _build_data_notes(metrics, property_snapshot, permit_timeline, redfin_ok, ladbs_ok)
+    data_notes = _build_data_notes(
+        metrics, property_snapshot, permit_timeline, timeline_summary,
+        cost_model, construction_summary, redfin_ok, ladbs_ok
+    )
     links = _build_links(url, team_network)
 
     # Calculate hold_months for display

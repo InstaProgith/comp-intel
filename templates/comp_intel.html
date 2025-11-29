@@ -150,7 +150,7 @@
               <tr style="border-bottom:1px solid #f0f0f0;">
                 <td style="padding:10px 0; font-size:13px; color:#888; font-weight:600;">Existing SF</td>
                 <td style="padding:10px 0; font-size:13px; color:#111; font-weight:600; text-align:right;">
-                  {% if cs.existing_sf %}{{ "{:,.0f}".format(cs.existing_sf) }} SF{% else %}<span class="muted">Unknown</span>{% endif %}
+                  {% if cs.is_new_construction %}<span class="muted" style="font-style:italic;">0 (New Construction)</span>{% elif cs.existing_sf %}{{ "{:,.0f}".format(cs.existing_sf) }} SF{% else %}<span class="muted">Unknown</span>{% endif %}
                 </td>
               </tr>
               <tr style="border-bottom:1px solid #f0f0f0;">
@@ -224,7 +224,7 @@
               <tr style="border-bottom:1px solid #f0f0f0;">
                 <td style="padding:10px 0; font-size:13px; color:#888; font-weight:600; width:45%;">Existing SF</td>
                 <td style="padding:10px 0; font-size:13px; color:#111; font-weight:600; text-align:right;">
-                  {% if cs.existing_sf %}{{ "{:,.0f}".format(cs.existing_sf) }} SF{% elif cs.is_new_construction %}<span class="muted" style="font-style:italic;">0 (New Construction)</span>{% else %}<span class="muted">Unknown</span>{% endif %}
+                  {% if cs.is_new_construction %}<span class="muted" style="font-style:italic;">0 (New Construction)</span>{% elif cs.existing_sf %}{{ "{:,.0f}".format(cs.existing_sf) }} SF{% else %}<span class="muted">Unknown</span>{% endif %}
                 </td>
               </tr>
               <tr style="border-bottom:1px solid #f0f0f0;">
@@ -341,7 +341,7 @@
 
             {% if building_permits %}
             <div class="permit-group">
-              <div class="permit-group-header">Building Permits ({{ building_permits | length }})</div>
+              <div class="permit-group-header">Building Permits ({{ pc.building_count or building_permits | length }})</div>
               {% for p in building_permits %}
               <div class="permit-compact">
                 <div class="permit-compact-main">
@@ -358,7 +358,7 @@
 
             {% if demo_permits %}
             <div class="permit-group">
-              <div class="permit-group-header">Demolition ({{ demo_permits | length }})</div>
+              <div class="permit-group-header">Demolition ({{ pc.demo_count or demo_permits | length }})</div>
               {% for p in demo_permits %}
               <div class="permit-compact">
                 <div class="permit-compact-main">
@@ -375,7 +375,7 @@
 
             {% if mep_permits %}
             <div class="permit-group">
-              <div class="permit-group-header">MEP ({{ mep_permits | length }})</div>
+              <div class="permit-group-header">MEP ({{ pc.mep_count or mep_permits | length }})</div>
               {% for p in mep_permits %}
               <div class="permit-compact">
                 <div class="permit-compact-main">
@@ -389,7 +389,7 @@
 
             {% if other_permits %}
             <div class="permit-group">
-              <div class="permit-group-header">Other ({{ other_permits | length }})</div>
+              <div class="permit-group-header">Other ({{ pc.other_count or other_permits | length }})</div>
               {% for p in other_permits %}
               <div class="permit-compact">
                 <div class="permit-compact-main">
