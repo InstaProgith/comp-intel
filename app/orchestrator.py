@@ -623,6 +623,329 @@ def _extract_team_network(permits: List[Dict[str, Any]]) -> Dict[str, Any]:
     }
 
 
+def _build_property_snapshot(redfin: Dict[str, Any], metrics: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Build property snapshot with canonical field names.
+    """
+    address_full = redfin.get("address", "Unknown address")
+    beds = redfin.get("beds") or redfin.get("listing_beds")
+    baths = redfin.get("baths") or redfin.get("listing_baths")
+    building_sf = metrics.get("building_sf_after") or redfin.get("building_sf")
+    lot_sf = metrics.get("land_sf")
+    
+    # Determine property type from permits or default
+    property_type = "Single-Family"  # Default
+    
+    # Determine status based on timeline
+    timeline = redfin.get("timeline") or []
+    sold_events = [e for e in timeline if e.get("event") == "sold"]
+    list_price = redfin.get("list_price")
+    
+    status = "Unknown"
+    status_date = None
+    status_price = None
+    
+    if sold_events:
+        last_sold = sorted(sold_events, key=lambda e: e.get("date") or "")[-1]
+        status = "Sold"
+        status_date = last_sold.get("date")
+        status_price = last_sold.get("price")
+    elif list_price:
+        status = "Active Listing"
+        status_price = list_price
+        # Try to find list date from timeline
+        listed_events = [e for e in timeline if e.get("event") == "listed"]
+        if listed_events:
+            last_listed = sorted(listed_events, key=lambda e: e.get("date") or "")[-1]
+            status_date = last_listed.get("date")
+    
+    return {
+        "address_full": address_full,
+        "beds": beds,
+        "baths": baths,
+        "building_sf": building_sf,
+        "lot_sf": lot_sf,
+        "property_type": property_type,
+        "status": status,
+        "status_date": status_date,
+        "status_price": status_price,
+    }
+
+
+def _build_construction_summary(
+    redfin: Dict[str, Any], 
+    metrics: Dict[str, Any], 
+    permit_categories: Dict[str, Any]
+) -> Dict[str, Any]:
+    """
+    Build construction summary with SF logic.
+    """
+    existing_sf = metrics.get("building_sf_before") or 0
+    final_sf = metrics.get("building_sf_after") or metrics.get("building_sf_before") or 0
+    added_sf = metrics.get("sf_added") or 0
+    lot_sf = metrics.get("land_sf")
+    scope_level = permit_categories.get("scope_level", "UNKNOWN")
+    
+    # If we have no existing SF info but have final SF, treat as new construction
+    is_new_construction = False
+    if existing_sf == 0 and final_sf > 0:
+        is_new_construction = True
+        added_sf = final_sf
+    
+    return {
+        "existing_sf": existing_sf if existing_sf > 0 else None,
+        "added_sf": added_sf if added_sf > 0 else None,
+        "final_sf": final_sf if final_sf > 0 else None,
+        "lot_sf": lot_sf,
+        "scope_level": scope_level,
+        "is_new_construction": is_new_construction,
+    }
+
+
+def _build_cost_model(
+    metrics: Dict[str, Any],
+    construction_summary: Dict[str, Any],
+    permit_categories: Dict[str, Any]
+) -> Dict[str, Any]:
+    """
+    Build cost model using fixed assumptions.
+    
+    Fixed costs:
+    - Full new construction: $350/SF
+    - Remodel (existing SF): $150/SF
+    - Addition: $300/SF
+    - Garage: $200/SF
+    - Landscape/hardscape/demo: $30,000 flat
+    - Pool: $70,000 flat
+    - Soft costs: 6% of hard construction cost
+    - Financing: 10% annual, 15 months, 1 point
+    """
+    purchase_price = metrics.get("purchase_price")
+    exit_price = metrics.get("exit_price") or metrics.get("list_price")
+    
+    existing_sf = construction_summary.get("existing_sf") or 0
+    added_sf = construction_summary.get("added_sf") or 0
+    final_sf = construction_summary.get("final_sf") or 0
+    is_new_construction = construction_summary.get("is_new_construction", False)
+    
+    # Determine construction type costs
+    cost_new_construction = 0
+    cost_remodel = 0
+    cost_addition = 0
+    cost_garage = 0
+    remodel_sf = 0
+    addition_sf = 0
+    new_sf_full = 0
+    garage_sf = 0
+    
+    if is_new_construction:
+        # Full new construction
+        new_sf_full = final_sf
+        cost_new_construction = new_sf_full * 350
+    else:
+        # Remodel + Addition scenario
+        remodel_sf = existing_sf
+        cost_remodel = remodel_sf * 150
+        
+        if added_sf > 0:
+            addition_sf = added_sf
+            cost_addition = addition_sf * 300
+    
+    # Check for pool in permit categories
+    has_pool = False
+    scope_details = permit_categories.get("scope_details", "").upper()
+    if "POOL" in scope_details:
+        has_pool = True
+    
+    cost_landscape = 30000
+    cost_pool = 70000 if has_pool else 0
+    
+    hard_cost_total = (
+        cost_new_construction + 
+        cost_remodel + 
+        cost_addition + 
+        cost_garage + 
+        cost_landscape + 
+        cost_pool
+    )
+    
+    soft_costs = round(hard_cost_total * 0.06)
+    
+    # Simple financing: 10% annual rate, 15 months, 1 point
+    # Assume loan is on purchase price or hard cost, whichever is smaller
+    loan_base = purchase_price if purchase_price else hard_cost_total
+    interest_cost = round(loan_base * 0.10 * (15 / 12)) if loan_base else 0
+    points_cost = round(loan_base * 0.01) if loan_base else 0
+    financing_cost = interest_cost + points_cost
+    
+    total_project_cost = None
+    estimated_profit = None
+    
+    if purchase_price:
+        total_project_cost = purchase_price + hard_cost_total + soft_costs + financing_cost
+        if exit_price:
+            estimated_profit = exit_price - total_project_cost
+    
+    return {
+        "remodel_sf": remodel_sf,
+        "cost_remodel": cost_remodel,
+        "addition_sf": addition_sf,
+        "cost_addition": cost_addition,
+        "new_sf_full": new_sf_full,
+        "cost_new_construction": cost_new_construction,
+        "garage_sf": garage_sf,
+        "cost_garage": cost_garage,
+        "cost_landscape": cost_landscape,
+        "has_pool": has_pool,
+        "cost_pool": cost_pool,
+        "hard_cost_total": hard_cost_total,
+        "soft_costs": soft_costs,
+        "financing_cost": financing_cost,
+        "total_project_cost": total_project_cost,
+        "estimated_profit": estimated_profit,
+    }
+
+
+def _build_timeline_summary(
+    metrics: Dict[str, Any],
+    permit_timeline: Dict[str, Any],
+    project_durations: Dict[str, Any]
+) -> Dict[str, Any]:
+    """
+    Build timeline summary with stage durations.
+    """
+    purchase_date = metrics.get("purchase_date")
+    exit_date = metrics.get("exit_date")
+    
+    plans_submitted_date = permit_timeline.get("plans_submitted_date")
+    plans_approved_date = permit_timeline.get("plans_approved_date")
+    construction_completed_date = permit_timeline.get("construction_completed_date")
+    
+    # Calculate total time
+    total_days = metrics.get("hold_days")
+    total_months = round(total_days / 30.44, 1) if total_days else None
+    
+    stages = []
+    
+    # Purchase → Plans Submitted
+    if purchase_date and plans_submitted_date:
+        days = project_durations.get("days_to_submit")
+        if days is not None:
+            stages.append({
+                "name": "Purchase → Plans Submitted",
+                "days": days,
+                "start_date": purchase_date,
+                "end_date": plans_submitted_date,
+            })
+    
+    # Plans Submitted → Approval
+    if plans_submitted_date and plans_approved_date:
+        days = project_durations.get("days_to_approve")
+        if days is not None:
+            stages.append({
+                "name": "Plans Submitted → Approval",
+                "days": days,
+                "start_date": plans_submitted_date,
+                "end_date": plans_approved_date,
+            })
+    
+    # Plans Approved → Construction Complete
+    if plans_approved_date and construction_completed_date:
+        days = project_durations.get("days_to_complete")
+        if days is not None:
+            stages.append({
+                "name": "Construction Duration",
+                "days": days,
+                "start_date": plans_approved_date,
+                "end_date": construction_completed_date,
+            })
+    
+    # CofO → Sale (if both known)
+    if construction_completed_date and exit_date:
+        try:
+            cofo_dt = datetime.fromisoformat(construction_completed_date)
+            exit_dt = datetime.fromisoformat(exit_date)
+            cofo_to_sale_days = (exit_dt - cofo_dt).days
+            if cofo_to_sale_days >= 0:
+                stages.append({
+                    "name": "CofO → Sale",
+                    "days": cofo_to_sale_days,
+                    "start_date": construction_completed_date,
+                    "end_date": exit_date,
+                })
+        except Exception:
+            pass
+    
+    return {
+        "stages": stages,
+        "total_days": total_days,
+        "total_months": total_months,
+        "purchase_date": purchase_date,
+        "exit_date": exit_date,
+        "plans_submitted_date": plans_submitted_date,
+        "plans_approved_date": plans_approved_date,
+        "construction_completed_date": construction_completed_date,
+        "cofo_date": construction_completed_date,  # alias
+    }
+
+
+def _build_data_notes(
+    metrics: Dict[str, Any],
+    property_snapshot: Dict[str, Any],
+    permit_timeline: Dict[str, Any],
+    redfin_ok: bool,
+    ladbs_ok: bool
+) -> List[str]:
+    """
+    Build list of data notes explaining missing/weak data.
+    """
+    notes = []
+    
+    if not redfin_ok:
+        notes.append("Redfin data unavailable; property details may be incomplete.")
+    
+    if not ladbs_ok:
+        notes.append("LADBS data unavailable; permit history not verified.")
+    
+    if not metrics.get("land_sf"):
+        notes.append("Lot size not found in Redfin/public record; FAR not calculated.")
+    
+    if not metrics.get("purchase_price"):
+        notes.append("Purchase price not found; spread and ROI omitted.")
+    
+    if not metrics.get("purchase_date"):
+        notes.append("Purchase date unknown; timeline durations may be incomplete.")
+    
+    if not permit_timeline.get("construction_completed_date"):
+        notes.append("CofO date not found; construction completion inferred from last inspection or marked as Not Final.")
+    
+    if not property_snapshot.get("beds"):
+        notes.append("Bedroom count not available from listing data.")
+    
+    if not property_snapshot.get("building_sf"):
+        notes.append("Building SF not available from listing data.")
+    
+    return notes
+
+
+def _build_links(url: str, team_network: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Build links section for report.
+    """
+    gc_cslb_url = None
+    if team_network.get("primary_gc") and team_network["primary_gc"].get("cslb_url"):
+        gc_cslb_url = team_network["primary_gc"]["cslb_url"]
+    
+    # LADBS permit search URL (generic search page)
+    ladbs_url = "https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr"
+    
+    return {
+        "redfin_url": url,
+        "ladbs_url": ladbs_url,
+        "gc_cslb_url": gc_cslb_url,
+    }
+
+
 def run_full_comp_pipeline(url: str) -> Dict[str, Any]:
     print(f"[INFO] Running comp-intel pipeline for: {url}")
     
@@ -726,6 +1049,18 @@ def run_full_comp_pipeline(url: str) -> Dict[str, Any]:
     ladbs_ok = not (ladbs_source.startswith("ladbs_stub_") or ladbs_source == "ladbs_error" or ladbs_source == "ladbs_invalid")
     ladbs_error = None if ladbs_ok else ladbs_data.get("note", "LADBS data unavailable")
 
+    # Build new report sections
+    property_snapshot = _build_property_snapshot(redfin_data, metrics)
+    construction_summary = _build_construction_summary(redfin_data, metrics, permit_categories)
+    cost_model = _build_cost_model(metrics, construction_summary, permit_categories)
+    timeline_summary = _build_timeline_summary(metrics, permit_timeline, project_durations)
+    data_notes = _build_data_notes(metrics, property_snapshot, permit_timeline, redfin_ok, ladbs_ok)
+    links = _build_links(url, team_network)
+
+    # Calculate hold_months for display
+    hold_days = metrics.get("hold_days")
+    hold_months = round(hold_days / 30.44, 1) if hold_days else None
+
     combined: Dict[str, Any] = {
         "url": url,
         "address": redfin_data.get("address", "Unknown address"),
@@ -752,17 +1087,18 @@ def run_full_comp_pipeline(url: str) -> Dict[str, Any]:
         "ladbs_error": ladbs_error,
         "cslb_ok": cslb_ok,
         "cslb_error": cslb_error,
+        # NEW REPORT SECTIONS
+        "property_snapshot": property_snapshot,
+        "construction_summary": construction_summary,
+        "cost_model": cost_model,
+        "timeline_summary": timeline_summary,
+        "data_notes": data_notes,
+        "links": links,
+        "hold_months": hold_months,
     }
 
-    try:
-        combined["summary_markdown"] = summarize_comp(combined)
-    except Exception as e:
-        print(f"[WARN] summarize_comp failed: {e}")
-        _log_failure(LOGS_DIR, url, "summarizer", e)
-        combined["summary_markdown"] = (
-            "Summary unavailable due to an error in the AI summarizer. "
-            "Raw Redfin and LADBS data are still shown above."
-        )
+    # Skip AI summarizer - we're removing narrative sections
+    combined["summary_markdown"] = None
 
     now_tag = datetime.now().strftime("%Y%m%d-%H%M%S")
     out_path = SUMMARIES_DIR / f"comp_{now_tag}.json"

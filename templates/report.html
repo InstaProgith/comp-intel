@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>BLDGBIT · Property Report</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/comp.css') }}">
+  <style>
+    /* Report-specific styles */
+    .report-shell {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+    
+    .report-card {
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+    
+    .report-section {
+      padding: 24px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .report-section:last-child {
+      border-bottom: none;
+    }
+    
+    .report-section-header {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #888;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #111;
+    }
+    
+    /* Property Snapshot - Top of report */
+    .property-header {
+      padding: 32px 24px;
+      background: linear-gradient(180deg, #fafafa 0%, #f5f5f5 100%);
+    }
+    
+    .property-address {
+      font-size: 24px;
+      font-weight: 800;
+      color: #111;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+    
+    .property-specs {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 8px;
+    }
+    
+    .property-status {
+      font-size: 13px;
+      color: #666;
+    }
+    
+    .property-status strong {
+      color: #111;
+    }
+    
+    /* Metrics Table */
+    .metrics-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    .metrics-table tr {
+      border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .metrics-table tr:last-child {
+      border-bottom: none;
+    }
+    
+    .metrics-table td {
+      padding: 10px 0;
+      font-size: 13px;
+    }
+    
+    .metrics-table td:first-child {
+      color: #888;
+      font-weight: 600;
+      width: 45%;
+    }
+    
+    .metrics-table td:last-child {
+      color: #111;
+      font-weight: 600;
+      text-align: right;
+    }
+    
+    .metrics-table .value-success {
+      color: #059669;
+    }
+    
+    .metrics-table .value-muted {
+      color: #999;
+      font-weight: 400;
+      font-style: italic;
+    }
+    
+    /* Timeline Table */
+    .timeline-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    
+    .timeline-table th {
+      text-align: left;
+      padding: 10px 8px;
+      background: #f5f5f5;
+      color: #666;
+      font-weight: 700;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .timeline-table td {
+      padding: 10px 8px;
+      border-bottom: 1px solid #f0f0f0;
+      color: #333;
+    }
+    
+    .timeline-total {
+      margin-top: 16px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #111;
+    }
+    
+    /* Cost Model Table */
+    .cost-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    .cost-table tr {
+      border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .cost-table tr.subtotal {
+      background: #f9f9f9;
+    }
+    
+    .cost-table tr.total {
+      background: #f5f5f5;
+      font-weight: 700;
+    }
+    
+    .cost-table td {
+      padding: 10px 0;
+      font-size: 13px;
+    }
+    
+    .cost-table td:first-child {
+      color: #555;
+    }
+    
+    .cost-table td:last-child {
+      text-align: right;
+      color: #111;
+      font-weight: 600;
+    }
+    
+    .cost-table .profit-positive {
+      color: #059669;
+    }
+    
+    .cost-table .profit-negative {
+      color: #dc2626;
+    }
+    
+    /* Permit List */
+    .permit-item {
+      background: #fafafa;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      padding: 14px;
+      margin-bottom: 10px;
+    }
+    
+    .permit-item:last-child {
+      margin-bottom: 0;
+    }
+    
+    .permit-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    
+    .permit-type {
+      font-size: 13px;
+      font-weight: 600;
+      color: #111;
+    }
+    
+    .permit-number {
+      font-size: 10px;
+      font-family: 'Monaco', monospace;
+      color: #888;
+      background: #f0f0f0;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    
+    .permit-desc {
+      font-size: 12px;
+      color: #666;
+      line-height: 1.5;
+    }
+    
+    /* Team Section */
+    .team-row {
+      padding: 12px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .team-row:last-child {
+      border-bottom: none;
+    }
+    
+    .team-role {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #888;
+      margin-bottom: 4px;
+    }
+    
+    .team-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: #111;
+    }
+    
+    .team-license {
+      font-size: 11px;
+      color: #666;
+      font-family: 'Monaco', monospace;
+    }
+    
+    .team-link {
+      font-size: 11px;
+      color: #111;
+      margin-left: 12px;
+    }
+    
+    /* Data Notes */
+    .data-notes-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .data-notes-list li {
+      padding: 8px 0 8px 20px;
+      position: relative;
+      font-size: 13px;
+      color: #666;
+      border-bottom: 1px solid #f5f5f5;
+    }
+    
+    .data-notes-list li:before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: #ccc;
+    }
+    
+    .data-notes-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .no-notes {
+      font-size: 13px;
+      color: #888;
+      font-style: italic;
+    }
+    
+    /* Links Section */
+    .links-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .link-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .link-label {
+      font-size: 12px;
+      color: #888;
+      min-width: 100px;
+    }
+    
+    .link-url {
+      font-size: 13px;
+      color: #111;
+      text-decoration: none;
+    }
+    
+    .link-url:hover {
+      text-decoration: underline;
+    }
+    
+    /* Scope Badge */
+    .scope-indicator {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 12px;
+      letter-spacing: 0.5px;
+    }
+    
+    .scope-light {
+      background: #ecfdf5;
+      color: #065f46;
+    }
+    
+    .scope-medium {
+      background: #fffbeb;
+      color: #92400e;
+    }
+    
+    .scope-heavy {
+      background: #fef2f2;
+      color: #991b1b;
+    }
+    
+    .scope-unknown {
+      background: #f5f5f5;
+      color: #666;
+    }
+    
+    /* Print styles */
+    @media print {
+      .report-shell {
+        padding: 0;
+      }
+      
+      .report-card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-layer"></div>
+
+  <main class="report-shell">
+    {% if r %}
+    {% set ps = r.property_snapshot or {} %}
+    {% set m = r.metrics or {} %}
+    {% set cs = r.construction_summary or {} %}
+    {% set cm = r.cost_model or {} %}
+    {% set ts = r.timeline_summary or {} %}
+    {% set pc = r.permit_categories or {} %}
+    {% set team = r.team_network or {} %}
+    {% set permits = r.ladbs.permits if r.ladbs and r.ladbs.permits else [] %}
+    {% set dn = r.data_notes or [] %}
+    {% set links = r.links or {} %}
+
+    <div class="report-card">
+      
+      <!-- 1. PROPERTY SNAPSHOT -->
+      <div class="property-header">
+        <div class="property-address">{{ ps.address_full or r.address or "Unknown address" }}</div>
+        <div class="property-specs">
+          {% if ps.beds %}{{ ps.beds|int }} bd{% endif %}
+          {% if ps.baths %} / {{ ps.baths }} ba{% endif %}
+          {% if ps.building_sf %} · {{ "{:,.0f}".format(ps.building_sf) }} SF{% endif %}
+          {% if ps.lot_sf %} · Lot {{ "{:,.0f}".format(ps.lot_sf) }} SF{% else %} · Lot: Unknown (no lot size found){% endif %}
+          {% if ps.property_type %} · {{ ps.property_type }}{% endif %}
+        </div>
+        <div class="property-status">
+          <strong>{{ ps.status or "Status unknown" }}</strong>
+          {% if ps.status_price %} · ${{ "{:,.0f}".format(ps.status_price) }}{% endif %}
+          {% if ps.status_date %} on {{ ps.status_date }}{% endif %}
+        </div>
+      </div>
+      
+      <!-- 2. DEVELOPER SNAPSHOT -->
+      <div class="report-section">
+        <div class="report-section-header">Developer Snapshot</div>
+        <table class="metrics-table">
+          <tr>
+            <td>Purchase Price</td>
+            <td>{% if m.purchase_price %}${{ "{:,.0f}".format(m.purchase_price) }}{% else %}<span class="value-muted">Unknown (no prior sale in Redfin history)</span>{% endif %}</td>
+          </tr>
+          <tr>
+            <td>Exit / List Price</td>
+            <td>{% if m.exit_price %}${{ "{:,.0f}".format(m.exit_price) }}{% elif m.list_price %}${{ "{:,.0f}".format(m.list_price) }} (list){% else %}<span class="value-muted">Unknown</span>{% endif %}</td>
+          </tr>
+          {% if m.purchase_price %}
+          <tr>
+            <td>Hold Period</td>
+            <td>{% if m.hold_days %}{{ m.hold_days }} days (~{{ r.hold_months or (m.hold_days / 30.44)|round(1) }} months){% else %}<span class="value-muted">Unknown</span>{% endif %}</td>
+          </tr>
+          <tr>
+            <td>Gross Spread</td>
+            <td>{% if m.spread %}<span class="value-success">${{ "{:,.0f}".format(m.spread) }}</span>{% else %}<span class="value-muted">N/A</span>{% endif %}</td>
+          </tr>
+          <tr>
+            <td>ROI (simple)</td>
+            <td>{% if m.roi_pct %}<span class="value-success">{{ "{:.1f}%".format(m.roi_pct) }}</span>{% else %}<span class="value-muted">N/A</span>{% endif %}</td>
+          </tr>
+          <tr>
+            <td>Spread / Day</td>
+            <td>{% if m.spread_per_day %}<span class="value-success">${{ "{:,.0f}".format(m.spread_per_day) }}</span>{% else %}<span class="value-muted">N/A</span>{% endif %}</td>
+          </tr>
+          {% endif %}
+          <tr>
+            <td>Land SF</td>
+            <td>{% if m.land_sf %}{{ "{:,.0f}".format(m.land_sf) }} SF{% else %}<span class="value-muted">Unknown</span>{% endif %}</td>
+          </tr>
+          <tr>
+            <td>Existing SF</td>
+            <td>{% if cs.existing_sf %}{{ "{:,.0f}".format(cs.existing_sf) }} SF{% else %}<span class="value-muted">Unknown</span>{% endif %}</td>
+          </tr>
+          <tr>
+            <td>Added SF</td>
+            <td>{% if cs.added_sf %}+{{ "{:,.0f}".format(cs.added_sf) }} SF{% else %}<span class="value-muted">0</span>{% endif %}</td>
+          </tr>
+          <tr>
+            <td>Final SF</td>
+            <td>{% if cs.final_sf %}{{ "{:,.0f}".format(cs.final_sf) }} SF{% else %}<span class="value-muted">Unknown</span>{% endif %}</td>
+          </tr>
+          <tr>
+            <td>FAR (before → after)</td>
+            <td>
+              {% if m.far_before %}{{ m.far_before }}{% else %}<span class="value-muted">N/A</span>{% endif %}
+              {% if m.far_after and m.far_after != m.far_before %} → {{ m.far_after }}{% endif %}
+            </td>
+          </tr>
+          <tr>
+            <td>Scope Level</td>
+            <td><span class="scope-indicator scope-{{ (pc.scope_level or 'unknown')|lower }}">{{ pc.scope_level or "UNKNOWN" }}</span></td>
+          </tr>
+        </table>
+      </div>
+      
+      <!-- 3. TIMELINE SUMMARY -->
+      <div class="report-section">
+        <div class="report-section-header">Timeline Summary</div>
+        {% if ts.stages %}
+        <table class="timeline-table">
+          <thead>
+            <tr>
+              <th>Stage</th>
+              <th>Duration</th>
+              <th>Dates</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for stage in ts.stages %}
+            <tr>
+              <td>{{ stage.name }}</td>
+              <td>{{ stage.days }} days</td>
+              <td>{{ stage.start_date }} → {{ stage.end_date }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% if ts.total_days %}
+        <div class="timeline-total">
+          Total Project Time: {{ ts.total_days }} days (~{{ ts.total_months }} months)
+        </div>
+        {% endif %}
+        {% else %}
+        <p class="value-muted" style="font-size:13px;">Timeline data unavailable. Missing purchase date or permit milestones.</p>
+        {% endif %}
+      </div>
+      
+      <!-- 4. CONSTRUCTION SUMMARY -->
+      <div class="report-section">
+        <div class="report-section-header">Construction Summary</div>
+        <table class="metrics-table">
+          <tr>
+            <td>Existing SF</td>
+            <td>{% if cs.existing_sf %}{{ "{:,.0f}".format(cs.existing_sf) }} SF{% elif cs.is_new_construction %}<span class="value-muted">0 (New Construction)</span>{% else %}<span class="value-muted">Unknown</span>{% endif %}</td>
+          </tr>
+          <tr>
+            <td>Added SF</td>
+            <td>{% if cs.added_sf %}+{{ "{:,.0f}".format(cs.added_sf) }} SF{% else %}0{% endif %}</td>
+          </tr>
+          <tr>
+            <td>Final SF</td>
+            <td>{% if cs.final_sf %}{{ "{:,.0f}".format(cs.final_sf) }} SF{% else %}<span class="value-muted">Unknown</span>{% endif %}</td>
+          </tr>
+          <tr>
+            <td>Lot SF</td>
+            <td>{% if cs.lot_sf %}{{ "{:,.0f}".format(cs.lot_sf) }} SF{% else %}<span class="value-muted">Unknown</span>{% endif %}</td>
+          </tr>
+          <tr>
+            <td>Scope Level</td>
+            <td><span class="scope-indicator scope-{{ (cs.scope_level or 'unknown')|lower }}">{{ cs.scope_level or "UNKNOWN" }}</span></td>
+          </tr>
+        </table>
+      </div>
+      
+      <!-- 5. COST MODEL -->
+      <div class="report-section">
+        <div class="report-section-header">Cost Model</div>
+        <table class="cost-table">
+          {% if cm.remodel_sf > 0 %}
+          <tr>
+            <td>Remodel ({{ "{:,.0f}".format(cm.remodel_sf) }} SF × $150)</td>
+            <td>${{ "{:,.0f}".format(cm.cost_remodel) }}</td>
+          </tr>
+          {% endif %}
+          {% if cm.addition_sf > 0 %}
+          <tr>
+            <td>Addition ({{ "{:,.0f}".format(cm.addition_sf) }} SF × $300)</td>
+            <td>${{ "{:,.0f}".format(cm.cost_addition) }}</td>
+          </tr>
+          {% endif %}
+          {% if cm.new_sf_full > 0 %}
+          <tr>
+            <td>New Construction ({{ "{:,.0f}".format(cm.new_sf_full) }} SF × $350)</td>
+            <td>${{ "{:,.0f}".format(cm.cost_new_construction) }}</td>
+          </tr>
+          {% endif %}
+          {% if cm.garage_sf > 0 %}
+          <tr>
+            <td>Garage ({{ "{:,.0f}".format(cm.garage_sf) }} SF × $200)</td>
+            <td>${{ "{:,.0f}".format(cm.cost_garage) }}</td>
+          </tr>
+          {% endif %}
+          <tr>
+            <td>Landscape / Hardscape / Demo</td>
+            <td>${{ "{:,.0f}".format(cm.cost_landscape) }}</td>
+          </tr>
+          {% if cm.has_pool %}
+          <tr>
+            <td>Pool</td>
+            <td>${{ "{:,.0f}".format(cm.cost_pool) }}</td>
+          </tr>
+          {% endif %}
+          <tr class="subtotal">
+            <td><strong>Hard Cost Total</strong></td>
+            <td><strong>${{ "{:,.0f}".format(cm.hard_cost_total) }}</strong></td>
+          </tr>
+          <tr>
+            <td>Soft Costs (6%)</td>
+            <td>${{ "{:,.0f}".format(cm.soft_costs) }}</td>
+          </tr>
+          <tr>
+            <td>Financing Cost</td>
+            <td>${{ "{:,.0f}".format(cm.financing_cost) }}</td>
+          </tr>
+          {% if cm.total_project_cost %}
+          <tr class="total">
+            <td>Total Project Cost</td>
+            <td>${{ "{:,.0f}".format(cm.total_project_cost) }}</td>
+          </tr>
+          {% endif %}
+          {% if cm.estimated_profit is not none %}
+          <tr class="total">
+            <td>Estimated Profit</td>
+            <td class="{% if cm.estimated_profit > 0 %}profit-positive{% else %}profit-negative{% endif %}">
+              ${{ "{:,.0f}".format(cm.estimated_profit) }}
+            </td>
+          </tr>
+          {% endif %}
+        </table>
+      </div>
+      
+      <!-- 6. PERMIT OVERVIEW -->
+      <div class="report-section">
+        <div class="report-section-header">Permit Overview</div>
+        <div style="margin-bottom:16px; font-size:13px; color:#555;">
+          <strong>Permits:</strong> Building ({{ pc.building_count or 0 }}), Demolition ({{ pc.demo_count or 0 }}), MEP ({{ pc.mep_count or 0 }}), Other ({{ pc.other_count or 0 }})
+          · <span class="scope-indicator scope-{{ (pc.scope_level or 'unknown')|lower }}">{{ pc.scope_level or "UNKNOWN" }}</span>
+        </div>
+        
+        {% if permits %}
+        {% set building_permits = permits | selectattr('permit_type', 'match', '.*Bldg.*|.*Building.*') | list %}
+        {% set demo_permits = permits | selectattr('permit_type', 'match', '.*Demo.*') | list %}
+        {% set mep_permits = permits | selectattr('permit_type', 'match', '.*Electrical.*|.*Plumbing.*|.*Mechanical.*') | list %}
+        {% set other_permits = permits | rejectattr('permit_type', 'match', '.*Bldg.*|.*Building.*|.*Demo.*|.*Electrical.*|.*Plumbing.*|.*Mechanical.*') | list %}
+
+        {% if building_permits %}
+        <div style="font-size:11px; font-weight:700; color:#666; margin:16px 0 10px; text-transform:uppercase; letter-spacing:0.5px;">Building Permits</div>
+        {% for p in building_permits %}
+        <div class="permit-item">
+          <div class="permit-header">
+            <span class="permit-type">{{ p.permit_type }}</span>
+            <span class="permit-number">{{ p.permit_number }}</span>
+          </div>
+          {% if p.Work_Description and p.Work_Description != 'N/A' %}
+          <div class="permit-desc">{{ p.Work_Description }}</div>
+          {% endif %}
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        {% if demo_permits %}
+        <div style="font-size:11px; font-weight:700; color:#666; margin:16px 0 10px; text-transform:uppercase; letter-spacing:0.5px;">Demolition</div>
+        {% for p in demo_permits %}
+        <div class="permit-item">
+          <div class="permit-header">
+            <span class="permit-type">{{ p.permit_type }}</span>
+            <span class="permit-number">{{ p.permit_number }}</span>
+          </div>
+          {% if p.Work_Description and p.Work_Description != 'N/A' %}
+          <div class="permit-desc">{{ p.Work_Description }}</div>
+          {% endif %}
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        {% if mep_permits %}
+        <div style="font-size:11px; font-weight:700; color:#666; margin:16px 0 10px; text-transform:uppercase; letter-spacing:0.5px;">MEP</div>
+        {% for p in mep_permits %}
+        <div class="permit-item">
+          <div class="permit-header">
+            <span class="permit-type">{{ p.permit_type }}</span>
+            <span class="permit-number">{{ p.permit_number }}</span>
+          </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        {% if other_permits %}
+        <div style="font-size:11px; font-weight:700; color:#666; margin:16px 0 10px; text-transform:uppercase; letter-spacing:0.5px;">Other</div>
+        {% for p in other_permits %}
+        <div class="permit-item">
+          <div class="permit-header">
+            <span class="permit-type">{{ p.permit_type }}</span>
+            <span class="permit-number">{{ p.permit_number }}</span>
+          </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% else %}
+        <p class="value-muted" style="font-size:13px;">No permits found for this property.</p>
+        {% endif %}
+      </div>
+      
+      <!-- 7. TEAM -->
+      <div class="report-section">
+        <div class="report-section-header">Team</div>
+        {% if team.primary_gc %}
+        <div class="team-row">
+          <div class="team-role">GC</div>
+          <div class="team-name">
+            {{ team.primary_gc.name }}
+            {% if team.primary_gc.license %}
+            <span class="team-license">Lic #{{ team.primary_gc.license }}</span>
+            {% endif %}
+            {% if team.primary_gc.cslb_url %}
+            <a href="{{ team.primary_gc.cslb_url }}" target="_blank" class="team-link">CSLB Profile →</a>
+            {% endif %}
+          </div>
+        </div>
+        {% endif %}
+        
+        {% if team.primary_architect %}
+        <div class="team-row">
+          <div class="team-role">Architect</div>
+          <div class="team-name">
+            {{ team.primary_architect.name }}
+            {% if team.primary_architect.license %}
+            <span class="team-license">#{{ team.primary_architect.license }}</span>
+            {% endif %}
+          </div>
+        </div>
+        {% endif %}
+        
+        {% if team.primary_engineer %}
+        <div class="team-row">
+          <div class="team-role">Engineer</div>
+          <div class="team-name">
+            {{ team.primary_engineer.name }}
+            {% if team.primary_engineer.license %}
+            <span class="team-license">#{{ team.primary_engineer.license }}</span>
+            {% endif %}
+          </div>
+        </div>
+        {% endif %}
+        
+        {% if not team.primary_gc and not team.primary_architect and not team.primary_engineer %}
+        <p class="value-muted" style="font-size:13px;">No team members found in permit records.</p>
+        {% endif %}
+      </div>
+      
+      <!-- 8. DATA NOTES -->
+      <div class="report-section">
+        <div class="report-section-header">Data Notes</div>
+        {% if dn %}
+        <ul class="data-notes-list">
+          {% for note in dn %}
+          <li>{{ note }}</li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p class="no-notes">No major data issues detected.</p>
+        {% endif %}
+      </div>
+      
+      <!-- 9. LINKS -->
+      <div class="report-section">
+        <div class="report-section-header">Links</div>
+        <div class="links-list">
+          {% if links.redfin_url %}
+          <div class="link-item">
+            <span class="link-label">Redfin Listing</span>
+            <a href="{{ links.redfin_url }}" target="_blank" class="link-url">{{ links.redfin_url[:60] }}{% if links.redfin_url|length > 60 %}...{% endif %}</a>
+          </div>
+          {% endif %}
+          
+          {% if links.ladbs_url %}
+          <div class="link-item">
+            <span class="link-label">LADBS Permits</span>
+            <a href="{{ links.ladbs_url }}" target="_blank" class="link-url">LADBS Permit Search</a>
+          </div>
+          {% endif %}
+          
+          {% if links.gc_cslb_url %}
+          <div class="link-item">
+            <span class="link-label">CSLB Profile</span>
+            <a href="{{ links.gc_cslb_url }}" target="_blank" class="link-url">View GC License</a>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      
+    </div>
+    {% else %}
+    <div class="report-card">
+      <div class="report-section">
+        <p style="text-align:center; color:#888; padding:40px 20px;">No report data available.</p>
+      </div>
+    </div>
+    {% endif %}
+
+    <footer class="footer">
+      <div>© {{ year or 2025 }} BLDGBIT · Internal Tool</div>
+    </footer>
+  </main>
+
+</body>
+</html>
