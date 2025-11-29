@@ -25,6 +25,21 @@ SUMMARIES_DIR = DATA_DIR / "summaries"
 SUMMARIES_DIR.mkdir(parents=True, exist_ok=True)
 
 
+# ============================================================================
+# COST MODEL CONSTANTS
+# ============================================================================
+COST_NEW_CONSTRUCTION_PER_SF = 350
+COST_REMODEL_PER_SF = 150
+COST_ADDITION_PER_SF = 300
+COST_GARAGE_PER_SF = 200
+COST_LANDSCAPE_FLAT = 30000
+COST_POOL_FLAT = 70000
+SOFT_COST_RATE = 0.06
+FINANCING_RATE = 0.10
+FINANCING_TERM_MONTHS = 15
+FINANCING_POINTS = 0.01
+
+
 def _pick_purchase_and_exit(
     timeline: List[Dict[str, Any]]
 ) -> Tuple[Optional[Dict[str, Any]], Optional[Dict[str, Any]]]:
@@ -220,6 +235,7 @@ def _build_headline_metrics(redfin: Dict[str, Any]) -> Dict[str, Any]:
     spread = None
     roi_pct = None
     hold_days = None
+    spread_per_day = None
 
     if purchase_price is not None and exit_price is not None:
         spread = exit_price - purchase_price
@@ -231,6 +247,8 @@ def _build_headline_metrics(redfin: Dict[str, Any]) -> Dict[str, Any]:
             d0 = datetime.fromisoformat(purchase_date)
             d1 = datetime.fromisoformat(exit_date)
             hold_days = (d1 - d0).days
+            if hold_days and spread is not None:
+                spread_per_day = round(spread / max(hold_days, 1), 2)
         except Exception:
             hold_days = None
 
@@ -252,6 +270,18 @@ def _build_headline_metrics(redfin: Dict[str, Any]) -> Dict[str, Any]:
         if original_sf > 0:
             sf_pct_change = round(100.0 * sf_added / original_sf, 1)
 
+    # Get lot SF
+    lot_sf = redfin.get("lot_sf") or public_records.get("lot_sf")
+    
+    # Calculate FAR if possible
+    far_before = None
+    far_after = None
+    if lot_sf and lot_sf > 0:
+        if original_sf:
+            far_before = round(original_sf / lot_sf, 2)
+        if new_sf:
+            far_after = round(new_sf / lot_sf, 2)
+
     return {
         "purchase_price": purchase_price,
         "purchase_date": purchase_date,
@@ -260,11 +290,383 @@ def _build_headline_metrics(redfin: Dict[str, Any]) -> Dict[str, Any]:
         "spread": spread,
         "roi_pct": roi_pct,
         "hold_days": hold_days,
+        "spread_per_day": spread_per_day,
         "list_price": list_price,  # current listing price (separate from exit)
         "original_sf": original_sf,
         "new_sf": new_sf,
         "sf_added": sf_added,
         "sf_pct_change": sf_pct_change,
+        "lot_sf": lot_sf,
+        "far_before": far_before,
+        "far_after": far_after,
+    }
+
+
+def _build_property_snapshot(redfin: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Build property snapshot data for section 1.
+    Includes: address, beds, baths, building_sf, lot_sf, property_type, status, status_date, status_price
+    """
+    address = redfin.get("address", "Unknown address")
+    beds = redfin.get("beds")
+    baths = redfin.get("baths")
+    building_sf = redfin.get("building_sf") or redfin.get("listing_building_sf")
+    lot_sf = redfin.get("lot_sf") or (redfin.get("public_records") or {}).get("lot_sf")
+    
+    # Determine property type from context (default to Single-Family)
+    property_type = "Single-Family"
+    
+    # Determine status from timeline
+    timeline = redfin.get("timeline") or []
+    status = "Unknown"
+    status_date = None
+    status_price = None
+    
+    # Check if there's an active listing
+    list_price = redfin.get("list_price")
+    if list_price:
+        status = "Active Listing"
+        status_price = list_price
+        # Look for most recent listing date
+        for event in reversed(timeline):
+            if event.get("event") == "listed":
+                status_date = event.get("date")
+                break
+    
+    # Check for sold status
+    sold_events = [e for e in timeline if e.get("event") == "sold"]
+    if sold_events:
+        last_sold = sold_events[-1]
+        status = "Sold"
+        status_date = last_sold.get("date")
+        status_price = last_sold.get("price")
+    
+    return {
+        "address_full": address,
+        "beds": beds,
+        "baths": baths,
+        "building_sf": building_sf,
+        "lot_sf": lot_sf,
+        "property_type": property_type,
+        "status": status,
+        "status_date": status_date,
+        "status_price": status_price,
+    }
+
+
+def _determine_scope_level(permits: List[Dict[str, Any]]) -> str:
+    """
+    Determine scope level from permit analysis.
+    Returns: LIGHT, MEDIUM, or HEAVY
+    """
+    if not permits:
+        return "UNKNOWN"
+    
+    building_permits = 0
+    demo_permits = 0
+    total_permits = len(permits)
+    
+    for p in permits:
+        ptype = (p.get("permit_type") or p.get("Type") or "").upper()
+        if "BLDG" in ptype or "BUILDING" in ptype or "ADDITION" in ptype or "NEW" in ptype:
+            building_permits += 1
+        if "DEMO" in ptype:
+            demo_permits += 1
+    
+    # Check for new construction keywords in work descriptions
+    is_new_construction = False
+    for p in permits:
+        work_desc = (p.get("Work_Description") or "").upper()
+        if "NEW" in work_desc and ("CONSTRUCTION" in work_desc or "DWELLING" in work_desc or "SFD" in work_desc):
+            is_new_construction = True
+            break
+    
+    if is_new_construction or (demo_permits >= 1 and building_permits >= 2):
+        return "HEAVY"
+    elif building_permits >= 1 and total_permits >= 3:
+        return "MEDIUM"
+    else:
+        return "LIGHT"
+
+
+def _build_construction_summary(
+    redfin: Dict[str, Any], 
+    permits: List[Dict[str, Any]], 
+    metrics: Dict[str, Any]
+) -> Dict[str, Any]:
+    """
+    Build construction summary data for section 5.
+    SF logic:
+    1. If LADBS provides new/existing SF, use those
+    2. Fallback to Redfin SF:
+       - "New Construction" → existing_sf = 0, added_sf = building_sf
+       - "Addition" → existing_sf = prior SF, added_sf = final - existing
+       - Default → existing_sf = building_sf, added_sf = 0
+    """
+    lot_sf = metrics.get("lot_sf")
+    final_sf = metrics.get("new_sf") or redfin.get("building_sf")
+    existing_sf = metrics.get("original_sf")
+    added_sf = metrics.get("sf_added") or 0
+    
+    # Check permit work descriptions for new construction
+    is_new_construction = False
+    for p in permits:
+        work_desc = (p.get("Work_Description") or "").upper()
+        if "NEW" in work_desc and ("CONSTRUCTION" in work_desc or "DWELLING" in work_desc or "SFD" in work_desc):
+            is_new_construction = True
+            break
+    
+    # Apply SF logic
+    if is_new_construction:
+        existing_sf = 0
+        added_sf = final_sf or 0
+    elif existing_sf is None and final_sf:
+        existing_sf = final_sf
+        added_sf = 0
+    elif existing_sf and final_sf and added_sf == 0:
+        added_sf = max(0, final_sf - existing_sf)
+    
+    scope_level = _determine_scope_level(permits)
+    
+    return {
+        "existing_sf": existing_sf,
+        "added_sf": added_sf,
+        "final_sf": final_sf,
+        "lot_sf": lot_sf,
+        "scope_level": scope_level,
+        "is_new_construction": is_new_construction,
+    }
+
+
+def _build_cost_model(
+    metrics: Dict[str, Any], 
+    construction: Dict[str, Any], 
+    permits: List[Dict[str, Any]]
+) -> Dict[str, Any]:
+    """
+    Build cost model data for section 6.
+    Uses fixed cost assumptions from constants.
+    """
+    purchase_price = metrics.get("purchase_price") or 0
+    existing_sf = construction.get("existing_sf") or 0
+    added_sf = construction.get("added_sf") or 0
+    final_sf = construction.get("final_sf") or 0
+    is_new_construction = construction.get("is_new_construction", False)
+    
+    # Check for pool in permits
+    has_pool = False
+    for p in permits:
+        work_desc = (p.get("Work_Description") or "").upper()
+        ptype = (p.get("permit_type") or "").upper()
+        if "POOL" in work_desc or "POOL" in ptype:
+            has_pool = True
+            break
+    
+    # Check for garage in permits
+    garage_sf = 0
+    for p in permits:
+        work_desc = (p.get("Work_Description") or "").upper()
+        if "GARAGE" in work_desc:
+            # Estimate garage size at 400 SF if mentioned
+            garage_sf = 400
+            break
+    
+    # Calculate costs
+    cost_remodel = 0
+    cost_addition = 0
+    cost_new_construction = 0
+    
+    if is_new_construction:
+        cost_new_construction = final_sf * COST_NEW_CONSTRUCTION_PER_SF
+    else:
+        # If not new construction, assume remodel of existing + addition
+        if existing_sf > 0:
+            cost_remodel = existing_sf * COST_REMODEL_PER_SF
+        if added_sf > 0:
+            cost_addition = added_sf * COST_ADDITION_PER_SF
+    
+    cost_garage = garage_sf * COST_GARAGE_PER_SF
+    cost_landscape = COST_LANDSCAPE_FLAT
+    cost_pool = COST_POOL_FLAT if has_pool else 0
+    
+    hard_cost_total = (
+        cost_remodel + cost_addition + cost_new_construction + 
+        cost_garage + cost_landscape + cost_pool
+    )
+    
+    soft_costs = round(hard_cost_total * SOFT_COST_RATE)
+    
+    # Simple financing calculation
+    # Assume loan amount = hard_cost_total
+    # Interest = 10% annual, 15 month term
+    # Points = 1%
+    loan_amount = hard_cost_total
+    interest_cost = round(loan_amount * FINANCING_RATE * (FINANCING_TERM_MONTHS / 12))
+    points_cost = round(loan_amount * FINANCING_POINTS)
+    financing_cost = interest_cost + points_cost
+    
+    total_project_cost = purchase_price + hard_cost_total + soft_costs + financing_cost
+    
+    # Calculate estimated profit
+    exit_price = metrics.get("exit_price") or metrics.get("list_price")
+    estimated_profit = None
+    if exit_price and total_project_cost > 0:
+        estimated_profit = exit_price - total_project_cost
+    
+    return {
+        "remodel_sf": existing_sf if not is_new_construction else 0,
+        "addition_sf": added_sf if not is_new_construction else 0,
+        "new_construction_sf": final_sf if is_new_construction else 0,
+        "garage_sf": garage_sf,
+        "has_pool": has_pool,
+        "cost_remodel": cost_remodel,
+        "cost_addition": cost_addition,
+        "cost_new_construction": cost_new_construction,
+        "cost_garage": cost_garage,
+        "cost_landscape": cost_landscape,
+        "cost_pool": cost_pool,
+        "hard_cost_total": hard_cost_total,
+        "soft_costs": soft_costs,
+        "financing_cost": financing_cost,
+        "total_project_cost": total_project_cost,
+        "estimated_profit": estimated_profit,
+        "purchase_price": purchase_price,
+    }
+
+
+def _build_permit_overview(permits: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """
+    Build permit overview data for section 7.
+    Categorizes permits and calculates counts.
+    """
+    total_permits = len(permits)
+    building_permits = []
+    demo_permits = []
+    mep_permits = []
+    other_permits = []
+    
+    for p in permits:
+        ptype = (p.get("permit_type") or p.get("Type") or "").upper()
+        
+        if "BLDG" in ptype or "BUILDING" in ptype or "ADDITION" in ptype:
+            building_permits.append(p)
+        elif "DEMO" in ptype:
+            demo_permits.append(p)
+        elif any(kw in ptype for kw in ["ELEC", "PLUMB", "MECH", "HVAC", "GAS"]):
+            mep_permits.append(p)
+        else:
+            other_permits.append(p)
+    
+    scope_level = _determine_scope_level(permits)
+    
+    return {
+        "total_permits": total_permits,
+        "building_count": len(building_permits),
+        "demo_count": len(demo_permits),
+        "mep_count": len(mep_permits),
+        "other_count": len(other_permits),
+        "building_permits": building_permits,
+        "demo_permits": demo_permits,
+        "mep_permits": mep_permits,
+        "other_permits": other_permits,
+        "scope_level": scope_level,
+    }
+
+
+def _build_team_info(permits: List[Dict[str, Any]], cslb_data: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+    """
+    Build team info for section 8.
+    Only includes roles that actually exist in the data.
+    """
+    gc_name = None
+    gc_license = None
+    gc_cslb_url = None
+    architect_name = None
+    engineer_name = None
+    
+    # Extract from permits
+    for p in permits:
+        if not gc_name and p.get("contractor"):
+            gc_name = p.get("contractor")
+            gc_license = p.get("contractor_license")
+        if not architect_name and p.get("architect"):
+            architect_name = p.get("architect")
+        if not engineer_name and p.get("engineer"):
+            engineer_name = p.get("engineer")
+    
+    # Add CSLB data if available
+    if cslb_data:
+        gc_cslb_url = cslb_data.get("detail_url")
+        if not gc_name and cslb_data.get("business_name"):
+            gc_name = cslb_data.get("business_name")
+        if not gc_license and cslb_data.get("license_number"):
+            gc_license = cslb_data.get("license_number")
+    
+    return {
+        "gc_name": gc_name,
+        "gc_license": gc_license,
+        "gc_cslb_url": gc_cslb_url,
+        "architect_name": architect_name,
+        "engineer_name": engineer_name,
+    }
+
+
+def _build_data_notes(
+    metrics: Dict[str, Any], 
+    property_snapshot: Dict[str, Any],
+    construction: Dict[str, Any],
+    permit_timeline: Dict[str, Any],
+    permits: List[Dict[str, Any]]
+) -> List[str]:
+    """
+    Build data notes for section 9.
+    Lists issues and missing data in human-readable form.
+    """
+    notes = []
+    
+    # Check lot size
+    if not property_snapshot.get("lot_sf"):
+        notes.append("Lot size not found in Redfin/public record; FAR not calculated.")
+    
+    # Check purchase info
+    if not metrics.get("purchase_price"):
+        notes.append("Purchase price not found; spread and ROI omitted.")
+    
+    # Check CofO
+    if not permit_timeline.get("construction_completed_date"):
+        notes.append("CofO date not found; construction completion inferred from last inspection.")
+    
+    # Check SF data
+    if construction.get("existing_sf") is None and construction.get("final_sf"):
+        notes.append("Original SF not available; construction summary based on current SF only.")
+    
+    # Check permits
+    if not permits:
+        notes.append("No LADBS permits found; permit analysis not available.")
+    
+    return notes
+
+
+def _build_links(
+    redfin_url: str, 
+    redfin: Dict[str, Any], 
+    cslb_data: Optional[Dict[str, Any]]
+) -> Dict[str, Any]:
+    """
+    Build links for section 10.
+    """
+    apn = None
+    tax = redfin.get("tax") or {}
+    if isinstance(tax, dict):
+        apn = tax.get("apn")
+    
+    # LADBS permit search URL
+    ladbs_url = "https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr"
+    
+    return {
+        "redfin_url": redfin_url,
+        "ladbs_url": ladbs_url,
+        "cslb_url": cslb_data.get("detail_url") if cslb_data else None,
     }
 
 
@@ -382,6 +784,15 @@ def run_full_comp_pipeline(url: str) -> Dict[str, Any]:
             print(f"[WARN] CSLB lookup failed: {e}")
             _log_failure(LOGS_DIR, url, "cslb", e)
 
+    # Build new report sections
+    property_snapshot = _build_property_snapshot(redfin_data)
+    construction_summary = _build_construction_summary(redfin_data, permits, metrics)
+    cost_model = _build_cost_model(metrics, construction_summary, permits)
+    permit_overview = _build_permit_overview(permits)
+    team_info = _build_team_info(permits, cslb_contractor)
+    data_notes = _build_data_notes(metrics, property_snapshot, construction_summary, permit_timeline, permits)
+    links = _build_links(url, redfin_data, cslb_contractor)
+
     combined: Dict[str, Any] = {
         "url": url,
         "address": redfin_data.get("address", "Unknown address"),
@@ -398,6 +809,14 @@ def run_full_comp_pipeline(url: str) -> Dict[str, Any]:
         "redfin": redfin_data,
         "project_contacts": project_contacts or None,
         "cslb_contractor": cslb_contractor,
+        # New report sections
+        "property_snapshot": property_snapshot,
+        "construction_summary": construction_summary,
+        "cost_model": cost_model,
+        "permit_overview": permit_overview,
+        "team_info": team_info,
+        "data_notes": data_notes,
+        "links": links,
     }
 
     try:
@@ -461,6 +880,10 @@ def run_multiple(urls: List[str]) -> List[Dict[str, Any]]:
                     "spread": None,
                     "roi_pct": None,
                     "hold_days": None,
+                    "spread_per_day": None,
+                    "lot_sf": None,
+                    "far_before": None,
+                    "far_after": None,
                 },
                 "current_summary": "—",
                 "public_record_summary": "—",
@@ -471,6 +894,56 @@ def run_multiple(urls: List[str]) -> List[Dict[str, Any]]:
                 "ladbs": {"permits": []},
                 "project_contacts": None,
                 "cslb_contractor": None,
+                "permit_timeline": {},
+                "project_durations": {},
+                "property_snapshot": {
+                    "address_full": "Error processing property",
+                    "beds": None,
+                    "baths": None,
+                    "building_sf": None,
+                    "lot_sf": None,
+                    "property_type": "Unknown",
+                    "status": "Unknown",
+                    "status_date": None,
+                    "status_price": None,
+                },
+                "construction_summary": {
+                    "existing_sf": None,
+                    "added_sf": None,
+                    "final_sf": None,
+                    "lot_sf": None,
+                    "scope_level": "UNKNOWN",
+                    "is_new_construction": False,
+                },
+                "cost_model": {
+                    "total_project_cost": None,
+                    "estimated_profit": None,
+                },
+                "permit_overview": {
+                    "total_permits": 0,
+                    "building_count": 0,
+                    "demo_count": 0,
+                    "mep_count": 0,
+                    "other_count": 0,
+                    "building_permits": [],
+                    "demo_permits": [],
+                    "mep_permits": [],
+                    "other_permits": [],
+                    "scope_level": "UNKNOWN",
+                },
+                "team_info": {
+                    "gc_name": None,
+                    "gc_license": None,
+                    "gc_cslb_url": None,
+                    "architect_name": None,
+                    "engineer_name": None,
+                },
+                "data_notes": ["Error processing property data."],
+                "links": {
+                    "redfin_url": url,
+                    "ladbs_url": None,
+                    "cslb_url": None,
+                },
             })
             # continue to next URL without raising
     return results
