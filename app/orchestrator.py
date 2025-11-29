@@ -720,7 +720,7 @@ def _extract_team_network(permits: List[Dict[str, Any]]) -> Dict[str, Any]:
     }
 
 
-def _build_property_snapshot(redfin: Dict[str, Any], metrics: Dict[str, Any]) -> Dict[str, Any]:
+def _build_property_snapshot(redfin: Dict[str, Any], metrics: Dict[str, Any], permits: Optional[List[Dict[str, Any]]] = None) -> Dict[str, Any]:
     """
     Build property snapshot with canonical field names matching golden test format.
     
@@ -732,9 +732,66 @@ def _build_property_snapshot(redfin: Dict[str, Any], metrics: Dict[str, Any]) ->
     address_full = redfin.get("address", "Unknown address")
     beds = redfin.get("beds") or redfin.get("listing_beds")
     baths = redfin.get("baths") or redfin.get("listing_baths")
+    
+    # Format beds/baths nicely (remove .0 for whole numbers)
+    if beds and beds == int(beds):
+        beds = int(beds)
+    if baths and baths == int(baths):
+        baths = int(baths)
+    
     building_sf = redfin.get("building_sf") or metrics.get("building_sf_after")
     lot_sf = redfin.get("lot_sf") or metrics.get("land_sf")
     year_built = redfin.get("year_built")
+    
+    # Enhanced year built logic: detect if property was substantially rebuilt
+    # If there are recent major building permits, use the completion year instead of original year
+    if permits and year_built:
+        permit_years = []
+        for permit in permits:
+            # Look for building/new construction permits that have been finaled
+            permit_type = (permit.get("permit_type") or permit.get("Type") or "").upper()
+            status = (permit.get("status") or permit.get("Status") or "").upper()
+            
+            if any(keyword in permit_type for keyword in ["BLDG", "BUILDING", "NEW", "ADDITION"]):
+                # Check if status contains "FINAL" or "COFO" with a date
+                # Format: "CofO Issued on 5/3/2021" or "Finaled on 12/15/2022"
+                status_date_match = re.search(r'(?:CofO|Final|Complet).*?(\d{1,2}/\d{1,2}/\d{4})', status, re.I)
+                if status_date_match:
+                    date_str = status_date_match.group(1)
+                    try:
+                        parts = date_str.split("/")
+                        if len(parts) == 3:
+                            permit_year = int(parts[2])
+                            permit_years.append(permit_year)
+                    except (ValueError, IndexError):
+                        pass
+                
+                # Also check status_history
+                status_history = permit.get("status_history") or permit.get("raw_details", {}).get("status_history") or []
+                for event in status_history:
+                    event_name = (event.get("event") or "").upper()
+                    date_str = event.get("date") or ""
+                    if any(keyword in event_name for keyword in ["FINAL", "COMPLET", "COFO", "CERTIFICATE"]):
+                        try:
+                            # Parse date format MM/DD/YYYY
+                            if "/" in date_str:
+                                parts = date_str.split("/")
+                                if len(parts) == 3 and len(parts[2]) == 4:
+                                    permit_year = int(parts[2])
+                                    permit_years.append(permit_year)
+                                    break
+                        except (ValueError, IndexError):
+                            continue
+        
+        # If we found permit completion years and they're recent (within last 10 years)
+        # and significantly newer than original year built, use the permit year
+        if permit_years:
+            latest_permit_year = max(permit_years)
+            current_year = datetime.now().year
+            
+            # If permit is recent (within 10 years) and at least 20 years newer than original
+            if (current_year - latest_permit_year <= 10) and (latest_permit_year - year_built >= 20):
+                year_built = latest_permit_year
     
     # Property type - get from Redfin or default
     property_type = redfin.get("property_type") or "Single-family"
@@ -754,6 +811,7 @@ def _build_property_snapshot(redfin: Dict[str, Any], metrics: Dict[str, Any]) ->
     status_price = None
     list_price_before_sale = None
     list_date = None
+    days_on_market = None
     
     if sold_events:
         # Sort by date and get the most recent sale
@@ -770,6 +828,15 @@ def _build_property_snapshot(redfin: Dict[str, Any], metrics: Dict[str, Any]) ->
                 last_list = sorted(prior_listings, key=lambda e: e.get("date") or "")[-1]
                 list_price_before_sale = last_list.get("price")
                 list_date = last_list.get("date")
+                
+                # Calculate days on market
+                if list_date and status_date:
+                    try:
+                        list_dt = datetime.fromisoformat(list_date)
+                        sold_dt = datetime.fromisoformat(status_date)
+                        days_on_market = (sold_dt - list_dt).days
+                    except Exception:
+                        pass
             elif listed_events:
                 # Fallback: use any listing event
                 first_list = sorted(listed_events, key=lambda e: e.get("date") or "")[0]
@@ -786,6 +853,15 @@ def _build_property_snapshot(redfin: Dict[str, Any], metrics: Dict[str, Any]) ->
                 last_listed = sorted(listed_events, key=lambda e: e.get("date") or "")[-1]
                 status_date = last_listed.get("date")
                 list_date = status_date
+                
+                # Days on market = days since listing
+                if list_date:
+                    try:
+                        list_dt = datetime.fromisoformat(list_date)
+                        now_dt = datetime.now()
+                        days_on_market = (now_dt - list_dt).days
+                    except Exception:
+                        pass
         elif listed_events:
             # Has listing events but no current price
             last_listed = sorted(listed_events, key=lambda e: e.get("date") or "")[-1]
@@ -812,6 +888,8 @@ def _build_property_snapshot(redfin: Dict[str, Any], metrics: Dict[str, Any]) ->
         "list_price_before_sale": list_price_before_sale,
         "list_date": list_date,
         "price_per_sf": price_per_sf,
+        "days_on_market": days_on_market,
+        "price_history": timeline,  # Full price history for reference
     }
 
 
@@ -1290,7 +1368,7 @@ def run_full_comp_pipeline(url: str) -> Dict[str, Any]:
     ladbs_error = None if ladbs_ok else ladbs_data.get("note", "LADBS data unavailable")
 
     # Build new report sections
-    property_snapshot = _build_property_snapshot(redfin_data, metrics)
+    property_snapshot = _build_property_snapshot(redfin_data, metrics, ladbs_data.get("permits", []))
     construction_summary = _build_construction_summary(redfin_data, metrics, permit_categories)
     cost_model = _build_cost_model(metrics, construction_summary, permit_categories)
     timeline_summary = _build_timeline_summary(metrics, permit_timeline, project_durations)
