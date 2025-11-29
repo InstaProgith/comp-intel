@@ -169,6 +169,46 @@ def history():
     )
 
 
+@app.route("/report", methods=["POST"])
+def single_report():
+    """
+    Render a clean single-building report.
+    This route renders report.html which does NOT include:
+    - Input card / textarea / "Run Analysis AI" button
+    - Search history table
+    - Repeat players block
+    
+    Used for PDF generation and clean report viewing.
+    """
+    urls_text = (request.form.get("urls") or "").strip()
+    if not urls_text:
+        return render_template(
+            "report.html",
+            r=None,
+            year=datetime.now().year,
+        )
+    
+    # Parse URLs - take only the first one for single report
+    raw_lines = [u.strip() for u in urls_text.splitlines() if u.strip()]
+    valid_urls = [u for u in raw_lines if u.startswith("https://www.redfin.com/")]
+    
+    if not valid_urls:
+        return render_template(
+            "report.html",
+            r=None,
+            year=datetime.now().year,
+        )
+    
+    # Run pipeline for the first URL only
+    result = run_full_comp_pipeline(valid_urls[0])
+    
+    return render_template(
+        "report.html",
+        r=result,
+        year=datetime.now().year,
+    )
+
+
 @app.route("/api/history")
 def api_history():
     """API endpoint for search history data."""

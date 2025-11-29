@@ -443,7 +443,7 @@
           </tr>
           <tr>
             <td>Existing SF</td>
-            <td>{% if cs.existing_sf %}{{ "{:,.0f}".format(cs.existing_sf) }} SF{% else %}<span class="value-muted">Unknown</span>{% endif %}</td>
+            <td>{% if cs.is_new_construction %}<span class="value-muted">0 (New Construction)</span>{% elif cs.existing_sf %}{{ "{:,.0f}".format(cs.existing_sf) }} SF{% else %}<span class="value-muted">Unknown</span>{% endif %}</td>
           </tr>
           <tr>
             <td>Added SF</td>
@@ -505,7 +505,7 @@
         <table class="metrics-table">
           <tr>
             <td>Existing SF</td>
-            <td>{% if cs.existing_sf %}{{ "{:,.0f}".format(cs.existing_sf) }} SF{% elif cs.is_new_construction %}<span class="value-muted">0 (New Construction)</span>{% else %}<span class="value-muted">Unknown</span>{% endif %}</td>
+            <td>{% if cs.is_new_construction %}<span class="value-muted">0 (New Construction)</span>{% elif cs.existing_sf %}{{ "{:,.0f}".format(cs.existing_sf) }} SF{% else %}<span class="value-muted">Unknown</span>{% endif %}</td>
           </tr>
           <tr>
             <td>Added SF</td>
@@ -608,7 +608,7 @@
         {% set other_permits = permits | rejectattr('permit_type', 'match', '.*Bldg.*|.*Building.*|.*Demo.*|.*Electrical.*|.*Plumbing.*|.*Mechanical.*') | list %}
 
         {% if building_permits %}
-        <div style="font-size:11px; font-weight:700; color:#666; margin:16px 0 10px; text-transform:uppercase; letter-spacing:0.5px;">Building Permits</div>
+        <div style="font-size:11px; font-weight:700; color:#666; margin:16px 0 10px; text-transform:uppercase; letter-spacing:0.5px;">Building Permits ({{ pc.building_count or building_permits | length }})</div>
         {% for p in building_permits %}
         <div class="permit-item">
           <div class="permit-header">
@@ -623,7 +623,7 @@
         {% endif %}
 
         {% if demo_permits %}
-        <div style="font-size:11px; font-weight:700; color:#666; margin:16px 0 10px; text-transform:uppercase; letter-spacing:0.5px;">Demolition</div>
+        <div style="font-size:11px; font-weight:700; color:#666; margin:16px 0 10px; text-transform:uppercase; letter-spacing:0.5px;">Demolition ({{ pc.demo_count or demo_permits | length }})</div>
         {% for p in demo_permits %}
         <div class="permit-item">
           <div class="permit-header">
@@ -638,7 +638,7 @@
         {% endif %}
 
         {% if mep_permits %}
-        <div style="font-size:11px; font-weight:700; color:#666; margin:16px 0 10px; text-transform:uppercase; letter-spacing:0.5px;">MEP</div>
+        <div style="font-size:11px; font-weight:700; color:#666; margin:16px 0 10px; text-transform:uppercase; letter-spacing:0.5px;">MEP ({{ pc.mep_count or mep_permits | length }})</div>
         {% for p in mep_permits %}
         <div class="permit-item">
           <div class="permit-header">
@@ -650,7 +650,7 @@
         {% endif %}
 
         {% if other_permits %}
-        <div style="font-size:11px; font-weight:700; color:#666; margin:16px 0 10px; text-transform:uppercase; letter-spacing:0.5px;">Other</div>
+        <div style="font-size:11px; font-weight:700; color:#666; margin:16px 0 10px; text-transform:uppercase; letter-spacing:0.5px;">Other ({{ pc.other_count or other_permits | length }})</div>
         {% for p in other_permits %}
         <div class="permit-item">
           <div class="permit-header">
