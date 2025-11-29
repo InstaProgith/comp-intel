@@ -70,27 +70,44 @@ def get_repeat_players() -> Dict[str, Any]:
     """
     Compute repeat player stats from search log.
     Returns dict with top GCs, architects, engineers by count with addresses.
+    
+    NEW: Dedupe by property - each property counts only once per team member,
+    even if analyzed multiple times.
     """
     with _search_log_lock:
-        gc_map: Dict[str, List[str]] = {}
-        arch_map: Dict[str, List[str]] = {}
-        eng_map: Dict[str, List[str]] = {}
+        gc_map: Dict[str, set] = {}  # Maps GC name to set of canonical addresses
+        arch_map: Dict[str, set] = {}
+        eng_map: Dict[str, set] = {}
 
         for entry in _search_log:
             addr = entry.get("address", "Unknown")
+            # Create canonical address key (normalize for deduplication)
+            canonical_addr = _canonicalize_address(addr)
+            
             gc = entry.get("primary_gc_name")
             arch = entry.get("primary_architect_name")
             eng = entry.get("primary_engineer_name")
 
             if _is_valid_name(gc):
-                gc_map.setdefault(gc, []).append(addr)
+                if gc not in gc_map:
+                    gc_map[gc] = set()
+                gc_map[gc].add(canonical_addr)
             if _is_valid_name(arch):
-                arch_map.setdefault(arch, []).append(addr)
+                if arch not in arch_map:
+                    arch_map[arch] = set()
+                arch_map[arch].add(canonical_addr)
             if _is_valid_name(eng):
-                eng_map.setdefault(eng, []).append(addr)
+                if eng not in eng_map:
+                    eng_map[eng] = set()
+                eng_map[eng].add(canonical_addr)
 
-        def _top_n(m: Dict[str, List[str]], n: int = 10) -> List[Dict[str, Any]]:
-            sorted_items = sorted(m.items(), key=lambda x: len(x[1]), reverse=True)[:n]
+        def _top_n(m: Dict[str, set], n: int = 10) -> List[Dict[str, Any]]:
+            # Convert sets to sorted lists and sort by count
+            sorted_items = sorted(
+                [(k, sorted(list(v))) for k, v in m.items()],
+                key=lambda x: len(x[1]),
+                reverse=True
+            )[:n]
             return [{"name": k, "count": len(v), "addresses": v} for k, v in sorted_items]
 
         return {
@@ -110,6 +127,24 @@ def _is_valid_name(name: Optional[str]) -> bool:
     # Common invalid/placeholder values
     invalid_values = {"N/A", "NA", "NONE", "UNKNOWN", "-", "--", ""}
     return stripped.upper() not in invalid_values
+
+
+def _canonicalize_address(address: str) -> str:
+    """
+    Normalize an address for deduplication.
+    Removes extra spaces, converts to uppercase, removes special chars.
+    """
+    if not address:
+        return ""
+    # Convert to uppercase
+    addr = address.upper()
+    # Remove common separators and extra whitespace
+    addr = re.sub(r'[,.\s]+', ' ', addr)
+    # Remove special characters
+    addr = re.sub(r'[^\w\s]', '', addr)
+    # Collapse whitespace
+    addr = ' '.join(addr.split())
+    return addr.strip()
 
 
 # Load search log on module import
@@ -1001,16 +1036,18 @@ def _build_data_notes(
     if not ladbs_ok:
         notes.append("LADBS data unavailable; permit history not verified.")
     
-    # CRITICAL: Purchase price unknown
-    if not metrics.get("purchase_price"):
+    # CRITICAL: Purchase price unknown or found
+    purchase_price = metrics.get("purchase_price")
+    purchase_date = metrics.get("purchase_date")
+    
+    if purchase_price and purchase_date:
+        # Purchase was found - note which sale was used
+        notes.append(f"Developer purchase inferred from Redfin sale on {purchase_date} at ${purchase_price:,.0f}.")
+    elif not purchase_price:
+        # Purchase unknown
         notes.append("Purchase price unknown (no prior developer sale in Redfin history); spread, ROI, and profit not computed.")
     
-    # Purchase date unknown
-    if not metrics.get("purchase_date") and metrics.get("purchase_price"):
-        notes.append("Purchase date unknown; timeline durations may be incomplete.")
-    
     # Timeline issues: check if any purchase-dependent stages were skipped
-    purchase_date = metrics.get("purchase_date")
     plans_submitted = permit_timeline.get("plans_submitted_date")
     
     if plans_submitted and purchase_date:
@@ -1018,9 +1055,14 @@ def _build_data_notes(
             p_dt = datetime.fromisoformat(purchase_date)
             s_dt = datetime.fromisoformat(plans_submitted)
             if p_dt > s_dt:
-                notes.append("Purchase → plans duration omitted because available purchase date is after permit dates.")
+                notes.append("Purchase → plans duration omitted because purchase date occurs after permit submission.")
         except Exception:
             pass
+    
+    # Check if timeline stages are sparse
+    stages = timeline_summary.get("stages") or []
+    if len(stages) < 2 and purchase_date:
+        notes.append("Timeline incomplete; some permit milestones not found in LADBS records.")
     
     # Lot size / FAR missing
     if not metrics.get("land_sf"):
@@ -1028,11 +1070,15 @@ def _build_data_notes(
     
     # CofO date not found
     if not permit_timeline.get("construction_completed_date"):
-        notes.append("Certificate of Occupancy date not found; construction completion timing uncertain.")
+        notes.append("Certificate of Occupancy date not found in permits; construction completion timing uncertain.")
     
     # Building SF not available
     if not property_snapshot.get("building_sf"):
-        notes.append("Building SF not available from listing data.")
+        notes.append("Building square footage not available from Redfin listing data.")
+    
+    # Profit not computed note (only if purchase exists but profit is None)
+    if purchase_price and cost_model.get("estimated_profit") is None:
+        notes.append("Profit could not be estimated; exit price not available.")
     
     return notes
 
