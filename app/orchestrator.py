@@ -1225,7 +1225,7 @@ def _build_data_notes(
         notes.append("Building square footage not available from Redfin listing data.")
     
     # Profit not computed note (only if purchase exists but profit is None)
-    if purchase_price and cost_model.get("estimated_profit") is None:
+    if metrics.get("purchase_price") and cost_model.get("estimated_profit") is None:
         notes.append("Profit could not be estimated; exit price not available.")
     
     return notes
