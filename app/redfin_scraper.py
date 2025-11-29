@@ -104,6 +104,8 @@ def parse_redfin_html_listing(soup: BeautifulSoup, html_text: str) -> Dict[str, 
       - building_sf
       - current list_price (ONLY from active listing banner)
       - listing_year_built
+      - property_type
+      - price_per_sf
     
     CRITICAL RULE: list_price comes ONLY from [data-rf-test-id="abp-price"].
     NEVER use tax amounts, assessed values, or tax table numbers as list_price.
@@ -156,6 +158,28 @@ def parse_redfin_html_listing(soup: BeautifulSoup, html_text: str) -> Dict[str, 
             listing_year_built = int(year_str)
         except ValueError:
             listing_year_built = None
+    
+    # Property type
+    property_type: Optional[str] = None
+    prop_type_match = re.search(r'Property Type[:\s]+([^<\n]+)', html_text)
+    if prop_type_match:
+        property_type = prop_type_match.group(1).strip()
+        # Normalize common types
+        if 'single' in property_type.lower() and 'family' in property_type.lower():
+            property_type = "Single-family"
+        elif 'condo' in property_type.lower():
+            property_type = "Condo"
+        elif 'townhouse' in property_type.lower():
+            property_type = "Townhouse"
+    
+    # Price per SF
+    price_per_sf: Optional[float] = None
+    price_sf_match = re.search(r'\$([\d,]+)\s*/\s*Sq\.\s*Ft\.', html_text)
+    if price_sf_match:
+        try:
+            price_per_sf = float(price_sf_match.group(1).replace(",", ""))
+        except ValueError:
+            pass
 
     return {
         "address": address_text,
@@ -164,6 +188,8 @@ def parse_redfin_html_listing(soup: BeautifulSoup, html_text: str) -> Dict[str, 
         "building_sf": building_sf_val,
         "list_price": list_price_val,  # PRICE: from active listing banner ONLY
         "listing_year_built": listing_year_built,
+        "property_type": property_type,
+        "price_per_sf": price_per_sf,
     }
 
 
@@ -419,6 +445,8 @@ def get_redfin_data(url: str) -> Dict[str, Any]:
     building_sf = listing_parsed.get("building_sf")
     list_price = listing_parsed.get("list_price")  # PRICE: from active listing banner ONLY
     listing_year_built = listing_parsed.get("listing_year_built")
+    property_type = listing_parsed.get("property_type")
+    price_per_sf = listing_parsed.get("price_per_sf")
 
     # Public records / APN
     public_records: Dict[str, Any] = {}
@@ -473,11 +501,14 @@ def get_redfin_data(url: str) -> Dict[str, Any]:
         "listing_building_sf": building_sf,
         "listing_year_built": listing_year_built,
         "list_price": list_price,  # PRICE: from active listing banner ONLY
+        "property_type": property_type,
+        "price_per_sf": price_per_sf,
         # backward compatible top-level
         "beds": beds,
         "baths": baths,
         "building_sf": building_sf,
         "lot_sf": lot_sf,
+        "year_built": listing_year_built or public_records.get("year_built"),  # Prefer listing, fallback to public
         # timeline: real sale/list history ONLY - NO tax amounts, NO assessed values
         "timeline": sale_events,
         # tax + APN: Keep tax/assessed values separate from prices (NEVER used as prices)

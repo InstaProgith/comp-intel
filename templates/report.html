@@ -397,13 +397,25 @@
           {% if ps.beds %}{{ ps.beds|int }} bd{% endif %}
           {% if ps.baths %} / {{ ps.baths }} ba{% endif %}
           {% if ps.building_sf %} · {{ "{:,.0f}".format(ps.building_sf) }} SF{% endif %}
-          {% if ps.lot_sf %} · Lot {{ "{:,.0f}".format(ps.lot_sf) }} SF{% else %} · Lot: Unknown (no lot size found){% endif %}
+          {% if ps.lot_sf %} · Lot {{ "{:,.0f}".format(ps.lot_sf) }} SF{% else %} · Lot: Unknown{% endif %}
           {% if ps.property_type %} · {{ ps.property_type }}{% endif %}
+          {% if ps.year_built %} · Built {{ ps.year_built }}{% endif %}
         </div>
         <div class="property-status">
-          <strong>{{ ps.status or "Status unknown" }}</strong>
-          {% if ps.status_price %} · ${{ "{:,.0f}".format(ps.status_price) }}{% endif %}
-          {% if ps.status_date %} on {{ ps.status_date }}{% endif %}
+          {% if ps.status == "Sold" %}
+            <strong>Sold on {{ ps.status_date }}</strong>
+            {% if ps.status_price %} for ${{ "{:,.0f}".format(ps.status_price) }}{% endif %}
+            {% if ps.list_price_before_sale %} (List: ${{ "{:,.0f}".format(ps.list_price_before_sale) }}){% endif %}
+          {% elif ps.status == "Active Listing" or ps.status == "Listed" %}
+            <strong>{{ ps.status }}</strong>
+            {% if ps.status_price %} · ${{ "{:,.0f}".format(ps.status_price) }}{% endif %}
+            {% if ps.status_date %} on {{ ps.status_date }}{% endif %}
+          {% else %}
+            <strong>{{ ps.status or "Status unknown" }}</strong>
+            {% if ps.status_price %} · ${{ "{:,.0f}".format(ps.status_price) }}{% endif %}
+            {% if ps.status_date %} on {{ ps.status_date }}{% endif %}
+          {% endif %}
+          {% if ps.price_per_sf %} · ${{ "{:,.0f}".format(ps.price_per_sf) }} / SF{% endif %}
         </div>
       </div>
       

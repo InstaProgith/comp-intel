@@ -722,39 +722,81 @@ def _extract_team_network(permits: List[Dict[str, Any]]) -> Dict[str, Any]:
 
 def _build_property_snapshot(redfin: Dict[str, Any], metrics: Dict[str, Any]) -> Dict[str, Any]:
     """
-    Build property snapshot with canonical field names.
+    Build property snapshot with canonical field names matching golden test format.
+    
+    Expected format:
+    Line 1: "3440 Cattaraugus Ave, Culver City, CA 90232"
+    Line 2: "5 bd / 5.5 ba · 3,595 SF · Lot 5,397 SF · Single-family · Built 2024"
+    Line 3: "Sold on Sep 5, 2025 for $3,750,000 (List: $3,988,000) · $1,043 / SF"
     """
     address_full = redfin.get("address", "Unknown address")
     beds = redfin.get("beds") or redfin.get("listing_beds")
     baths = redfin.get("baths") or redfin.get("listing_baths")
-    building_sf = metrics.get("building_sf_after") or redfin.get("building_sf")
-    lot_sf = metrics.get("land_sf")
+    building_sf = redfin.get("building_sf") or metrics.get("building_sf_after")
+    lot_sf = redfin.get("lot_sf") or metrics.get("land_sf")
+    year_built = redfin.get("year_built")
     
-    # Determine property type from permits or default
-    property_type = "Single-Family"  # Default
+    # Property type - get from Redfin or default
+    property_type = redfin.get("property_type") or "Single-family"
+    
+    # Get price/SF from Redfin or calculate
+    price_per_sf = redfin.get("price_per_sf")
     
     # Determine status based on timeline
     timeline = redfin.get("timeline") or []
+    
+    # Find the most recent sold event
     sold_events = [e for e in timeline if e.get("event") == "sold"]
-    list_price = redfin.get("list_price")
+    listed_events = [e for e in timeline if e.get("event") == "listed"]
     
     status = "Unknown"
     status_date = None
     status_price = None
+    list_price_before_sale = None
+    list_date = None
     
     if sold_events:
+        # Sort by date and get the most recent sale
         last_sold = sorted(sold_events, key=lambda e: e.get("date") or "")[-1]
         status = "Sold"
         status_date = last_sold.get("date")
         status_price = last_sold.get("price")
-    elif list_price:
-        status = "Active Listing"
-        status_price = list_price
-        # Try to find list date from timeline
-        listed_events = [e for e in timeline if e.get("event") == "listed"]
-        if listed_events:
+        
+        # Look for a listing event before this sale (could be the original list price)
+        if listed_events and status_date:
+            prior_listings = [e for e in listed_events if e.get("date", "") < status_date]
+            if prior_listings:
+                # Get the most recent listing before sale
+                last_list = sorted(prior_listings, key=lambda e: e.get("date") or "")[-1]
+                list_price_before_sale = last_list.get("price")
+                list_date = last_list.get("date")
+            elif listed_events:
+                # Fallback: use any listing event
+                first_list = sorted(listed_events, key=lambda e: e.get("date") or "")[0]
+                list_price_before_sale = first_list.get("price")
+                list_date = first_list.get("date")
+    else:
+        # Not sold - check if actively listed
+        list_price_redfin = redfin.get("list_price")
+        if list_price_redfin:
+            status = "Active Listing"
+            status_price = list_price_redfin
+            # Try to find list date from timeline
+            if listed_events:
+                last_listed = sorted(listed_events, key=lambda e: e.get("date") or "")[-1]
+                status_date = last_listed.get("date")
+                list_date = status_date
+        elif listed_events:
+            # Has listing events but no current price
             last_listed = sorted(listed_events, key=lambda e: e.get("date") or "")[-1]
+            status = "Listed"
             status_date = last_listed.get("date")
+            status_price = last_listed.get("price")
+            list_date = status_date
+    
+    # Calculate price per SF if not already available
+    if not price_per_sf and status_price and building_sf and building_sf > 0:
+        price_per_sf = round(status_price / building_sf)
     
     return {
         "address_full": address_full,
@@ -762,10 +804,14 @@ def _build_property_snapshot(redfin: Dict[str, Any], metrics: Dict[str, Any]) ->
         "baths": baths,
         "building_sf": building_sf,
         "lot_sf": lot_sf,
+        "year_built": year_built,
         "property_type": property_type,
         "status": status,
         "status_date": status_date,
         "status_price": status_price,
+        "list_price_before_sale": list_price_before_sale,
+        "list_date": list_date,
+        "price_per_sf": price_per_sf,
     }
 
 
