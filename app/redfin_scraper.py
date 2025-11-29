@@ -100,15 +100,19 @@ def parse_redfin_html_listing(soup: BeautifulSoup, html_text: str) -> Dict[str, 
     Parse the listing (top-of-page) stats:
       - address
       - beds
-      - baths
+      - baths (including half baths)
       - building_sf
+      - lot_sf (from listing banner or property details)
       - current list_price (ONLY from active listing banner)
       - listing_year_built
+      - property_type
+      - price_per_sf
+      - sold_status (SOLD banner detection)
     
     CRITICAL RULE: list_price comes ONLY from [data-rf-test-id="abp-price"].
     NEVER use tax amounts, assessed values, or tax table numbers as list_price.
     """
-    # Address
+    # Address - ensure proper formatting with spaces after commas
     address_text: Optional[str] = None
     addr_el = soup.select_one('[data-rf-test-id="abp-streetLine"]')
     if not addr_el:
@@ -116,7 +120,10 @@ def parse_redfin_html_listing(soup: BeautifulSoup, html_text: str) -> Dict[str, 
     if not addr_el:
         addr_el = soup.find("h1")
     if addr_el:
-        address_text = addr_el.get_text(strip=True) or None
+        raw_address = addr_el.get_text(strip=True) or None
+        if raw_address:
+            # Ensure space after commas (fix "Ave,Los Angeles" -> "Ave, Los Angeles")
+            address_text = re.sub(r',(?!\s)', ', ', raw_address)
 
     # Beds / baths / SF
     beds_val: Optional[float] = None
@@ -131,8 +138,33 @@ def parse_redfin_html_listing(soup: BeautifulSoup, html_text: str) -> Dict[str, 
         beds_val = _extract_first_number(beds_el.get_text(strip=True))
     if baths_el:
         baths_val = _extract_first_number(baths_el.get_text(strip=True))
+    
+    # Enhanced bath parsing to handle "4 Full, 2 Half" format
+    if not baths_val:
+        full_half_match = re.search(r'(\d+)\s*Full,\s*(\d+)\s*Half', html_text, re.I)
+        if full_half_match:
+            full = int(full_half_match.group(1))
+            half = int(full_half_match.group(2))
+            baths_val = full + (half * 0.5)
+    
     if sqft_el:
         building_sf_val = _extract_first_number(sqft_el.get_text(strip=True))
+
+    # Lot size from listing banner (e.g., "6,494 Sq. Ft. Lot")
+    lot_sf_val: Optional[float] = None
+    lot_patterns = [
+        r'([\d,]+)\s*Sq\.\s*Ft\.\s*Lot',
+        r'([\d,]+)\s*sq\s*ft\s*lot',
+        r'Lot[:\s]+([\d,]+)\s*Sq\.\s*Ft\.',
+    ]
+    for pattern in lot_patterns:
+        lot_match = re.search(pattern, html_text, re.I)
+        if lot_match:
+            try:
+                lot_sf_val = float(lot_match.group(1).replace(",", ""))
+                break
+            except (ValueError, IndexError):
+                continue
 
     # Current list price from price banner ONLY
     # RULE: ONLY from data-rf-test-id="abp-price" - NEVER from tax table
@@ -148,22 +180,61 @@ def parse_redfin_html_listing(soup: BeautifulSoup, html_text: str) -> Dict[str, 
             except ValueError:
                 pass
 
-    # Listing year built (e.g. "2025 Year Built" in property details)
+    # Listing year built (e.g. "2025 Year Built" or "Year Built: 2022")
     listing_year_built: Optional[int] = None
-    year_str = _regex_first_group(r"(\d{4})\s+Year Built", html_text)
-    if year_str:
+    year_patterns = [
+        r'(\d{4})\s+Year Built',
+        r'Year Built[:\s]+(\d{4})',
+        r'Built in (\d{4})',
+    ]
+    for pattern in year_patterns:
+        year_str = _regex_first_group(pattern, html_text)
+        if year_str:
+            try:
+                listing_year_built = int(year_str)
+                break
+            except ValueError:
+                continue
+    
+    # Property type
+    property_type: Optional[str] = None
+    prop_type_match = re.search(r'Property Type[:\s]+([^<\n]+)', html_text)
+    if prop_type_match:
+        property_type = prop_type_match.group(1).strip()
+        # Normalize common types
+        if 'single' in property_type.lower() and 'family' in property_type.lower():
+            property_type = "Single-family"
+        elif 'condo' in property_type.lower():
+            property_type = "Condo"
+        elif 'townhouse' in property_type.lower():
+            property_type = "Townhouse"
+    
+    # Price per SF
+    price_per_sf: Optional[float] = None
+    price_sf_match = re.search(r'\$([\d,]+)\s*/\s*Sq\.\s*Ft\.', html_text)
+    if price_sf_match:
         try:
-            listing_year_built = int(year_str)
+            price_per_sf = float(price_sf_match.group(1).replace(",", ""))
         except ValueError:
-            listing_year_built = None
+            pass
+    
+    # SOLD status detection (e.g., "SOLD NOV 21, 2025")
+    sold_banner: Optional[str] = None
+    sold_match = re.search(r'SOLD\s+([A-Z]{3}\s+\d{1,2},\s+\d{4})', html_text, re.I)
+    if sold_match:
+        sold_banner = sold_match.group(1)
 
     return {
         "address": address_text,
         "beds": beds_val,
         "baths": baths_val,
         "building_sf": building_sf_val,
+        "lot_sf": lot_sf_val,
         "list_price": list_price_val,  # PRICE: from active listing banner ONLY
         "listing_year_built": listing_year_built,
+        "property_type": property_type,
+        "price_per_sf": price_per_sf,
+        "sold_banner": sold_banner,
     }
 
 
@@ -229,13 +300,13 @@ def parse_public_facts_and_apn(html_text: str) -> Dict[str, Any]:
     return result
 
 
-def parse_sale_history(html_text: str, soup: Optional[BeautifulSoup] = None) -> List[Dict[str, Any]]:
+def parse_sale_history(html_text: str, soup: Optional[BeautifulSoup] = None, sold_banner: Optional[str] = None) -> List[Dict[str, Any]]:
     """
     Parse the 'Sale and tax history' section into a list of REAL sale/list events ONLY.
-    Returns: List of { date: 'YYYY-MM-DD', event: 'listed'|'sold'|'price_changed', price: int, raw_status: str }
+    Returns: List of { date: 'YYYY-MM-DD', event: 'listed'|'sold'|'price_changed'|'contingent'|'pending', price: int, raw_status: str }
     
     CRITICAL ANTI-HALLUCINATION RULES:
-    - ONLY parse events labeled "Sold", "Listed", or "Price changed" from the sale history timeline.
+    - ONLY parse events labeled "Sold", "Listed", "Price changed", "Contingent", or "Pending" from sale history.
     - NEVER use property tax amounts (e.g. $15,403 annual tax) as prices.
     - NEVER use assessed values from the tax table as sale prices.
     - If a listing event shows "*" or no price, skip it (do NOT invent a price).
@@ -243,20 +314,23 @@ def parse_sale_history(html_text: str, soup: Optional[BeautifulSoup] = None) -> 
     - NEVER fabricate a sold event.
     - Skip rows containing keywords: "tax", "assessment", "assessed", "property tax"
     
-    FALLBACK: If no PropertyHistoryEventRow found, extract from meta tags (for sold properties).
+    FALLBACK: 
+    - If no PropertyHistoryEventRow found, extract from meta tags (for sold properties).
+    - Use sold_banner parameter (e.g., "NOV 21, 2025") to create sold event if needed.
     """
 
     events: List[Dict[str, Any]] = []
 
-    # Strategy 1: Look for PropertyHistoryEventRow divs
+    # Strategy 1: Look for PropertyHistoryEventRow elements
+    # Use a more robust pattern that doesn't rely on exact closing tag structure
     for match_obj in re.finditer(
-        r'<div[^>]*class="[^"]*PropertyHistoryEventRow[^"]*"[^>]*>(.*?)</div>\s*</div>\s*</div>',
+        r'<div[^>]*class="[^"]*PropertyHistoryEventRow[^"]*"[^>]*>(.*?)(?=<div[^>]*class="[^"]*PropertyHistoryEventRow|<div[^>]*class="property-history-content-container|</section>)',
         html_text,
         re.DOTALL
     ):
         row_html = match_obj.group(1)
         
-        # FILTER OUT TAX ROWS - skip if row contains tax-related keywords
+        # FILTER OUT TAX ROWS
         row_lower = row_html.lower()
         if any(keyword in row_lower for keyword in ["tax", "assessment", "assessed", "property tax"]):
             continue
@@ -267,8 +341,8 @@ def parse_sale_history(html_text: str, soup: Optional[BeautifulSoup] = None) -> 
             continue
         date_str = date_match.group(1)
         
-        # Extract event type and status
-        event_match = re.search(r'<div>(Sold|Listed|Price\s+changed)\s*\(([^)]+)\)</div>', row_html, re.IGNORECASE)
+        # Extract event type and status - enhanced to include Contingent and Pending
+        event_match = re.search(r'<div>(Sold|Listed|Price\s+changed|Contingent|Pending)\s*\(([^)]+)\)</div>', row_html, re.IGNORECASE)
         if not event_match:
             continue
         event_type_raw = event_match.group(1)
@@ -278,13 +352,17 @@ def parse_sale_history(html_text: str, soup: Optional[BeautifulSoup] = None) -> 
         event_type = event_type_raw.lower().replace(" ", "_")
         
         # Extract price
-        price_match = re.search(r'<div[^>]*class="[^"]*price-col[^"]*"[^>]*>\$?([\d,]+|\*)', row_html)
+        price_match = re.search(r'<div[^>]*class="[^"]*price-col[^"]*"[^>]*>\$?([\d,]+)(?!.*—)', row_html)
+        if not price_match:
+            # Try without the class requirement
+            price_match = re.search(r'>\$?([\d,]+)<', row_html)
+        
         if not price_match:
             continue
         price_str = price_match.group(1)
         
-        # Skip if price is "*" (no price listed)
-        if price_str == "*":
+        # Skip if price contains dashes or other non-numeric (except commas)
+        if not re.match(r'^[\d,]+$', price_str):
             continue
             
         try:
@@ -292,47 +370,102 @@ def parse_sale_history(html_text: str, soup: Optional[BeautifulSoup] = None) -> 
             price = int(price_str.replace(",", ""))
             
             # STRICT validation: real estate prices should be >= $100,000
-            # This filters out tax amounts (typically $5k-$20k)
             if price < 100000:
                 continue
                 
         except (ValueError, AttributeError):
             continue
+        
+        # Dedupe: check if we already have this exact event
+        event_key = (dt.date().isoformat(), event_type, price)
+        if not any((e["date"], e["event"], e["price"]) == event_key for e in events):
+            events.append({
+                "date": dt.date().isoformat(),
+                "event": event_type,
+                "price": price,
+                "raw_status": status,
+            })
+    
+    # Pattern B: Alternative structure for listing data table
+    # Look for standalone rows with Date/Description/Price structure
+    # Match each row individually with tight boundaries
+    for match_obj in re.finditer(
+        r'<div[^>]*>\s*<p>([A-Z][a-z]{2} \d{1,2}, \d{4})</p>\s*<p[^>]*>Date</p>\s*</div>\s*<div[^>]*>\s*<div>(Listed|Sold|Price\s+changed|Contingent|Pending)\s*\(([^)]+)\)</div>.*?<div[^>]*price-col[^>]*>\$?([\d,]+)',
+        html_text,
+        re.DOTALL | re.IGNORECASE
+    ):
+        date_str = match_obj.group(1)
+        event_type_raw = match_obj.group(2)
+        status = match_obj.group(3)
+        price_str = match_obj.group(4)
+        
+        # Normalize event type
+        event_type = event_type_raw.lower().replace(" ", "_")
+        
+        try:
+            dt = datetime.strptime(date_str, "%b %d, %Y")
+            price = int(price_str.replace(",", ""))
             
-        events.append({
-            "date": dt.date().isoformat(),
-            "event": event_type,  # "sold", "listed", or "price_changed"
-            "price": price,
-            "raw_status": f"{event_type_raw} ({status})",
-        })
-
-    # Strategy 2: FALLBACK - Extract from meta tags (for sold properties with no timeline DOM)
-    if not events and soup:
-        # Look for meta description: "sold for $1,150,000 on Nov 27, 2019"
-        meta_desc = soup.find("meta", attrs={"name": "description"})
-        if meta_desc and meta_desc.get("content"):
-            desc_text = meta_desc["content"]
-            # Pattern: "sold for $1,150,000 on Nov 27, 2019"
-            sold_match = re.search(
-                r'sold for \$?([\d,]+) on ([A-Z][a-z]{2} \d{1,2}, \d{4})',
-                desc_text,
-                re.IGNORECASE
-            )
-            if sold_match:
-                price_str = sold_match.group(1)
-                date_str = sold_match.group(2)
-                try:
-                    price = int(price_str.replace(",", ""))
-                    dt = datetime.strptime(date_str, "%b %d, %Y")
-                    if price >= 100000:  # Validate realistic price
-                        events.append({
-                            "date": dt.date().isoformat(),
-                            "event": "sold",
-                            "price": price,
-                            "raw_status": "Sold (from meta)",
-                        })
-                except (ValueError, AttributeError):
-                    pass
+            # Validate realistic price
+            if price < 100000:
+                continue
+                
+            # Check if we already have this event (dedupe by date + event + price)
+            event_key = (dt.date().isoformat(), event_type, price)
+            existing_keys = [(e["date"], e["event"], e["price"]) for e in events]
+            
+            if event_key not in existing_keys:
+                events.append({
+                    "date": dt.date().isoformat(),
+                    "event": event_type,
+                    "price": price,
+                    "raw_status": status,
+                })
+        except (ValueError, AttributeError):
+            continue
+    
+    # Strategy 2: Fallback to meta tags (for sold properties without timeline)
+    if not events:
+        # Check for sold price in meta description
+        meta_match = re.search(
+            r'sold for \$?([\d,]+) on ([A-Z][a-z]{2} \d{1,2}, \d{4})',
+            html_text,
+            re.IGNORECASE
+        )
+        if meta_match:
+            try:
+                price_str = meta_match.group(1)
+                date_str = meta_match.group(2)
+                price = int(price_str.replace(",", ""))
+                dt = datetime.strptime(date_str, "%b %d, %Y")
+                if price >= 100000:
+                    events.append({
+                        "date": dt.date().isoformat(),
+                        "event": "sold",
+                        "price": price,
+                        "raw_status": "Sold (from meta)",
+                    })
+            except (ValueError, AttributeError):
+                pass
+    
+    # Strategy 3: Use sold_banner if provided and no sold event found
+    if sold_banner and not any(e.get("event") == "sold" for e in events):
+        try:
+            # Parse sold_banner like "AUG 15, 2025"
+            dt = datetime.strptime(sold_banner, "%b %d, %Y")
+            # Look for price near SOLD banner
+            sold_price_match = re.search(r'SOLD[^$]*\$?([\d,]+)', html_text, re.I | re.DOTALL)
+            if sold_price_match:
+                price = int(sold_price_match.group(1).replace(",", ""))
+                if price >= 100000:
+                    events.append({
+                        "date": dt.date().isoformat(),
+                        "event": "sold",
+                        "price": price,
+                        "raw_status": "Sold (from banner)",
+                    })
+        except (ValueError, AttributeError):
+            pass
 
     # Sort by date ascending
     events.sort(key=lambda e: e["date"])
@@ -402,10 +535,13 @@ def get_redfin_data(url: str) -> Dict[str, Any]:
             print(f"[WARN] Failed to parse public facts: {e}")
             public_parsed = {}
 
+    # Extract sold_banner BEFORE calling parse_sale_history
+    sold_banner = listing_parsed.get("sold_banner")  # e.g., "AUG 15, 2025"
+
     sale_events: List[Dict[str, Any]] = []
     if html_text:
         try:
-            sale_events = parse_sale_history(html_text, soup)
+            sale_events = parse_sale_history(html_text, soup, sold_banner)
         except Exception as e:
             print(f"[WARN] Failed to parse sale history: {e}")
             sale_events = []
@@ -417,8 +553,11 @@ def get_redfin_data(url: str) -> Dict[str, Any]:
     beds = listing_parsed.get("beds")
     baths = listing_parsed.get("baths")
     building_sf = listing_parsed.get("building_sf")
+    lot_sf_listing = listing_parsed.get("lot_sf")  # From listing banner
     list_price = listing_parsed.get("list_price")  # PRICE: from active listing banner ONLY
     listing_year_built = listing_parsed.get("listing_year_built")
+    property_type = listing_parsed.get("property_type")
+    price_per_sf = listing_parsed.get("price_per_sf")
 
     # Public records / APN
     public_records: Dict[str, Any] = {}
@@ -432,6 +571,9 @@ def get_redfin_data(url: str) -> Dict[str, Any]:
         public_records["lot_sf"] = public_parsed["public_lot_sf"]
     if public_parsed.get("public_year_built") is not None:
         public_records["year_built"] = public_parsed["public_year_built"]
+    
+    # Merge lot size: prefer listing banner, fallback to public records
+    lot_sf = lot_sf_listing if lot_sf_listing else public_parsed.get("public_lot_sf")
 
     # Build summary strings
     def _format_summary(beds, baths, sf, label=""):
@@ -473,11 +615,15 @@ def get_redfin_data(url: str) -> Dict[str, Any]:
         "listing_building_sf": building_sf,
         "listing_year_built": listing_year_built,
         "list_price": list_price,  # PRICE: from active listing banner ONLY
+        "property_type": property_type,
+        "price_per_sf": price_per_sf,
+        "sold_banner": sold_banner,  # SOLD detection
         # backward compatible top-level
         "beds": beds,
         "baths": baths,
         "building_sf": building_sf,
         "lot_sf": lot_sf,
+        "year_built": listing_year_built or public_records.get("year_built"),  # Prefer listing, fallback to public
         # timeline: real sale/list history ONLY - NO tax amounts, NO assessed values
         "timeline": sale_events,
         # tax + APN: Keep tax/assessed values separate from prices (NEVER used as prices)

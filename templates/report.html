@@ -11,24 +11,25 @@
 
   <link rel="stylesheet" href="{{ url_for('static', filename='css/comp.css') }}">
   <style>
-    /* Report-specific styles */
+    /* Report-specific styles - Compact & Scannable */
     .report-shell {
-      max-width: 800px;
+      max-width: 1000px;
       margin: 0 auto;
-      padding: 40px 24px 80px;
+      padding: 24px 16px 60px;
     }
     
     .report-card {
       background: #fff;
-      border: 1px solid #e5e5e5;
-      border-radius: 12px;
-      margin-bottom: 24px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      margin-bottom: 16px;
       overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     }
     
     .report-section {
-      padding: 24px;
-      border-bottom: 1px solid #f0f0f0;
+      padding: 16px 20px;
+      border-bottom: 1px solid #f5f5f5;
     }
     
     .report-section:last-child {
@@ -36,129 +37,144 @@
     }
     
     .report-section-header {
-      font-size: 11px;
-      font-weight: 700;
+      font-size: 10px;
+      font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 1.5px;
-      color: #888;
-      margin-bottom: 16px;
-      padding-bottom: 8px;
+      letter-spacing: 1.2px;
+      color: #111;
+      margin-bottom: 12px;
+      padding-bottom: 6px;
       border-bottom: 2px solid #111;
+      display: inline-block;
     }
     
     /* Property Snapshot - Top of report */
     .property-header {
-      padding: 32px 24px;
-      background: linear-gradient(180deg, #fafafa 0%, #f5f5f5 100%);
+      padding: 20px;
+      background: linear-gradient(135deg, #111 0%, #333 100%);
+      color: #fff;
     }
     
     .property-address {
-      font-size: 24px;
+      font-size: 20px;
       font-weight: 800;
-      color: #111;
-      letter-spacing: -0.5px;
-      margin-bottom: 8px;
+      color: #fff;
+      letter-spacing: -0.3px;
+      margin-bottom: 6px;
     }
     
     .property-specs {
-      font-size: 14px;
-      color: #555;
-      margin-bottom: 8px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.85);
+      margin-bottom: 6px;
     }
     
     .property-status {
-      font-size: 13px;
-      color: #666;
+      font-size: 12px;
+      color: rgba(255,255,255,0.75);
     }
     
     .property-status strong {
-      color: #111;
+      color: #fff;
+      font-weight: 700;
     }
     
-    /* Metrics Table */
-    .metrics-table {
-      width: 100%;
-      border-collapse: collapse;
+    /* Metrics Table - Compact 2-column grid */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px 16px;
     }
     
-    .metrics-table tr {
-      border-bottom: 1px solid #f0f0f0;
+    .metric-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
     }
     
-    .metrics-table tr:last-child {
-      border-bottom: none;
-    }
-    
-    .metrics-table td {
-      padding: 10px 0;
-      font-size: 13px;
-    }
-    
-    .metrics-table td:first-child {
+    .metric-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
       color: #888;
-      font-weight: 600;
-      width: 45%;
     }
     
-    .metrics-table td:last-child {
+    .metric-value {
+      font-size: 14px;
+      font-weight: 700;
       color: #111;
-      font-weight: 600;
-      text-align: right;
     }
     
-    .metrics-table .value-success {
+    .metric-value.success {
       color: #059669;
     }
     
-    .metrics-table .value-muted {
+    .metric-value.muted {
       color: #999;
       font-weight: 400;
       font-style: italic;
+      font-size: 12px;
     }
     
-    /* Timeline Table */
+    /* Full-width metric items */
+    .metric-item.full-width {
+      grid-column: 1 / -1;
+    }
+    
+    /* Timeline Table - Compact */
     .timeline-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+    
+    .timeline-table th {
+      text-align: left;
+      padding: 8px 6px;
+      background: #f8f8f8;
+      color: #666;
+      font-weight: 700;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid #e0e0e0;
+    }
+    
+    .timeline-table td {
+      padding: 8px 6px;
+      border-bottom: 1px solid #f5f5f5;
+      color: #333;
+    }
+    
+    .timeline-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    
+    .timeline-total {
+      margin-top: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #111;
+      padding: 10px;
+      background: #f8f8f8;
+      border-radius: 4px;
+    }
+    
+    /* Cost Model Table - Clean & Compact */
+    .cost-table {
       width: 100%;
       border-collapse: collapse;
       font-size: 12px;
     }
     
-    .timeline-table th {
-      text-align: left;
-      padding: 10px 8px;
-      background: #f5f5f5;
-      color: #666;
-      font-weight: 700;
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    
-    .timeline-table td {
-      padding: 10px 8px;
-      border-bottom: 1px solid #f0f0f0;
-      color: #333;
-    }
-    
-    .timeline-total {
-      margin-top: 16px;
-      font-size: 14px;
-      font-weight: 700;
-      color: #111;
-    }
-    
-    /* Cost Model Table */
-    .cost-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    
     .cost-table tr {
-      border-bottom: 1px solid #f0f0f0;
+      border-bottom: 1px solid #f5f5f5;
     }
     
     .cost-table tr.subtotal {
-      background: #f9f9f9;
+      background: #fafafa;
+      font-weight: 600;
     }
     
     .cost-table tr.total {
@@ -167,12 +183,11 @@
     }
     
     .cost-table td {
-      padding: 10px 0;
-      font-size: 13px;
+      padding: 8px 0;
     }
     
     .cost-table td:first-child {
-      color: #555;
+      color: #666;
     }
     
     .cost-table td:last-child {
@@ -183,19 +198,22 @@
     
     .cost-table .profit-positive {
       color: #059669;
+      font-weight: 700;
     }
     
     .cost-table .profit-negative {
       color: #dc2626;
+      font-weight: 700;
     }
     
-    /* Permit List */
+    /* Permit List - Compact Cards */
     .permit-item {
       background: #fafafa;
-      border: 1px solid #eee;
-      border-radius: 8px;
-      padding: 14px;
-      margin-bottom: 10px;
+      border: 1px solid #e8e8e8;
+      border-radius: 4px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      font-size: 11px;
     }
     
     .permit-item:last-child {
@@ -206,34 +224,34 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
     
     .permit-type {
-      font-size: 13px;
-      font-weight: 600;
+      font-size: 11px;
+      font-weight: 700;
       color: #111;
     }
     
     .permit-number {
-      font-size: 10px;
-      font-family: 'Monaco', monospace;
-      color: #888;
+      font-size: 9px;
+      font-family: 'Monaco', 'Courier New', monospace;
+      color: #666;
       background: #f0f0f0;
-      padding: 2px 8px;
-      border-radius: 4px;
+      padding: 2px 6px;
+      border-radius: 3px;
     }
     
     .permit-desc {
-      font-size: 12px;
+      font-size: 10px;
       color: #666;
-      line-height: 1.5;
+      line-height: 1.4;
     }
     
-    /* Team Section */
+    /* Team Section - Compact */
     .team-row {
-      padding: 12px 0;
-      border-bottom: 1px solid #f0f0f0;
+      padding: 10px 0;
+      border-bottom: 1px solid #f5f5f5;
     }
     
     .team-row:last-child {
@@ -241,33 +259,40 @@
     }
     
     .team-role {
-      font-size: 10px;
-      font-weight: 700;
+      font-size: 9px;
+      font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.8px;
       color: #888;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
     
     .team-name {
-      font-size: 14px;
-      font-weight: 600;
+      font-size: 13px;
+      font-weight: 700;
       color: #111;
     }
     
     .team-license {
-      font-size: 11px;
+      font-size: 10px;
       color: #666;
-      font-family: 'Monaco', monospace;
+      font-family: 'Monaco', 'Courier New', monospace;
+      margin-left: 8px;
     }
     
     .team-link {
-      font-size: 11px;
+      font-size: 10px;
       color: #111;
-      margin-left: 12px;
+      text-decoration: none;
+      margin-left: 10px;
+      border-bottom: 1px solid #ccc;
     }
     
-    /* Data Notes */
+    .team-link:hover {
+      border-bottom-color: #111;
+    }
+    
+    /* Data Notes - Clean list */
     .data-notes-list {
       list-style: none;
       padding: 0;
@@ -275,11 +300,12 @@
     }
     
     .data-notes-list li {
-      padding: 8px 0 8px 20px;
+      padding: 6px 0 6px 16px;
       position: relative;
-      font-size: 13px;
+      font-size: 11px;
       color: #666;
-      border-bottom: 1px solid #f5f5f5;
+      line-height: 1.5;
+      border-bottom: 1px solid #f8f8f8;
     }
     
     .data-notes-list li:before {
@@ -287,6 +313,7 @@
       position: absolute;
       left: 0;
       color: #ccc;
+      font-weight: 700;
     }
     
     .data-notes-list li:last-child {
@@ -294,38 +321,47 @@
     }
     
     .no-notes {
-      font-size: 13px;
-      color: #888;
+      font-size: 11px;
+      color: #999;
       font-style: italic;
     }
     
-    /* Links Section */
+    /* Links Section - Clean with proper hyperlinks */
     .links-list {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
     }
     
     .link-item {
       display: flex;
-      align-items: center;
-      gap: 12px;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 11px;
     }
     
     .link-label {
-      font-size: 12px;
+      font-weight: 700;
       color: #888;
-      min-width: 100px;
+      min-width: 90px;
+      flex-shrink: 0;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-size: 9px;
+      padding-top: 2px;
     }
     
     .link-url {
-      font-size: 13px;
       color: #111;
       text-decoration: none;
+      word-break: break-all;
+      border-bottom: 1px solid #ddd;
+      flex: 1;
     }
     
     .link-url:hover {
-      text-decoration: underline;
+      border-bottom-color: #111;
+      background: #fafafa;
     }
     
     /* Scope Badge */
@@ -363,11 +399,64 @@
     @media print {
       .report-shell {
         padding: 0;
+        max-width: 100%;
       }
       
       .report-card {
         box-shadow: none;
         border: 1px solid #ddd;
+        page-break-inside: avoid;
+      }
+      
+      .report-section {
+        page-break-inside: avoid;
+      }
+      
+      a {
+        text-decoration: none;
+        color: #111;
+      }
+      
+      .link-url {
+        word-break: break-all;
+        font-size: 9px;
+      }
+    }
+    
+    /* Responsive - Mobile */
+    @media (max-width: 640px) {
+      .report-shell {
+        padding: 16px 12px;
+      }
+      
+      .property-header {
+        padding: 16px;
+      }
+      
+      .property-address {
+        font-size: 16px;
+      }
+      
+      .property-specs {
+        font-size: 12px;
+      }
+      
+      .metrics-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      
+      .report-section {
+        padding: 14px 16px;
+      }
+      
+      .timeline-table {
+        font-size: 10px;
+      }
+      
+      .timeline-table th,
+      .timeline-table td {
+        padding: 6px 4px;
       }
     }
   </style>
@@ -397,45 +486,74 @@
           {% if ps.beds %}{{ ps.beds|int }} bd{% endif %}
           {% if ps.baths %} / {{ ps.baths }} ba{% endif %}
           {% if ps.building_sf %} · {{ "{:,.0f}".format(ps.building_sf) }} SF{% endif %}
-          {% if ps.lot_sf %} · Lot {{ "{:,.0f}".format(ps.lot_sf) }} SF{% else %} · Lot: Unknown (no lot size found){% endif %}
+          {% if ps.lot_sf %} · Lot {{ "{:,.0f}".format(ps.lot_sf) }} SF{% else %} · Lot: Unknown{% endif %}
           {% if ps.property_type %} · {{ ps.property_type }}{% endif %}
+          {% if ps.year_built %} · Built {{ ps.year_built }}{% endif %}
         </div>
         <div class="property-status">
-          <strong>{{ ps.status or "Status unknown" }}</strong>
-          {% if ps.status_price %} · ${{ "{:,.0f}".format(ps.status_price) }}{% endif %}
-          {% if ps.status_date %} on {{ ps.status_date }}{% endif %}
+          {% if ps.status == "Sold" %}
+            <strong>Sold on {{ ps.status_date }}</strong>
+            {% if ps.status_price %} for ${{ "{:,.0f}".format(ps.status_price) }}{% endif %}
+            {% if ps.list_price_before_sale %} (List: ${{ "{:,.0f}".format(ps.list_price_before_sale) }}){% endif %}
+          {% elif ps.status == "Active Listing" or ps.status == "Listed" %}
+            <strong>{{ ps.status }}</strong>
+            {% if ps.status_price %} · ${{ "{:,.0f}".format(ps.status_price) }}{% endif %}
+            {% if ps.status_date %} on {{ ps.status_date }}{% endif %}
+          {% else %}
+            <strong>{{ ps.status or "Status unknown" }}</strong>
+            {% if ps.status_price %} · ${{ "{:,.0f}".format(ps.status_price) }}{% endif %}
+            {% if ps.status_date %} on {{ ps.status_date }}{% endif %}
+          {% endif %}
+          {% if ps.price_per_sf %} · ${{ "{:,.0f}".format(ps.price_per_sf) }} / SF{% endif %}
         </div>
       </div>
       
       <!-- 2. DEVELOPER SNAPSHOT -->
       <div class="report-section">
         <div class="report-section-header">Developer Snapshot</div>
-        <table class="metrics-table">
-          <tr>
-            <td>Purchase Price</td>
-            <td>{% if m.purchase_price %}${{ "{:,.0f}".format(m.purchase_price) }}{% else %}<span class="value-muted">Unknown (no prior sale in Redfin history)</span>{% endif %}</td>
-          </tr>
-          <tr>
-            <td>Exit / List Price</td>
-            <td>{% if m.exit_price %}${{ "{:,.0f}".format(m.exit_price) }}{% elif m.list_price %}${{ "{:,.0f}".format(m.list_price) }} (list){% else %}<span class="value-muted">Unknown</span>{% endif %}</td>
-          </tr>
+        <div class="metrics-grid">
+          <div class="metric-item">
+            <div class="metric-label">Purchase Price</div>
+            <div class="metric-value">
+              {% if m.purchase_price %}${{ "{:,.0f}".format(m.purchase_price) }}{% else %}<span class="muted">Unknown</span>{% endif %}
+            </div>
+          </div>
+          
+          <div class="metric-item">
+            <div class="metric-label">Exit / List Price</div>
+            <div class="metric-value">
+              {% if m.exit_price %}${{ "{:,.0f}".format(m.exit_price) }}{% elif m.list_price %}${{ "{:,.0f}".format(m.list_price) }}{% else %}<span class="muted">Unknown</span>{% endif %}
+            </div>
+          </div>
+          
           {% if m.purchase_price %}
-          <tr>
-            <td>Hold Period</td>
-            <td>{% if m.hold_days %}{{ m.hold_days }} days (~{{ r.hold_months or (m.hold_days / 30.44)|round(1) }} months){% else %}<span class="value-muted">Unknown</span>{% endif %}</td>
-          </tr>
-          <tr>
-            <td>Gross Spread</td>
-            <td>{% if m.spread %}<span class="value-success">${{ "{:,.0f}".format(m.spread) }}</span>{% else %}<span class="value-muted">N/A</span>{% endif %}</td>
-          </tr>
-          <tr>
-            <td>ROI (simple)</td>
-            <td>{% if m.roi_pct %}<span class="value-success">{{ "{:.1f}%".format(m.roi_pct) }}</span>{% else %}<span class="value-muted">N/A</span>{% endif %}</td>
-          </tr>
-          <tr>
-            <td>Spread / Day</td>
-            <td>{% if m.spread_per_day %}<span class="value-success">${{ "{:,.0f}".format(m.spread_per_day) }}</span>{% else %}<span class="value-muted">N/A</span>{% endif %}</td>
-          </tr>
+          <div class="metric-item">
+            <div class="metric-label">Hold Period</div>
+            <div class="metric-value">
+              {% if m.hold_days %}{{ m.hold_days }} days (~{{ (m.hold_days / 30.44)|round(1) }} mo){% else %}<span class="muted">Unknown</span>{% endif %}
+            </div>
+          </div>
+          
+          <div class="metric-item">
+            <div class="metric-label">Gross Spread</div>
+            <div class="metric-value success">
+              {% if m.spread %}${{ "{:,.0f}".format(m.spread) }}{% else %}<span class="muted">N/A</span>{% endif %}
+            </div>
+          </div>
+          
+          <div class="metric-item">
+            <div class="metric-label">ROI (simple)</div>
+            <div class="metric-value success">
+              {% if m.roi_pct %}{{ "{:.1f}%".format(m.roi_pct) }}{% else %}<span class="muted">N/A</span>{% endif %}
+            </div>
+          </div>
+          
+          <div class="metric-item">
+            <div class="metric-label">Spread / Day</div>
+            <div class="metric-value success">
+              {% if m.spread_per_day %}<span>${{ "{:,.0f}".format(m.spread_per_day) }}</span>{% else %}<span class="muted">N/A</span>{% endif %}
+            </div>
+          </div>
           {% endif %}
           <tr>
             <td>Land SF</td>
@@ -458,13 +576,16 @@
             <td>
               {% if m.far_before %}{{ m.far_before }}{% else %}<span class="value-muted">N/A</span>{% endif %}
               {% if m.far_after and m.far_after != m.far_before %} → {{ m.far_after }}{% endif %}
-            </td>
-          </tr>
-          <tr>
-            <td>Scope Level</td>
-            <td><span class="scope-indicator scope-{{ (pc.scope_level or 'unknown')|lower }}">{{ pc.scope_level or "UNKNOWN" }}</span></td>
-          </tr>
-        </table>
+            </div>
+          </div>
+          
+          <div class="metric-item">
+            <div class="metric-label">Scope Level</div>
+            <div class="metric-value">
+              <span class="scope-indicator scope-{{ (pc.scope_level or 'unknown')|lower }}">{{ pc.scope_level or "UNKNOWN" }}</span>
+            </div>
+          </div>
+        </div>
       </div>
       
       <!-- 3. TIMELINE SUMMARY -->
@@ -596,8 +717,8 @@
       <!-- 6. PERMIT OVERVIEW -->
       <div class="report-section">
         <div class="report-section-header">Permit Overview</div>
-        <div style="margin-bottom:16px; font-size:13px; color:#555;">
-          <strong>Permits:</strong> Building ({{ pc.building_count or 0 }}), Demolition ({{ pc.demo_count or 0 }}), MEP ({{ pc.mep_count or 0 }}), Other ({{ pc.other_count or 0 }})
+        <div style="margin-bottom:14px; font-size:11px; color:#666; padding:8px; background:#f8f8f8; border-radius:4px;">
+          <strong style="color:#111;">Summary:</strong> Building ({{ pc.building_count or 0 }}) · Demo ({{ pc.demo_count or 0 }}) · MEP ({{ pc.mep_count or 0 }}) · Other ({{ pc.other_count or 0 }})
           · <span class="scope-indicator scope-{{ (pc.scope_level or 'unknown')|lower }}">{{ pc.scope_level or "UNKNOWN" }}</span>
         </div>
         
@@ -730,24 +851,29 @@
       <div class="report-section">
         <div class="report-section-header">Links</div>
         <div class="links-list">
-          {% if links.redfin_url %}
+          {% if links.redfin_url or r.redfin_url or r.url %}
           <div class="link-item">
-            <span class="link-label">Redfin Listing</span>
-            <a href="{{ links.redfin_url }}" target="_blank" class="link-url">{{ links.redfin_url[:60] }}{% if links.redfin_url|length > 60 %}...{% endif %}</a>
+            <span class="link-label">Redfin</span>
+            <a href="{{ links.redfin_url or r.redfin_url or r.url }}" target="_blank" rel="noopener noreferrer" class="link-url">{{ links.redfin_url or r.redfin_url or r.url }}</a>
           </div>
           {% endif %}
           
-          {% if links.ladbs_url %}
+          {% if links.ladbs_url or r.ladbs_url %}
           <div class="link-item">
-            <span class="link-label">LADBS Permits</span>
-            <a href="{{ links.ladbs_url }}" target="_blank" class="link-url">LADBS Permit Search</a>
+            <span class="link-label">LADBS</span>
+            <a href="{{ links.ladbs_url or r.ladbs_url }}" target="_blank" rel="noopener noreferrer" class="link-url">{{ links.ladbs_url or r.ladbs_url }}</a>
           </div>
           {% endif %}
           
-          {% if links.gc_cslb_url %}
+          {% if team.primary_gc and team.primary_gc.cslb_url %}
           <div class="link-item">
-            <span class="link-label">CSLB Profile</span>
-            <a href="{{ links.gc_cslb_url }}" target="_blank" class="link-url">View GC License</a>
+            <span class="link-label">GC CSLB</span>
+            <a href="{{ team.primary_gc.cslb_url }}" target="_blank" rel="noopener noreferrer" class="link-url">{{ team.primary_gc.cslb_url }}</a>
+          </div>
+          {% elif links.gc_cslb_url %}
+          <div class="link-item">
+            <span class="link-label">GC CSLB</span>
+            <a href="{{ links.gc_cslb_url }}" target="_blank" rel="noopener noreferrer" class="link-url">{{ links.gc_cslb_url }}</a>
           </div>
           {% endif %}
         </div>

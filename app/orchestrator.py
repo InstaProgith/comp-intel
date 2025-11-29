@@ -70,27 +70,44 @@ def get_repeat_players() -> Dict[str, Any]:
     """
     Compute repeat player stats from search log.
     Returns dict with top GCs, architects, engineers by count with addresses.
+    
+    NEW: Dedupe by property - each property counts only once per team member,
+    even if analyzed multiple times.
     """
     with _search_log_lock:
-        gc_map: Dict[str, List[str]] = {}
-        arch_map: Dict[str, List[str]] = {}
-        eng_map: Dict[str, List[str]] = {}
+        gc_map: Dict[str, set] = {}  # Maps GC name to set of canonical addresses
+        arch_map: Dict[str, set] = {}
+        eng_map: Dict[str, set] = {}
 
         for entry in _search_log:
             addr = entry.get("address", "Unknown")
+            # Create canonical address key (normalize for deduplication)
+            canonical_addr = _canonicalize_address(addr)
+            
             gc = entry.get("primary_gc_name")
             arch = entry.get("primary_architect_name")
             eng = entry.get("primary_engineer_name")
 
             if _is_valid_name(gc):
-                gc_map.setdefault(gc, []).append(addr)
+                if gc not in gc_map:
+                    gc_map[gc] = set()
+                gc_map[gc].add(canonical_addr)
             if _is_valid_name(arch):
-                arch_map.setdefault(arch, []).append(addr)
+                if arch not in arch_map:
+                    arch_map[arch] = set()
+                arch_map[arch].add(canonical_addr)
             if _is_valid_name(eng):
-                eng_map.setdefault(eng, []).append(addr)
+                if eng not in eng_map:
+                    eng_map[eng] = set()
+                eng_map[eng].add(canonical_addr)
 
-        def _top_n(m: Dict[str, List[str]], n: int = 10) -> List[Dict[str, Any]]:
-            sorted_items = sorted(m.items(), key=lambda x: len(x[1]), reverse=True)[:n]
+        def _top_n(m: Dict[str, set], n: int = 10) -> List[Dict[str, Any]]:
+            # Convert sets to sorted lists and sort by count
+            sorted_items = sorted(
+                [(k, sorted(list(v))) for k, v in m.items()],
+                key=lambda x: len(x[1]),
+                reverse=True
+            )[:n]
             return [{"name": k, "count": len(v), "addresses": v} for k, v in sorted_items]
 
         return {
@@ -110,6 +127,24 @@ def _is_valid_name(name: Optional[str]) -> bool:
     # Common invalid/placeholder values
     invalid_values = {"N/A", "NA", "NONE", "UNKNOWN", "-", "--", ""}
     return stripped.upper() not in invalid_values
+
+
+def _canonicalize_address(address: str) -> str:
+    """
+    Normalize an address for deduplication.
+    Removes extra spaces, converts to uppercase, removes special chars.
+    """
+    if not address:
+        return ""
+    # Convert to uppercase
+    addr = address.upper()
+    # Remove common separators and extra whitespace
+    addr = re.sub(r'[,.\s]+', ' ', addr)
+    # Remove special characters
+    addr = re.sub(r'[^\w\s]', '', addr)
+    # Collapse whitespace
+    addr = ' '.join(addr.split())
+    return addr.strip()
 
 
 # Load search log on module import
@@ -206,6 +241,7 @@ def _parse_permit_timeline(permits: List[Dict[str, Any]]) -> Dict[str, Any]:
     Returns:
         - plans_submitted_date: earliest permit application date
         - plans_approved_date: earliest plan check approval date
+        - construction_start_date: earliest permit issued date (construction start)
         - construction_completed_date: earliest finaled/CO date
         - main_permit: the core building permit dict
     """
@@ -227,6 +263,7 @@ def _parse_permit_timeline(permits: List[Dict[str, Any]]) -> Dict[str, Any]:
     # Extract dates from status history
     plans_submitted = None
     plans_approved = None
+    construction_start = None
     construction_completed = None
     
     for permit in building_permits:
@@ -256,6 +293,11 @@ def _parse_permit_timeline(permits: List[Dict[str, Any]]) -> Dict[str, Any]:
                     if not plans_approved or event_date < plans_approved:
                         plans_approved = event_date
                 
+                # Construction start (permit issued)
+                if "ISSUED" in event_name or "PERMIT ISSUED" in event_name:
+                    if not construction_start or event_date < construction_start:
+                        construction_start = event_date
+                
                 # Construction completed (finaled/CO)
                 if "FINAL" in event_name or "CERTIFICATE OF OCCUPANCY" in event_name:
                     if not construction_completed or event_date < construction_completed:
@@ -267,6 +309,7 @@ def _parse_permit_timeline(permits: List[Dict[str, Any]]) -> Dict[str, Any]:
         "main_permit": main_permit,
         "plans_submitted_date": plans_submitted.date().isoformat() if plans_submitted else None,
         "plans_approved_date": plans_approved.date().isoformat() if plans_approved else None,
+        "construction_start_date": construction_start.date().isoformat() if construction_start else None,
         "construction_completed_date": construction_completed.date().isoformat() if construction_completed else None,
     }
 
@@ -278,7 +321,8 @@ def _calculate_project_durations(purchase_date: Optional[str], permit_timeline: 
     Returns dict with:
         - days_to_submit: purchase → plans submitted
         - days_to_approve: plans submitted → approved
-        - days_to_complete: plans approved → construction completed
+        - days_approval_to_start: plans approved → construction start
+        - days_construction: construction start → construction completed
         - total_project_days: purchase → construction completed
     """
     if not purchase_date:
@@ -291,6 +335,7 @@ def _calculate_project_durations(purchase_date: Optional[str], permit_timeline: 
     
     submitted_str = permit_timeline.get("plans_submitted_date")
     approved_str = permit_timeline.get("plans_approved_date")
+    start_str = permit_timeline.get("construction_start_date")
     completed_str = permit_timeline.get("construction_completed_date")
     
     durations = {}
@@ -310,11 +355,19 @@ def _calculate_project_durations(purchase_date: Optional[str], permit_timeline: 
         except Exception:
             pass
     
-    if approved_str and completed_str:
+    if approved_str and start_str:
         try:
             approved_dt = datetime.fromisoformat(approved_str)
+            start_dt = datetime.fromisoformat(start_str)
+            durations["days_approval_to_start"] = (start_dt - approved_dt).days
+        except Exception:
+            pass
+    
+    if start_str and completed_str:
+        try:
+            start_dt = datetime.fromisoformat(start_str)
             completed_dt = datetime.fromisoformat(completed_str)
-            durations["days_to_complete"] = (completed_dt - approved_dt).days
+            durations["days_construction"] = (completed_dt - start_dt).days
         except Exception:
             pass
     
@@ -667,41 +720,159 @@ def _extract_team_network(permits: List[Dict[str, Any]]) -> Dict[str, Any]:
     }
 
 
-def _build_property_snapshot(redfin: Dict[str, Any], metrics: Dict[str, Any]) -> Dict[str, Any]:
+def _build_property_snapshot(redfin: Dict[str, Any], metrics: Dict[str, Any], permits: Optional[List[Dict[str, Any]]] = None) -> Dict[str, Any]:
     """
-    Build property snapshot with canonical field names.
+    Build property snapshot with canonical field names matching golden test format.
+    
+    Expected format:
+    Line 1: "3440 Cattaraugus Ave, Culver City, CA 90232"
+    Line 2: "5 bd / 5.5 ba · 3,595 SF · Lot 5,397 SF · Single-family · Built 2024"
+    Line 3: "Sold on Sep 5, 2025 for $3,750,000 (List: $3,988,000) · $1,043 / SF"
     """
     address_full = redfin.get("address", "Unknown address")
     beds = redfin.get("beds") or redfin.get("listing_beds")
     baths = redfin.get("baths") or redfin.get("listing_baths")
-    building_sf = metrics.get("building_sf_after") or redfin.get("building_sf")
-    lot_sf = metrics.get("land_sf")
     
-    # Determine property type from permits or default
-    property_type = "Single-Family"  # Default
+    # Format beds/baths nicely (remove .0 for whole numbers)
+    if beds and beds == int(beds):
+        beds = int(beds)
+    if baths and baths == int(baths):
+        baths = int(baths)
+    
+    building_sf = redfin.get("building_sf") or metrics.get("building_sf_after")
+    lot_sf = redfin.get("lot_sf") or metrics.get("land_sf")
+    year_built = redfin.get("year_built")
+    
+    # Enhanced year built logic: detect if property was substantially rebuilt
+    # If there are recent major building permits, use the completion year instead of original year
+    if permits and year_built:
+        permit_years = []
+        for permit in permits:
+            # Look for building/new construction permits that have been finaled
+            permit_type = (permit.get("permit_type") or permit.get("Type") or "").upper()
+            status = (permit.get("status") or permit.get("Status") or "").upper()
+            
+            if any(keyword in permit_type for keyword in ["BLDG", "BUILDING", "NEW", "ADDITION"]):
+                # Check if status contains "FINAL" or "COFO" with a date
+                # Format: "CofO Issued on 5/3/2021" or "Finaled on 12/15/2022"
+                status_date_match = re.search(r'(?:CofO|Final|Complet).*?(\d{1,2}/\d{1,2}/\d{4})', status, re.I)
+                if status_date_match:
+                    date_str = status_date_match.group(1)
+                    try:
+                        parts = date_str.split("/")
+                        if len(parts) == 3:
+                            permit_year = int(parts[2])
+                            permit_years.append(permit_year)
+                    except (ValueError, IndexError):
+                        pass
+                
+                # Also check status_history
+                status_history = permit.get("status_history") or permit.get("raw_details", {}).get("status_history") or []
+                for event in status_history:
+                    event_name = (event.get("event") or "").upper()
+                    date_str = event.get("date") or ""
+                    if any(keyword in event_name for keyword in ["FINAL", "COMPLET", "COFO", "CERTIFICATE"]):
+                        try:
+                            # Parse date format MM/DD/YYYY
+                            if "/" in date_str:
+                                parts = date_str.split("/")
+                                if len(parts) == 3 and len(parts[2]) == 4:
+                                    permit_year = int(parts[2])
+                                    permit_years.append(permit_year)
+                                    break
+                        except (ValueError, IndexError):
+                            continue
+        
+        # If we found permit completion years and they're recent (within last 10 years)
+        # and significantly newer than original year built, use the permit year
+        if permit_years:
+            latest_permit_year = max(permit_years)
+            current_year = datetime.now().year
+            
+            # If permit is recent (within 10 years) and at least 20 years newer than original
+            if (current_year - latest_permit_year <= 10) and (latest_permit_year - year_built >= 20):
+                year_built = latest_permit_year
+    
+    # Property type - get from Redfin or default
+    property_type = redfin.get("property_type") or "Single-family"
+    
+    # Get price/SF from Redfin or calculate
+    price_per_sf = redfin.get("price_per_sf")
     
     # Determine status based on timeline
     timeline = redfin.get("timeline") or []
+    
+    # Find the most recent sold event
     sold_events = [e for e in timeline if e.get("event") == "sold"]
-    list_price = redfin.get("list_price")
+    listed_events = [e for e in timeline if e.get("event") == "listed"]
     
     status = "Unknown"
     status_date = None
     status_price = None
+    list_price_before_sale = None
+    list_date = None
+    days_on_market = None
     
     if sold_events:
+        # Sort by date and get the most recent sale
         last_sold = sorted(sold_events, key=lambda e: e.get("date") or "")[-1]
         status = "Sold"
         status_date = last_sold.get("date")
         status_price = last_sold.get("price")
-    elif list_price:
-        status = "Active Listing"
-        status_price = list_price
-        # Try to find list date from timeline
-        listed_events = [e for e in timeline if e.get("event") == "listed"]
-        if listed_events:
+        
+        # Look for a listing event before this sale (could be the original list price)
+        if listed_events and status_date:
+            prior_listings = [e for e in listed_events if e.get("date", "") < status_date]
+            if prior_listings:
+                # Get the most recent listing before sale
+                last_list = sorted(prior_listings, key=lambda e: e.get("date") or "")[-1]
+                list_price_before_sale = last_list.get("price")
+                list_date = last_list.get("date")
+                
+                # Calculate days on market
+                if list_date and status_date:
+                    try:
+                        list_dt = datetime.fromisoformat(list_date)
+                        sold_dt = datetime.fromisoformat(status_date)
+                        days_on_market = (sold_dt - list_dt).days
+                    except Exception:
+                        pass
+            elif listed_events:
+                # Fallback: use any listing event
+                first_list = sorted(listed_events, key=lambda e: e.get("date") or "")[0]
+                list_price_before_sale = first_list.get("price")
+                list_date = first_list.get("date")
+    else:
+        # Not sold - check if actively listed
+        list_price_redfin = redfin.get("list_price")
+        if list_price_redfin:
+            status = "Active Listing"
+            status_price = list_price_redfin
+            # Try to find list date from timeline
+            if listed_events:
+                last_listed = sorted(listed_events, key=lambda e: e.get("date") or "")[-1]
+                status_date = last_listed.get("date")
+                list_date = status_date
+                
+                # Days on market = days since listing
+                if list_date:
+                    try:
+                        list_dt = datetime.fromisoformat(list_date)
+                        now_dt = datetime.now()
+                        days_on_market = (now_dt - list_dt).days
+                    except Exception:
+                        pass
+        elif listed_events:
+            # Has listing events but no current price
             last_listed = sorted(listed_events, key=lambda e: e.get("date") or "")[-1]
+            status = "Listed"
             status_date = last_listed.get("date")
+            status_price = last_listed.get("price")
+            list_date = status_date
+    
+    # Calculate price per SF if not already available
+    if not price_per_sf and status_price and building_sf and building_sf > 0:
+        price_per_sf = round(status_price / building_sf)
     
     return {
         "address_full": address_full,
@@ -709,10 +880,16 @@ def _build_property_snapshot(redfin: Dict[str, Any], metrics: Dict[str, Any]) ->
         "baths": baths,
         "building_sf": building_sf,
         "lot_sf": lot_sf,
+        "year_built": year_built,
         "property_type": property_type,
         "status": status,
         "status_date": status_date,
         "status_price": status_price,
+        "list_price_before_sale": list_price_before_sale,
+        "list_date": list_date,
+        "price_per_sf": price_per_sf,
+        "days_on_market": days_on_market,
+        "price_history": timeline,  # Full price history for reference
     }
 
 
@@ -892,6 +1069,7 @@ def _build_timeline_summary(
     
     plans_submitted_date = permit_timeline.get("plans_submitted_date")
     plans_approved_date = permit_timeline.get("plans_approved_date")
+    construction_start_date = permit_timeline.get("construction_start_date")
     construction_completed_date = permit_timeline.get("construction_completed_date")
     
     # Calculate total time only if purchase is known
@@ -937,13 +1115,24 @@ def _build_timeline_summary(
         days = project_durations.get("days_to_complete")
         if days is not None and days >= 0:  # Skip negative durations
             stages.append({
-                "name": "Construction Duration",
+                "name": "Plans Approved → Construction Start",
                 "days": days,
                 "start_date": plans_approved_date,
+                "end_date": construction_start_date,
+            })
+    
+    # STAGE 4: Construction Duration (Start → Completion)
+    if construction_start_date and construction_completed_date:
+        days = project_durations.get("days_construction")
+        if days is not None and days >= 0:  # Skip negative durations
+            stages.append({
+                "name": "Construction Duration",
+                "days": days,
+                "start_date": construction_start_date,
                 "end_date": construction_completed_date,
             })
     
-    # CofO → Sale (if both known)
+    # STAGE 5: CofO → Sale (if both known)
     if construction_completed_date and exit_date:
         try:
             cofo_dt = datetime.fromisoformat(construction_completed_date)
@@ -967,6 +1156,7 @@ def _build_timeline_summary(
         "exit_date": exit_date,
         "plans_submitted_date": plans_submitted_date,
         "plans_approved_date": plans_approved_date,
+        "construction_start_date": construction_start_date,
         "construction_completed_date": construction_completed_date,
         "cofo_date": construction_completed_date,  # alias
     }
@@ -1032,7 +1222,11 @@ def _build_data_notes(
     
     # Building SF not available
     if not property_snapshot.get("building_sf"):
-        notes.append("Building SF not available from listing data.")
+        notes.append("Building square footage not available from Redfin listing data.")
+    
+    # Profit not computed note (only if purchase exists but profit is None)
+    if purchase_price and cost_model.get("estimated_profit") is None:
+        notes.append("Profit could not be estimated; exit price not available.")
     
     return notes
 
@@ -1161,7 +1355,7 @@ def run_full_comp_pipeline(url: str) -> Dict[str, Any]:
     ladbs_error = None if ladbs_ok else ladbs_data.get("note", "LADBS data unavailable")
 
     # Build new report sections
-    property_snapshot = _build_property_snapshot(redfin_data, metrics)
+    property_snapshot = _build_property_snapshot(redfin_data, metrics, ladbs_data.get("permits", []))
     construction_summary = _build_construction_summary(redfin_data, metrics, permit_categories)
     cost_model = _build_cost_model(metrics, construction_summary, permit_categories)
     timeline_summary = _build_timeline_summary(metrics, permit_timeline, project_durations)
