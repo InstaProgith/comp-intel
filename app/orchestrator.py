@@ -40,6 +40,9 @@ COST_MODEL = {
     "landscape_demo_allowance": 30000,     # Landscape/hardscape/demo flat allowance
     "pool_allowance": 70000,               # Pool installation flat cost
     
+    # ADU estimation
+    "typical_adu_sf": 1000,                # Typical ADU size for cost estimation when added SF > ADU
+    
     # Soft costs and financing
     "soft_cost_pct": 0.06,                 # 6% of hard costs
     "interest_rate_annual": 0.10,          # 10% annual hard money rate
@@ -1120,6 +1123,7 @@ def _build_cost_model(
     
     # Check for ADU in permit categories
     has_adu = permit_categories.get("has_adu", False)
+    typical_adu_sf = COST_MODEL["typical_adu_sf"]
     
     if is_new_construction:
         # Full new construction
@@ -1133,8 +1137,8 @@ def _build_cost_model(
         if added_sf > 0:
             # If ADU detected, attribute some SF to ADU
             if has_adu:
-                # Estimate: ADUs typically 800-1200 SF, cap at added_sf
-                estimated_adu_sf = min(added_sf, 1000)
+                # Use configurable typical ADU size, cap at added_sf
+                estimated_adu_sf = min(added_sf, typical_adu_sf)
                 adu_sf = estimated_adu_sf
                 addition_sf = added_sf - adu_sf
                 cost_adu = adu_sf * cost_per_sf_adu
@@ -1225,6 +1229,7 @@ def _build_cost_model(
             "soft_cost_pct": soft_cost_pct,
             "interest_rate": interest_rate,
             "loan_points_pct": loan_points_pct,
+            "typical_adu_sf": typical_adu_sf,
         },
     }
 
