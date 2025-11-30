@@ -1,4 +1,5 @@
 Flask
+gunicorn
 selenium
 requests
 python-dotenv
@@ -6,3 +7,4 @@ pandas
 beautifulsoup4
 lxml
 markdown2
+jinja2

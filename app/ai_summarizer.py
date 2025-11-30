@@ -5,7 +5,8 @@ from typing import Dict, Any, Optional, List
 from dotenv import load_dotenv
 
 load_dotenv()
-API_KEY = os.getenv("ONE_MIN_API_KEY")
+# Support both ONE_MIN_AI_API_KEY (preferred) and ONE_MIN_API_KEY (legacy)
+API_KEY = os.environ.get("ONE_MIN_AI_API_KEY") or os.environ.get("ONE_MIN_API_KEY")
 
 URL = "https://api.1min.ai/api/features"
 
