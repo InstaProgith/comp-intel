@@ -341,7 +341,20 @@
             <div class="permit-summary-line">
               <strong>Permits:</strong> Building ({{ pc.building_count or 0 }}), Demolition ({{ pc.demo_count or 0 }}), MEP ({{ pc.mep_count or 0 }}), Other ({{ pc.other_count or 0 }})
               · <span class="scope-badge scope-{{ (pc.scope_level or 'unknown')|lower }}">{{ pc.scope_level or "UNKNOWN" }}</span>
+              · Complexity: <span class="scope-badge scope-{% if pc.permit_complexity_score == 'HIGH' %}heavy{% elif pc.permit_complexity_score == 'LOW' %}light{% else %}medium{% endif %}">{{ pc.permit_complexity_score or "?" }}</span>
             </div>
+            
+            <!-- Permit Flags -->
+            {% if pc.has_pool or pc.has_adu or pc.has_grading_or_hillside or pc.has_methane or pc.has_fire_sprinklers or pc.has_new_structure %}
+            <div class="permit-flags" style="margin-bottom:16px;">
+              {% if pc.has_pool %}<span class="permit-flag flag-pool">Pool</span>{% endif %}
+              {% if pc.has_adu %}<span class="permit-flag flag-adu">ADU</span>{% endif %}
+              {% if pc.has_new_structure %}<span class="permit-flag flag-new-structure">New Construction</span>{% endif %}
+              {% if pc.has_grading_or_hillside %}<span class="permit-flag flag-hillside">Hillside/Grading</span>{% endif %}
+              {% if pc.has_methane %}<span class="permit-flag flag-methane">Methane Zone</span>{% endif %}
+              {% if pc.has_fire_sprinklers %}<span class="permit-flag flag-sprinklers">Fire Sprinklers{% if pc.removed_fire_sprinklers %} (Removed){% endif %}</span>{% endif %}
+            </div>
+            {% endif %}
             
             {% if permits %}
             {% set building_permits = permits | selectattr('permit_type', 'match', '.*Bldg.*|.*Building.*') | list %}
