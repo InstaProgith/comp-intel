@@ -1,6 +1,7 @@
 import os
 import json
 import requests
+from typing import Dict, Any, Optional, List
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -9,110 +10,158 @@ API_KEY = os.getenv("ONE_MIN_API_KEY")
 URL = "https://api.1min.ai/api/features"
 
 
-def summarize_comp(combined_data: dict) -> str:
+def _build_fallback_strategy_notes(combined_data: dict) -> Dict[str, Any]:
     """
-    Sends the combined Redfin + LADBS + metrics data to 1min.ai
-    for a developer-grade comp-intel summary.
-
-    Important: combined_data should already contain only real,
-    parsed numbers from Redfin/LADBS; no fabricated prices or
-    square footage.
+    Generate fallback strategy notes when API is unavailable.
+    Returns structured data similar to what the AI would return.
     """
+    metrics = combined_data.get("metrics", {})
+    permit_categories = combined_data.get("permit_categories", {})
+    construction_summary = combined_data.get("construction_summary", {})
+    timeline_summary = combined_data.get("timeline_summary", {})
+    team_network = combined_data.get("team_network", {})
+    
+    tactics: List[str] = []
+    risks: List[str] = []
+    insights: List[str] = []
+    
+    # Generate tactics based on data
+    scope_level = permit_categories.get("scope_level", "UNKNOWN")
+    if scope_level == "HEAVY":
+        tactics.append("Major construction project - ground-up build or substantial addition")
+    elif scope_level == "MEDIUM":
+        tactics.append("Moderate scope - significant remodel or addition work")
+    else:
+        tactics.append("Light scope - cosmetic or minor permitted work")
+    
+    if permit_categories.get("has_adu"):
+        tactics.append("Added ADU to maximize density and rental income potential")
+    
+    if permit_categories.get("has_new_structure"):
+        tactics.append("New structure built - maximized FAR utilization")
+    
+    if construction_summary.get("is_new_construction"):
+        tactics.append("Ground-up new construction on cleared lot")
+    elif construction_summary.get("added_sf"):
+        added_sf = construction_summary.get("added_sf", 0)
+        tactics.append(f"Added {added_sf:,} SF to existing structure")
+    
+    if permit_categories.get("has_pool"):
+        tactics.append("Pool added for market appeal in luxury segment")
+    
+    # Generate risks based on permit flags
+    if permit_categories.get("has_grading_or_hillside"):
+        risks.append("Hillside/grading permits indicate challenging site conditions")
+    
+    if permit_categories.get("has_methane"):
+        risks.append("Methane mitigation required - additional construction complexity")
+    
+    if permit_categories.get("has_fire_sprinklers"):
+        if permit_categories.get("removed_fire_sprinklers"):
+            risks.append("Fire sprinkler system removed - may indicate permit strategy")
+        else:
+            risks.append("Fire sprinkler system required - adds to construction cost")
+    
+    permit_complexity = permit_categories.get("permit_complexity_score", "UNKNOWN")
+    if permit_complexity == "HIGH":
+        risks.append("High permit complexity - multiple supplements and specialty permits")
+    
+    if permit_categories.get("supplement_count", 0) >= 3:
+        risks.append(f"Multiple permit supplements ({permit_categories.get('supplement_count')}) may indicate plan changes or issues")
+    
+    # Default risks if none detected
+    if not risks:
+        risks.append("Standard permitting process - no unusual complexities detected")
+    
+    # Generate insights
+    roi_pct = metrics.get("roi_pct")
+    hold_days = metrics.get("hold_days")
+    
+    if roi_pct is not None and roi_pct > 30:
+        insights.append(f"Strong returns ({roi_pct:.1f}% ROI) in current market conditions")
+    elif roi_pct is not None:
+        insights.append(f"Moderate returns ({roi_pct:.1f}% ROI) for this scope of work")
+    
+    if hold_days:
+        if hold_days <= 365:
+            insights.append(f"Quick turnaround ({hold_days} days) suggests efficient execution")
+        elif hold_days <= 548:
+            insights.append(f"Standard timeline ({hold_days} days) for scope of work")
+        else:
+            insights.append(f"Extended hold period ({hold_days} days) may indicate permitting or market challenges")
+    
+    # Check for owner-builder
+    gc = team_network.get("primary_gc", {})
+    if gc and "owner" in (gc.get("name", "").lower()):
+        insights.append("Owner-builder project - experienced developer self-performing")
+    
+    return {
+        "tactics": tactics[:6] if tactics else ["No specific tactics identified from permit data"],
+        "risks": risks[:3] if risks else ["No unusual risks detected"],
+        "insights": insights[:2] if insights else ["Insufficient data for market insights"],
+        "source": "fallback",
+    }
 
+
+def summarize_comp(combined_data: dict) -> Dict[str, Any]:
+    """
+    Generates structured strategy notes for a comp analysis.
+    
+    Returns a dictionary with:
+    - tactics: 3-6 bullets explaining what they built and why
+    - risks: 2-3 bullets on potential issues
+    - insights: 1-2 bullets on learnings from this comp
+    - source: "api" or "fallback"
+    
+    Falls back to template-based generation if API is unavailable.
+    """
     # Check if API key is available
     if not API_KEY:
-        return "Summary unavailable: missing ONE_MIN_API_KEY. Raw Redfin and LADBS data are shown above."
+        return _build_fallback_strategy_notes(combined_data)
 
     # Convert JSON to readable text for the prompt
-    input_json_text = json.dumps(combined_data, indent=2)
+    input_json_text = json.dumps(combined_data, indent=2, default=str)
 
     prompt_text = f"""
 You are a comp-intel analyst for a Los Angeles real estate developer.
 
-You will receive a JSON object (below). It contains:
-- Redfin / MLS data
-- LADBS permit list and permit summaries
-- Derived deal metrics (purchase/exit/hold/ROI)
-- Project contacts from public records
+Analyze the following property data and provide a structured analysis.
 
-Your task is to produce a concise but high-value summary that reads like
-professional due-diligence for a developer.
+IMPORTANT: Return ONLY valid JSON with this exact structure:
+{{
+  "tactics": [
+    "bullet 1 - what they built and why",
+    "bullet 2 - strategy used",
+    "bullet 3 - value-add approach"
+  ],
+  "risks": [
+    "risk 1 - e.g. hillside complexity",
+    "risk 2 - e.g. permit delays"
+  ],
+  "insights": [
+    "insight 1 - what we learn from this comp"
+  ]
+}}
 
-Follow these rules exactly:
+Guidelines for content:
+- tactics: 3-6 bullets explaining construction strategy, permit approach, value-add methods
+  Examples: "Garage moved to front to maximize rear yard", "ADU added for rental income",
+  "NFPA-13D removed to simplify construction", "Aggressive permit strategy with early starts"
+  
+- risks: 2-3 bullets on challenges or red flags
+  Examples: "Hillside location adds grading complexity", "Long driveway increases utility costs",
+  "Methane zone requires mitigation", "Multiple supplements suggest plan changes"
+  
+- insights: 1-2 bullets on learnings from this comp pattern
+  Examples: "Quick approval timeline achievable in this area", "Owner-builder approach viable for experienced developers"
 
-===========================================================
-1) DEAL SNAPSHOT
-===========================================================
-- Address
-- Current configuration (beds, baths, living SF) from listing
-- Original configuration from PUBLIC RECORDS (beds, baths, SF, year built)
-- How many SF were added or changed (if data allows)
-- Purchase price + purchase date (from sale history)
-- Current listing price + listing date (or last sale if already sold)
-- Hold period in days (purchase → exit, or purchase → today if still held)
-- Gross spread (exit/list price - purchase)
-- Gross ROI (spread / purchase price)
-Only compute these when the numbers exist. If some numbers are missing,
-say so instead of guessing.
+DO NOT include any text outside the JSON object.
+DO NOT include markdown formatting or code blocks.
 
-===========================================================
-2) SCOPE OF WORK (PERMITS)
-===========================================================
-Analyze all LADBS permits in the JSON:
-- Identify which are core building/addition permits (look at Type/Sub-Type and work_description)
-- Categorize demo, addition, ADU, remodel, new structure, pool, etc.
-- State clearly what major work was done in the last 5–10 years.
-- Mention any open/active/not-final permits.
-- Do NOT just list permits — interpret them for a developer.
-
-===========================================================
-3) TEAM (COMPETITOR NETWORK)
-===========================================================
-For core permits, extract the team:
-- General Contractor (flag “Owner-Builder” clearly)
-- Architect
-- Structural Engineer
-
-If repeated names or firms appear, mention that they are repeat players.
-
-Output structure:
-  - GC: …
-  - Architect: …
-  - Engineer: …
-  - Notes: any repeated players or interesting patterns.
-
-===========================================================
-4) PERMIT TIMING (DURATIONS)
-===========================================================
-Using the permit status history and metrics:
-- For the main building/addition permit (or closest equivalent):
-  - Submitted → Plan Check Approved
-  - Plan Check Approved → Issued
-  - Issued → Finaled
-
-Provide durations in calendar days when the underlying dates exist.
-If final is missing, say “not finaled”.
-
-===========================================================
-5) VALUE-ADD SUMMARY
-===========================================================
-In 2–3 sentences, give the “story”:
-- What they bought
-- What they built (including any ADUs or major additions)
-- How much value was added (directionally)
-- How long it took
-- What spread they are targeting or achieved
-
-Keep it direct, factual, and developer-focused. Do not invent numbers
-that are not present in the JSON.
-
-===========================================================
-JSON INPUT (USE THIS DATA ONLY)
-===========================================================
-
+PROPERTY DATA:
 {input_json_text}
 
-Now produce the final summary.
+Return ONLY the JSON object.
 """
 
     payload = {
@@ -132,15 +181,44 @@ Now produce the final summary.
         resp.raise_for_status()
         
         data = resp.json()
-        line = (
+        result_text = (
             data.get("aiRecord", {})
             .get("aiRecordDetail", {})
             .get("resultObject", [None])[0]
         )
-        if isinstance(line, str) and line.strip():
-            return line.strip()
-        return resp.text
-    except requests.exceptions.RequestException:
-        return "Summary unavailable due to an error calling the AI summarizer. Raw Redfin and LADBS data are shown above."
-    except Exception:
-        return "Summary unavailable due to an error calling the AI summarizer. Raw Redfin and LADBS data are shown above."
+        
+        if isinstance(result_text, str) and result_text.strip():
+            # Try to parse as JSON
+            try:
+                # Clean up potential markdown formatting
+                clean_text = result_text.strip()
+                if clean_text.startswith("```"):
+                    # Remove markdown code blocks
+                    clean_text = clean_text.replace("```json", "").replace("```", "").strip()
+                
+                parsed = json.loads(clean_text)
+                
+                # Validate structure
+                if isinstance(parsed, dict) and "tactics" in parsed:
+                    parsed["source"] = "api"
+                    return parsed
+            except json.JSONDecodeError:
+                pass
+            
+            # If JSON parsing failed, return as raw text with fallback structure
+            return {
+                "tactics": [result_text[:500] if len(result_text) > 500 else result_text],
+                "risks": [],
+                "insights": [],
+                "source": "api_raw",
+            }
+        
+        # Fallback if no valid response
+        return _build_fallback_strategy_notes(combined_data)
+        
+    except requests.exceptions.RequestException as e:
+        print(f"[WARN] AI summarizer API error: {e}")
+        return _build_fallback_strategy_notes(combined_data)
+    except Exception as e:
+        print(f"[WARN] AI summarizer error: {e}")
+        return _build_fallback_strategy_notes(combined_data)

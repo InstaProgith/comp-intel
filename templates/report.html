@@ -555,26 +555,31 @@
             </div>
           </div>
           {% endif %}
-          <tr>
-            <td>Land SF</td>
-            <td>{% if m.land_sf %}{{ "{:,.0f}".format(m.land_sf) }} SF{% else %}<span class="value-muted">Unknown</span>{% endif %}</td>
-          </tr>
-          <tr>
-            <td>Existing SF</td>
-            <td>{% if cs.is_new_construction %}<span class="value-muted">0 (New Construction)</span>{% elif cs.existing_sf %}{{ "{:,.0f}".format(cs.existing_sf) }} SF{% else %}<span class="value-muted">Unknown</span>{% endif %}</td>
-          </tr>
-          <tr>
-            <td>Added SF</td>
-            <td>{% if cs.added_sf %}+{{ "{:,.0f}".format(cs.added_sf) }} SF{% else %}<span class="value-muted">0</span>{% endif %}</td>
-          </tr>
-          <tr>
-            <td>Final SF</td>
-            <td>{% if cs.final_sf %}{{ "{:,.0f}".format(cs.final_sf) }} SF{% else %}<span class="value-muted">Unknown</span>{% endif %}</td>
-          </tr>
-          <tr>
-            <td>FAR (before → after)</td>
-            <td>
-              {% if m.far_before %}{{ m.far_before }}{% else %}<span class="value-muted">N/A</span>{% endif %}
+          
+          <div class="metric-item">
+            <div class="metric-label">Land SF</div>
+            <div class="metric-value">{% if m.land_sf %}{{ "{:,.0f}".format(m.land_sf) }} SF{% else %}<span class="muted">Unknown</span>{% endif %}</div>
+          </div>
+          
+          <div class="metric-item">
+            <div class="metric-label">Existing SF</div>
+            <div class="metric-value">{% if cs.is_new_construction %}<span class="muted">0 (New Construction)</span>{% elif cs.existing_sf %}{{ "{:,.0f}".format(cs.existing_sf) }} SF{% else %}<span class="muted">Unknown</span>{% endif %}</div>
+          </div>
+          
+          <div class="metric-item">
+            <div class="metric-label">Added SF</div>
+            <div class="metric-value">{% if cs.added_sf %}+{{ "{:,.0f}".format(cs.added_sf) }} SF{% else %}0{% endif %}</div>
+          </div>
+          
+          <div class="metric-item">
+            <div class="metric-label">Final SF</div>
+            <div class="metric-value">{% if cs.final_sf %}{{ "{:,.0f}".format(cs.final_sf) }} SF{% else %}<span class="muted">Unknown</span>{% endif %}</div>
+          </div>
+          
+          <div class="metric-item">
+            <div class="metric-label">FAR (before → after)</div>
+            <div class="metric-value">
+              {% if m.far_before %}{{ m.far_before }}{% else %}<span class="muted">N/A</span>{% endif %}
               {% if m.far_after and m.far_after != m.far_before %} → {{ m.far_after }}{% endif %}
             </div>
           </div>
@@ -585,6 +590,17 @@
               <span class="scope-indicator scope-{{ (pc.scope_level or 'unknown')|lower }}">{{ pc.scope_level or "UNKNOWN" }}</span>
             </div>
           </div>
+          
+          {% set df = r.deal_fitness or {} %}
+          {% if df.score is not none %}
+          <div class="metric-item full-width">
+            <div class="metric-label">Deal Fitness Score</div>
+            <div class="metric-value">
+              <span style="font-size:18px; font-weight:800;">{{ df.score }}/{{ df.max_score or 100 }}</span>
+              <span class="scope-indicator scope-{% if df.score >= 70 %}light{% elif df.score >= 50 %}medium{% else %}heavy{% endif %}" style="margin-left:10px;">Grade: {{ df.grade or '—' }}</span>
+            </div>
+          </div>
+          {% endif %}
         </div>
       </div>
       
@@ -833,7 +849,63 @@
         {% endif %}
       </div>
       
-      <!-- 8. DATA NOTES -->
+      <!-- 8. STRATEGY NOTES -->
+      {% set sn = r.strategy_notes or {} %}
+      {% if sn.tactics or sn.risks or sn.insights %}
+      <div class="report-section">
+        <div class="report-section-header">Strategy Notes</div>
+        
+        {% if sn.tactics %}
+        <div style="margin-bottom:16px;">
+          <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:#888; margin-bottom:8px;">Tactics</div>
+          <ul style="list-style:none; padding:0; margin:0;">
+            {% for tactic in sn.tactics %}
+            <li style="padding:6px 0 6px 16px; position:relative; font-size:12px; color:#333; border-bottom:1px solid #f5f5f5;">
+              <span style="position:absolute; left:0; color:#059669; font-weight:700;">•</span>
+              {{ tactic }}
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+        
+        {% if sn.risks %}
+        <div style="margin-bottom:16px;">
+          <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:#888; margin-bottom:8px;">Risks</div>
+          <ul style="list-style:none; padding:0; margin:0;">
+            {% for risk in sn.risks %}
+            <li style="padding:6px 0 6px 16px; position:relative; font-size:12px; color:#333; border-bottom:1px solid #f5f5f5;">
+              <span style="position:absolute; left:0; color:#dc2626; font-weight:700;">!</span>
+              {{ risk }}
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+        
+        {% if sn.insights %}
+        <div>
+          <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:#888; margin-bottom:8px;">Insights</div>
+          <ul style="list-style:none; padding:0; margin:0;">
+            {% for insight in sn.insights %}
+            <li style="padding:6px 0 6px 16px; position:relative; font-size:12px; color:#333; border-bottom:1px solid #f5f5f5;">
+              <span style="position:absolute; left:0; color:#3b82f6; font-weight:700;">→</span>
+              {{ insight }}
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+        
+        {% if sn.source == 'fallback' %}
+        <div style="margin-top:12px; font-size:10px; color:#999; font-style:italic;">
+          Generated from permit data (AI unavailable)
+        </div>
+        {% endif %}
+      </div>
+      {% endif %}
+      
+      <!-- 9. DATA NOTES -->
       <div class="report-section">
         <div class="report-section-header">Data Notes</div>
         {% if dn %}
