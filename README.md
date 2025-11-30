@@ -1,179 +1,275 @@
-# Comp-Intel: Real Estate Investment Analysis Tool
+# Real Estate Development Intelligence Tool (BLDGBIT)
 
-A Flask web application that analyzes real estate investment deals by scraping Redfin property data and LA building permits to help developers research competitor projects.
+A comprehensive Flask-based web application for analyzing single-family home development projects in Los Angeles by combining data from multiple sources:
 
-## Quick Start
+- **Redfin** - Property listings, sale history, and market data
+- **LADBS** (LA Department of Building and Safety) - Construction permits and timeline
+- **CSLB** (California State License Board) - Contractor licensing information
 
-```bash
-# Install dependencies
-pip install -r requirements.txt
+## 🎯 What It Does
 
-# Start server
-python3 -m app.ui_server
+This tool generates detailed development analysis reports for residential properties, including:
 
-# Open browser
-# Local: http://127.0.0.1:5000
-# Codespaces: Ports tab → Port 5000 → Click globe icon
-```
+- **Property Snapshot** - Address, specs (beds/baths/SF), lot size, year built, sale status
+- **Transaction Analysis** - Purchase price, exit price, hold period, spread, ROI
+- **Development Timeline** - Construction stages from permits to completion
+- **Construction Summary** - Existing SF, added SF, scope level (light/medium/heavy)
+- **Cost Model** - Estimated construction costs using industry-standard rates
+- **Permit Overview** - All building, demolition, MEP, and other permits
+- **Team** - General contractor, architect, engineer with license info
+- **Data Quality Notes** - Flags and caveats about the analysis
 
-## What It Does
+## 📋 Quick Start
 
-Analyzes investment properties to show:
-- **Purchase & exit prices** from Redfin sale history
-- **Deal metrics**: spread, ROI, hold time
-- **Building permits** from LADBS (timeline, team, scope)
-- **AI-generated analysis** using GPT-4
-
-Perfect for developers researching what competitors paid, how they added value, and who they hired.
-
-## Example Output
-
-For a development project:
-```
-Purchase:  $1,358,000 (Jul 2022)
-Exit:      $2,950,000 (Oct 2023)
-Spread:    $1,592,000
-ROI:       117%
-Hold:      487 days
-
-Construction:
-  Original: 1,379 SF
-  New:      3,890 SF (+182%)
-
-Permit Timeline:
-  Submit:   9/1/2022
-  Approve:  12/1/2022 (91 days)
-  Complete: 9/8/2023 (281 days)
-
-Team:
-  Contractor: Owner Builder
-  Engineer: Jesus Eduardo Carrillo
-```
-
-## Documentation
-
-- **[START_HERE.md](START_HERE.md)** - Quick overview & getting started
-- **[HOW_IT_WORKS.md](HOW_IT_WORKS.md)** - Complete architecture & data flow
-- **[TESTING_GUIDE.md](TESTING_GUIDE.md)** - Full testing & troubleshooting
-- **[QUICK_REFERENCE.md](QUICK_REFERENCE.md)** - Command cheat sheet
-
-## Architecture
-
-```
-Browser → Flask Server → Orchestrator
-                           ├─→ Redfin Scraper (sale history, lot size)
-                           ├─→ LADBS Scraper (permits via Selenium)
-                           └─→ CSLB Lookup (license validation)
-                           ↓
-                         AI Summarizer (GPT-4)
-                           ↓
-                         HTML Report
-```
-
-## Key Features
-
-✅ **Accurate pricing** - Only uses real sale/list prices, never tax values  
-✅ **Transparent metrics** - Shows "—" for missing data, no fabrication  
-✅ **Permit timeline** - Plan submission → approval → completion dates  
-✅ **Team validation** - Contractor/architect licenses verified  
-✅ **AI analysis** - GPT-4 generates investment summary  
-
-## Test Properties
-
-```
-https://www.redfin.com/CA/Los-Angeles/7841-Stewart-Ave-90045/home/6618580
-https://www.redfin.com/CA/Los-Angeles/3024-Midvale-Ave-90034/home/6752669
-```
-
-## Requirements
-
+### Prerequisites
 - Python 3.8+
-- Flask
-- Selenium + ChromeDriver (for LADBS permits)
-- OpenAI API key (for AI summaries)
+- Git
+- OpenAI API key (for AI summaries - optional)
 
-## Configuration
+### Installation
 
-Create `.env` file:
-```bash
-OPENAI_API_KEY=sk-your-key-here
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/InstaProgith/comp-intel.git
+   cd comp-intel
+   ```
+
+2. **Create and activate virtual environment**
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+   ```
+
+3. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Configure environment** (optional - for AI features)
+   ```bash
+   echo "OPENAI_API_KEY=your-key-here" > .env
+   ```
+
+5. **Run the application**
+   ```bash
+   python -m app.ui_server
+   ```
+
+6. **Open in browser**
+   - Navigate to `http://localhost:5555`
+
+## 🚀 Usage
+
+### Single Property Analysis
+
+1. Go to the home page
+2. Paste a Redfin URL (e.g., `https://www.redfin.com/CA/Los-Angeles/...`)
+3. Click **"Run Analysis"** for standard report or **"Run Analysis AI"** for AI-enhanced summary
+4. View the generated report with all metrics and data
+
+### Multiple Properties
+
+- Paste multiple Redfin URLs (one per line)
+- The tool will analyze each property and generate individual reports
+- View search history and "repeat players" (contractors/architects appearing on multiple projects)
+
+### Example URLs
+
+Test the tool with these verified properties:
+
+```
+https://www.redfin.com/CA/Culver-City/3440-Cattaraugus-Ave-90232/home/6721247
+https://www.redfin.com/CA/Los-Angeles/540-N-Gardner-St-90036/home/198348544
+https://www.redfin.com/CA/Los-Angeles/12811-Rubens-Ave-90066/home/6731989
 ```
 
-## Troubleshooting
-
-**Chrome driver errors?**
-```bash
-sudo apt-get install google-chrome-stable
-# Install ChromeDriver matching Chrome version
-```
-
-**Missing permits?**
-- Selenium/ChromeDriver required for LADBS scraping
-
-**No AI summary?**
-- Set `OPENAI_API_KEY` in `.env`
-
-## Development
-
-```bash
-# Test individual components
-python3 -m app.orchestrator --url "https://www.redfin.com/..."
-
-# Check syntax
-python3 -m py_compile app/*.py
-
-# View raw HTML
-ls data/raw/
-
-# Check logs
-ls data/logs/
-```
-
-## Project Structure
+## 📂 Project Structure
 
 ```
 comp-intel/
 ├── app/
-│   ├── ui_server.py         # Flask web server
-│   ├── orchestrator.py      # Coordinates scrapers
-│   ├── redfin_scraper.py    # Redfin parser
-│   ├── ladbs_scraper.py     # LADBS Selenium scraper
-│   └── ai_summarizer.py     # GPT-4 analysis
+│   ├── __init__.py
+│   ├── redfin_scraper.py      # Redfin HTML parsing and data extraction
+│   ├── ladbs_scraper.py        # LADBS permit scraping
+│   ├── cslb_lookup.py          # Contractor license lookups
+│   ├── orchestrator.py         # Main pipeline: combines all data sources
+│   ├── ui_server.py            # Flask web server and routes
+│   └── ai_summarizer.py        # OpenAI GPT integration
 ├── templates/
-│   └── comp_intel.html      # Report template
+│   ├── comp_intel.html         # Home page with input form
+│   ├── report.html             # Single property report
+│   └── history.html            # Search history and repeat players
+├── static/
+│   └── style.css               # Application styles
 ├── data/
-│   ├── raw/                 # Saved HTML
-│   └── logs/                # Error logs
-└── requirements.txt
+│   └── raw/                    # Cached HTML (gitignored)
+├── .env                        # Environment variables (gitignored)
+├── .gitignore
+├── requirements.txt
+├── push_to_github.sh           # Helper script for git operations
+├── README.md
+└── START_HERE.md               # Detailed developer guide
 ```
 
-## Use Cases
+## 🔧 How It Works
 
-- Research competitor acquisition prices
-- Benchmark construction timelines
-- Identify value-add strategies
-- Find quality contractors/architects
-- Validate your own deal assumptions
-- Reverse-engineer successful projects
+### Data Collection Pipeline
 
-## Limitations
+1. **Redfin Scraper** (`redfin_scraper.py`)
+   - Parses property HTML from Redfin
+   - Extracts: address, specs, lot size, sale history, status, price/SF
 
-- Redfin data only (no MLS access)
-- LA permits only (LADBS database)
-- Scraping may violate ToS
-- Not production-ready (no auth, rate limits)
+2. **LADBS Scraper** (`ladbs_scraper.py`)
+   - Searches LADBS by address
+   - Retrieves all permits for the parcel
+   - Parses: permit types, dates, contractors, status
 
-## License
+3. **CSLB Lookup** (`cslb_lookup.py`)
+   - Validates contractor licenses
+   - Retrieves license status and classification
 
-MIT
+4. **Orchestrator** (`orchestrator.py`)
+   - Combines all data sources
+   - Computes metrics (ROI, spread, hold period, FAR)
+   - Builds timeline from permit dates and sale history
+   - Categorizes permits and determines scope level
+   - Applies cost model using fixed unit costs
+   - Generates final report data structure
 
-## Support
+### Cost Model
 
-For issues, check:
-1. `data/logs/` for error messages
-2. `data/raw/` for saved HTML files
-3. Documentation in `TESTING_GUIDE.md`
+The tool uses industry-standard unit costs:
+
+- **New Construction**: $350/SF
+- **Remodel**: $150/SF
+- **Addition**: $300/SF
+- **Garage**: $200/SF
+- **Landscape/Hardscape**: $30,000 (flat)
+- **Pool**: $70,000 (if pool permits exist)
+- **Soft Costs**: 6% of hard costs
+- **Financing**: 10% interest, 15 months, 1 point
+
+### Timeline Stages
+
+- Purchase → Plans Submitted
+- Plans Submitted → Approval
+- Plans Approved → Construction Start
+- Construction Duration
+- CofO → Sale
+- List → Sold (market time)
+
+## 🛠️ Development
+
+### Testing Changes
+
+```bash
+# Activate virtual environment
+source .venv/bin/activate
+
+# Run the pipeline for a test property
+python3 -c "
+from app.orchestrator import run_full_comp_pipeline
+result = run_full_comp_pipeline('https://www.redfin.com/CA/Los-Angeles/...')
+print(result['property_snapshot'])
+"
+```
+
+### Code Style
+
+- Use descriptive variable names
+- Add docstrings to functions
+- Keep functions focused and modular
+- Comment complex logic
+
+### Git Workflow
+
+```bash
+# Check status
+git status
+
+# Add changes
+git add .
+
+# Commit
+git commit -m "Description of changes"
+
+# Push to GitHub
+git push origin main
+```
+
+Or use the helper script:
+```bash
+./push_to_github.sh "Your commit message"
+```
+
+## 📊 Data Sources
+
+### Redfin
+- Public property listings
+- Historical sales data
+- Property characteristics
+- Market statistics
+
+### LADBS
+- Building permits (public records)
+- Permit timeline and status
+- Contractor information
+- Permit descriptions
+
+### CSLB
+- Contractor license verification
+- License status and classification
+- Public business information
+
+## 🔒 Privacy & Legal
+
+- All data collected is from public sources
+- No private or confidential information is accessed
+- Tool is for research and analysis purposes
+- Users must comply with terms of service of data sources
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+**"Module not found" errors**
+- Ensure virtual environment is activated: `source .venv/bin/activate`
+- Reinstall dependencies: `pip install -r requirements.txt`
+
+**Scraping errors**
+- Check internet connection
+- Verify Redfin URL is valid and accessible
+- LADBS may be temporarily unavailable (retry later)
+
+**Missing data in reports**
+- Some properties may lack permit history
+- Older sales may not have complete Redfin history
+- Check "Data Notes" section for explanations
+
+**Git push rejected**
+- Pull latest changes: `git pull origin main`
+- Resolve conflicts if any
+- Push again: `git push origin main`
+
+## 📝 License
+
+MIT License - see LICENSE file for details
+
+## 🤝 Contributing
+
+Contributions welcome! Please:
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+## 📧 Contact
+
+For questions or issues:
+- Open an issue on GitHub
+- Check existing documentation in START_HERE.md
 
 ---
 
-**Ready to start?** Read [START_HERE.md](START_HERE.md)
+**Note**: This tool is for educational and research purposes. Always verify data from original sources before making investment decisions.
