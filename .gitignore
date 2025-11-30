@@ -35,7 +35,11 @@ env/
 
 # Environment
 .env
+.env.*
 .env.local
+
+# Password file (optional - remove from repo for production)
+# access_password.txt
 
 # Data cache (HTML snapshots)
 data/raw/*.html
