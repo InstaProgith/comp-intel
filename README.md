@@ -22,11 +22,11 @@ This tool generates detailed development analysis reports for residential proper
 ## 📋 Quick Start
 
 ### Prerequisites
-- Python 3.8+
+- Python 3.8+ (Python 3.11 recommended)
 - Git
-- OpenAI API key (for AI summaries - optional)
+- Chrome browser + ChromeDriver (for LADBS scraping)
 
-### Installation
+### Local Development Setup
 
 1. **Clone the repository**
    ```bash
@@ -45,18 +45,65 @@ This tool generates detailed development analysis reports for residential proper
    pip install -r requirements.txt
    ```
 
-4. **Configure environment** (optional - for AI features)
+4. **Configure environment variables** (create a `.env` file or export these):
    ```bash
-   echo "OPENAI_API_KEY=your-key-here" > .env
+   # Required for production, optional for local dev:
+   export FLASK_SECRET_KEY=your-secure-secret-key-here
+   export APP_ACCESS_PASSWORD=your-access-password-here
+   
+   # Optional - for AI features:
+   export ONE_MIN_AI_API_KEY=your-1min-ai-api-key
+   
+   # For local dev with debug mode:
+   export FLASK_DEBUG=1
    ```
 
-5. **Run the application**
+5. **Run the application locally**
    ```bash
+   # Option 1: Using Flask CLI
+   flask --app app.ui_server run
+   
+   # Option 2: Direct Python
    python -m app.ui_server
    ```
 
 6. **Open in browser**
-   - Navigate to `http://localhost:5555`
+   - Navigate to `http://localhost:5000`
+   - Enter the access password (default: see `access_password.txt`)
+
+## 🚀 Production Deployment (Render, Heroku, etc.)
+
+### Build Command
+```bash
+pip install -r requirements.txt
+```
+
+### Start Command
+```bash
+gunicorn app.ui_server:app
+```
+
+### Required Environment Variables
+
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `FLASK_SECRET_KEY` | Secret key for session encryption | **Yes** |
+| `APP_ACCESS_PASSWORD` | Password for app access (recommended) | Recommended |
+| `ONE_MIN_AI_API_KEY` | API key for 1min.ai (AI summaries) | Optional |
+| `FLASK_DEBUG` | Set to "1" for debug mode (never in production) | No |
+
+### Password Protection
+
+The app uses shared-password protection. Password resolution order:
+
+1. **Environment variable** `APP_ACCESS_PASSWORD` (recommended for production)
+2. **Password file** `access_password.txt` at repo root (convenience for dev/internal use)
+3. **Dev fallback** `CHANGE_ME_DEV` (only if nothing else is configured)
+
+For production deployments:
+- **Always** set `APP_ACCESS_PASSWORD` as an environment variable
+- **Never** rely on the password file for public/sensitive deployments
+- Consider removing `access_password.txt` from production deployments
 
 ## 🚀 Usage
 
