@@ -555,26 +555,31 @@
             </div>
           </div>
           {% endif %}
-          <tr>
-            <td>Land SF</td>
-            <td>{% if m.land_sf %}{{ "{:,.0f}".format(m.land_sf) }} SF{% else %}<span class="value-muted">Unknown</span>{% endif %}</td>
-          </tr>
-          <tr>
-            <td>Existing SF</td>
-            <td>{% if cs.is_new_construction %}<span class="value-muted">0 (New Construction)</span>{% elif cs.existing_sf %}{{ "{:,.0f}".format(cs.existing_sf) }} SF{% else %}<span class="value-muted">Unknown</span>{% endif %}</td>
-          </tr>
-          <tr>
-            <td>Added SF</td>
-            <td>{% if cs.added_sf %}+{{ "{:,.0f}".format(cs.added_sf) }} SF{% else %}<span class="value-muted">0</span>{% endif %}</td>
-          </tr>
-          <tr>
-            <td>Final SF</td>
-            <td>{% if cs.final_sf %}{{ "{:,.0f}".format(cs.final_sf) }} SF{% else %}<span class="value-muted">Unknown</span>{% endif %}</td>
-          </tr>
-          <tr>
-            <td>FAR (before → after)</td>
-            <td>
-              {% if m.far_before %}{{ m.far_before }}{% else %}<span class="value-muted">N/A</span>{% endif %}
+          
+          <div class="metric-item">
+            <div class="metric-label">Land SF</div>
+            <div class="metric-value">{% if m.land_sf %}{{ "{:,.0f}".format(m.land_sf) }} SF{% else %}<span class="muted">Unknown</span>{% endif %}</div>
+          </div>
+          
+          <div class="metric-item">
+            <div class="metric-label">Existing SF</div>
+            <div class="metric-value">{% if cs.is_new_construction %}<span class="muted">0 (New Construction)</span>{% elif cs.existing_sf %}{{ "{:,.0f}".format(cs.existing_sf) }} SF{% else %}<span class="muted">Unknown</span>{% endif %}</div>
+          </div>
+          
+          <div class="metric-item">
+            <div class="metric-label">Added SF</div>
+            <div class="metric-value">{% if cs.added_sf %}+{{ "{:,.0f}".format(cs.added_sf) }} SF{% else %}0{% endif %}</div>
+          </div>
+          
+          <div class="metric-item">
+            <div class="metric-label">Final SF</div>
+            <div class="metric-value">{% if cs.final_sf %}{{ "{:,.0f}".format(cs.final_sf) }} SF{% else %}<span class="muted">Unknown</span>{% endif %}</div>
+          </div>
+          
+          <div class="metric-item">
+            <div class="metric-label">FAR (before → after)</div>
+            <div class="metric-value">
+              {% if m.far_before %}{{ m.far_before }}{% else %}<span class="muted">N/A</span>{% endif %}
               {% if m.far_after and m.far_after != m.far_before %} → {{ m.far_after }}{% endif %}
             </div>
           </div>
@@ -585,6 +590,17 @@
               <span class="scope-indicator scope-{{ (pc.scope_level or 'unknown')|lower }}">{{ pc.scope_level or "UNKNOWN" }}</span>
             </div>
           </div>
+          
+          {% set df = r.deal_fitness or {} %}
+          {% if df.score is not none %}
+          <div class="metric-item full-width">
+            <div class="metric-label">Deal Fitness Score</div>
+            <div class="metric-value">
+              <span style="font-size:18px; font-weight:800;">{{ df.score }}/{{ df.max_score or 100 }}</span>
+              <span class="scope-indicator scope-{% if df.score >= 70 %}light{% elif df.score >= 50 %}medium{% else %}heavy{% endif %}" style="margin-left:10px;">Grade: {{ df.grade or '—' }}</span>
+            </div>
+          </div>
+          {% endif %}
         </div>
       </div>
       
@@ -720,7 +736,20 @@
         <div style="margin-bottom:14px; font-size:11px; color:#666; padding:8px; background:#f8f8f8; border-radius:4px;">
           <strong style="color:#111;">Summary:</strong> Building ({{ pc.building_count or 0 }}) · Demo ({{ pc.demo_count or 0 }}) · MEP ({{ pc.mep_count or 0 }}) · Other ({{ pc.other_count or 0 }})
           · <span class="scope-indicator scope-{{ (pc.scope_level or 'unknown')|lower }}">{{ pc.scope_level or "UNKNOWN" }}</span>
+          · Complexity: <span class="scope-indicator scope-{% if pc.permit_complexity_score == 'HIGH' %}heavy{% elif pc.permit_complexity_score == 'LOW' %}light{% else %}medium{% endif %}">{{ pc.permit_complexity_score or "?" }}</span>
         </div>
+        
+        <!-- Permit Flags -->
+        {% if pc.has_pool or pc.has_adu or pc.has_grading_or_hillside or pc.has_methane or pc.has_fire_sprinklers or pc.has_new_structure %}
+        <div class="permit-flags" style="margin-bottom:14px;">
+          {% if pc.has_pool %}<span class="permit-flag flag-pool">Pool</span>{% endif %}
+          {% if pc.has_adu %}<span class="permit-flag flag-adu">ADU</span>{% endif %}
+          {% if pc.has_new_structure %}<span class="permit-flag flag-new-structure">New Construction</span>{% endif %}
+          {% if pc.has_grading_or_hillside %}<span class="permit-flag flag-hillside">Hillside/Grading</span>{% endif %}
+          {% if pc.has_methane %}<span class="permit-flag flag-methane">Methane Zone</span>{% endif %}
+          {% if pc.has_fire_sprinklers %}<span class="permit-flag flag-sprinklers">Fire Sprinklers{% if pc.removed_fire_sprinklers %} (Removed){% endif %}</span>{% endif %}
+        </div>
+        {% endif %}
         
         {% if permits %}
         {% set building_permits = permits | selectattr('permit_type', 'match', '.*Bldg.*|.*Building.*') | list %}
@@ -833,7 +862,63 @@
         {% endif %}
       </div>
       
-      <!-- 8. DATA NOTES -->
+      <!-- 8. STRATEGY NOTES -->
+      {% set sn = r.strategy_notes or {} %}
+      {% if sn.tactics or sn.risks or sn.insights %}
+      <div class="report-section">
+        <div class="report-section-header">Strategy Notes</div>
+        
+        {% if sn.tactics %}
+        <div style="margin-bottom:16px;">
+          <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:#888; margin-bottom:8px;">Tactics</div>
+          <ul style="list-style:none; padding:0; margin:0;">
+            {% for tactic in sn.tactics %}
+            <li style="padding:6px 0 6px 16px; position:relative; font-size:12px; color:#333; border-bottom:1px solid #f5f5f5;">
+              <span style="position:absolute; left:0; color:#059669; font-weight:700;">•</span>
+              {{ tactic }}
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+        
+        {% if sn.risks %}
+        <div style="margin-bottom:16px;">
+          <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:#888; margin-bottom:8px;">Risks</div>
+          <ul style="list-style:none; padding:0; margin:0;">
+            {% for risk in sn.risks %}
+            <li style="padding:6px 0 6px 16px; position:relative; font-size:12px; color:#333; border-bottom:1px solid #f5f5f5;">
+              <span style="position:absolute; left:0; color:#dc2626; font-weight:700;">!</span>
+              {{ risk }}
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+        
+        {% if sn.insights %}
+        <div>
+          <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:#888; margin-bottom:8px;">Insights</div>
+          <ul style="list-style:none; padding:0; margin:0;">
+            {% for insight in sn.insights %}
+            <li style="padding:6px 0 6px 16px; position:relative; font-size:12px; color:#333; border-bottom:1px solid #f5f5f5;">
+              <span style="position:absolute; left:0; color:#3b82f6; font-weight:700;">→</span>
+              {{ insight }}
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+        
+        {% if sn.source == 'fallback' %}
+        <div style="margin-top:12px; font-size:10px; color:#999; font-style:italic;">
+          Generated from permit data (AI unavailable)
+        </div>
+        {% endif %}
+      </div>
+      {% endif %}
+      
+      <!-- 9. DATA NOTES -->
       <div class="report-section">
         <div class="report-section-header">Data Notes</div>
         {% if dn %}

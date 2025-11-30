@@ -25,6 +25,31 @@ DATA_DIR = BASE_DIR / "data"
 SUMMARIES_DIR = DATA_DIR / "summaries"
 SUMMARIES_DIR.mkdir(parents=True, exist_ok=True)
 
+# -----------------------------------------------------------------------------
+# CENTRALIZED COST MODEL CONSTANTS - Easy to tune in one place
+# -----------------------------------------------------------------------------
+COST_MODEL = {
+    # Construction costs per SF
+    "cost_per_sf_new_construction": 350,  # Full new construction
+    "cost_per_sf_remodel": 150,            # Remodel existing SF
+    "cost_per_sf_addition": 300,           # Addition to existing structure
+    "cost_per_sf_garage": 200,             # Garage construction
+    "cost_per_sf_adu": 300,                # ADU construction
+    
+    # Fixed allowances
+    "landscape_demo_allowance": 30000,     # Landscape/hardscape/demo flat allowance
+    "pool_allowance": 70000,               # Pool installation flat cost
+    
+    # ADU estimation
+    "typical_adu_sf": 1000,                # Typical ADU size for cost estimation when added SF > ADU
+    
+    # Soft costs and financing
+    "soft_cost_pct": 0.06,                 # 6% of hard costs
+    "interest_rate_annual": 0.10,          # 10% annual hard money rate
+    "hold_months_default": 15,             # Default hold for financing calc
+    "loan_points": 0.01,                   # 1 point on loan
+}
+
 # ----- SEARCH HISTORY SYSTEM -----
 # Thread-safe in-memory + disk-backed search log
 _search_log_lock = threading.Lock()
@@ -534,16 +559,24 @@ def _extract_basic_project_contacts(ladbs: Dict[str, Any]) -> Dict[str, Any]:
 
 def _categorize_permits(permits: List[Dict[str, Any]]) -> Dict[str, Any]:
     """
-    Categorize permits into Building, Demo, MEP, Other.
-    Also classify scope level based on permit patterns.
+    Categorize permits into Building, Demo, MEP, Other with detailed flags.
     
     Returns:
         - building_count: count of building/addition permits
         - demo_count: count of demolition permits
         - mep_count: count of mechanical/electrical/plumbing permits
         - other_count: count of other permits
+        - supplement_count: count of supplement/revision permits
         - scope_level: 'LIGHT', 'MEDIUM', or 'HEAVY'
         - scope_details: explanation of classification
+        - permit_complexity_score: 'LOW', 'MEDIUM', or 'HIGH'
+        - Flags: has_fire_sprinklers, removed_fire_sprinklers, has_pool, 
+                 has_grading_or_hillside, has_methane, has_adu, has_new_structure,
+                 started_before_final_approval
+        - building_permits: list of main building permits
+        - mep_permits: list of MEP permits
+        - supplement_permits: list of supplements/revisions
+        - other_permits: list of other permits (pool, grading, etc.)
     """
     if not permits:
         return {
@@ -551,46 +584,102 @@ def _categorize_permits(permits: List[Dict[str, Any]]) -> Dict[str, Any]:
             "demo_count": 0,
             "mep_count": 0,
             "other_count": 0,
+            "supplement_count": 0,
             "scope_level": "UNKNOWN",
             "scope_details": "No permits found",
+            "permit_complexity_score": "UNKNOWN",
+            "has_fire_sprinklers": False,
+            "removed_fire_sprinklers": False,
+            "has_pool": False,
+            "has_grading_or_hillside": False,
+            "has_methane": False,
+            "has_adu": False,
+            "has_new_structure": False,
+            "started_before_final_approval": False,
+            "building_permits": [],
+            "mep_permits": [],
+            "supplement_permits": [],
+            "other_permits": [],
         }
 
     building_count = 0
     demo_count = 0
     mep_count = 0
     other_count = 0
+    supplement_count = 0
     
+    # Feature flags
+    has_fire_sprinklers = False
+    removed_fire_sprinklers = False
+    has_pool = False
+    has_grading_or_hillside = False
+    has_methane = False
     has_adu = False
     has_new_structure = False
     has_addition = False
     has_major_remodel = False
+    started_before_final_approval = False
+    
+    # Permit lists by category
+    building_permits: List[Dict[str, Any]] = []
+    mep_permits: List[Dict[str, Any]] = []
+    supplement_permits: List[Dict[str, Any]] = []
+    other_permits_list: List[Dict[str, Any]] = []
+    
     total_permits = len(permits)
 
     for p in permits:
         permit_type = (p.get("permit_type") or p.get("Type") or "").upper()
         work_desc = (p.get("Work_Description") or p.get("work_description") or "").upper()
         sub_type = (p.get("sub_type") or "").upper()
+        status = (p.get("Status") or p.get("status") or "").upper()
         
         combined = f"{permit_type} {work_desc} {sub_type}"
         
+        # Detect fire sprinklers
+        if "SPRINKLER" in combined or "NFPA" in combined or "FIRE SUPPRESSION" in combined:
+            has_fire_sprinklers = True
+            # Check if sprinklers were removed
+            if "REMOV" in combined or "DELET" in combined or "DECOMMISSION" in combined:
+                removed_fire_sprinklers = True
+        
+        # Detect pool
+        if "POOL" in combined or "SPA" in combined:
+            has_pool = True
+        
+        # Detect grading/hillside
+        if any(kw in combined for kw in ["GRADING", "HILLSIDE", "RETAINING WALL", "EXCAVATION", "SLOPE"]):
+            has_grading_or_hillside = True
+        
+        # Detect methane
+        if "METHANE" in combined:
+            has_methane = True
+        
         # Classify permit
-        if any(kw in combined for kw in ["DEMO", "DEMOLITION"]):
+        if any(kw in combined for kw in ["SUPPLEMENT", "REVISION", "REV ", "SUPP"]):
+            supplement_count += 1
+            supplement_permits.append(p)
+        elif any(kw in combined for kw in ["DEMO", "DEMOLITION"]):
             demo_count += 1
+            other_permits_list.append(p)
         elif any(kw in combined for kw in ["ELECTRICAL", "PLUMBING", "MECHANICAL", "HVAC"]):
             mep_count += 1
+            mep_permits.append(p)
         elif any(kw in combined for kw in ["BLDG", "BUILDING", "ADDITION", "NEW", "CONSTRUCT", "ADU", "REMODEL"]):
             building_count += 1
+            building_permits.append(p)
             # Check for scope indicators
-            if "ADU" in combined or "ACCESSORY" in combined:
+            if "ADU" in combined or "ACCESSORY DWELLING" in combined:
                 has_adu = True
-            if "NEW" in combined or "NEW CONSTRUCTION" in combined:
+            if "NEW" in combined and any(kw in combined for kw in ["CONSTRUCT", "STRUCTURE", "SFD", "SFR", "DWELLING"]):
                 has_new_structure = True
             if "ADDITION" in combined:
                 has_addition = True
-            if "MAJOR" in combined or "SUBSTANTIAL" in combined or "REMODEL" in combined:
+            if "MAJOR" in combined or "SUBSTANTIAL" in combined or ("REMODEL" in combined and not "MINOR" in combined):
                 has_major_remodel = True
         else:
             other_count += 1
+            other_permits_list.append(p)
 
     # Classify scope level
     scope_level = "LIGHT"
@@ -620,13 +709,57 @@ def _categorize_permits(permits: List[Dict[str, Any]]) -> Dict[str, Any]:
         scope_level = "LIGHT"
         scope_details = "Minor or cosmetic work only"
 
+    # Compute permit_complexity_score based on multiple factors
+    complexity_score = 0
+    if total_permits >= 8:
+        complexity_score += 3
+    elif total_permits >= 5:
+        complexity_score += 2
+    elif total_permits >= 3:
+        complexity_score += 1
+    
+    if supplement_count >= 3:
+        complexity_score += 2
+    elif supplement_count >= 1:
+        complexity_score += 1
+    
+    if has_pool:
+        complexity_score += 1
+    if has_grading_or_hillside:
+        complexity_score += 2
+    if has_methane:
+        complexity_score += 1
+    if has_fire_sprinklers:
+        complexity_score += 1
+    
+    if complexity_score >= 5:
+        permit_complexity_score = "HIGH"
+    elif complexity_score >= 2:
+        permit_complexity_score = "MEDIUM"
+    else:
+        permit_complexity_score = "LOW"
+
     return {
         "building_count": building_count,
         "demo_count": demo_count,
         "mep_count": mep_count,
         "other_count": other_count,
+        "supplement_count": supplement_count,
         "scope_level": scope_level,
         "scope_details": scope_details,
+        "permit_complexity_score": permit_complexity_score,
+        "has_fire_sprinklers": has_fire_sprinklers,
+        "removed_fire_sprinklers": removed_fire_sprinklers,
+        "has_pool": has_pool,
+        "has_grading_or_hillside": has_grading_or_hillside,
+        "has_methane": has_methane,
+        "has_adu": has_adu,
+        "has_new_structure": has_new_structure,
+        "started_before_final_approval": started_before_final_approval,
+        "building_permits": building_permits,
+        "mep_permits": mep_permits,
+        "supplement_permits": supplement_permits,
+        "other_permits": other_permits_list,
     }
 
 
@@ -937,77 +1070,108 @@ def _build_cost_model(
     permit_categories: Dict[str, Any]
 ) -> Dict[str, Any]:
     """
-    Build cost model using fixed assumptions.
+    Build cost model using centralized COST_MODEL constants.
     
-    Fixed costs:
-    - Full new construction: $350/SF
-    - Remodel (existing SF): $150/SF
-    - Addition: $300/SF
-    - Garage: $200/SF
-    - Landscape/hardscape/demo: $30,000 flat
-    - Pool: $70,000 flat
-    - Soft costs: 6% of hard construction cost
-    - Financing: 10% annual, 15 months, 1 point
+    Uses configurable costs from COST_MODEL dict:
+    - Full new construction: $350/SF (default)
+    - Remodel (existing SF): $150/SF (default)
+    - Addition: $300/SF (default)
+    - Garage: $200/SF (default)
+    - ADU: $300/SF (default)
+    - Landscape/hardscape/demo: $30,000 flat (default)
+    - Pool: $70,000 flat (default)
+    - Soft costs: 6% of hard construction cost (default)
+    - Financing: 10% annual, 15 months hold, 1 point (defaults)
     
-    NEW RULES (Issue Fix):
+    Rules:
     - Only compute total_project_cost and estimated_profit when PURCHASE is known.
-    - When purchase is unknown:
-      - Show construction cost breakdown (hard costs) + soft costs only.
-      - Do NOT show total_project_cost or estimated_profit.
-      - Set financing_cost based on hard_cost_total (construction loan only).
+    - When purchase is unknown: show construction cost breakdown only.
     """
     purchase_price = metrics.get("purchase_price")
     exit_price = metrics.get("exit_price") or metrics.get("list_price")
+    hold_days = metrics.get("hold_days")
     
     existing_sf = construction_summary.get("existing_sf") or 0
     added_sf = construction_summary.get("added_sf") or 0
     final_sf = construction_summary.get("final_sf") or 0
     is_new_construction = construction_summary.get("is_new_construction", False)
     
+    # Get cost constants from centralized config
+    cost_per_sf_new = COST_MODEL["cost_per_sf_new_construction"]
+    cost_per_sf_remodel = COST_MODEL["cost_per_sf_remodel"]
+    cost_per_sf_addition = COST_MODEL["cost_per_sf_addition"]
+    cost_per_sf_garage = COST_MODEL["cost_per_sf_garage"]
+    cost_per_sf_adu = COST_MODEL["cost_per_sf_adu"]
+    landscape_allowance = COST_MODEL["landscape_demo_allowance"]
+    pool_allowance = COST_MODEL["pool_allowance"]
+    soft_cost_pct = COST_MODEL["soft_cost_pct"]
+    interest_rate = COST_MODEL["interest_rate_annual"]
+    default_hold_months = COST_MODEL["hold_months_default"]
+    loan_points_pct = COST_MODEL["loan_points"]
+    
     # Determine construction type costs
     cost_new_construction = 0
     cost_remodel = 0
     cost_addition = 0
     cost_garage = 0
+    cost_adu = 0
     remodel_sf = 0
     addition_sf = 0
     new_sf_full = 0
     garage_sf = 0
+    adu_sf = 0
+    
+    # Check for ADU in permit categories
+    has_adu = permit_categories.get("has_adu", False)
+    typical_adu_sf = COST_MODEL["typical_adu_sf"]
     
     if is_new_construction:
         # Full new construction
         new_sf_full = final_sf
-        cost_new_construction = new_sf_full * 350
+        cost_new_construction = new_sf_full * cost_per_sf_new
     else:
         # Remodel + Addition scenario
         remodel_sf = existing_sf
-        cost_remodel = remodel_sf * 150
+        cost_remodel = remodel_sf * cost_per_sf_remodel
         
         if added_sf > 0:
-            addition_sf = added_sf
-            cost_addition = addition_sf * 300
+            # If ADU detected, attribute some SF to ADU
+            if has_adu:
+                # Use configurable typical ADU size, cap at added_sf
+                estimated_adu_sf = min(added_sf, typical_adu_sf)
+                adu_sf = estimated_adu_sf
+                addition_sf = added_sf - adu_sf
+                cost_adu = adu_sf * cost_per_sf_adu
+                cost_addition = addition_sf * cost_per_sf_addition
+            else:
+                addition_sf = added_sf
+                cost_addition = addition_sf * cost_per_sf_addition
     
-    # Check for pool in permit categories
-    has_pool = False
-    scope_details = permit_categories.get("scope_details", "").upper()
-    if "POOL" in scope_details:
-        has_pool = True
+    # Check for pool in permit categories (use new flag)
+    has_pool = permit_categories.get("has_pool", False)
     
-    cost_landscape = 30000
-    cost_pool = 70000 if has_pool else 0
+    cost_landscape = landscape_allowance
+    cost_pool = pool_allowance if has_pool else 0
     
     hard_cost_total = (
         cost_new_construction + 
         cost_remodel + 
         cost_addition + 
         cost_garage + 
+        cost_adu +
         cost_landscape + 
         cost_pool
     )
     
-    soft_costs = round(hard_cost_total * 0.06)
+    soft_costs = round(hard_cost_total * soft_cost_pct)
     
     # Financing cost calculation
+    # Use actual hold days if known, otherwise default
+    if hold_days and hold_days > 0:
+        hold_months = hold_days / 30.44
+    else:
+        hold_months = default_hold_months
+    
     # When purchase is UNKNOWN: compute financing only on construction costs
     # When purchase is KNOWN: compute financing on purchase price
     if purchase_price:
@@ -1016,11 +1180,11 @@ def _build_cost_model(
         # No purchase known - use hard cost total as loan base (construction loan only)
         loan_base = hard_cost_total
     
-    interest_cost = round(loan_base * 0.10 * (15 / 12)) if loan_base else 0
-    points_cost = round(loan_base * 0.01) if loan_base else 0
+    interest_cost = round(loan_base * interest_rate * (hold_months / 12)) if loan_base else 0
+    points_cost = round(loan_base * loan_points_pct) if loan_base else 0
     financing_cost = interest_cost + points_cost
     
-    # CRITICAL FIX: Only compute total_project_cost and estimated_profit when purchase is KNOWN
+    # CRITICAL: Only compute total_project_cost and estimated_profit when purchase is KNOWN
     total_project_cost = None
     estimated_profit = None
     
@@ -1028,7 +1192,6 @@ def _build_cost_model(
         total_project_cost = purchase_price + hard_cost_total + soft_costs + financing_cost
         if exit_price:
             estimated_profit = exit_price - total_project_cost
-    # When purchase is unknown: do NOT compute total_project_cost or estimated_profit
     
     return {
         "remodel_sf": remodel_sf,
@@ -1039,15 +1202,35 @@ def _build_cost_model(
         "cost_new_construction": cost_new_construction,
         "garage_sf": garage_sf,
         "cost_garage": cost_garage,
+        "adu_sf": adu_sf,
+        "cost_adu": cost_adu,
         "cost_landscape": cost_landscape,
         "has_pool": has_pool,
         "cost_pool": cost_pool,
         "hard_cost_total": hard_cost_total,
         "soft_costs": soft_costs,
+        "soft_cost_pct": soft_cost_pct,
         "financing_cost": financing_cost,
+        "interest_cost": interest_cost,
+        "points_cost": points_cost,
+        "hold_months_used": hold_months,
         "total_project_cost": total_project_cost,
         "estimated_profit": estimated_profit,
-        "purchase_unknown": purchase_price is None,  # Flag for template
+        "purchase_unknown": purchase_price is None,
+        # Include cost model constants for transparency
+        "cost_model_constants": {
+            "cost_per_sf_new": cost_per_sf_new,
+            "cost_per_sf_remodel": cost_per_sf_remodel,
+            "cost_per_sf_addition": cost_per_sf_addition,
+            "cost_per_sf_garage": cost_per_sf_garage,
+            "cost_per_sf_adu": cost_per_sf_adu,
+            "landscape_allowance": landscape_allowance,
+            "pool_allowance": pool_allowance,
+            "soft_cost_pct": soft_cost_pct,
+            "interest_rate": interest_rate,
+            "loan_points_pct": loan_points_pct,
+            "typical_adu_sf": typical_adu_sf,
+        },
     }
 
 
@@ -1159,6 +1342,152 @@ def _build_timeline_summary(
         "construction_start_date": construction_start_date,
         "construction_completed_date": construction_completed_date,
         "cofo_date": construction_completed_date,  # alias
+    }
+
+
+def _calculate_deal_fitness_score(
+    metrics: Dict[str, Any],
+    permit_categories: Dict[str, Any],
+    timeline_summary: Dict[str, Any],
+    cost_model: Dict[str, Any]
+) -> Dict[str, Any]:
+    """
+    Calculate Deal Fitness Score (0-100) for the comp.
+    
+    Simple first-pass scoring using:
+    - ROI % (higher = better)
+    - Permit complexity (lower = better)
+    - Money-on-time (spread per day, higher = better)
+    - Hold duration (shorter = better for flips)
+    
+    Returns:
+        - score: 0-100 overall score
+        - grade: A/B/C/D/F letter grade
+        - components: breakdown of scoring factors
+        - notes: explanation of the score
+    """
+    score = 0
+    components: Dict[str, Any] = {}
+    notes: List[str] = []
+    
+    # Component 1: ROI Score (0-30 points)
+    roi_pct = metrics.get("roi_pct")
+    roi_score = 0
+    if roi_pct is not None:
+        if roi_pct >= 50:
+            roi_score = 30
+            notes.append("Excellent ROI (≥50%)")
+        elif roi_pct >= 30:
+            roi_score = 25
+            notes.append("Good ROI (30-50%)")
+        elif roi_pct >= 20:
+            roi_score = 20
+            notes.append("Moderate ROI (20-30%)")
+        elif roi_pct >= 10:
+            roi_score = 15
+            notes.append("Low ROI (10-20%)")
+        elif roi_pct >= 0:
+            roi_score = 10
+            notes.append("Minimal ROI (<10%)")
+        else:
+            roi_score = 0
+            notes.append("Negative ROI (loss)")
+    else:
+        roi_score = 0
+        notes.append("ROI not calculable (missing purchase)")
+    
+    components["roi_score"] = roi_score
+    score += roi_score
+    
+    # Component 2: Permit Complexity Score (0-25 points, lower complexity = higher score)
+    permit_complexity = permit_categories.get("permit_complexity_score", "UNKNOWN")
+    complexity_score = 0
+    if permit_complexity == "LOW":
+        complexity_score = 25
+        notes.append("Low permit complexity")
+    elif permit_complexity == "MEDIUM":
+        complexity_score = 15
+        notes.append("Moderate permit complexity")
+    elif permit_complexity == "HIGH":
+        complexity_score = 5
+        notes.append("High permit complexity")
+    else:
+        complexity_score = 10  # Unknown gets middle score
+        notes.append("Permit complexity unknown")
+    
+    components["complexity_score"] = complexity_score
+    score += complexity_score
+    
+    # Component 3: Money-on-Time Score (0-25 points based on spread per day)
+    spread_per_day = metrics.get("spread_per_day")
+    mot_score = 0
+    if spread_per_day is not None and spread_per_day > 0:
+        if spread_per_day >= 3000:
+            mot_score = 25
+            notes.append("Excellent $/day (≥$3k)")
+        elif spread_per_day >= 2000:
+            mot_score = 20
+            notes.append("Good $/day ($2-3k)")
+        elif spread_per_day >= 1000:
+            mot_score = 15
+            notes.append("Moderate $/day ($1-2k)")
+        elif spread_per_day >= 500:
+            mot_score = 10
+            notes.append("Low $/day ($500-1k)")
+        else:
+            mot_score = 5
+            notes.append("Very low $/day (<$500)")
+    else:
+        mot_score = 0
+        notes.append("$/day not calculable")
+    
+    components["mot_score"] = mot_score
+    score += mot_score
+    
+    # Component 4: Hold Duration Score (0-20 points, shorter = better for flips)
+    hold_days = metrics.get("hold_days")
+    hold_score = 0
+    if hold_days is not None and hold_days > 0:
+        if hold_days <= 180:  # ≤6 months
+            hold_score = 20
+            notes.append("Quick flip (≤6 months)")
+        elif hold_days <= 365:  # ≤12 months
+            hold_score = 15
+            notes.append("Standard hold (6-12 months)")
+        elif hold_days <= 548:  # ≤18 months
+            hold_score = 10
+            notes.append("Extended hold (12-18 months)")
+        elif hold_days <= 730:  # ≤24 months
+            hold_score = 5
+            notes.append("Long hold (18-24 months)")
+        else:
+            hold_score = 0
+            notes.append("Very long hold (>24 months)")
+    else:
+        hold_score = 0
+        notes.append("Hold duration unknown")
+    
+    components["hold_score"] = hold_score
+    score += hold_score
+    
+    # Calculate grade
+    if score >= 85:
+        grade = "A"
+    elif score >= 70:
+        grade = "B"
+    elif score >= 55:
+        grade = "C"
+    elif score >= 40:
+        grade = "D"
+    else:
+        grade = "F"
+    
+    return {
+        "score": score,
+        "grade": grade,
+        "components": components,
+        "notes": notes,
+        "max_score": 100,
     }
 
 
@@ -1359,6 +1688,10 @@ def run_full_comp_pipeline(url: str) -> Dict[str, Any]:
     construction_summary = _build_construction_summary(redfin_data, metrics, permit_categories)
     cost_model = _build_cost_model(metrics, construction_summary, permit_categories)
     timeline_summary = _build_timeline_summary(metrics, permit_timeline, project_durations)
+    
+    # Calculate Deal Fitness Score
+    deal_fitness = _calculate_deal_fitness_score(metrics, permit_categories, timeline_summary, cost_model)
+    
     data_notes = _build_data_notes(
         metrics, property_snapshot, permit_timeline, timeline_summary,
         cost_model, construction_summary, redfin_ok, ladbs_ok
@@ -1368,6 +1701,22 @@ def run_full_comp_pipeline(url: str) -> Dict[str, Any]:
     # Calculate hold_months for display
     hold_days = metrics.get("hold_days")
     hold_months = round(hold_days / 30.44, 1) if hold_days else None
+    
+    # Get AI-generated strategy notes
+    strategy_notes = None
+    try:
+        strategy_notes = summarize_comp({
+            "address": redfin_data.get("address"),
+            "metrics": metrics,
+            "permit_categories": permit_categories,
+            "construction_summary": construction_summary,
+            "timeline_summary": timeline_summary,
+            "team_network": team_network,
+            "property_snapshot": property_snapshot,
+        })
+    except Exception as e:
+        print(f"[WARN] AI summarizer failed: {e}")
+        strategy_notes = None
 
     combined: Dict[str, Any] = {
         "url": url,
@@ -1400,12 +1749,14 @@ def run_full_comp_pipeline(url: str) -> Dict[str, Any]:
         "construction_summary": construction_summary,
         "cost_model": cost_model,
         "timeline_summary": timeline_summary,
+        "deal_fitness": deal_fitness,
+        "strategy_notes": strategy_notes,
         "data_notes": data_notes,
         "links": links,
         "hold_months": hold_months,
     }
 
-    # Skip AI summarizer - we're removing narrative sections
+    # summary_markdown is deprecated, strategy_notes is used instead
     combined["summary_markdown"] = None
 
     now_tag = datetime.now().strftime("%Y%m%d-%H%M%S")
