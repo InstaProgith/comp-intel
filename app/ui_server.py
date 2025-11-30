@@ -2,6 +2,7 @@
 
 import os
 import re
+import secrets
 from functools import wraps
 from datetime import datetime
 from pathlib import Path
@@ -25,7 +26,17 @@ app = Flask(
 )
 
 # Set Flask secret key from environment variable with dev fallback
-app.secret_key = os.environ.get("FLASK_SECRET_KEY", "DEV_ONLY_CHANGE_ME")
+# WARNING: The fallback is only for local development - always set FLASK_SECRET_KEY in production
+_flask_secret = os.environ.get("FLASK_SECRET_KEY")
+if not _flask_secret:
+    import warnings
+    warnings.warn(
+        "FLASK_SECRET_KEY not set! Using insecure fallback. "
+        "Set FLASK_SECRET_KEY environment variable in production.",
+        RuntimeWarning
+    )
+    _flask_secret = "DEV_ONLY_CHANGE_ME"
+app.secret_key = _flask_secret
 
 
 def get_expected_password() -> str:
@@ -67,7 +78,9 @@ def login_required(f):
 
         if request.method == "POST" and "password" in request.form:
             pw = request.form.get("password", "")
-            if pw and pw == get_expected_password():
+            expected = get_expected_password()
+            # Use constant-time comparison to prevent timing attacks
+            if pw and secrets.compare_digest(pw, expected):
                 session["logged_in"] = True
                 return redirect(request.path)
 
