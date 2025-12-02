@@ -1,322 +1,99 @@
 # Real Estate Development Intelligence Tool (BLDGBIT)
 
-A comprehensive Flask-based web application for analyzing single-family home development projects in Los Angeles by combining data from multiple sources:
+Flask web app that analyzes LA single-family home development projects by scraping Redfin listings, LADBS permits, and CSLB contractor licenses.
 
-- **Redfin** - Property listings, sale history, and market data
-- **LADBS** (LA Department of Building and Safety) - Construction permits and timeline
-- **CSLB** (California State License Board) - Contractor licensing information
+## Overview
 
-## 🎯 What It Does
+Generates development analysis reports for residential properties:
+- Property snapshot (address, beds/baths/SF, lot size, year built, sale status)
+- Transaction analysis (purchase/exit price, hold period, spread, ROI)
+- Development timeline (construction stages from permits to completion)
+- Construction summary (existing SF, added SF, scope level)
+- Cost model (estimated construction costs using industry rates)
+- Permit overview (building, demolition, MEP permits)
+- Team info (general contractor, architect, engineer with license data)
 
-This tool generates detailed development analysis reports for residential properties, including:
+## Quick Start
 
-- **Property Snapshot** - Address, specs (beds/baths/SF), lot size, year built, sale status
-- **Transaction Analysis** - Purchase price, exit price, hold period, spread, ROI
-- **Development Timeline** - Construction stages from permits to completion
-- **Construction Summary** - Existing SF, added SF, scope level (light/medium/heavy)
-- **Cost Model** - Estimated construction costs using industry-standard rates
-- **Permit Overview** - All building, demolition, MEP, and other permits
-- **Team** - General contractor, architect, engineer with license info
-- **Data Quality Notes** - Flags and caveats about the analysis
+**Prerequisites:** Python 3.11+, Git, Chrome + ChromeDriver
 
-## 📋 Quick Start
-
-### Prerequisites
-- Python 3.8+ (Python 3.11 recommended)
-- Git
-- Chrome browser + ChromeDriver (for LADBS scraping)
-
-### Local Development Setup
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/InstaProgith/comp-intel.git
-   cd comp-intel
-   ```
-
-2. **Create and activate virtual environment**
-   ```bash
-   python -m venv .venv
-   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-   ```
-
-3. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Configure environment variables** (create a `.env` file or export these):
-   ```bash
-   # Required for production, optional for local dev:
-   export FLASK_SECRET_KEY=your-secure-secret-key-here
-   export APP_ACCESS_PASSWORD=your-access-password-here
-   
-   # Optional - for AI features:
-   export ONE_MIN_AI_API_KEY=your-1min-ai-api-key
-   
-   # For local dev with debug mode:
-   export FLASK_DEBUG=1
-   ```
-
-5. **Run the application locally**
-   ```bash
-   # Option 1: Using Flask CLI
-   flask --app app.ui_server run
-   
-   # Option 2: Direct Python
-   python -m app.ui_server
-   ```
-
-6. **Open in browser**
-   - Navigate to `http://localhost:5000`
-   - Enter the access password (default: see `access_password.txt`)
-
-## 🚀 Production Deployment (Render, Heroku, etc.)
-
-### Build Command
+**Run locally:**
 ```bash
+git clone https://github.com/InstaProgith/comp-intel.git
+cd comp-intel
+python -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
+python -m app.ui_server
+# Open http://localhost:5000
+# Password: see access_password.txt
 ```
 
-### Start Command
-```bash
-gunicorn app.ui_server:app
-```
+## Environment Variables
 
-### Required Environment Variables
+**Production (required):**
+- `FLASK_SECRET_KEY` - Session encryption key (generate random string)
+- `APP_ACCESS_PASSWORD` - Login password (overrides access_password.txt)
 
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `FLASK_SECRET_KEY` | Secret key for session encryption | **Yes** |
-| `APP_ACCESS_PASSWORD` | Password for app access (recommended) | Recommended |
-| `ONE_MIN_AI_API_KEY` | API key for 1min.ai (AI summaries) | Optional |
-| `FLASK_DEBUG` | Set to "1" for debug mode (never in production) | No |
+**Optional:**
+- `ONE_MIN_AI_API_KEY` - For AI-generated summaries
+- `FLASK_DEBUG` - Set to "1" for debug mode (never in production)
 
-### Password Protection
+**Password priority:** Environment var `APP_ACCESS_PASSWORD` > `access_password.txt` > fallback "CHANGE_ME_DEV"
 
-The app uses shared-password protection. Password resolution order:
+## Deployment (Render/Heroku)
 
-1. **Environment variable** `APP_ACCESS_PASSWORD` (recommended for production)
-2. **Password file** `access_password.txt` at repo root (convenience for dev/internal use)
-3. **Dev fallback** `CHANGE_ME_DEV` (only if nothing else is configured)
+- Build command: `pip install -r requirements.txt`
+- Start command: `gunicorn app.ui_server:app`
+- Set environment variables in platform dashboard
+- Runs on port assigned by `PORT` env var (or 5000 default)
+- Python version: see `runtime.txt`
 
-For production deployments:
-- **Always** set `APP_ACCESS_PASSWORD` as an environment variable
-- **Never** rely on the password file for public/sensitive deployments
-- Consider removing `access_password.txt` from production deployments
+## Usage
 
-## 🚀 Usage
+1. Paste Redfin URL(s) into home page (one per line)
+2. Click "Run Analysis" (standard) or "Run Analysis AI" (with AI summary)
+3. View generated report with metrics and timeline
 
-### Single Property Analysis
-
-1. Go to the home page
-2. Paste a Redfin URL (e.g., `https://www.redfin.com/CA/Los-Angeles/...`)
-3. Click **"Run Analysis"** for standard report or **"Run Analysis AI"** for AI-enhanced summary
-4. View the generated report with all metrics and data
-
-### Multiple Properties
-
-- Paste multiple Redfin URLs (one per line)
-- The tool will analyze each property and generate individual reports
-- View search history and "repeat players" (contractors/architects appearing on multiple projects)
-
-### Example URLs
-
-Test the tool with these verified properties:
-
+**Test URLs:**
 ```
 https://www.redfin.com/CA/Culver-City/3440-Cattaraugus-Ave-90232/home/6721247
 https://www.redfin.com/CA/Los-Angeles/540-N-Gardner-St-90036/home/198348544
-https://www.redfin.com/CA/Los-Angeles/12811-Rubens-Ave-90066/home/6731989
 ```
 
-## 📂 Project Structure
+## Project Structure
 
-```
-comp-intel/
-├── app/
-│   ├── __init__.py
-│   ├── redfin_scraper.py      # Redfin HTML parsing and data extraction
-│   ├── ladbs_scraper.py        # LADBS permit scraping
-│   ├── cslb_lookup.py          # Contractor license lookups
-│   ├── orchestrator.py         # Main pipeline: combines all data sources
-│   ├── ui_server.py            # Flask web server and routes
-│   └── ai_summarizer.py        # OpenAI GPT integration
-├── templates/
-│   ├── comp_intel.html         # Home page with input form
-│   ├── report.html             # Single property report
-│   └── history.html            # Search history and repeat players
-├── static/
-│   └── style.css               # Application styles
-├── data/
-│   └── raw/                    # Cached HTML (gitignored)
-├── .env                        # Environment variables (gitignored)
-├── .gitignore
-├── requirements.txt
-├── push_to_github.sh           # Helper script for git operations
-├── README.md
-└── START_HERE.md               # Detailed developer guide
-```
+- `app/` - Python modules (scrapers, orchestrator, Flask server, AI)
+- `templates/` - HTML templates (home, report, history pages)
+- `static/` - CSS styles
+- `data/raw/` - Cached HTML (gitignored)
+- `requirements.txt` - Python dependencies
+- `runtime.txt` - Python version for deployment
+- `access_password.txt` - Default password (dev/internal use only)
 
-## 🔧 How It Works
+## Data Pipeline
 
-### Data Collection Pipeline
+1. `redfin_scraper.py` - Extracts property data from Redfin HTML
+2. `ladbs_scraper.py` - Scrapes LA building permits via Selenium
+3. `cslb_lookup.py` - Validates contractor licenses
+4. `orchestrator.py` - Combines all sources, computes metrics, builds timeline
+5. `ai_summarizer.py` - Generates AI analysis (optional)
+6. `ui_server.py` - Flask routes and web interface
 
-1. **Redfin Scraper** (`redfin_scraper.py`)
-   - Parses property HTML from Redfin
-   - Extracts: address, specs, lot size, sale history, status, price/SF
+## Cost Model Rates
 
-2. **LADBS Scraper** (`ladbs_scraper.py`)
-   - Searches LADBS by address
-   - Retrieves all permits for the parcel
-   - Parses: permit types, dates, contractors, status
+- New construction: $350/SF
+- Remodel: $150/SF
+- Addition: $300/SF
+- Garage: $200/SF
+- Landscape: $30K flat
+- Pool: $70K (if permits exist)
+- Soft costs: 6% of hard costs
+- Financing: 10% interest, 15mo, 1pt
 
-3. **CSLB Lookup** (`cslb_lookup.py`)
-   - Validates contractor licenses
-   - Retrieves license status and classification
+## Troubleshooting
 
-4. **Orchestrator** (`orchestrator.py`)
-   - Combines all data sources
-   - Computes metrics (ROI, spread, hold period, FAR)
-   - Builds timeline from permit dates and sale history
-   - Categorizes permits and determines scope level
-   - Applies cost model using fixed unit costs
-   - Generates final report data structure
-
-### Cost Model
-
-The tool uses industry-standard unit costs:
-
-- **New Construction**: $350/SF
-- **Remodel**: $150/SF
-- **Addition**: $300/SF
-- **Garage**: $200/SF
-- **Landscape/Hardscape**: $30,000 (flat)
-- **Pool**: $70,000 (if pool permits exist)
-- **Soft Costs**: 6% of hard costs
-- **Financing**: 10% interest, 15 months, 1 point
-
-### Timeline Stages
-
-- Purchase → Plans Submitted
-- Plans Submitted → Approval
-- Plans Approved → Construction Start
-- Construction Duration
-- CofO → Sale
-- List → Sold (market time)
-
-## 🛠️ Development
-
-### Testing Changes
-
-```bash
-# Activate virtual environment
-source .venv/bin/activate
-
-# Run the pipeline for a test property
-python3 -c "
-from app.orchestrator import run_full_comp_pipeline
-result = run_full_comp_pipeline('https://www.redfin.com/CA/Los-Angeles/...')
-print(result['property_snapshot'])
-"
-```
-
-### Code Style
-
-- Use descriptive variable names
-- Add docstrings to functions
-- Keep functions focused and modular
-- Comment complex logic
-
-### Git Workflow
-
-```bash
-# Check status
-git status
-
-# Add changes
-git add .
-
-# Commit
-git commit -m "Description of changes"
-
-# Push to GitHub
-git push origin main
-```
-
-Or use the helper script:
-```bash
-./push_to_github.sh "Your commit message"
-```
-
-## 📊 Data Sources
-
-### Redfin
-- Public property listings
-- Historical sales data
-- Property characteristics
-- Market statistics
-
-### LADBS
-- Building permits (public records)
-- Permit timeline and status
-- Contractor information
-- Permit descriptions
-
-### CSLB
-- Contractor license verification
-- License status and classification
-- Public business information
-
-## 🔒 Privacy & Legal
-
-- All data collected is from public sources
-- No private or confidential information is accessed
-- Tool is for research and analysis purposes
-- Users must comply with terms of service of data sources
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-**"Module not found" errors**
-- Ensure virtual environment is activated: `source .venv/bin/activate`
-- Reinstall dependencies: `pip install -r requirements.txt`
-
-**Scraping errors**
-- Check internet connection
-- Verify Redfin URL is valid and accessible
-- LADBS may be temporarily unavailable (retry later)
-
-**Missing data in reports**
-- Some properties may lack permit history
-- Older sales may not have complete Redfin history
-- Check "Data Notes" section for explanations
-
-**Git push rejected**
-- Pull latest changes: `git pull origin main`
-- Resolve conflicts if any
-- Push again: `git push origin main`
-
-## 📝 License
-
-MIT License - see LICENSE file for details
-
-## 🤝 Contributing
-
-Contributions welcome! Please:
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-## 📧 Contact
-
-For questions or issues:
-- Open an issue on GitHub
-- Check existing documentation in START_HERE.md
-
----
-
-**Note**: This tool is for educational and research purposes. Always verify data from original sources before making investment decisions.
+- Missing modules: activate venv (`source .venv/bin/activate`), reinstall (`pip install -r requirements.txt`)
+- LADBS scraping fails: verify Chrome/ChromeDriver installed
+- No AI summary: set `ONE_MIN_AI_API_KEY` in environment
+- Empty permits: property may have no permit history or LADBS temporarily unavailable
