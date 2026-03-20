@@ -54,6 +54,21 @@ Run the smoke suite:
 python -m unittest discover -s tests -v
 ```
 
+Run the live LADBS smoke before exposing the app:
+
+```bash
+python -m app.ladbs_smoke --redfin-url https://www.redfin.com/CA/Los-Angeles/1120-S-Lucerne-Blvd-90019/home/6911003 --json
+```
+
+Optional LADBS runtime env vars:
+
+- `LADBS_CHROME_BINARY`
+- `LADBS_CHROMEDRIVER_PATH`
+- `LADBS_SELENIUM_PROFILE_DIR`
+- `LADBS_BROWSER_ENV_DIR`
+- `SE_CACHE_PATH`
+- `LADBS_HEADLESS`
+
 ## 4. Start with Gunicorn
 
 ```bash
@@ -89,4 +104,5 @@ WantedBy=multi-user.target
 - The app now fails closed in production-like environments if `FLASK_SECRET_KEY` or `APP_ACCESS_PASSWORD` is missing.
 - LADBS browser bootstrap writes logs under `data/logs/ladbs/`.
 - Selenium cache and browser profiles should point to writable directories on the VPS.
+- `python -m app.ladbs_smoke` is the repeatable post-deploy check for browser startup + live LADBS search flow.
 - `access_password.txt` is intentionally ignored by git and should only be used for local-only setups.

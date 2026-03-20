@@ -43,6 +43,7 @@ This run stayed inside the current local repo, compared it against `origin/main`
 - `app/ui_server.py`
 - `app/redfin_scraper.py`
 - `app/ladbs_scraper.py`
+- `app/ladbs_smoke.py`
 - `tests/test_runtime_config.py`
 - `tests/test_redfin_scraper.py`
 - `tests/test_ladbs_scraper.py`
@@ -163,19 +164,94 @@ Assessment:
 - The failure is now explicit, retried, and logged instead of silent.
 - The repo is in a better state for VPS validation because browser paths, cache dirs, and profile dirs are configurable.
 
+## Follow-Up Pass: LADBS Startup Resolution
+
+This follow-up pass stayed on `codex/lucerne-full-run-hardening` and focused only on the remaining LADBS startup blocker.
+
+### Baseline re-check on this pass
+
+- `.\.venv\Scripts\python.exe -m unittest discover -s tests -v` -> `9/9` passed
+- `.\.venv\Scripts\python.exe -m compileall app tests` -> passed
+- `.\.venv\Scripts\python.exe -c "from app.redfin_scraper import get_redfin_data; ..."` Lucerne Redfin smoke still returned:
+  - address `1120 S Lucerne Blvd, Los Angeles, CA 90019`
+  - `list_price=None`
+  - sold event on `2025-09-05` for `$800,000`
+
+### What changed in this pass
+
+- Added explicit Chrome and ChromeDriver autodetection from env, PATH, and common local locations.
+- Added direct-address parsing for LADBS debugging without requiring a Redfin URL.
+- Added Chromium environment sanitization before browser launch.
+- Added headless plus headed fallback startup modes.
+- Added direct browser-startup probes so the scraper can distinguish WebDriver issues from raw browser startup failures.
+- Added `app/ladbs_smoke.py` as the repeatable live LADBS smoke entrypoint.
+- Added tests for direct-address parsing and direct-address LADBS smoke routing.
+- Updated docs with the exact smoke command and exact env vars used to make Lucerne green.
+
+### Exact commands used in this pass
+
+Baseline:
+
+- `Get-Location`
+- `git remote -v`
+- `git branch --show-current`
+- `git status --short --branch`
+- `.\.venv\Scripts\python.exe -m unittest discover -s tests -v`
+- `.\.venv\Scripts\python.exe -m compileall app tests`
+- `.\.venv\Scripts\python.exe -c "from app.redfin_scraper import get_redfin_data; ..."`
+
+Repeatable LADBS smoke command added to the repo:
+
+- `python -m app.ladbs_smoke --show-diagnostics --json`
+- `python -m app.ladbs_smoke --address "1120 S Lucerne Blvd, Los Angeles, CA 90019" --json`
+
+Exact Windows PowerShell env vars that produced a successful live LADBS smoke in this environment:
+
+```powershell
+$env:LADBS_SELENIUM_PROFILE_DIR = Join-Path $env:LOCALAPPDATA 'comp-intel-ladbs\profiles'
+$env:LADBS_BROWSER_ENV_DIR = Join-Path $env:LOCALAPPDATA 'comp-intel-ladbs\browser-env'
+$env:SE_CACHE_PATH = Join-Path $env:LOCALAPPDATA 'comp-intel-ladbs\selenium-cache'
+python -m app.ladbs_smoke --show-diagnostics --json
+python -m app.ladbs_smoke --address "1120 S Lucerne Blvd, Los Angeles, CA 90019" --json
+```
+
+### Exact LADBS smoke result
+
+Working Lucerne LADBS smoke with the env vars above:
+
+- source: `ladbs_plr_v6`
+- outcome: real LADBS page visit, real search flow, real permit extraction
+- permits found with status date >= 2018: `3`
+- permit numbers returned:
+  - `25041-90000-59794`
+  - `25042-90000-22280`
+  - `25014-10000-03595`
+
+Direct-address smoke also succeeded:
+
+- command shape: `python -m app.ladbs_smoke --address "1120 S Lucerne Blvd, Los Angeles, CA 90019" --json`
+- source: `ladbs_plr_v6`
+- permits found with status date >= 2018: `3`
+
+### Root cause learned from this pass
+
+- The earlier repo-local browser/profile/cache paths under the Desktop workspace were not sufficient for Chromium startup in this Codex environment.
+- With AppData-based LADBS profile/cache/browser-env dirs, direct Chromium launch succeeded and the real LADBS flow completed.
+- The branch now has the exact diagnostics and smoke path needed to reproduce both the failure mode and the successful workaround.
+
 ## Remaining Blockers
 
-- LADBS browser automation still fails in this environment due Chrome/ChromeDriver profile startup restrictions.
+- No blocker remains for the Lucerne LADBS smoke when the AppData-based LADBS env vars above are used.
+- Repo-local Chromium profile/cache dirs inside this Codex workspace can still trigger startup restrictions; use the documented AppData-based env vars for local Windows smoke runs.
 - The password that used to live in `access_password.txt` should be treated as exposed and rotated, because deleting it from the current tree does not remove it from git history.
 - ZIMAS and exact building-record PDF retrieval were intentionally not started in this run because the baseline needed hardening first.
 
 ## Exact Next Best Step
 
-Validate LADBS on the real VPS or a normal local Chrome install with explicit runtime config:
+Promote the successful LADBS smoke path into your normal local/VPS workflow:
 
-1. Set `LADBS_CHROME_BINARY` and `LADBS_CHROMEDRIVER_PATH`.
-2. Confirm Chrome can launch under the configured writable profile/cache directories.
-3. Re-run the Lucerne smoke and confirm real permits return.
-4. If ChromeDriver remains brittle there too, evaluate a targeted Playwright migration for the LADBS workflow only.
+1. Re-run `python -m app.ladbs_smoke --show-diagnostics --json` with the documented writable LADBS env vars and confirm Lucerne stays green.
+2. Validate the same smoke command on the VPS with writable non-protected browser/cache/profile dirs.
+3. Once that is stable, move into ZIMAS and building-record/PDF expansion work.
 
 Once LADBS is green, the baseline is stable enough to expand into ZIMAS, building-record PDF retrieval, and final PDF export work.

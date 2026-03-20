@@ -8,6 +8,7 @@ from urllib.parse import urlparse
 import os
 import re
 import shutil
+import subprocess
 import tempfile
 import time
 import traceback
@@ -34,12 +35,49 @@ DATA_DIR = BASE_DIR / "data"
 RAW_DIR = DATA_DIR / "raw"
 RAW_DIR.mkdir(parents=True, exist_ok=True)
 LAST_DRIVER_ERROR_SUMMARY = "ChromeDriver startup failed for an unknown reason."
+WINDOWS_CHROME_CANDIDATES = [
+    Path(r"C:\Program Files\Google\Chrome\Application\chrome.exe"),
+    Path(r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"),
+    Path(r"C:\Program Files\Chromium\Application\chrome.exe"),
+]
+WINDOWS_CHROMEDRIVER_CANDIDATES = [
+    BASE_DIR / "chromedriver.exe",
+]
+INHERITED_BROWSER_ENV_KEYS_TO_REMOVE = {
+    "CHROME_CRASHPAD_PIPE_NAME",
+    "CHROME_HEADLESS",
+    "ELECTRON_RUN_AS_NODE",
+}
+STREET_NOISE_TOKENS = {
+    "N",
+    "S",
+    "E",
+    "W",
+    "NE",
+    "NW",
+    "SE",
+    "SW",
+    "BLVD",
+    "ST",
+    "AVE",
+    "RD",
+    "PL",
+    "DR",
+    "CT",
+    "LN",
+    "WAY",
+    "PKWY",
+    "TER",
+    "HWY",
+}
 
 
 @dataclass
 class DriverSettings:
     chrome_binary: Optional[str]
+    chrome_binary_source: Optional[str]
     chromedriver_path: Optional[str]
+    chromedriver_source: Optional[str]
     cache_dir: Path
     profile_root: Path
     browser_env_root: Path
@@ -49,6 +87,16 @@ class DriverSettings:
     page_load_timeout_seconds: int
     implicit_wait_seconds: int
     headless: bool
+    allow_headed_fallback: bool
+    use_remote_debugging_pipe: bool
+    browser_probe_timeout_seconds: int
+
+
+@dataclass(frozen=True)
+class BrowserStartupMode:
+    name: str
+    headless: bool
+    use_remote_debugging_pipe: bool
 
 
 def _env_flag(name: str, default: bool = False) -> bool:
@@ -72,6 +120,58 @@ def _env_float(name: str, default: float) -> float:
         return default
 
 
+def _first_existing_path(candidates: List[Tuple[Path, str]]) -> Tuple[Optional[str], Optional[str]]:
+    seen: set[str] = set()
+    for candidate, source in candidates:
+        candidate_str = str(candidate)
+        key = candidate_str.lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        if candidate.exists():
+            return candidate_str, source
+    return None, None
+
+
+def _discover_chrome_binary() -> Tuple[Optional[str], Optional[str]]:
+    env_candidates: List[Tuple[Path, str]] = []
+    for env_name in ("LADBS_CHROME_BINARY", "CHROME_BINARY"):
+        value = os.environ.get(env_name)
+        if value:
+            env_candidates.append((Path(value), f"env:{env_name}"))
+
+    path_candidates: List[Tuple[Path, str]] = []
+    for command_name in ("chrome.exe", "chrome"):
+        resolved = shutil.which(command_name)
+        if resolved:
+            path_candidates.append((Path(resolved), f"path:{command_name}"))
+
+    common_candidates = [(path, "common-path") for path in WINDOWS_CHROME_CANDIDATES]
+    return _first_existing_path(env_candidates + path_candidates + common_candidates)
+
+
+def _discover_chromedriver_path() -> Tuple[Optional[str], Optional[str]]:
+    env_candidates: List[Tuple[Path, str]] = []
+    for env_name in ("LADBS_CHROMEDRIVER_PATH", "CHROMEDRIVER_PATH"):
+        value = os.environ.get(env_name)
+        if value:
+            env_candidates.append((Path(value), f"env:{env_name}"))
+
+    path_candidates: List[Tuple[Path, str]] = []
+    for command_name in ("chromedriver.exe", "chromedriver"):
+        resolved = shutil.which(command_name)
+        if resolved:
+            path_candidates.append((Path(resolved), f"path:{command_name}"))
+
+    repo_candidates: List[Tuple[Path, str]] = [(path, "repo:chromedriver") for path in WINDOWS_CHROMEDRIVER_CANDIDATES]
+    repo_root = BASE_DIR / "chromedriver"
+    if repo_root.exists():
+        for path in sorted(repo_root.rglob("chromedriver.exe"), reverse=True):
+            repo_candidates.append((path, "repo:chromedriver"))
+
+    return _first_existing_path(env_candidates + path_candidates + repo_candidates)
+
+
 def _resolve_driver_settings() -> DriverSettings:
     cache_dir = Path(os.environ.get("SE_CACHE_PATH") or (DATA_DIR / "selenium-cache"))
     profile_root = Path(
@@ -79,14 +179,17 @@ def _resolve_driver_settings() -> DriverSettings:
     )
     browser_env_root = Path(os.environ.get("LADBS_BROWSER_ENV_DIR") or (DATA_DIR / "browser-env"))
     logs_dir = DATA_DIR / "logs" / "ladbs"
+    chrome_binary, chrome_binary_source = _discover_chrome_binary()
+    chromedriver_path, chromedriver_source = _discover_chromedriver_path()
 
     for path in (cache_dir, profile_root, browser_env_root, logs_dir):
         path.mkdir(parents=True, exist_ok=True)
 
     return DriverSettings(
-        chrome_binary=os.environ.get("LADBS_CHROME_BINARY") or os.environ.get("CHROME_BINARY"),
-        chromedriver_path=os.environ.get("LADBS_CHROMEDRIVER_PATH")
-        or os.environ.get("CHROMEDRIVER_PATH"),
+        chrome_binary=chrome_binary,
+        chrome_binary_source=chrome_binary_source,
+        chromedriver_path=chromedriver_path,
+        chromedriver_source=chromedriver_source,
         cache_dir=cache_dir,
         profile_root=profile_root,
         browser_env_root=browser_env_root,
@@ -96,6 +199,9 @@ def _resolve_driver_settings() -> DriverSettings:
         page_load_timeout_seconds=max(10, _env_int("LADBS_PAGE_LOAD_TIMEOUT", 45)),
         implicit_wait_seconds=max(0, _env_int("LADBS_IMPLICIT_WAIT", 1)),
         headless=_env_flag("LADBS_HEADLESS", True),
+        allow_headed_fallback=_env_flag("LADBS_ALLOW_HEADED_FALLBACK", True),
+        use_remote_debugging_pipe=_env_flag("LADBS_USE_REMOTE_DEBUGGING_PIPE", False),
+        browser_probe_timeout_seconds=max(3, _env_int("LADBS_BROWSER_PROBE_TIMEOUT", 6)),
     )
 
 
@@ -121,57 +227,109 @@ def extract_address_from_redfin_url(redfin_url: str) -> Tuple[Optional[str], Opt
             return None, None
 
         street_number = address_components[0]
-        street_name_parts = address_components[1:]
-
-        clean_parts: List[str] = []
-        for part in street_name_parts:
-            if part.upper() not in [
-                "N",
-                "S",
-                "E",
-                "W",
-                "BLVD",
-                "ST",
-                "AVE",
-                "RD",
-                "PL",
-                "DR",
-                "CT",
-                "LN",
-                "WAY",
-            ]:
-                clean_parts.append(part)
-
-        street_name = " ".join(clean_parts) if clean_parts else ""
+        street_name = _normalize_street_name_parts(address_components[1:])
         return street_number, street_name
     except Exception as exc:
         print(f"[LADBS] Error extracting address from URL: {exc}")
         return None, None
 
 
-def _build_chrome_options(settings: DriverSettings, profile_dir: Path) -> "Options":
+def _normalize_street_name_parts(parts: List[str]) -> Optional[str]:
+    clean_parts: List[str] = []
+    for part in parts:
+        cleaned = re.sub(r"[^A-Za-z0-9]", "", part).strip()
+        if not cleaned:
+            continue
+        if cleaned.upper() in STREET_NOISE_TOKENS:
+            continue
+        clean_parts.append(cleaned)
+    if not clean_parts:
+        return None
+    return " ".join(clean_parts)
+
+
+def extract_address_from_text(address: str) -> Tuple[Optional[str], Optional[str]]:
+    try:
+        street_line = (address or "").split(",", 1)[0].strip()
+        match = re.match(r"^(\d+[A-Za-z]?)\s+(.+)$", street_line)
+        if not match:
+            return None, None
+        street_number = match.group(1)
+        street_name = _normalize_street_name_parts(match.group(2).split())
+        return street_number, street_name
+    except Exception as exc:
+        print(f"[LADBS] Error extracting address from text: {exc}")
+        return None, None
+
+
+def _build_startup_modes(settings: DriverSettings) -> List[BrowserStartupMode]:
+    modes = [
+        BrowserStartupMode(
+            name="headless" if settings.headless else "headed",
+            headless=settings.headless,
+            use_remote_debugging_pipe=settings.use_remote_debugging_pipe,
+        )
+    ]
+    if settings.allow_headed_fallback:
+        alternate_headless = not settings.headless
+        modes.append(
+            BrowserStartupMode(
+                name="headed-fallback" if not alternate_headless else "headless-fallback",
+                headless=alternate_headless,
+                use_remote_debugging_pipe=settings.use_remote_debugging_pipe,
+            )
+        )
+    return modes
+
+
+def _build_common_browser_args(
+    profile_dir: Path,
+    *,
+    headless: bool,
+    use_remote_debugging_pipe: bool,
+) -> List[str]:
+    args: List[str] = []
+    if headless:
+        args.append("--headless=new")
+    args.extend(
+        [
+            "--no-sandbox",
+            "--disable-dev-shm-usage",
+            "--disable-gpu",
+            "--disable-software-rasterizer",
+            "--disable-extensions",
+            "--disable-setuid-sandbox",
+            "--disable-background-networking",
+            "--disable-breakpad",
+            "--disable-crash-reporter",
+            "--disable-sync",
+            "--disable-features=Translate,OptimizationGuideModelDownloading",
+            "--hide-crash-restore-bubble",
+            "--metrics-recording-only",
+            "--no-default-browser-check",
+            "--no-first-run",
+            "--password-store=basic",
+            "--window-size=1920,1080",
+            f"--user-data-dir={profile_dir}",
+        ]
+    )
+    if use_remote_debugging_pipe:
+        args.append("--remote-debugging-pipe")
+    return args
+
+
+def _build_chrome_options(
+    settings: DriverSettings,
+    profile_dir: Path,
+    mode: BrowserStartupMode,
+) -> "Options":
     chrome_options = Options()
-    if settings.headless:
-        chrome_options.add_argument("--headless=new")
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("--disable-gpu")
-    chrome_options.add_argument("--disable-software-rasterizer")
-    chrome_options.add_argument("--disable-extensions")
-    chrome_options.add_argument("--disable-setuid-sandbox")
-    chrome_options.add_argument("--disable-background-networking")
-    chrome_options.add_argument("--disable-breakpad")
-    chrome_options.add_argument("--disable-crash-reporter")
-    chrome_options.add_argument("--disable-sync")
-    chrome_options.add_argument("--disable-features=Translate,OptimizationGuideModelDownloading")
-    chrome_options.add_argument("--hide-crash-restore-bubble")
-    chrome_options.add_argument("--metrics-recording-only")
-    chrome_options.add_argument("--no-default-browser-check")
-    chrome_options.add_argument("--no-first-run")
-    chrome_options.add_argument("--password-store=basic")
-    chrome_options.add_argument("--remote-debugging-pipe")
-    chrome_options.add_argument("--window-size=1920,1080")
-    chrome_options.add_argument(f"--user-data-dir={profile_dir}")
+    for arg in _build_common_browser_args(
+        profile_dir,
+        headless=mode.headless,
+        use_remote_debugging_pipe=mode.use_remote_debugging_pipe,
+    ):
+        chrome_options.add_argument(arg)
     chrome_options.page_load_strategy = "eager"
 
     if settings.chrome_binary:
@@ -192,6 +350,8 @@ def _build_chrome_service(settings: DriverSettings, log_path: Path) -> "Service"
 
 def _build_browser_env(settings: DriverSettings) -> Dict[str, str]:
     env = os.environ.copy()
+    for key in INHERITED_BROWSER_ENV_KEYS_TO_REMOVE:
+        env.pop(key, None)
 
     local_app_data = settings.browser_env_root / "localapp"
     app_data = settings.browser_env_root / "appdata"
@@ -215,6 +375,7 @@ def _cleanup_profile_dir(profile_dir: Path | None) -> None:
 def _log_driver_failure(
     settings: DriverSettings,
     attempt: int,
+    mode: BrowserStartupMode,
     error: Exception,
     profile_dir: Path,
     service_log_path: Path,
@@ -226,6 +387,7 @@ def _log_driver_failure(
             [
                 f"timestamp: {datetime.now().isoformat()}",
                 f"attempt: {attempt}",
+                f"startup_mode: {mode.name}",
                 f"profile_dir: {profile_dir}",
                 f"service_log_path: {service_log_path}",
                 f"settings: {get_driver_settings()}",
@@ -239,12 +401,162 @@ def _log_driver_failure(
     )
 
 
-def _classify_driver_error(error: Optional[Exception]) -> str:
+def _probe_browser_launch(settings: DriverSettings, headless: bool) -> Dict[str, Any]:
+    mode_label = "headless" if headless else "headed"
+    profile_dir = Path(tempfile.mkdtemp(prefix=f"ladbs-probe-{mode_label}-", dir=str(settings.profile_root)))
+    log_path = settings.logs_dir / (
+        f"browser_probe_{datetime.now().strftime('%Y%m%d-%H%M%S')}_{mode_label}.log"
+    )
+    if not settings.chrome_binary:
+        return {
+            "mode": mode_label,
+            "headless": headless,
+            "ok": False,
+            "returncode": None,
+            "stdout_excerpt": "",
+            "stderr_excerpt": "No Chrome binary was discovered for direct browser probing.",
+            "log_path": str(log_path),
+        }
+
+    command = [
+        settings.chrome_binary,
+        *(
+            _build_common_browser_args(
+                profile_dir,
+                headless=headless,
+                use_remote_debugging_pipe=False,
+            )
+        ),
+    ]
+    if headless:
+        command.extend(["--dump-dom", "about:blank"])
+    else:
+        command.append("about:blank")
+
+    env = _build_browser_env(settings)
+    stdout_text = ""
+    stderr_text = ""
+    returncode: Optional[int] = None
+    ok = False
+
+    try:
+        if headless:
+            completed = subprocess.run(
+                command,
+                capture_output=True,
+                text=True,
+                timeout=settings.browser_probe_timeout_seconds,
+                env=env,
+            )
+            stdout_text = completed.stdout or ""
+            stderr_text = completed.stderr or ""
+            returncode = completed.returncode
+            ok = completed.returncode == 0
+        else:
+            process = subprocess.Popen(
+                command,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                env=env,
+            )
+            time.sleep(settings.browser_probe_timeout_seconds)
+            if process.poll() is None:
+                ok = True
+                process.terminate()
+                try:
+                    stdout_text, stderr_text = process.communicate(timeout=5)
+                except subprocess.TimeoutExpired:
+                    process.kill()
+                    stdout_text, stderr_text = process.communicate()
+                returncode = process.returncode
+            else:
+                stdout_text, stderr_text = process.communicate()
+                returncode = process.returncode
+                ok = process.returncode == 0
+    except subprocess.TimeoutExpired:
+        stderr_text = "Browser probe timed out before reporting readiness."
+    except Exception as exc:
+        stderr_text = f"Browser probe exception: {exc}"
+    finally:
+        log_path.write_text(
+            "\n".join(
+                [
+                    f"timestamp: {datetime.now().isoformat()}",
+                    f"mode: {mode_label}",
+                    f"command: {command}",
+                    f"returncode: {returncode}",
+                    "stdout:",
+                    stdout_text,
+                    "stderr:",
+                    stderr_text,
+                ]
+            ),
+            encoding="utf-8",
+        )
+        _cleanup_profile_dir(profile_dir)
+
+    return {
+        "mode": mode_label,
+        "headless": headless,
+        "ok": ok,
+        "returncode": returncode,
+        "stdout_excerpt": stdout_text[:1000],
+        "stderr_excerpt": stderr_text[:1000],
+        "log_path": str(log_path),
+    }
+
+
+def diagnose_browser_startup() -> Dict[str, Any]:
+    settings = _resolve_driver_settings()
+    seen_headless_modes: set[bool] = set()
+    probe_results: List[Dict[str, Any]] = []
+    for mode in _build_startup_modes(settings):
+        if mode.headless in seen_headless_modes:
+            continue
+        seen_headless_modes.add(mode.headless)
+        probe_results.append(_probe_browser_launch(settings, mode.headless))
+    return {
+        "settings": get_driver_settings(),
+        "probe_results": probe_results,
+    }
+
+
+def _classify_driver_error(
+    error: Optional[Exception],
+    settings: DriverSettings,
+    probe_results: Optional[List[Dict[str, Any]]] = None,
+) -> str:
     message = str(error or "").lower()
+    if probe_results:
+        failed_results = [result for result in probe_results if not result.get("ok")]
+        if failed_results and len(failed_results) == len(probe_results):
+            combined = " ".join(
+                f"{result.get('stdout_excerpt', '')} {result.get('stderr_excerpt', '')}"
+                for result in failed_results
+            ).lower()
+            if "crashpad" in combined and "access is denied" in combined:
+                return (
+                    "Direct Chromium launch also failed before WebDriver could attach. "
+                    "Detected Crashpad/Mojo access-denied errors even with repo-local "
+                    "browser env and profile directories. This is an environment-level "
+                    "Chromium startup restriction, not a LADBS page/search failure."
+                )
+            if "processsingleton" in combined or "lock file can not be created" in combined:
+                return (
+                    "Chromium could not obtain a usable profile/process lock during direct "
+                    "browser startup. Close other Chromium instances and clear repo-local "
+                    "profile directories before retrying."
+                )
+        if any(result.get("ok") for result in probe_results):
+            return (
+                "Chromium can launch directly, but WebDriver session creation still failed. "
+                "Check Chrome/ChromeDriver version compatibility and the selected driver path."
+            )
     if "cannot create default profile directory" in message:
         return (
             "ChromeDriver could not initialize a writable browser profile. "
-            "Check LOCALAPPDATA/TEMP overrides and Chrome policy restrictions."
+            "Check repo-local profile/cache dirs plus Chrome policy restrictions."
         )
     if "devtoolsactiveport file doesn't exist" in message:
         return (
@@ -275,33 +587,43 @@ def setup_driver() -> Optional["webdriver.Chrome"]:
         if key in {"LOCALAPPDATA", "APPDATA", "TEMP", "TMP", "SE_CACHE_PATH"}:
             os.environ[key] = value
     last_error: Optional[Exception] = None
+    startup_modes = _build_startup_modes(settings)
+    total_attempts = len(startup_modes) * settings.start_retries
 
-    for attempt in range(1, settings.start_retries + 1):
-        profile_dir = Path(tempfile.mkdtemp(prefix="ladbs-", dir=str(settings.profile_root)))
-        service_log_path = settings.logs_dir / (
-            f"chromedriver_{datetime.now().strftime('%Y%m%d-%H%M%S')}_attempt{attempt}.log"
-        )
-
-        try:
-            driver = webdriver.Chrome(
-                service=_build_chrome_service(settings, service_log_path),
-                options=_build_chrome_options(settings, profile_dir),
+    for mode in startup_modes:
+        for attempt in range(1, settings.start_retries + 1):
+            profile_dir = Path(
+                tempfile.mkdtemp(prefix=f"ladbs-{mode.name}-", dir=str(settings.profile_root))
             )
-            driver.set_page_load_timeout(settings.page_load_timeout_seconds)
-            driver.implicitly_wait(settings.implicit_wait_seconds)
-            setattr(driver, "_codex_profile_dir", str(profile_dir))
-            LAST_DRIVER_ERROR_SUMMARY = ""
-            return driver
-        except Exception as exc:
-            last_error = exc
-            _log_driver_failure(settings, attempt, exc, profile_dir, service_log_path)
-            _cleanup_profile_dir(profile_dir)
-            if attempt < settings.start_retries:
-                time.sleep(settings.retry_delay_seconds)
+            service_log_path = settings.logs_dir / (
+                f"chromedriver_{datetime.now().strftime('%Y%m%d-%H%M%S')}_{mode.name}_attempt{attempt}.log"
+            )
 
-    LAST_DRIVER_ERROR_SUMMARY = _classify_driver_error(last_error)
+            try:
+                driver = webdriver.Chrome(
+                    service=_build_chrome_service(settings, service_log_path),
+                    options=_build_chrome_options(settings, profile_dir, mode),
+                )
+                driver.set_page_load_timeout(settings.page_load_timeout_seconds)
+                driver.implicitly_wait(settings.implicit_wait_seconds)
+                setattr(driver, "_codex_profile_dir", str(profile_dir))
+                LAST_DRIVER_ERROR_SUMMARY = ""
+                return driver
+            except Exception as exc:
+                last_error = exc
+                _log_driver_failure(settings, attempt, mode, exc, profile_dir, service_log_path)
+                _cleanup_profile_dir(profile_dir)
+                if attempt < settings.start_retries:
+                    time.sleep(settings.retry_delay_seconds)
+
+    diagnostics = diagnose_browser_startup()
+    LAST_DRIVER_ERROR_SUMMARY = _classify_driver_error(
+        last_error,
+        settings,
+        diagnostics.get("probe_results"),
+    )
     print(
-        f"[LADBS] Error setting up Chrome driver after {settings.start_retries} attempts: "
+        f"[LADBS] Error setting up Chrome driver after {total_attempts} startup attempts: "
         f"{LAST_DRIVER_ERROR_SUMMARY}"
     )
     print(f"[LADBS] Review logs under {settings.logs_dir}")
@@ -632,17 +954,16 @@ def get_ladbs_data(
             "note": "Selenium not installed; LADBS not queried.",
         }
 
-    if not redfin_url:
-        return {
-            "source": "ladbs_stub_no_url",
-            "apn": apn,
-            "address": address,
-            "fetched_at": fetched_at,
-            "permits": [],
-            "note": "No Redfin URL provided; cannot derive LADBS address.",
-        }
+    street_number: Optional[str] = None
+    street_name: Optional[str] = None
+    address_source = None
+    if redfin_url:
+        street_number, street_name = extract_address_from_redfin_url(redfin_url)
+        address_source = "redfin_url"
+    if (not street_number or not street_name) and address:
+        street_number, street_name = extract_address_from_text(address)
+        address_source = "address"
 
-    street_number, street_name = extract_address_from_redfin_url(redfin_url)
     if not street_number or not street_name:
         return {
             "source": "ladbs_stub_bad_address",
@@ -650,7 +971,10 @@ def get_ladbs_data(
             "address": address,
             "fetched_at": fetched_at,
             "permits": [],
-            "note": f"Could not extract street number/name from Redfin URL: {redfin_url}",
+            "note": (
+                "Could not extract LADBS street number/name from the provided inputs. "
+                f"redfin_url={redfin_url!r} address={address!r}"
+            ),
         }
 
     driver = setup_driver()
@@ -664,7 +988,11 @@ def get_ladbs_data(
             "permits": [],
             "note": (
                 f"{LAST_DRIVER_ERROR_SUMMARY} "
-                f"Review LADBS logs under {settings.logs_dir} and confirm Chrome/ChromeDriver settings."
+                f"Chrome={settings.chrome_binary or 'not-found'} "
+                f"({settings.chrome_binary_source or 'no-source'}); "
+                f"ChromeDriver={settings.chromedriver_path or 'selenium-manager'} "
+                f"({settings.chromedriver_source or 'auto'}). "
+                f"Review LADBS logs under {settings.logs_dir}."
             ),
         }
 
@@ -679,7 +1007,10 @@ def get_ladbs_data(
                 "address": address,
                 "fetched_at": fetched_at,
                 "permits": [],
-                "note": f"PLR search did not return a results page for {street_number} {street_name}.",
+                "note": (
+                    f"PLR search did not return a results page for {street_number} {street_name} "
+                    f"(derived from {address_source})."
+                ),
             }
 
         permits_basic = get_permit_list(driver)

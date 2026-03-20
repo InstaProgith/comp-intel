@@ -77,6 +77,7 @@ https://www.redfin.com/CA/Los-Angeles/540-N-Gardner-St-90036/home/198348544
 ## Project Structure
 
 - `app/` - Python modules (scrapers, orchestrator, Flask server, AI)
+- `app/ladbs_smoke.py` - Repeatable LADBS smoke entrypoint for Redfin URL or direct-address checks
 - `templates/` - HTML templates (home, report, history pages)
 - `static/` - CSS styles
 - `data/raw/` - Cached HTML (gitignored)
@@ -110,6 +111,7 @@ https://www.redfin.com/CA/Los-Angeles/540-N-Gardner-St-90036/home/198348544
 
 - Missing modules: activate venv (`source .venv/bin/activate`), reinstall (`pip install -r requirements.txt`)
 - LADBS scraping fails: verify Chrome/ChromeDriver installed and review `data/logs/ladbs/`
+- LADBS on Windows/Codex: if Chromium cannot lock a profile under the repo path, point `LADBS_SELENIUM_PROFILE_DIR`, `LADBS_BROWSER_ENV_DIR`, and `SE_CACHE_PATH` to a writable `%LOCALAPPDATA%` location before re-running the smoke command
 - No AI summary: set `ONE_MIN_AI_API_KEY` in environment
 - Empty permits: property may have no permit history or LADBS temporarily unavailable
 - Production startup fails: set `APP_ENV=production`, `FLASK_SECRET_KEY`, and `APP_ACCESS_PASSWORD`
@@ -120,4 +122,20 @@ Run the smoke suite with:
 
 ```bash
 python -m unittest discover -s tests -v
+```
+
+Repeatable LADBS smoke commands:
+
+```bash
+python -m app.ladbs_smoke --show-diagnostics --json
+python -m app.ladbs_smoke --address "1120 S Lucerne Blvd, Los Angeles, CA 90019" --json
+```
+
+Exact Windows PowerShell env vars that produced a green Lucerne LADBS smoke in this repo:
+
+```powershell
+$env:LADBS_SELENIUM_PROFILE_DIR = Join-Path $env:LOCALAPPDATA 'comp-intel-ladbs\profiles'
+$env:LADBS_BROWSER_ENV_DIR = Join-Path $env:LOCALAPPDATA 'comp-intel-ladbs\browser-env'
+$env:SE_CACHE_PATH = Join-Path $env:LOCALAPPDATA 'comp-intel-ladbs\selenium-cache'
+python -m app.ladbs_smoke --show-diagnostics --json
 ```
