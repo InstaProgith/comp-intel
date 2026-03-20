@@ -3,8 +3,8 @@
 import os
 import re
 import secrets
-from functools import wraps
 from datetime import datetime
+from functools import wraps
 from pathlib import Path
 from typing import Any, Dict, List
 
@@ -12,58 +12,33 @@ from flask import Flask, render_template, request, jsonify, session, redirect, m
 
 # Always import using the package path
 from app.orchestrator import run_full_comp_pipeline, run_multiple, get_search_log, get_repeat_players
+from app.runtime_config import (
+    is_production_like_mode,
+    resolve_access_password,
+    resolve_flask_secret_key,
+)
 
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-LOGS_DIR = Path(BASE_DIR) / "data" / "logs"
+BASE_DIR = Path(__file__).resolve().parent.parent
+LOGS_DIR = BASE_DIR / "data" / "logs"
 LOGS_DIR.mkdir(parents=True, exist_ok=True)
 MAX_URLS = 5  # Stage 6: limit number of Redfin URLs per request
 
 app = Flask(
     __name__,
-    template_folder=os.path.join(BASE_DIR, "templates"),
-    static_folder=os.path.join(BASE_DIR, "static"),
+    template_folder=str(BASE_DIR / "templates"),
+    static_folder=str(BASE_DIR / "static"),
 )
 
-# Set Flask secret key from environment variable with dev fallback
-# WARNING: The fallback is only for local development - always set FLASK_SECRET_KEY in production
-_flask_secret = os.environ.get("FLASK_SECRET_KEY")
-if not _flask_secret:
-    import warnings
-    warnings.warn(
-        "FLASK_SECRET_KEY not set! Using insecure fallback. "
-        "Set FLASK_SECRET_KEY environment variable in production.",
-        RuntimeWarning
-    )
-    _flask_secret = "DEV_ONLY_CHANGE_ME"
-app.secret_key = _flask_secret
+app.secret_key = resolve_flask_secret_key()
+app.config["EXPECTED_PASSWORD"] = resolve_access_password()
+app.config["SESSION_COOKIE_HTTPONLY"] = True
+app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+app.config["SESSION_COOKIE_SECURE"] = is_production_like_mode()
 
 
 def get_expected_password() -> str:
-    """
-    Resolve the access password with this precedence:
-    1. Environment variable APP_ACCESS_PASSWORD
-    2. A text file at the repo root named access_password.txt
-    3. As a last resort ONLY for local dev, a hardcoded placeholder
-    """
-    # 1. Check environment variable first
-    env_pw = os.environ.get("APP_ACCESS_PASSWORD")
-    if env_pw:
-        return env_pw
-
-    # 2. Fallback: read from access_password.txt at repo root
-    try:
-        pw_file = os.path.join(BASE_DIR, "access_password.txt")
-        if os.path.exists(pw_file):
-            with open(pw_file, "r", encoding="utf-8") as f:
-                pw = f.read().strip()
-                if pw:
-                    return pw
-    except Exception:
-        pass
-
-    # 3. Final dev-only fallback
-    return "CHANGE_ME_DEV"
+    return str(app.config["EXPECTED_PASSWORD"])
 
 
 def login_required(f):
@@ -328,7 +303,7 @@ def single_report():
     
     Used for PDF generation and clean report viewing.
     """
-    urls_text = (request.form.get("urls") or "").strip()
+    urls_text = (request.form.get("urls") or request.form.get("redfin_url") or "").strip()
     if not urls_text:
         return render_template(
             "report.html",

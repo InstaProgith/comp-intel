@@ -26,20 +26,32 @@ source .venv/bin/activate
 pip install -r requirements.txt
 python -m app.ui_server
 # Open http://localhost:5000
-# Password: see access_password.txt
+# Password: APP_ACCESS_PASSWORD, local access_password.txt, or CHANGE_ME_DEV in local debug-style runs
 ```
+
+**Local config:**
+- Set `FLASK_SECRET_KEY` and `APP_ACCESS_PASSWORD` in your environment or `.env`
+- Optional local-only fallback: create an untracked `access_password.txt`
+- Safe examples live in `.env.example` and `access_password.example.txt`
 
 ## Environment Variables
 
 **Production (required):**
 - `FLASK_SECRET_KEY` - Session encryption key (generate random string)
-- `APP_ACCESS_PASSWORD` - Login password (overrides access_password.txt)
+- `APP_ACCESS_PASSWORD` - Login password (preferred over local file)
+- `APP_ENV=production` - Enables fail-closed production config behavior
 
 **Optional:**
 - `ONE_MIN_AI_API_KEY` - For AI-generated summaries
 - `FLASK_DEBUG` - Set to "1" for debug mode (never in production)
+- `LADBS_CHROME_BINARY` - Explicit Chrome binary path if Chrome is not on PATH
+- `LADBS_CHROMEDRIVER_PATH` - Explicit ChromeDriver path if needed
+- `SE_CACHE_PATH` - Writable Selenium Manager cache directory
+- `LADBS_SELENIUM_PROFILE_DIR` - Writable browser profile root for LADBS sessions
+- `LADBS_DRIVER_START_RETRIES` - Chrome startup retry count
+- `LADBS_PAGE_LOAD_TIMEOUT` - LADBS page-load timeout in seconds
 
-**Password priority:** Environment var `APP_ACCESS_PASSWORD` > `access_password.txt` > fallback "CHANGE_ME_DEV"
+**Password priority:** `APP_ACCESS_PASSWORD` > local `access_password.txt` > fallback `CHANGE_ME_DEV` outside production-like environments only
 
 ## Deployment (Render/Heroku)
 
@@ -48,6 +60,7 @@ python -m app.ui_server
 - Set environment variables in platform dashboard
 - Runs on port assigned by `PORT` env var (or 5000 default)
 - Python version: see `runtime.txt`
+- VPS guide: see `VPS_DEPLOYMENT.md`
 
 ## Usage
 
@@ -69,7 +82,9 @@ https://www.redfin.com/CA/Los-Angeles/540-N-Gardner-St-90036/home/198348544
 - `data/raw/` - Cached HTML (gitignored)
 - `requirements.txt` - Python dependencies
 - `runtime.txt` - Python version for deployment
-- `access_password.txt` - Default password (dev/internal use only)
+- `.env.example` - Safe environment variable template
+- `access_password.example.txt` - Safe local password-file example
+- `tests/` - Stdlib smoke tests for config, Flask routes, and parser logic
 
 ## Data Pipeline
 
@@ -94,6 +109,15 @@ https://www.redfin.com/CA/Los-Angeles/540-N-Gardner-St-90036/home/198348544
 ## Troubleshooting
 
 - Missing modules: activate venv (`source .venv/bin/activate`), reinstall (`pip install -r requirements.txt`)
-- LADBS scraping fails: verify Chrome/ChromeDriver installed
+- LADBS scraping fails: verify Chrome/ChromeDriver installed and review `data/logs/ladbs/`
 - No AI summary: set `ONE_MIN_AI_API_KEY` in environment
 - Empty permits: property may have no permit history or LADBS temporarily unavailable
+- Production startup fails: set `APP_ENV=production`, `FLASK_SECRET_KEY`, and `APP_ACCESS_PASSWORD`
+
+## Tests
+
+Run the smoke suite with:
+
+```bash
+python -m unittest discover -s tests -v
+```
