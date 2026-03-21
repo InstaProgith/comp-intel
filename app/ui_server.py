@@ -145,6 +145,15 @@ def login_required(f):
     return wrapper
 
 
+def _is_missing_template_value(value: Any) -> bool:
+    if value is None:
+        return True
+    if isinstance(value, str):
+        stripped = value.strip()
+        return stripped == "" or stripped.lower() in {"none", "null", "n/a", "na", "--"}
+    return False
+
+
 @app.template_test("match")
 def jinja_match(value, pattern):
     """
@@ -157,6 +166,16 @@ def jinja_match(value, pattern):
         return re.search(pattern, str(value)) is not None
     except re.error:
         return False
+
+
+@app.template_test("present")
+def jinja_present(value):
+    return not _is_missing_template_value(value)
+
+
+@app.template_filter("display_text")
+def jinja_display_text(value, placeholder="Unknown"):
+    return placeholder if _is_missing_template_value(value) else str(value).strip()
 
 
 @app.route("/", methods=["GET", "POST"])

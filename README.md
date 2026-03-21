@@ -84,6 +84,7 @@ https://www.redfin.com/CA/Los-Angeles/540-N-Gardner-St-90036/home/198348544
 - `app/` - Python modules (scrapers, orchestrator, Flask server, AI)
 - `app/ladbs_smoke.py` - Repeatable LADBS smoke entrypoint for Redfin URL or direct-address checks
 - `app/property_data_smoke.py` - Repeatable Lucerne-style smoke for Redfin + ZIMAS + LADBS permits + LADBS records
+- `app/qa_harness.py` - Real-property QA harness with Lucerne expectations and report-render checks
 - `app/zimas_pin_client.py` - Browserless ZIMAS PIN resolver used by the new LADBS pin-first path
 - `app/zimas_client.py` - Browserless ZIMAS parcel-profile client
 - `app/ladbs_records_client.py` - Browserless LADBS records/document search client with PDF-link resolution
@@ -154,9 +155,13 @@ Repeatable Lucerne full-data smoke command:
 ```bash
 python -m app.property_data_smoke --redfin-url https://www.redfin.com/CA/Los-Angeles/1120-S-Lucerne-Blvd-90019/home/6911003
 python -m app.property_data_smoke --redfin-url https://www.redfin.com/CA/Los-Angeles/1120-S-Lucerne-Blvd-90019/home/6911003 --json
+python -m app.qa_harness
+python -m app.qa_harness --json
 ```
 
 The property-data smoke validates the browserless ZIMAS parcel profile, the browserless LADBS records/documents search, and the existing LADBS permit flow together. It prints record counts plus public PDF viewer links when LADBS exposes digital images. Downloaded PDFs and generated artifacts remain out of git.
+
+The QA harness layers Lucerne-specific expectations on top of the orchestrated payload and rendered report. It checks schema warnings, key source states, representative permit/document IDs, core ZIMAS values, and basic report cleanliness (`Review Flags`, `Data Notes`, no raw `None`/`null`).
 
 Exact Windows PowerShell env vars that produced the earlier PLR browser fallback green path in this repo:
 

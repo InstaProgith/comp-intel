@@ -45,11 +45,15 @@ class ZimasClientTests(TestCase):
             'divTab2: "<table><tr><td>Community Plan Area</td><td>Wilshire</td></tr>'
             '<tr><td>Council District</td><td>CD 10 - Heather Hutt</td></tr></table>", '
             'divTab3: "<table><tr><td>Zoning</td><td>R1-1-O</td></tr>'
-            '<tr><td>General Plan Land Use</td><td>Low II Residential</td></tr></table>", '
+            '<tr><td>General Plan Land Use</td><td>Low II Residential</td></tr>'
+            '<tr><td>General Plan Note(s)</td><td>Yes</td></tr>'
+            '<tr><td>Hillside Area (Zoning Code)</td><td>No</td></tr>'
+            '<tr><td>Residential Market Area</td><td>Medium-High</td></tr></table>", '
             'divTab7: "<table><tr><td>Flood Zone</td><td>500 Yr</td></tr>'
             '<tr><td>Methane Hazard Site</td><td>Methane Zone</td></tr></table>", '
             'divTab8: "<table><tr><td>Nearest Fault (Name)</td><td>Puente Hills Blind Thrust</td></tr>'
-            '<tr><td>Nearest Fault (Distance in km)</td><td>2.5415748</td></tr></table>", '
+            '<tr><td>Nearest Fault (Distance in km)</td><td>2.5415748</td></tr>'
+            '<tr><td>Tsunami Hazard Area</td><td>No</td></tr></table>", '
             'divTab1200: "<table><tr><td>Building Permit Info</td><td>View</td></tr></table>"}'
         )
 
@@ -59,9 +63,13 @@ class ZimasClientTests(TestCase):
         self.assertEqual(parsed["parcel_identity"]["apn"], "5082004025")
         self.assertEqual(parsed["planning_context"]["community_plan_area"], "Wilshire")
         self.assertEqual(parsed["zoning_profile"]["zoning"], "R1-1-O")
+        self.assertEqual(parsed["zoning_profile"]["general_plan_notes"], "Yes")
+        self.assertEqual(parsed["zoning_profile"]["residential_market_area"], "Medium-High")
+        self.assertEqual(parsed["environmental_profile"]["hillside_area"], "No")
         self.assertEqual(parsed["environmental_profile"]["flood_zone"], "500 Yr")
         self.assertEqual(parsed["hazard_profile"]["nearest_fault"], "Puente Hills Blind Thrust")
         self.assertEqual(parsed["hazard_profile"]["nearest_fault_distance_km"], 2.5415748)
+        self.assertEqual(parsed["hazard_profile"]["tsunami_hazard_area"], "No")
         self.assertEqual(parsed["permit_references"]["building_permit_info"], "View")
 
     def test_get_zimas_profile_uses_direct_pin(self) -> None:

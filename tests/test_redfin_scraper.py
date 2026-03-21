@@ -90,3 +90,5 @@ class RedfinScraperTests(TestCase):
         self.assertEqual(data["sold_banner"], "SEP 5, 2025")
         self.assertEqual(data["timeline"][0]["event"], "sold")
         self.assertEqual(data["timeline"][0]["price"], 800000)
+        self.assertEqual(data["address"], "1120 S Lucerne Blvd, Los Angeles, CA 90019")
+        self.assertEqual(data["year_built"], 1922)

@@ -13,6 +13,7 @@ try:
     from app.redfin_scraper import get_redfin_data  # type: ignore
     from app.ladbs_scraper import get_ladbs_data  # type: ignore
     from app.ladbs_records_client import get_ladbs_records  # type: ignore
+    from app.payload_contract import apply_payload_contract  # type: ignore
     from app.zimas_client import get_zimas_profile  # type: ignore
     from app.ai_summarizer import summarize_comp  # type: ignore
     from app.cslb_lookup import lookup_cslb_license  # type: ignore
@@ -20,6 +21,7 @@ except ImportError:
     from redfin_scraper import get_redfin_data  # type: ignore
     from ladbs_scraper import get_ladbs_data  # type: ignore
     from ladbs_records_client import get_ladbs_records  # type: ignore
+    from payload_contract import apply_payload_contract  # type: ignore
     from zimas_client import get_zimas_profile  # type: ignore
     from ai_summarizer import summarize_comp  # type: ignore
     from cslb_lookup import lookup_cslb_license  # type: ignore
@@ -1789,7 +1791,8 @@ def run_full_comp_pipeline(url: str) -> Dict[str, Any]:
         print(f"[WARN] AI summarizer failed: {e}")
         strategy_notes = None
 
-    combined: Dict[str, Any] = {
+    combined = apply_payload_contract(
+        {
         "url": url,
         "address": redfin_data.get("address", "Unknown address"),
         "headline_metrics": metrics,
@@ -1831,7 +1834,8 @@ def run_full_comp_pipeline(url: str) -> Dict[str, Any]:
         "hold_months": hold_months,
         "zimas_profile": zimas_data,
         "ladbs_records": ladbs_records_data,
-    }
+        }
+    )
 
     # summary_markdown is deprecated, strategy_notes is used instead
     combined["summary_markdown"] = None
@@ -1914,30 +1918,36 @@ def run_multiple(urls: List[str]) -> List[Dict[str, Any]]:
         try:
             results.append(run_full_comp_pipeline(url))
         except Exception as exc:
-            results.append({
-                "address": "Error processing property",
-                "url": url,
-                "summary_markdown": "<p class='error-message'>An error occurred…</p>",
-                "headline_metrics": None,
-                "metrics": {
-                    "purchase_price": None,
-                    "purchase_date": None,
-                    "exit_price": None,
-                    "exit_date": None,
-                    "spread": None,
-                    "roi_pct": None,
-                    "hold_days": None,
-                },
-                "current_summary": "—",
-                "public_record_summary": "—",
-                "lot_summary": "—",
-                "permit_summary": "—",
-                "permit_count": 0,
-                "redfin": {"timeline": []},
-                "ladbs": {"permits": []},
-                "project_contacts": None,
-                "cslb_contractor": None,
-            })
+            results.append(
+                apply_payload_contract(
+                    {
+                        "address": "Error processing property",
+                        "url": url,
+                        "summary_markdown": "<p class='error-message'>An error occurred…</p>",
+                        "metrics": {
+                            "purchase_price": None,
+                            "purchase_date": None,
+                            "exit_price": None,
+                            "exit_date": None,
+                            "spread": None,
+                            "roi_pct": None,
+                            "hold_days": None,
+                        },
+                        "current_summary": "—",
+                        "public_record_summary": "—",
+                        "lot_summary": "—",
+                        "permit_summary": "—",
+                        "permit_count": 0,
+                        "redfin": {"timeline": []},
+                        "ladbs": {"permits": []},
+                        "project_contacts": None,
+                        "cslb_contractor": None,
+                        "redfin_error": str(exc),
+                        "ladbs_error": str(exc),
+                        "data_notes": ["Pipeline error while processing this property."],
+                    }
+                )
+            )
             # continue to next URL without raising
     return results
 
