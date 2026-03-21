@@ -1,0 +1,305 @@
+{
+  "properties": [
+    {
+      "name": "malcolm",
+      "tags": [
+        "sparse-records",
+        "recent-sale",
+        "permit-endpoint-uncertainty"
+      ],
+      "redfin_url": "https://www.redfin.com/CA/Los-Angeles/2831-Malcolm-Ave-90064/home/6753382",
+      "known_truths": {
+        "address": "2831 Malcolm Ave, Los Angeles, CA 90064",
+        "apn": "4255013007",
+        "pin": "123B157   607",
+        "zoning": "R1-1"
+      },
+      "key_fields_to_verify": [
+        "address",
+        "pin",
+        "apn",
+        "zoning",
+        "permit source",
+        "record count",
+        "report cleanliness"
+      ],
+      "acceptable_uncertainty_notes": [
+        "The LADBS PermitResultsbyPin endpoint may intermittently return service-unavailable content for this parcel even when the browserless records search still resolves a document."
+      ],
+      "expectations": {
+        "address_contains": "Malcolm",
+        "pin": "123B157   607",
+        "apn": "4255013007",
+        "zoning": "R1-1",
+        "allowed_zimas_sources": [
+          "zimas_profile_v1"
+        ],
+        "allowed_permit_sources": [
+          "ladbs_pin_v1",
+          "ladbs_pin_no_results",
+          "ladbs_pin_error"
+        ],
+        "allowed_records_sources": [
+          "ladbs_records_v1"
+        ],
+        "min_record_count": 1,
+        "min_pdf_count": 1,
+        "required_document_numbers": [
+          "23010-20000-03343"
+        ],
+        "required_report_sections": [
+          "Developer Snapshot",
+          "Permit Overview",
+          "ZIMAS Parcel Profile",
+          "LADBS Records",
+          "Review Flags",
+          "Data Notes"
+        ],
+        "forbidden_report_strings": [
+          ">None<",
+          "null"
+        ]
+      }
+    },
+    {
+      "name": "rosewood",
+      "tags": [
+        "recently-permitted",
+        "multiple-ladbs-docs",
+        "range-address"
+      ],
+      "redfin_url": "https://www.redfin.com/CA/Los-Angeles/3629-Rosewood-Ave-90066/home/6746236",
+      "known_truths": {
+        "address": "3629 Rosewood Ave, Los Angeles, CA 90066",
+        "apn": "4245011018",
+        "pin": "111B149   315",
+        "zoning": "R1V2"
+      },
+      "key_fields_to_verify": [
+        "address",
+        "pin",
+        "apn",
+        "zoning",
+        "permit count",
+        "record count",
+        "representative permit and document IDs"
+      ],
+      "acceptable_uncertainty_notes": [
+        "This property uses range-style and TEMP LADBS address labels; review output should only flag those if they expand beyond the subject address rather than merely restating it."
+      ],
+      "expectations": {
+        "address_contains": "Rosewood",
+        "pin": "111B149   315",
+        "apn": "4245011018",
+        "zoning": "R1V2",
+        "allowed_zimas_sources": [
+          "zimas_profile_v1"
+        ],
+        "allowed_permit_sources": [
+          "ladbs_pin_v1"
+        ],
+        "allowed_records_sources": [
+          "ladbs_records_v1"
+        ],
+        "min_permit_count": 8,
+        "min_record_count": 9,
+        "min_pdf_count": 8,
+        "required_permit_numbers": [
+          "26016-30000-03655"
+        ],
+        "required_document_numbers": [
+          "24014-30000-03980"
+        ],
+        "required_report_sections": [
+          "ZIMAS Parcel Profile",
+          "LADBS Records",
+          "Review Flags"
+        ],
+        "forbidden_report_strings": [
+          ">None<",
+          "null"
+        ]
+      }
+    },
+    {
+      "name": "kelton",
+      "tags": [
+        "older-records",
+        "certificate-bundle",
+        "dense-doc-history"
+      ],
+      "redfin_url": "https://www.redfin.com/CA/Los-Angeles/3104-Kelton-Ave-90034/home/6752630",
+      "known_truths": {
+        "address": "3104 Kelton Ave, Los Angeles, CA 90034",
+        "apn": "4254007013",
+        "pin": "120B157   124",
+        "zoning": "R1-1"
+      },
+      "key_fields_to_verify": [
+        "address",
+        "pin",
+        "apn",
+        "zoning",
+        "permit count",
+        "record count",
+        "certificate bundle handling"
+      ],
+      "acceptable_uncertainty_notes": [
+        "LADBS documents include certificate-of-occupancy bundles that reuse a record ID; that should not be treated as a suspicious mismatch when the bundle is same-day CO-only."
+      ],
+      "expectations": {
+        "address_contains": "Kelton",
+        "pin": "120B157   124",
+        "apn": "4254007013",
+        "zoning": "R1-1",
+        "allowed_zimas_sources": [
+          "zimas_profile_v1"
+        ],
+        "allowed_permit_sources": [
+          "ladbs_pin_v1"
+        ],
+        "allowed_records_sources": [
+          "ladbs_records_v1"
+        ],
+        "min_permit_count": 6,
+        "min_record_count": 18,
+        "min_pdf_count": 9,
+        "required_permit_numbers": [
+          "24014-20000-00638"
+        ],
+        "required_document_numbers": [
+          "CERT 273648"
+        ],
+        "required_report_sections": [
+          "ZIMAS Parcel Profile",
+          "LADBS Records",
+          "Review Flags"
+        ],
+        "forbidden_report_strings": [
+          ">None<",
+          "null"
+        ]
+      }
+    },
+    {
+      "name": "castle-heights",
+      "tags": [
+        "multiple-ladbs-docs",
+        "certificate-bundle",
+        "different-zoning-profile"
+      ],
+      "redfin_url": "https://www.redfin.com/CA/Los-Angeles/2631-Castle-Heights-Pl-90034/home/6792332",
+      "known_truths": {
+        "address": "2631 Castle Heights Pl, Los Angeles, CA 90034",
+        "apn": "4309024016",
+        "pin": "126B165   920",
+        "zoning": "R1V2"
+      },
+      "key_fields_to_verify": [
+        "address",
+        "pin",
+        "apn",
+        "zoning",
+        "permit count",
+        "record count",
+        "certificate bundle handling"
+      ],
+      "acceptable_uncertainty_notes": [
+        "Historic certificate bundles on this parcel should be summarized cleanly without inflating duplicate-record anomaly noise."
+      ],
+      "expectations": {
+        "address_contains": "Castle Heights",
+        "pin": "126B165   920",
+        "apn": "4309024016",
+        "zoning": "R1V2",
+        "allowed_zimas_sources": [
+          "zimas_profile_v1"
+        ],
+        "allowed_permit_sources": [
+          "ladbs_pin_v1"
+        ],
+        "allowed_records_sources": [
+          "ladbs_records_v1"
+        ],
+        "min_permit_count": 8,
+        "min_record_count": 15,
+        "min_pdf_count": 12,
+        "required_permit_numbers": [
+          "23014-30000-05383"
+        ],
+        "required_document_numbers": [
+          "CERT 274662"
+        ],
+        "required_report_sections": [
+          "ZIMAS Parcel Profile",
+          "LADBS Records",
+          "Review Flags"
+        ],
+        "forbidden_report_strings": [
+          ">None<",
+          "null"
+        ]
+      }
+    },
+    {
+      "name": "appleton",
+      "tags": [
+        "newer-build",
+        "multiple-ladbs-docs",
+        "temp-address-label"
+      ],
+      "redfin_url": "https://www.redfin.com/CA/Los-Angeles/12506-Appleton-Way-90066/home/6748251",
+      "known_truths": {
+        "address": "12506 Appleton Way, Los Angeles, CA 90066",
+        "apn": "4247028037",
+        "pin": "114B153   331",
+        "zoning": "R1V2"
+      },
+      "key_fields_to_verify": [
+        "address",
+        "pin",
+        "apn",
+        "zoning",
+        "permit count",
+        "record count",
+        "TEMP address normalization"
+      ],
+      "acceptable_uncertainty_notes": [
+        "TEMP LADBS address labels should collapse to the subject address for anomaly review rather than creating standalone crossover warnings."
+      ],
+      "expectations": {
+        "address_contains": "Appleton",
+        "pin": "114B153   331",
+        "apn": "4247028037",
+        "zoning": "R1V2",
+        "allowed_zimas_sources": [
+          "zimas_profile_v1"
+        ],
+        "allowed_permit_sources": [
+          "ladbs_pin_v1"
+        ],
+        "allowed_records_sources": [
+          "ladbs_records_v1"
+        ],
+        "min_permit_count": 10,
+        "min_record_count": 12,
+        "min_pdf_count": 10,
+        "required_permit_numbers": [
+          "20047-20000-01009"
+        ],
+        "required_document_numbers": [
+          "CERT 211258"
+        ],
+        "required_report_sections": [
+          "ZIMAS Parcel Profile",
+          "LADBS Records",
+          "Review Flags"
+        ],
+        "forbidden_report_strings": [
+          ">None<",
+          "null"
+        ]
+      }
+    }
+  ]
+}

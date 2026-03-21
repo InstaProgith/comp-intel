@@ -258,11 +258,11 @@ def _pick_purchase_and_exit(
 
 def _fmt_money(val: Optional[int]) -> str:
     if val is None:
-        return "—"
+        return "N/A"
     try:
         return f"${val:,.0f}"
     except Exception:
-        return "—"
+        return "N/A"
 
 
 def _parse_permit_timeline(permits: List[Dict[str, Any]]) -> Dict[str, Any]:
@@ -1625,9 +1625,9 @@ def run_full_comp_pipeline(url: str) -> Dict[str, Any]:
             "address": "Unknown (Redfin fetch failed)",
             "timeline": [],
             "tax": {},
-            "current_summary": "—",
-            "public_record_summary": "—",
-            "lot_summary": "—",
+            "current_summary": "N/A",
+            "public_record_summary": "N/A",
+            "lot_summary": "N/A",
         }
 
     # Validate redfin_data has minimal required structure
@@ -1745,7 +1745,13 @@ def run_full_comp_pipeline(url: str) -> Dict[str, Any]:
     redfin_error = None if redfin_ok else "Redfin data unavailable (scrape error or no match)"
     
     ladbs_source = ladbs_data.get("source", "")
-    ladbs_ok = not (ladbs_source.startswith("ladbs_stub_") or ladbs_source == "ladbs_error" or ladbs_source == "ladbs_invalid")
+    ladbs_ok = ladbs_source in {
+        "ladbs_pin_v1",
+        "ladbs_pin_no_results",
+        "ladbs_plr_v6",
+        "ladbs_no_results_page",
+        "ladbs_no_permits_found",
+    }
     ladbs_error = None if ladbs_ok else ladbs_data.get("note", "LADBS data unavailable")
     
     zimas_source = zimas_data.get("source", "")
@@ -1799,10 +1805,10 @@ def run_full_comp_pipeline(url: str) -> Dict[str, Any]:
         "metrics": metrics,               # alias so template can use r.metrics.*
         "permit_timeline": permit_timeline,
         "project_durations": project_durations,
-        "current_summary": redfin_data.get("current_summary", "—"),
-        "public_record_summary": redfin_data.get("public_record_summary", "—"),
-        "lot_summary": redfin_data.get("lot_summary", "—"),
-        "permit_summary": ladbs_data.get("note", "—"),
+        "current_summary": redfin_data.get("current_summary", "N/A"),
+        "public_record_summary": redfin_data.get("public_record_summary", "N/A"),
+        "lot_summary": redfin_data.get("lot_summary", "N/A"),
+        "permit_summary": ladbs_data.get("note", "N/A"),
         "permit_count": len(ladbs_data.get("permits") or []),
         "ladbs": ladbs_data,
         "redfin": redfin_data,
@@ -1923,7 +1929,7 @@ def run_multiple(urls: List[str]) -> List[Dict[str, Any]]:
                     {
                         "address": "Error processing property",
                         "url": url,
-                        "summary_markdown": "<p class='error-message'>An error occurred…</p>",
+                        "summary_markdown": "<p class='error-message'>An error occurred...</p>",
                         "metrics": {
                             "purchase_price": None,
                             "purchase_date": None,
@@ -1933,10 +1939,10 @@ def run_multiple(urls: List[str]) -> List[Dict[str, Any]]:
                             "roi_pct": None,
                             "hold_days": None,
                         },
-                        "current_summary": "—",
-                        "public_record_summary": "—",
-                        "lot_summary": "—",
-                        "permit_summary": "—",
+                        "current_summary": "N/A",
+                        "public_record_summary": "N/A",
+                        "lot_summary": "N/A",
+                        "permit_summary": "N/A",
                         "permit_count": 0,
                         "redfin": {"timeline": []},
                         "ladbs": {"permits": []},

@@ -227,6 +227,19 @@ def extract_address_from_text(address: str) -> Tuple[Optional[str], Optional[str
     return zimas_extract_address_from_text(address)
 
 
+def _normalize_address_signature(value: Optional[str]) -> Optional[str]:
+    if not value:
+        return None
+    normalized = re.sub(r"[^A-Z0-9 ]+", " ", str(value).upper())
+    normalized = re.sub(r"\bTEMP\b", " ", normalized)
+    tokens = normalized.split()
+    if tokens and re.fullmatch(r"\d{5}", tokens[-1]):
+        tokens = tokens[:-1]
+    tokens = [token for token in tokens if not re.fullmatch(r"\d+(?:/\d+)?", token)]
+    signature = " ".join(tokens)
+    return signature or None
+
+
 def _build_http_session() -> requests.Session:
     session = requests.Session()
     session.headers.update(
@@ -478,23 +491,65 @@ def _fetch_pin_route_data(
     fetched_at: str,
     pin_resolution: Dict[str, Any],
 ) -> Dict[str, Any]:
-    session = _build_http_session()
     diagnostics: Dict[str, Any] = {
         "pin_results_url": LADBS_PERMIT_RESULTS_BY_PIN_URL,
         "address_partial_url": LADBS_PIN_ADDRESS_PARTIAL_URL,
         "page_summary": None,
+        "request_attempts": [],
         "address_sections": [],
+        "ignored_address_sections": [],
         "detail_fetch_failures": [],
     }
+    request_attempts = max(1, _env_int("LADBS_PIN_ROUTE_ATTEMPTS", 3))
+    retry_delay_seconds = max(0.0, _env_float("LADBS_PIN_ROUTE_RETRY_DELAY_SECONDS", 2.0))
+    session: Optional[requests.Session] = None
+    results_response: Optional[requests.Response] = None
+    page_summary: Optional[Dict[str, Any]] = None
+    last_pin_note = "LADBS by-PIN request failed for an unknown reason."
 
-    try:
-        results_response = session.get(
-            LADBS_PERMIT_RESULTS_BY_PIN_URL,
-            params={"pin": pin},
-            timeout=30,
+    for attempt in range(1, request_attempts + 1):
+        session = _build_http_session()
+        attempt_diagnostics: Dict[str, Any] = {"attempt": attempt}
+        try:
+            results_response = session.get(
+                LADBS_PERMIT_RESULTS_BY_PIN_URL,
+                params={"pin": pin},
+                timeout=30,
+            )
+            results_response.raise_for_status()
+        except requests.RequestException as exc:
+            attempt_diagnostics["error"] = str(exc)
+            diagnostics["request_attempts"].append(attempt_diagnostics)
+            last_pin_note = f"LADBS by-PIN request failed: {exc}"
+            if attempt < request_attempts:
+                time.sleep(retry_delay_seconds * attempt)
+                continue
+            return {
+                "source": "ladbs_pin_error",
+                "apn": apn,
+                "address": address,
+                "fetched_at": fetched_at,
+                "permits": [],
+                "pin": pin,
+                "pin_source": pin_resolution.get("source"),
+                "note": last_pin_note,
+                "pin_route": diagnostics,
+            }
+
+        page_summary = _parse_pin_results_summary(results_response.text)
+        attempt_diagnostics["page_summary"] = page_summary
+        diagnostics["request_attempts"].append(attempt_diagnostics)
+        diagnostics["page_summary"] = page_summary
+        if not page_summary["service_unavailable"]:
+            break
+
+        last_pin_note = (
+            "LADBS PermitResultsbyPin loaded, but the site reported "
+            "service-unavailable content for this PIN request."
         )
-        results_response.raise_for_status()
-    except requests.RequestException as exc:
+        if attempt < request_attempts:
+            time.sleep(retry_delay_seconds * attempt)
+            continue
         return {
             "source": "ladbs_pin_error",
             "apn": apn,
@@ -503,13 +558,11 @@ def _fetch_pin_route_data(
             "permits": [],
             "pin": pin,
             "pin_source": pin_resolution.get("source"),
-            "note": f"LADBS by-PIN request failed: {exc}",
+            "note": last_pin_note,
             "pin_route": diagnostics,
         }
 
-    page_summary = _parse_pin_results_summary(results_response.text)
-    diagnostics["page_summary"] = page_summary
-    if page_summary["service_unavailable"]:
+    if session is None or page_summary is None:
         return {
             "source": "ladbs_pin_error",
             "apn": apn,
@@ -518,10 +571,7 @@ def _fetch_pin_route_data(
             "permits": [],
             "pin": pin,
             "pin_source": pin_resolution.get("source"),
-            "note": (
-                "LADBS PermitResultsbyPin loaded, but the site reported "
-                "service-unavailable content for this PIN request."
-            ),
+            "note": last_pin_note,
             "pin_route": diagnostics,
         }
 
@@ -546,6 +596,19 @@ def _fetch_pin_route_data(
         }
 
     address_sections = _parse_pin_address_sections(address_partial_response.text)
+    subject_address = pin_resolution.get("matched_address") or address
+    subject_signature = _normalize_address_signature(subject_address)
+    if subject_signature:
+        matching_sections = [
+            section
+            for section in address_sections
+            if _normalize_address_signature(section.get("label")) == subject_signature
+        ]
+        if matching_sections:
+            diagnostics["ignored_address_sections"] = [
+                section["label"] for section in address_sections if section not in matching_sections
+            ]
+            address_sections = matching_sections
     diagnostics["address_sections"] = [section["label"] for section in address_sections]
     permit_basics: Dict[str, Dict[str, Any]] = {}
 

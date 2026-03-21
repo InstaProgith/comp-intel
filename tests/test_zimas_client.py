@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import requests
 from unittest import TestCase
+from unittest import mock
 
 from app import zimas_client
 
@@ -125,3 +127,36 @@ class ZimasClientTests(TestCase):
         self.assertEqual(result["pin"], "129B185   131")
         self.assertEqual(result["planning_context"]["community_plan_area"], "Wilshire")
         self.assertEqual(result["zoning_profile"]["zoning"], "R1-1-O")
+
+    def test_get_zimas_profile_retries_transient_profile_request_error(self) -> None:
+        profile_response = (
+            '{Address: "3104 KELTON AVE", selectedAPN: "4254007013", '
+            'divTab1: "<table><tr><td>Site Address</td><td>3104 KELTON AVE</td></tr>'
+            '<tr><td>PIN Number</td><td>120B157   124</td></tr>'
+            '<tr><td>Assessor Parcel No. (APN)</td><td>4254007013</td></tr></table>", '
+            'divTab3: "<table><tr><td>Zoning</td><td>R1-1</td></tr>'
+            '<tr><td>General Plan Land Use</td><td>Low Residential</td></tr></table>"}'
+        )
+
+        class _RetrySession:
+            def __init__(self) -> None:
+                self.headers = {}
+                self.calls = []
+                self.attempt = 0
+
+            def get(self, url: str, params=None, timeout=None):  # type: ignore[override]
+                self.calls.append({"url": url, "params": params, "timeout": timeout})
+                self.attempt += 1
+                if self.attempt == 1:
+                    raise requests.RequestException("temporary timeout")
+                return _FakeResponse(profile_response)
+
+        session = _RetrySession()
+
+        with mock.patch.object(zimas_client.time, "sleep"):
+            result = zimas_client.get_zimas_profile(pin="120B157   124", session=session)
+
+        self.assertEqual(result["source"], "zimas_profile_v1")
+        self.assertEqual(result["zoning_profile"]["zoning"], "R1-1")
+        self.assertEqual(len(result["diagnostics"]["request_attempts"]), 2)
+        self.assertIn("temporary timeout", result["diagnostics"]["request_attempts"][0]["error"])

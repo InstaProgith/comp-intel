@@ -1128,9 +1128,9 @@
       {% endif %}
       
       <!-- 11. REVIEW FLAGS -->
-      {% if review_flags %}
       <div class="report-section">
         <div class="report-section-header">Review Flags</div>
+        {% if review_flags %}
         <ul class="review-flags-list">
           {% for flag in review_flags %}
           <li>
@@ -1139,8 +1139,10 @@
           </li>
           {% endfor %}
         </ul>
+        {% else %}
+        <p class="value-muted" style="font-size:13px;">No review flags.</p>
+        {% endif %}
       </div>
-      {% endif %}
 
       <!-- 12. DATA NOTES -->
       <div class="report-section">

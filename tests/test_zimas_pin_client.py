@@ -34,6 +34,14 @@ class ZimasPinClientTests(TestCase):
         self.assertEqual(parsed["matched_address"], "1120 S LUCERNE BLVD")
         self.assertIsNone(parsed["error_message"])
 
+    def test_parse_search_response_decodes_percent_encoded_pin_and_address(self) -> None:
+        parsed = zimas_pin_client.parse_search_response(
+            "{action: \"ZimasData.navigateDataToPin('123B157%20%20%20607', '2831%201/2%20S%20MALCOLM%20AVE');\"}"
+        )
+
+        self.assertEqual(parsed["pin"], "123B157   607")
+        self.assertEqual(parsed["matched_address"], "2831 1/2 S MALCOLM AVE")
+
     def test_resolve_pin_uses_ajax_search_response(self) -> None:
         session = _FakeSession(
             "{action: \"ZimasData.setWaitingDataTabs; "

@@ -32,6 +32,7 @@ class PayloadContractTests(TestCase):
         payload = apply_payload_contract(
             {
                 "metrics": {"land_sf": 8379.0},
+                "address": "1120 S Lucerne Blvd, Los Angeles, CA 90019",
                 "zimas_profile": {
                     "source": "zimas_profile_v1",
                     "parcel_identity": {"lot_area_sqft": 7196.1},
@@ -62,6 +63,43 @@ class PayloadContractTests(TestCase):
         self.assertIn("lot_size_mismatch", anomaly_codes)
         self.assertIn("permit_address_variants", anomaly_codes)
         self.assertIn("shared_record_ids", anomaly_codes)
+
+    def test_detect_payload_anomalies_ignores_temp_and_range_labels_that_include_subject(self) -> None:
+        payload = apply_payload_contract(
+            {
+                "address": "3629 Rosewood Ave, Los Angeles, CA 90066",
+                "ladbs": {
+                    "source": "ladbs_pin_v1",
+                    "permits": [
+                        {"address_label": "3629 S ROSEWOOD AVE 90066"},
+                        {"address_label": "3629 S ROSEWOOD AVE TEMP 90066"},
+                        {"address_label": "3627-3629 S ROSEWOOD AVE 90066"},
+                    ],
+                },
+            }
+        )
+
+        anomaly_codes = {anomaly["code"] for anomaly in payload["anomalies"]}
+
+        self.assertNotIn("permit_address_variants", anomaly_codes)
+
+    def test_detect_payload_anomalies_ignores_same_day_certificate_bundles(self) -> None:
+        payload = apply_payload_contract(
+            {
+                "ladbs_records": {
+                    "source": "ladbs_records_v1",
+                    "documents": [
+                        {"record_id": "130935075", "doc_number": "CERT 275679", "doc_type": "CERTIFICATE OF OCCUPANCY", "doc_date": "11/29/2025"},
+                        {"record_id": "130935075", "doc_number": "24014-30001-03980", "doc_type": "CERTIFICATE OF OCCUPANCY", "doc_date": "11/29/2025"},
+                        {"record_id": "130935075", "doc_number": "24014-30000-03980", "doc_type": "CERTIFICATE OF OCCUPANCY", "doc_date": "11/29/2025"},
+                    ],
+                },
+            }
+        )
+
+        anomaly_codes = {anomaly["code"] for anomaly in payload["anomalies"]}
+
+        self.assertNotIn("shared_record_ids", anomaly_codes)
 
     def test_apply_payload_contract_sorts_permits_and_documents_newest_first(self) -> None:
         payload = apply_payload_contract(

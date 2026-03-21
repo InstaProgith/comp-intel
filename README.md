@@ -157,11 +157,15 @@ python -m app.property_data_smoke --redfin-url https://www.redfin.com/CA/Los-Ang
 python -m app.property_data_smoke --redfin-url https://www.redfin.com/CA/Los-Angeles/1120-S-Lucerne-Blvd-90019/home/6911003 --json
 python -m app.qa_harness
 python -m app.qa_harness --json
+python -m app.qa_harness --property-file validation/los_angeles_five_property_pack.json
+python -m app.qa_harness --property-file validation/los_angeles_five_property_pack.json --json
 ```
 
 The property-data smoke validates the browserless ZIMAS parcel profile, the browserless LADBS records/documents search, and the existing LADBS permit flow together. It prints record counts plus public PDF viewer links when LADBS exposes digital images. Downloaded PDFs and generated artifacts remain out of git.
 
 The QA harness layers Lucerne-specific expectations on top of the orchestrated payload and rendered report. It checks schema warnings, key source states, representative permit/document IDs, core ZIMAS values, and basic report cleanliness (`Review Flags`, `Data Notes`, no raw `None`/`null`).
+
+The five-property validation pack in `validation/los_angeles_five_property_pack.json` extends that same harness across a small real Los Angeles property set for broader live QA without adding new providers.
 
 Exact Windows PowerShell env vars that produced the earlier PLR browser fallback green path in this repo:
 

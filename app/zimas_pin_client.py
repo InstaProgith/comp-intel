@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from typing import Any, Dict, List, Optional, Tuple
-from urllib.parse import urlparse
+from urllib.parse import unquote, urlparse
 import re
 
 import requests
@@ -90,8 +90,8 @@ def parse_search_response(response_text: str) -> Dict[str, Optional[str]]:
     pin_match = re.search(r"navigateDataToPin\('([^']+)'\s*,\s*'([^']*)'\)", response_text or "")
     if pin_match:
         return {
-            "pin": pin_match.group(1),
-            "matched_address": pin_match.group(2) or None,
+            "pin": unquote(pin_match.group(1)),
+            "matched_address": unquote(pin_match.group(2)) or None,
             "error_message": None,
         }
 
