@@ -178,3 +178,24 @@ class LadbsRecordsClientTests(TestCase):
         self.assertEqual(len(result["documents"]), 1)
         self.assertEqual(result["documents"][0]["doc_number"], "06014-70000-09673")
         self.assertIn("StPdfViewer.aspx", result["documents"][0]["pdf_url"])
+
+    def test_get_ladbs_records_returns_no_results_shape(self) -> None:
+        session = _FakeSession(
+            [
+                "<html></html>",
+                SEARCH_FORM_HTML,
+                "<html><body><span id='lblSearchCriteria'>BOOK NUMBER: 5082 PAGE NUMBER: 004 PARCEL NUMBER: 025</span></body></html>",
+            ]
+        )
+
+        result = ladbs_records_client.get_ladbs_records(
+            apn="5082004025",
+            address="1120 S Lucerne Blvd, Los Angeles, CA 90019",
+            pin="129B185   131",
+            session=session,
+        )
+
+        self.assertEqual(result["source"], "ladbs_records_no_results")
+        self.assertEqual(result["documents"], [])
+        self.assertEqual(result["apn"], "5082004025")
+        self.assertEqual(result["pin"], "129B185   131")

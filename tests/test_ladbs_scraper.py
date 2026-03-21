@@ -198,11 +198,12 @@ class LadbsScraperTests(TestCase):
             "pin": "129B185   131",
             "source": "zimas_ajax_v1",
             "note": "Resolved via ZIMAS.",
+            "matched_address": "1120 S LUCERNE BLVD",
         }
         pin_result = {
             "source": "ladbs_pin_v1",
             "apn": None,
-            "address": "1120 S Lucerne Blvd, Los Angeles, CA 90019",
+            "address": None,
             "fetched_at": "2026-03-20 12:00:00",
             "permits": [{"permit_number": "25014-10000-03595"}],
             "pin": "129B185   131",
@@ -228,6 +229,7 @@ class LadbsScraperTests(TestCase):
         self.assertFalse(result["fallback_used"])
         self.assertEqual(result["pin"], "129B185   131")
         self.assertEqual(result["pin_source"], "zimas_ajax_v1")
+        self.assertEqual(result["address"], "1120 S LUCERNE BLVD")
 
     def test_get_ladbs_data_pin_first_falls_back_to_plr(self) -> None:
         pin_resolution = {

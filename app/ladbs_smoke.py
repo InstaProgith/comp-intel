@@ -75,7 +75,7 @@ def main() -> int:
         os.environ["LADBS_HEADLESS"] = "0"
 
     print(f"[SMOKE] redfin_url={redfin_url!r}")
-    print(f"[SMOKE] address={address!r}")
+    print(f"[SMOKE] input_address={address!r}")
     print(f"[SMOKE] strategy={args.strategy!r}")
     _print_json_block("driver_settings", get_driver_settings())
 
@@ -89,6 +89,7 @@ def main() -> int:
         print(f"[SMOKE] source={result.get('source')}")
         print(f"[SMOKE] retrieval_strategy={result.get('retrieval_strategy')}")
         print(f"[SMOKE] fallback_used={result.get('fallback_used')}")
+        print(f"[SMOKE] resolved_address={result.get('address')!r}")
         print(f"[SMOKE] pin={result.get('pin')!r}")
         print(f"[SMOKE] pin_source={result.get('pin_source')!r}")
         print(f"[SMOKE] pin_route_source={result.get('pin_route_source')!r}")

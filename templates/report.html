@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>BLDGBIT · Property Report</title>
+  <title>BLDGBIT - Property Report</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -231,6 +231,7 @@
       font-size: 11px;
       font-weight: 700;
       color: #111;
+      overflow-wrap: anywhere;
     }
     
     .permit-number {
@@ -240,12 +241,14 @@
       background: #f0f0f0;
       padding: 2px 6px;
       border-radius: 3px;
+      overflow-wrap: anywhere;
     }
     
     .permit-desc {
       font-size: 10px;
       color: #666;
       line-height: 1.4;
+      overflow-wrap: anywhere;
     }
 
     .source-meta {
@@ -256,6 +259,7 @@
       color: #666;
       font-size: 10px;
       line-height: 1.5;
+      overflow-wrap: anywhere;
     }
 
     .audit-list {
@@ -268,6 +272,7 @@
       padding: 8px 0;
       border-bottom: 1px solid #f5f5f5;
       vertical-align: top;
+      overflow-wrap: anywhere;
     }
 
     .audit-list td:first-child {
@@ -291,6 +296,7 @@
       color: #111;
       text-decoration: none;
       border-bottom: 1px solid #ccc;
+      overflow-wrap: anywhere;
     }
 
     .doc-links a:hover {
@@ -320,6 +326,7 @@
       font-size: 13px;
       font-weight: 700;
       color: #111;
+      overflow-wrap: anywhere;
     }
     
     .team-license {
@@ -358,7 +365,7 @@
     }
     
     .data-notes-list li:before {
-      content: "•";
+      content: "*";
       position: absolute;
       left: 0;
       color: #ccc;
@@ -367,6 +374,57 @@
     
     .data-notes-list li:last-child {
       border-bottom: none;
+    }
+
+    .review-flags-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .review-flags-list li {
+      padding: 10px 12px;
+      border: 1px solid #ececec;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      background: #fafafa;
+    }
+
+    .review-flags-list li:last-child {
+      margin-bottom: 0;
+    }
+
+    .review-flag-level {
+      display: inline-block;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 999px;
+      margin-bottom: 6px;
+    }
+
+    .review-flag-warning {
+      background: #fff7ed;
+      color: #9a3412;
+    }
+
+    .review-flag-review {
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+
+    .review-flag-error {
+      background: #fef2f2;
+      color: #b91c1c;
+    }
+
+    .review-flag-message {
+      font-size: 11px;
+      color: #444;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
     }
     
     .no-notes {
@@ -531,6 +589,7 @@
     {% set zhaz = zimas.hazard_profile or {} %}
     {% set records = r.ladbs_records or {} %}
     {% set record_docs = records.documents or [] %}
+    {% set review_flags = r.anomalies or [] %}
     {% set dn = r.data_notes or [] %}
     {% set links = r.links or {} %}
 
@@ -540,28 +599,28 @@
       <div class="property-header">
         <div class="property-address">{{ ps.address_full or r.address or "Unknown address" }}</div>
         <div class="property-specs">
-          {% if ps.beds %}{{ ps.beds|int }} bd{% endif %}
-          {% if ps.baths %} / {{ ps.baths }} ba{% endif %}
-          {% if ps.building_sf %} · {{ "{:,.0f}".format(ps.building_sf) }} SF{% endif %}
-          {% if ps.lot_sf %} · Lot {{ "{:,.0f}".format(ps.lot_sf) }} SF{% else %} · Lot: Unknown{% endif %}
-          {% if ps.property_type %} · {{ ps.property_type }}{% endif %}
-          {% if ps.year_built %} · Built {{ ps.year_built }}{% endif %}
+          {% if ps.beds is not none %}{{ ps.beds|int }} bd{% endif %}
+          {% if ps.baths is not none %} / {{ ps.baths }} ba{% endif %}
+          {% if ps.building_sf is not none %} | {{ "{:,.0f}".format(ps.building_sf) }} SF{% endif %}
+          {% if ps.lot_sf is not none %} | Lot {{ "{:,.0f}".format(ps.lot_sf) }} SF{% else %} | Lot: Unknown{% endif %}
+          {% if ps.property_type is present %} | {{ ps.property_type|display_text }}{% endif %}
+          {% if ps.year_built is not none %} | Built {{ ps.year_built }}{% endif %}
         </div>
         <div class="property-status">
           {% if ps.status == "Sold" %}
-            <strong>Sold on {{ ps.status_date }}</strong>
-            {% if ps.status_price %} for ${{ "{:,.0f}".format(ps.status_price) }}{% endif %}
-            {% if ps.list_price_before_sale %} (List: ${{ "{:,.0f}".format(ps.list_price_before_sale) }}){% endif %}
+            <strong>Sold on {{ ps.status_date|display_text("Unknown date") }}</strong>
+            {% if ps.status_price is not none %} for ${{ "{:,.0f}".format(ps.status_price) }}{% endif %}
+            {% if ps.list_price_before_sale is not none %} (List: ${{ "{:,.0f}".format(ps.list_price_before_sale) }}){% endif %}
           {% elif ps.status == "Active Listing" or ps.status == "Listed" %}
-            <strong>{{ ps.status }}</strong>
-            {% if ps.status_price %} · ${{ "{:,.0f}".format(ps.status_price) }}{% endif %}
-            {% if ps.status_date %} on {{ ps.status_date }}{% endif %}
+            <strong>{{ ps.status|display_text("Status unknown") }}</strong>
+            {% if ps.status_price is not none %} | ${{ "{:,.0f}".format(ps.status_price) }}{% endif %}
+            {% if ps.status_date is present %} on {{ ps.status_date|display_text("Unknown date") }}{% endif %}
           {% else %}
-            <strong>{{ ps.status or "Status unknown" }}</strong>
-            {% if ps.status_price %} · ${{ "{:,.0f}".format(ps.status_price) }}{% endif %}
-            {% if ps.status_date %} on {{ ps.status_date }}{% endif %}
+            <strong>{{ ps.status|display_text("Status unknown") }}</strong>
+            {% if ps.status_price is not none %} | ${{ "{:,.0f}".format(ps.status_price) }}{% endif %}
+            {% if ps.status_date is present %} on {{ ps.status_date|display_text("Unknown date") }}{% endif %}
           {% endif %}
-          {% if ps.price_per_sf %} · ${{ "{:,.0f}".format(ps.price_per_sf) }} / SF{% endif %}
+          {% if ps.price_per_sf is not none %} | ${{ "{:,.0f}".format(ps.price_per_sf) }} / SF{% endif %}
         </div>
       </div>
       
@@ -572,72 +631,72 @@
           <div class="metric-item">
             <div class="metric-label">Purchase Price</div>
             <div class="metric-value">
-              {% if m.purchase_price %}${{ "{:,.0f}".format(m.purchase_price) }}{% else %}<span class="muted">Unknown</span>{% endif %}
+              {% if m.purchase_price is not none %}${{ "{:,.0f}".format(m.purchase_price) }}{% else %}<span class="muted">Unknown</span>{% endif %}
             </div>
           </div>
           
           <div class="metric-item">
             <div class="metric-label">Exit / List Price</div>
             <div class="metric-value">
-              {% if m.exit_price %}${{ "{:,.0f}".format(m.exit_price) }}{% elif m.list_price %}${{ "{:,.0f}".format(m.list_price) }}{% else %}<span class="muted">Unknown</span>{% endif %}
+              {% if m.exit_price is not none %}${{ "{:,.0f}".format(m.exit_price) }}{% elif m.list_price is not none %}${{ "{:,.0f}".format(m.list_price) }}{% else %}<span class="muted">Unknown</span>{% endif %}
             </div>
           </div>
           
-          {% if m.purchase_price %}
+          {% if m.purchase_price is not none %}
           <div class="metric-item">
             <div class="metric-label">Hold Period</div>
             <div class="metric-value">
-              {% if m.hold_days %}{{ m.hold_days }} days (~{{ (m.hold_days / 30.44)|round(1) }} mo){% else %}<span class="muted">Unknown</span>{% endif %}
+              {% if m.hold_days is not none %}{{ m.hold_days }} days (~{{ (m.hold_days / 30.44)|round(1) }} mo){% else %}<span class="muted">Unknown</span>{% endif %}
             </div>
           </div>
           
           <div class="metric-item">
             <div class="metric-label">Gross Spread</div>
             <div class="metric-value success">
-              {% if m.spread %}${{ "{:,.0f}".format(m.spread) }}{% else %}<span class="muted">N/A</span>{% endif %}
+              {% if m.spread is not none %}${{ "{:,.0f}".format(m.spread) }}{% else %}<span class="muted">N/A</span>{% endif %}
             </div>
           </div>
           
           <div class="metric-item">
             <div class="metric-label">ROI (simple)</div>
             <div class="metric-value success">
-              {% if m.roi_pct %}{{ "{:.1f}%".format(m.roi_pct) }}{% else %}<span class="muted">N/A</span>{% endif %}
+              {% if m.roi_pct is not none %}{{ "{:.1f}%".format(m.roi_pct) }}{% else %}<span class="muted">N/A</span>{% endif %}
             </div>
           </div>
           
           <div class="metric-item">
             <div class="metric-label">Spread / Day</div>
             <div class="metric-value success">
-              {% if m.spread_per_day %}<span>${{ "{:,.0f}".format(m.spread_per_day) }}</span>{% else %}<span class="muted">N/A</span>{% endif %}
+              {% if m.spread_per_day is not none %}<span>${{ "{:,.0f}".format(m.spread_per_day) }}</span>{% else %}<span class="muted">N/A</span>{% endif %}
             </div>
           </div>
           {% endif %}
           
           <div class="metric-item">
             <div class="metric-label">Land SF</div>
-            <div class="metric-value">{% if m.land_sf %}{{ "{:,.0f}".format(m.land_sf) }} SF{% else %}<span class="muted">Unknown</span>{% endif %}</div>
+            <div class="metric-value">{% if m.land_sf is not none %}{{ "{:,.0f}".format(m.land_sf) }} SF{% else %}<span class="muted">Unknown</span>{% endif %}</div>
           </div>
           
           <div class="metric-item">
             <div class="metric-label">Existing SF</div>
-            <div class="metric-value">{% if cs.is_new_construction %}<span class="muted">0 (New Construction)</span>{% elif cs.existing_sf %}{{ "{:,.0f}".format(cs.existing_sf) }} SF{% else %}<span class="muted">Unknown</span>{% endif %}</div>
+            <div class="metric-value">{% if cs.is_new_construction %}<span class="muted">0 (New Construction)</span>{% elif cs.existing_sf is not none %}{{ "{:,.0f}".format(cs.existing_sf) }} SF{% else %}<span class="muted">Unknown</span>{% endif %}</div>
           </div>
           
           <div class="metric-item">
             <div class="metric-label">Added SF</div>
-            <div class="metric-value">{% if cs.added_sf %}+{{ "{:,.0f}".format(cs.added_sf) }} SF{% else %}0{% endif %}</div>
+            <div class="metric-value">{% if cs.added_sf is not none and cs.added_sf != 0 %}+{{ "{:,.0f}".format(cs.added_sf) }} SF{% else %}0{% endif %}</div>
           </div>
           
           <div class="metric-item">
             <div class="metric-label">Final SF</div>
-            <div class="metric-value">{% if cs.final_sf %}{{ "{:,.0f}".format(cs.final_sf) }} SF{% else %}<span class="muted">Unknown</span>{% endif %}</div>
+            <div class="metric-value">{% if cs.final_sf is not none %}{{ "{:,.0f}".format(cs.final_sf) }} SF{% else %}<span class="muted">Unknown</span>{% endif %}</div>
           </div>
           
           <div class="metric-item">
-            <div class="metric-label">FAR (before → after)</div>
+            <div class="metric-label">FAR (before -> after)</div>
             <div class="metric-value">
-              {% if m.far_before %}{{ m.far_before }}{% else %}<span class="muted">N/A</span>{% endif %}
-              {% if m.far_after and m.far_after != m.far_before %} → {{ m.far_after }}{% endif %}
+              {% if m.far_before is not none %}{{ m.far_before }}{% else %}<span class="muted">N/A</span>{% endif %}
+              {% if m.far_after is not none and m.far_after != m.far_before %} -> {{ m.far_after }}{% endif %}
             </div>
           </div>
           
@@ -654,7 +713,7 @@
             <div class="metric-label">Deal Fitness Score</div>
             <div class="metric-value">
               <span style="font-size:18px; font-weight:800;">{{ df.score }}/{{ df.max_score or 100 }}</span>
-              <span class="scope-indicator scope-{% if df.score >= 70 %}light{% elif df.score >= 50 %}medium{% else %}heavy{% endif %}" style="margin-left:10px;">Grade: {{ df.grade or '—' }}</span>
+              <span class="scope-indicator scope-{% if df.score >= 70 %}light{% elif df.score >= 50 %}medium{% else %}heavy{% endif %}" style="margin-left:10px;">Grade: {{ df.grade|display_text('-') }}</span>
             </div>
           </div>
           {% endif %}
@@ -678,12 +737,12 @@
             <tr>
               <td>{{ stage.name }}</td>
               <td>{{ stage.days }} days</td>
-              <td>{{ stage.start_date }} → {{ stage.end_date }}</td>
+              <td>{{ stage.start_date }} -> {{ stage.end_date }}</td>
             </tr>
             {% endfor %}
           </tbody>
         </table>
-        {% if ts.total_days %}
+        {% if ts.total_days is not none %}
         <div class="timeline-total">
           Total Project Time: {{ ts.total_days }} days (~{{ ts.total_months }} months)
         </div>
@@ -699,19 +758,19 @@
         <table class="metrics-table">
           <tr>
             <td>Existing SF</td>
-            <td>{% if cs.is_new_construction %}<span class="value-muted">0 (New Construction)</span>{% elif cs.existing_sf %}{{ "{:,.0f}".format(cs.existing_sf) }} SF{% else %}<span class="value-muted">Unknown</span>{% endif %}</td>
+            <td>{% if cs.is_new_construction %}<span class="value-muted">0 (New Construction)</span>{% elif cs.existing_sf is not none %}{{ "{:,.0f}".format(cs.existing_sf) }} SF{% else %}<span class="value-muted">Unknown</span>{% endif %}</td>
           </tr>
           <tr>
             <td>Added SF</td>
-            <td>{% if cs.added_sf %}+{{ "{:,.0f}".format(cs.added_sf) }} SF{% else %}0{% endif %}</td>
+            <td>{% if cs.added_sf is not none and cs.added_sf != 0 %}+{{ "{:,.0f}".format(cs.added_sf) }} SF{% else %}0{% endif %}</td>
           </tr>
           <tr>
             <td>Final SF</td>
-            <td>{% if cs.final_sf %}{{ "{:,.0f}".format(cs.final_sf) }} SF{% else %}<span class="value-muted">Unknown</span>{% endif %}</td>
+            <td>{% if cs.final_sf is not none %}{{ "{:,.0f}".format(cs.final_sf) }} SF{% else %}<span class="value-muted">Unknown</span>{% endif %}</td>
           </tr>
           <tr>
             <td>Lot SF</td>
-            <td>{% if cs.lot_sf %}{{ "{:,.0f}".format(cs.lot_sf) }} SF{% else %}<span class="value-muted">Unknown</span>{% endif %}</td>
+            <td>{% if cs.lot_sf is not none %}{{ "{:,.0f}".format(cs.lot_sf) }} SF{% else %}<span class="value-muted">Unknown</span>{% endif %}</td>
           </tr>
           <tr>
             <td>Scope Level</td>
@@ -726,25 +785,25 @@
         <table class="cost-table">
           {% if cm.remodel_sf > 0 %}
           <tr>
-            <td>Remodel ({{ "{:,.0f}".format(cm.remodel_sf) }} SF × $150)</td>
+            <td>Remodel ({{ "{:,.0f}".format(cm.remodel_sf) }} SF x $150)</td>
             <td>${{ "{:,.0f}".format(cm.cost_remodel) }}</td>
           </tr>
           {% endif %}
           {% if cm.addition_sf > 0 %}
           <tr>
-            <td>Addition ({{ "{:,.0f}".format(cm.addition_sf) }} SF × $300)</td>
+            <td>Addition ({{ "{:,.0f}".format(cm.addition_sf) }} SF x $300)</td>
             <td>${{ "{:,.0f}".format(cm.cost_addition) }}</td>
           </tr>
           {% endif %}
           {% if cm.new_sf_full > 0 %}
           <tr>
-            <td>New Construction ({{ "{:,.0f}".format(cm.new_sf_full) }} SF × $350)</td>
+            <td>New Construction ({{ "{:,.0f}".format(cm.new_sf_full) }} SF x $350)</td>
             <td>${{ "{:,.0f}".format(cm.cost_new_construction) }}</td>
           </tr>
           {% endif %}
           {% if cm.garage_sf > 0 %}
           <tr>
-            <td>Garage ({{ "{:,.0f}".format(cm.garage_sf) }} SF × $200)</td>
+            <td>Garage ({{ "{:,.0f}".format(cm.garage_sf) }} SF x $200)</td>
             <td>${{ "{:,.0f}".format(cm.cost_garage) }}</td>
           </tr>
           {% endif %}
@@ -770,7 +829,7 @@
             <td>Financing Cost</td>
             <td>${{ "{:,.0f}".format(cm.financing_cost) }}</td>
           </tr>
-          {% if cm.total_project_cost %}
+          {% if cm.total_project_cost is not none %}
           <tr class="total">
             <td>Total Project Cost</td>
             <td>${{ "{:,.0f}".format(cm.total_project_cost) }}</td>
@@ -791,9 +850,9 @@
       <div class="report-section">
         <div class="report-section-header">Permit Overview</div>
         <div style="margin-bottom:14px; font-size:11px; color:#666; padding:8px; background:#f8f8f8; border-radius:4px;">
-          <strong style="color:#111;">Summary:</strong> Building ({{ pc.building_count or 0 }}) · Demo ({{ pc.demo_count or 0 }}) · MEP ({{ pc.mep_count or 0 }}) · Other ({{ pc.other_count or 0 }})
-          · <span class="scope-indicator scope-{{ (pc.scope_level or 'unknown')|lower }}">{{ pc.scope_level or "UNKNOWN" }}</span>
-          · Complexity: <span class="scope-indicator scope-{% if pc.permit_complexity_score == 'HIGH' %}heavy{% elif pc.permit_complexity_score == 'LOW' %}light{% else %}medium{% endif %}">{{ pc.permit_complexity_score or "?" }}</span>
+          <strong style="color:#111;">Summary:</strong> Building ({{ pc.building_count or 0 }}) | Demo ({{ pc.demo_count or 0 }}) | MEP ({{ pc.mep_count or 0 }}) | Other ({{ pc.other_count or 0 }})
+          | <span class="scope-indicator scope-{{ (pc.scope_level or 'unknown')|lower }}">{{ pc.scope_level or "UNKNOWN" }}</span>
+          | Complexity: <span class="scope-indicator scope-{% if pc.permit_complexity_score == 'HIGH' %}heavy{% elif pc.permit_complexity_score == 'LOW' %}light{% else %}medium{% endif %}">{{ pc.permit_complexity_score or "?" }}</span>
         </div>
         
         <!-- Permit Flags -->
@@ -877,9 +936,9 @@
         <div class="report-section-header">ZIMAS Parcel Profile</div>
         <div class="source-meta">
           <strong style="color:#111;">Source:</strong>
-          {{ zimas.source or "Unavailable" }}
-          {% if zimas.transport %} Â· {{ zimas.transport|upper }}{% endif %}
-          {% if zimas.pin_resolution_source %} Â· PIN via {{ zimas.pin_resolution_source }}{% endif %}
+          {{ zimas.source|display_text("Unavailable") }}
+          {% if zimas.transport is present %} | {{ zimas.transport|upper }}{% endif %}
+          {% if zimas.pin_resolution_source is present %} | PIN via {{ zimas.pin_resolution_source|display_text("unknown") }}{% endif %}
         </div>
         {% if zimas.source == "zimas_profile_v1" %}
         <table class="audit-list">
@@ -893,39 +952,39 @@
           </tr>
           <tr>
             <td>Zoning</td>
-            <td>{{ zz.zoning or "Unknown" }}</td>
+            <td>{{ zz.zoning|display_text("Unknown") }}</td>
           </tr>
           <tr>
             <td>General Plan</td>
-            <td>{{ zz.general_plan_land_use or "Unknown" }}</td>
+            <td>{{ zz.general_plan_land_use|display_text("Unknown") }}</td>
           </tr>
           <tr>
             <td>Community Plan</td>
-            <td>{{ zctx.community_plan_area or "Unknown" }}</td>
+            <td>{{ zctx.community_plan_area|display_text("Unknown") }}</td>
           </tr>
           <tr>
             <td>Council District</td>
-            <td>{{ zctx.council_district or "Unknown" }}</td>
+            <td>{{ zctx.council_district|display_text("Unknown") }}</td>
           </tr>
           <tr>
             <td>Lot Area</td>
-            <td>{% if zpi.lot_area_sqft %}{{ "{:,.1f}".format(zpi.lot_area_sqft) }} SF{% else %}Unknown{% endif %}</td>
+            <td>{% if zpi.lot_area_sqft is not none %}{{ "{:,.1f}".format(zpi.lot_area_sqft) }} SF{% else %}Unknown{% endif %}</td>
           </tr>
           <tr>
             <td>Flood Zone</td>
-            <td>{{ zenv.flood_zone or "Unknown" }}</td>
+            <td>{{ zenv.flood_zone|display_text("Unknown") }}</td>
           </tr>
           <tr>
             <td>Methane</td>
-            <td>{{ zenv.methane_hazard_site or "Unknown" }}</td>
+            <td>{{ zenv.methane_hazard_site|display_text("Unknown") }}</td>
           </tr>
           <tr>
             <td>Nearest Fault</td>
-            <td>{{ zhaz.nearest_fault or "Unknown" }}</td>
+            <td>{{ zhaz.nearest_fault|display_text("Unknown") }}</td>
           </tr>
         </table>
         {% else %}
-        <p class="value-muted" style="font-size:13px;">{{ zimas.note or "ZIMAS parcel profile unavailable." }}</p>
+        <p class="value-muted" style="font-size:13px;">{{ zimas.note|display_text("ZIMAS parcel profile unavailable.") }}</p>
         {% endif %}
       </div>
 
@@ -934,22 +993,22 @@
         <div class="report-section-header">LADBS Records</div>
         <div class="source-meta">
           <strong style="color:#111;">Source:</strong>
-          {{ records.source or "Unavailable" }}
-          {% if records.transport %} Â· {{ records.transport|upper }}{% endif %}
+          {{ records.source|display_text("Unavailable") }}
+          {% if records.transport is present %} | {{ records.transport|upper }}{% endif %}
           {% if records.preselected_addresses %}
-            Â· {{ records.preselected_addresses|join(", ") }}
+            | {{ records.preselected_addresses|join(", ") }}
           {% endif %}
         </div>
         {% if record_docs %}
         {% for doc in record_docs %}
         <div class="permit-item">
           <div class="permit-header">
-            <span class="permit-type">{{ doc.doc_type or "Document" }}{% if doc.sub_type %} Â· {{ doc.sub_type }}{% endif %}</span>
-            <span class="permit-number">{{ doc.doc_number or "No number" }}</span>
+            <span class="permit-type">{{ doc.doc_type|display_text("Document") }}{% if doc.sub_type is present %} | {{ doc.sub_type|display_text("Unknown subtype") }}{% endif %}</span>
+            <span class="permit-number">{{ doc.doc_number|display_text("No number") }}</span>
           </div>
           <div class="permit-desc">
-            {% if doc.doc_date %}{{ doc.doc_date }}{% else %}Date unknown{% endif %}
-            {% if doc.description %} Â· {{ doc.description }}{% endif %}
+            {{ doc.doc_date|display_text("Date unknown") }}
+            {% if doc.description is present %} | {{ doc.description|display_text("No description") }}{% endif %}
           </div>
           {% if doc.summary_url or doc.pdf_url or doc.image_main_url %}
           <div class="doc-links">
@@ -961,7 +1020,7 @@
         </div>
         {% endfor %}
         {% else %}
-        <p class="value-muted" style="font-size:13px;">{{ records.note or "No LADBS records found for this property." }}</p>
+        <p class="value-muted" style="font-size:13px;">{{ records.note|display_text("No LADBS records found for this property.") }}</p>
         {% endif %}
       </div>
 
@@ -977,7 +1036,7 @@
             <span class="team-license">Lic #{{ team.primary_gc.license }}</span>
             {% endif %}
             {% if team.primary_gc.cslb_url %}
-            <a href="{{ team.primary_gc.cslb_url }}" target="_blank" class="team-link">CSLB Profile →</a>
+            <a href="{{ team.primary_gc.cslb_url }}" target="_blank" class="team-link">CSLB Profile -></a>
             {% endif %}
           </div>
         </div>
@@ -1024,7 +1083,7 @@
           <ul style="list-style:none; padding:0; margin:0;">
             {% for tactic in sn.tactics %}
             <li style="padding:6px 0 6px 16px; position:relative; font-size:12px; color:#333; border-bottom:1px solid #f5f5f5;">
-              <span style="position:absolute; left:0; color:#059669; font-weight:700;">•</span>
+              <span style="position:absolute; left:0; color:#059669; font-weight:700;">&#8226;</span>
               {{ tactic }}
             </li>
             {% endfor %}
@@ -1052,7 +1111,7 @@
           <ul style="list-style:none; padding:0; margin:0;">
             {% for insight in sn.insights %}
             <li style="padding:6px 0 6px 16px; position:relative; font-size:12px; color:#333; border-bottom:1px solid #f5f5f5;">
-              <span style="position:absolute; left:0; color:#3b82f6; font-weight:700;">→</span>
+              <span style="position:absolute; left:0; color:#3b82f6; font-weight:700;">-&gt;</span>
               {{ insight }}
             </li>
             {% endfor %}
@@ -1068,7 +1127,22 @@
       </div>
       {% endif %}
       
-      <!-- 11. DATA NOTES -->
+      <!-- 11. REVIEW FLAGS -->
+      {% if review_flags %}
+      <div class="report-section">
+        <div class="report-section-header">Review Flags</div>
+        <ul class="review-flags-list">
+          {% for flag in review_flags %}
+          <li>
+            <span class="review-flag-level review-flag-{{ flag.severity|default('review') }}">{{ flag.severity|default('review')|upper }}</span>
+            <div class="review-flag-message">{{ flag.message|display_text("Review flag raised without message.") }}</div>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+
+      <!-- 12. DATA NOTES -->
       <div class="report-section">
         <div class="report-section-header">Data Notes</div>
         {% if dn %}
@@ -1082,7 +1156,7 @@
         {% endif %}
       </div>
       
-      <!-- 12. LINKS -->
+      <!-- 13. LINKS -->
       <div class="report-section">
         <div class="report-section-header">Links</div>
         <div class="links-list">
@@ -1138,7 +1212,7 @@
     {% endif %}
 
     <footer class="footer">
-      <div>© {{ year or 2025 }} BLDGBIT · Internal Tool</div>
+      <div>&copy; {{ year or 2025 }} BLDGBIT | Internal Tool</div>
     </footer>
   </main>
 

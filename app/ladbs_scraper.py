@@ -1333,6 +1333,8 @@ def _annotate_ladbs_result(
     annotated["retrieval_strategy"] = retrieval_strategy
     annotated["fallback_used"] = fallback_used
     annotated["address_source"] = address_source
+    if not annotated.get("address"):
+        annotated["address"] = (pin_resolution or {}).get("matched_address") or annotated.get("address")
     annotated["pin"] = annotated.get("pin") or (pin_resolution or {}).get("pin")
     annotated["pin_source"] = annotated.get("pin_source") or (pin_resolution or {}).get("source")
     annotated["pin_resolution"] = pin_resolution
