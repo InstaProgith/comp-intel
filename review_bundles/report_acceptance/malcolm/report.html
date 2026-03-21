@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>BLDGBIT - Property Report</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/static/css/comp.css">
+  <style>
+    /* Report-specific styles - Compact & Scannable */
+    .report-shell {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 24px 16px 60px;
+    }
+    
+    .report-card {
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    
+    .report-section {
+      padding: 16px 20px;
+      border-bottom: 1px solid #f5f5f5;
+    }
+    
+    .report-section:last-child {
+      border-bottom: none;
+    }
+    
+    .report-section-header {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: #111;
+      margin-bottom: 12px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #111;
+      display: inline-block;
+    }
+    
+    /* Property Snapshot - Top of report */
+    .property-header {
+      padding: 20px;
+      background: linear-gradient(135deg, #111 0%, #333 100%);
+      color: #fff;
+    }
+    
+    .property-address {
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.3px;
+      margin-bottom: 6px;
+    }
+    
+    .property-specs {
+      font-size: 13px;
+      color: rgba(255,255,255,0.85);
+      margin-bottom: 6px;
+    }
+    
+    .property-status {
+      font-size: 12px;
+      color: rgba(255,255,255,0.75);
+    }
+    
+    .property-status strong {
+      color: #fff;
+      font-weight: 700;
+    }
+    
+    /* Metrics Table - Compact 2-column grid */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px 16px;
+    }
+    
+    .metric-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    
+    .metric-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #888;
+    }
+    
+    .metric-value {
+      font-size: 14px;
+      font-weight: 700;
+      color: #111;
+    }
+    
+    .metric-value.success {
+      color: #059669;
+    }
+    
+    .metric-value.muted {
+      color: #999;
+      font-weight: 400;
+      font-style: italic;
+      font-size: 12px;
+    }
+    
+    /* Full-width metric items */
+    .metric-item.full-width {
+      grid-column: 1 / -1;
+    }
+    
+    /* Timeline Table - Compact */
+    .timeline-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+    
+    .timeline-table th {
+      text-align: left;
+      padding: 8px 6px;
+      background: #f8f8f8;
+      color: #666;
+      font-weight: 700;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid #e0e0e0;
+    }
+    
+    .timeline-table td {
+      padding: 8px 6px;
+      border-bottom: 1px solid #f5f5f5;
+      color: #333;
+    }
+    
+    .timeline-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    
+    .timeline-total {
+      margin-top: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #111;
+      padding: 10px;
+      background: #f8f8f8;
+      border-radius: 4px;
+    }
+    
+    /* Cost Model Table - Clean & Compact */
+    .cost-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    
+    .cost-table tr {
+      border-bottom: 1px solid #f5f5f5;
+    }
+    
+    .cost-table tr.subtotal {
+      background: #fafafa;
+      font-weight: 600;
+    }
+    
+    .cost-table tr.total {
+      background: #f5f5f5;
+      font-weight: 700;
+    }
+    
+    .cost-table td {
+      padding: 8px 0;
+    }
+    
+    .cost-table td:first-child {
+      color: #666;
+    }
+    
+    .cost-table td:last-child {
+      text-align: right;
+      color: #111;
+      font-weight: 600;
+    }
+    
+    .cost-table .profit-positive {
+      color: #059669;
+      font-weight: 700;
+    }
+    
+    .cost-table .profit-negative {
+      color: #dc2626;
+      font-weight: 700;
+    }
+    
+    /* Permit List - Compact Cards */
+    .permit-item {
+      background: #fafafa;
+      border: 1px solid #e8e8e8;
+      border-radius: 4px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      font-size: 11px;
+    }
+    
+    .permit-item:last-child {
+      margin-bottom: 0;
+    }
+    
+    .permit-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+    
+    .permit-type {
+      font-size: 11px;
+      font-weight: 700;
+      color: #111;
+      overflow-wrap: anywhere;
+    }
+    
+    .permit-number {
+      font-size: 9px;
+      font-family: 'Monaco', 'Courier New', monospace;
+      color: #666;
+      background: #f0f0f0;
+      padding: 2px 6px;
+      border-radius: 3px;
+      overflow-wrap: anywhere;
+    }
+    
+    .permit-desc {
+      font-size: 10px;
+      color: #666;
+      line-height: 1.4;
+      overflow-wrap: anywhere;
+    }
+
+    .source-meta {
+      margin-bottom: 12px;
+      padding: 8px 10px;
+      border-radius: 4px;
+      background: #f8f8f8;
+      color: #666;
+      font-size: 10px;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+
+    .audit-list {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+
+    .audit-list td {
+      padding: 8px 0;
+      border-bottom: 1px solid #f5f5f5;
+      vertical-align: top;
+      overflow-wrap: anywhere;
+    }
+
+    .audit-list td:first-child {
+      width: 38%;
+      color: #666;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      font-size: 9px;
+    }
+
+    .doc-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 6px;
+      font-size: 10px;
+    }
+
+    .doc-links a {
+      color: #111;
+      text-decoration: none;
+      border-bottom: 1px solid #ccc;
+      overflow-wrap: anywhere;
+    }
+
+    .doc-links a:hover {
+      border-bottom-color: #111;
+    }
+    
+    /* Team Section - Compact */
+    .team-row {
+      padding: 10px 0;
+      border-bottom: 1px solid #f5f5f5;
+    }
+    
+    .team-row:last-child {
+      border-bottom: none;
+    }
+    
+    .team-role {
+      font-size: 9px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #888;
+      margin-bottom: 3px;
+    }
+    
+    .team-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: #111;
+      overflow-wrap: anywhere;
+    }
+    
+    .team-license {
+      font-size: 10px;
+      color: #666;
+      font-family: 'Monaco', 'Courier New', monospace;
+      margin-left: 8px;
+    }
+    
+    .team-link {
+      font-size: 10px;
+      color: #111;
+      text-decoration: none;
+      margin-left: 10px;
+      border-bottom: 1px solid #ccc;
+    }
+    
+    .team-link:hover {
+      border-bottom-color: #111;
+    }
+    
+    /* Data Notes - Clean list */
+    .data-notes-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .data-notes-list li {
+      padding: 6px 0 6px 16px;
+      position: relative;
+      font-size: 11px;
+      color: #666;
+      line-height: 1.5;
+      border-bottom: 1px solid #f8f8f8;
+    }
+    
+    .data-notes-list li:before {
+      content: "*";
+      position: absolute;
+      left: 0;
+      color: #ccc;
+      font-weight: 700;
+    }
+    
+    .data-notes-list li:last-child {
+      border-bottom: none;
+    }
+
+    .review-flags-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .review-flags-list li {
+      padding: 10px 12px;
+      border: 1px solid #ececec;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      background: #fafafa;
+    }
+
+    .review-flags-list li:last-child {
+      margin-bottom: 0;
+    }
+
+    .review-flag-level {
+      display: inline-block;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 999px;
+      margin-bottom: 6px;
+    }
+
+    .review-flag-warning {
+      background: #fff7ed;
+      color: #9a3412;
+    }
+
+    .review-flag-review {
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+
+    .review-flag-error {
+      background: #fef2f2;
+      color: #b91c1c;
+    }
+
+    .review-flag-message {
+      font-size: 11px;
+      color: #444;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+    
+    .no-notes {
+      font-size: 11px;
+      color: #999;
+      font-style: italic;
+    }
+    
+    /* Links Section - Clean with proper hyperlinks */
+    .links-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .link-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 11px;
+    }
+    
+    .link-label {
+      font-weight: 700;
+      color: #888;
+      min-width: 90px;
+      flex-shrink: 0;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-size: 9px;
+      padding-top: 2px;
+    }
+    
+    .link-url {
+      color: #111;
+      text-decoration: none;
+      word-break: break-all;
+      border-bottom: 1px solid #ddd;
+      flex: 1;
+    }
+    
+    .link-url:hover {
+      border-bottom-color: #111;
+      background: #fafafa;
+    }
+    
+    /* Scope Badge */
+    .scope-indicator {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 12px;
+      letter-spacing: 0.5px;
+    }
+    
+    .scope-light {
+      background: #ecfdf5;
+      color: #065f46;
+    }
+    
+    .scope-medium {
+      background: #fffbeb;
+      color: #92400e;
+    }
+    
+    .scope-heavy {
+      background: #fef2f2;
+      color: #991b1b;
+    }
+    
+    .scope-unknown {
+      background: #f5f5f5;
+      color: #666;
+    }
+    
+    /* Print styles */
+    @media print {
+      .report-shell {
+        padding: 0;
+        max-width: 100%;
+      }
+      
+      .report-card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        page-break-inside: avoid;
+      }
+      
+      .report-section {
+        page-break-inside: avoid;
+      }
+      
+      a {
+        text-decoration: none;
+        color: #111;
+      }
+      
+      .link-url {
+        word-break: break-all;
+        font-size: 9px;
+      }
+    }
+    
+    /* Responsive - Mobile */
+    @media (max-width: 640px) {
+      .report-shell {
+        padding: 16px 12px;
+      }
+      
+      .property-header {
+        padding: 16px;
+      }
+      
+      .property-address {
+        font-size: 16px;
+      }
+      
+      .property-specs {
+        font-size: 12px;
+      }
+      
+      .metrics-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      
+      .report-section {
+        padding: 14px 16px;
+      }
+      
+      .timeline-table {
+        font-size: 10px;
+      }
+      
+      .timeline-table th,
+      .timeline-table td {
+        padding: 6px 4px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-layer"></div>
+
+  <main class="report-shell">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <div class="report-card">
+      
+      <!-- 1. PROPERTY SNAPSHOT -->
+      <div class="property-header">
+        <div class="property-address">2831 Malcolm Ave, Los Angeles, CA 90064</div>
+        <div class="property-specs">
+          4 bd
+           / 5 ba
+           | 3,450 SF
+           | Lot 6,800 SF
+           | Single-family
+           | Built 2025
+        </div>
+        <div class="property-status">
+          
+            <strong>Sold on 2026-02-10</strong>
+             for $3,700,000
+            
+          
+           | $1,072 / SF
+        </div>
+      </div>
+      
+      <!-- 2. DEVELOPER SNAPSHOT -->
+      <div class="report-section">
+        <div class="report-section-header">Developer Snapshot</div>
+        <div class="metrics-grid">
+          <div class="metric-item">
+            <div class="metric-label">Purchase Price</div>
+            <div class="metric-value">
+              <span class="muted">Unknown</span>
+            </div>
+          </div>
+          
+          <div class="metric-item">
+            <div class="metric-label">Exit / List Price</div>
+            <div class="metric-value">
+              $3,700,000
+            </div>
+          </div>
+          
+          
+          
+          <div class="metric-item">
+            <div class="metric-label">Land SF</div>
+            <div class="metric-value">6,326 SF</div>
+          </div>
+          
+          <div class="metric-item">
+            <div class="metric-label">Existing SF</div>
+            <div class="metric-value"><span class="muted">0 (New Construction)</span></div>
+          </div>
+          
+          <div class="metric-item">
+            <div class="metric-label">Added SF</div>
+            <div class="metric-value">+3,450 SF</div>
+          </div>
+          
+          <div class="metric-item">
+            <div class="metric-label">Final SF</div>
+            <div class="metric-value">3,450 SF</div>
+          </div>
+          
+          <div class="metric-item">
+            <div class="metric-label">FAR (before -> after)</div>
+            <div class="metric-value">
+              <span class="muted">N/A</span>
+               -> 0.55
+            </div>
+          </div>
+          
+          <div class="metric-item">
+            <div class="metric-label">Scope Level</div>
+            <div class="metric-value">
+              <span class="scope-indicator scope-heavy">HEAVY</span>
+            </div>
+          </div>
+          
+          
+          
+          <div class="metric-item full-width">
+            <div class="metric-label">Deal Fitness Score</div>
+            <div class="metric-value">
+              <span style="font-size:18px; font-weight:800;">5/100</span>
+              <span class="scope-indicator scope-heavy" style="margin-left:10px;">Grade: F</span>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+      
+      <!-- 3. TIMELINE SUMMARY -->
+      <div class="report-section">
+        <div class="report-section-header">Timeline Summary</div>
+        
+        <table class="timeline-table">
+          <thead>
+            <tr>
+              <th>Stage</th>
+              <th>Duration</th>
+              <th>Dates</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            <tr>
+              <td>CofO → Sale</td>
+              <td>615 days</td>
+              <td>2024-06-05 -> 2026-02-10</td>
+            </tr>
+            
+          </tbody>
+        </table>
+        
+        
+      </div>
+      
+      <!-- 4. CONSTRUCTION SUMMARY -->
+      <div class="report-section">
+        <div class="report-section-header">Construction Summary</div>
+        <table class="metrics-table">
+          <tr>
+            <td>Existing SF</td>
+            <td><span class="value-muted">0 (New Construction)</span></td>
+          </tr>
+          <tr>
+            <td>Added SF</td>
+            <td>+3,450 SF</td>
+          </tr>
+          <tr>
+            <td>Final SF</td>
+            <td>3,450 SF</td>
+          </tr>
+          <tr>
+            <td>Lot SF</td>
+            <td>6,326 SF</td>
+          </tr>
+          <tr>
+            <td>Scope Level</td>
+            <td><span class="scope-indicator scope-heavy">HEAVY</span></td>
+          </tr>
+        </table>
+      </div>
+      
+      <!-- 5. COST MODEL -->
+      <div class="report-section">
+        <div class="report-section-header">Cost Model</div>
+        <table class="cost-table">
+          
+          
+          
+          <tr>
+            <td>New Construction (3,450 SF x $350)</td>
+            <td>$1,207,500</td>
+          </tr>
+          
+          
+          <tr>
+            <td>Landscape / Hardscape / Demo</td>
+            <td>$30,000</td>
+          </tr>
+          
+          <tr>
+            <td>Pool</td>
+            <td>$70,000</td>
+          </tr>
+          
+          <tr class="subtotal">
+            <td><strong>Hard Cost Total</strong></td>
+            <td><strong>$1,307,500</strong></td>
+          </tr>
+          <tr>
+            <td>Soft Costs (6%)</td>
+            <td>$78,450</td>
+          </tr>
+          <tr>
+            <td>Financing Cost</td>
+            <td>$176,513</td>
+          </tr>
+          
+          
+        </table>
+      </div>
+      
+      <!-- 6. PERMIT OVERVIEW -->
+      <div class="report-section">
+        <div class="report-section-header">Permit Overview</div>
+        <div style="margin-bottom:14px; font-size:11px; color:#666; padding:8px; background:#f8f8f8; border-radius:4px;">
+          <strong style="color:#111;">Summary:</strong> Building (8) | Demo (2) | MEP (4) | Supplement (0) | Other (0)
+          | <span class="scope-indicator scope-heavy">HEAVY</span>
+          | Complexity: <span class="scope-indicator scope-heavy">HIGH</span>
+        </div>
+        
+        <!-- Permit Flags -->
+        
+        <div class="permit-flags" style="margin-bottom:14px;">
+          <span class="permit-flag flag-pool">Pool</span>
+          <span class="permit-flag flag-adu">ADU</span>
+          <span class="permit-flag flag-new-structure">New Construction</span>
+          <span class="permit-flag flag-hillside">Hillside/Grading</span>
+          
+          <span class="permit-flag flag-sprinklers">Fire Sprinklers</span>
+        </div>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+
+        
+        <div style="font-size:11px; font-weight:700; color:#666; margin:16px 0 10px; text-transform:uppercase; letter-spacing:0.5px;">Building Permits (8)</div>
+        
+        <div class="permit-item">
+          <div class="permit-header">
+            <span class="permit-type">Bldg-New - 1 or 2 Family Dwelling</span>
+            <span class="permit-number">23010-10000-05197</span>
+          </div>
+          
+          <div class="permit-desc">*EPLAN* NEW 2-STORY SINGLE FAMILY DWELLING WITH ATTACHED 2-CAR GARAGE, ATTACHED ADU PER LAMC 12.22A.33(c) AND (e) AND ATTACHED TRELLIS. NFPA 13D</div>
+          
+        </div>
+        
+        <div class="permit-item">
+          <div class="permit-header">
+            <span class="permit-type">Fire Sprinkler - 1 or 2 Family Dwelling</span>
+            <span class="permit-number">24043-10000-03548</span>
+          </div>
+          
+          <div class="permit-desc">NEW FIRE SPRINKLER SYSTEM PER NFPA 13D. INCLUDES 1&#34; WATER METER AND NO BACKFLOW. **SFD &amp; ATTACHED ADU**</div>
+          
+        </div>
+        
+        <div class="permit-item">
+          <div class="permit-header">
+            <span class="permit-type">Bldg-Alter/Repair - 1 or 2 Family Dwelling</span>
+            <span class="permit-number">24016-30000-11400</span>
+          </div>
+          
+          <div class="permit-desc">No work description available</div>
+          
+        </div>
+        
+        <div class="permit-item">
+          <div class="permit-header">
+            <span class="permit-type">Grading - 1 or 2 Family Dwelling</span>
+            <span class="permit-number">23030-10000-05548</span>
+          </div>
+          
+          <div class="permit-desc">**GPI &amp; Posting** Construction of new 2 story single family home and pool.</div>
+          
+        </div>
+        
+        <div class="permit-item">
+          <div class="permit-header">
+            <span class="permit-type">Grading - 1 or 2 Family Dwelling</span>
+            <span class="permit-number">24030-10000-00708</span>
+          </div>
+          
+          <div class="permit-desc">New residential construction, two floors located on 0.15 acre (6,324 s.f) lot in the city of Los Angeles. New attached Junior ADU. New swimming pool and spa under separate permit.</div>
+          
+        </div>
+        
+        <div class="permit-item">
+          <div class="permit-header">
+            <span class="permit-type">Grading - 1 or 2 Family Dwelling</span>
+            <span class="permit-number">24030-10000-00868</span>
+          </div>
+          
+          <div class="permit-desc">GRADING FOR NEW POOL WITH SPA.</div>
+          
+        </div>
+        
+        <div class="permit-item">
+          <div class="permit-header">
+            <span class="permit-type">Nonbldg-New - 1 or 2 Family Dwelling</span>
+            <span class="permit-number">24020-30000-00545</span>
+          </div>
+          
+          <div class="permit-desc">Concrete block freestanding masonry fence walls constructed per Information Bulletin P/BC 2020-096 located in residential zones, maximum 6 feet height above grade, and not located in the required front yard or within 5 feet of the side street lot line of a reverse corner lot (subject to additional limitations of LAMC Section 12.22C20(f) and Information bulletin P/ZC 2002-002).</div>
+          
+        </div>
+        
+        <div class="permit-item">
+          <div class="permit-header">
+            <span class="permit-type">Swimming-Pool/Spa - 1 or 2 Family Dwelling</span>
+            <span class="permit-number">24047-10000-00180</span>
+          </div>
+          
+          <div class="permit-desc">New swimming pool with spa and pool cover STD plan 268.</div>
+          
+        </div>
+        
+        
+
+        
+        <div style="font-size:11px; font-weight:700; color:#666; margin:16px 0 10px; text-transform:uppercase; letter-spacing:0.5px;">Demolition (2)</div>
+        
+        <div class="permit-item">
+          <div class="permit-header">
+            <span class="permit-type">Bldg-Demolition - 1 or 2 Family Dwelling</span>
+            <span class="permit-number">23019-10000-04893</span>
+          </div>
+          
+          <div class="permit-desc">ePlan: Demolish existing SFD and detached garage and remove all landscape/hardscape.</div>
+          
+        </div>
+        
+        <div class="permit-item">
+          <div class="permit-header">
+            <span class="permit-type">Bldg-Demolition - 1 or 2 Family Dwelling</span>
+            <span class="permit-number">23019-10000-02965</span>
+          </div>
+          
+          <div class="permit-desc">DPI AND POSTING TO Demolish existing single family home, ADU and remove all hard scape and driveway. Clear the lot</div>
+          
+        </div>
+        
+        
+
+        
+        <div style="font-size:11px; font-weight:700; color:#666; margin:16px 0 10px; text-transform:uppercase; letter-spacing:0.5px;">MEP (4)</div>
+        
+        <div class="permit-item">
+          <div class="permit-header">
+            <span class="permit-type">Electrical - 1 or 2 Family Dwelling</span>
+            <span class="permit-number">20041-90000-20758</span>
+          </div>
+        </div>
+        
+        <div class="permit-item">
+          <div class="permit-header">
+            <span class="permit-type">Electrical - 1 or 2 Family Dwelling</span>
+            <span class="permit-number">24041-90000-45266</span>
+          </div>
+        </div>
+        
+        <div class="permit-item">
+          <div class="permit-header">
+            <span class="permit-type">Electrical - 1 or 2 Family Dwelling</span>
+            <span class="permit-number">24041-90000-23590</span>
+          </div>
+        </div>
+        
+        <div class="permit-item">
+          <div class="permit-header">
+            <span class="permit-type">Plumbing - 1 or 2 Family Dwelling</span>
+            <span class="permit-number">16042-90000-00016</span>
+          </div>
+        </div>
+        
+        
+
+        
+
+        
+        
+      </div>
+      
+      <!-- 7. ZIMAS PARCEL PROFILE -->
+      <div class="report-section">
+        <div class="report-section-header">ZIMAS Parcel Profile</div>
+        <div class="source-meta">
+          <strong style="color:#111;">Source:</strong>
+          zimas_profile_v1
+           | HTTP
+           | PIN via zimas_apn_v1
+        </div>
+        
+        <table class="audit-list">
+          <tr>
+            <td>PIN</td>
+            <td>123B157   607</td>
+          </tr>
+          <tr>
+            <td>APN</td>
+            <td>4255013007</td>
+          </tr>
+          <tr>
+            <td>Zoning</td>
+            <td>R1-1</td>
+          </tr>
+          <tr>
+            <td>General Plan</td>
+            <td>Low Residential</td>
+          </tr>
+          <tr>
+            <td>Community Plan</td>
+            <td>West Los Angeles</td>
+          </tr>
+          <tr>
+            <td>Council District</td>
+            <td>CD 5 - Katy Young Yaroslavsky</td>
+          </tr>
+          <tr>
+            <td>Lot Area</td>
+            <td>6,324.6 SF</td>
+          </tr>
+          <tr>
+            <td>Flood Zone</td>
+            <td>Outside Flood Zone</td>
+          </tr>
+          <tr>
+            <td>Methane</td>
+            <td>Unknown</td>
+          </tr>
+          <tr>
+            <td>Nearest Fault</td>
+            <td>Santa Monica Fault</td>
+          </tr>
+        </table>
+        
+      </div>
+
+      <!-- 8. LADBS RECORDS -->
+      <div class="report-section">
+        <div class="report-section-header">LADBS Records</div>
+        <div class="source-meta">
+          <strong style="color:#111;">Source:</strong>
+          ladbs_records_v1
+           | HTTP
+          
+            | Doc Type, Sub Type, Doc Date, Doc Number, Ascending, Descending, Doc Type, Sub Type, Doc Date, Doc Number, Ascending, Descending, Doc Type, Sub Type, Doc Date, Doc Number, Ascending, Descending, Doc Type, Sub Type, Doc Date, Doc Number, Ascending, Descending, 24137 W ALBERS ST
+          
+        </div>
+        
+        
+        <div class="permit-item">
+          <div class="permit-header">
+            <span class="permit-type">BUILDING PERMIT | BLDG-NEW</span>
+            <span class="permit-number">23010-20000-03343</span>
+          </div>
+          <div class="permit-desc">
+            4/1/2024
+             | EPLAN. NEW 1-STORY DETACHED ACCESSORY DWELLING UNIT PER LAMC 12.22 A.33(C)-(D).
+          </div>
+          
+          <div class="doc-links">
+            <a href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/Report.aspx?Record_Id=126286468&amp;Image=Visible&amp;ImageToOpen=%7B7054AB8E-0000-CF18-98B4-28549FB1280B%7D%2C" target="_blank" rel="noopener noreferrer">Summary</a>
+            <a href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/StPdfViewer.aspx?Library=IDIS&amp;Id=%7B7054AB8E-0000-CF18-98B4-28549FB1280B%7D&amp;ObjType=2&amp;Op=View" target="_blank" rel="noopener noreferrer">PDF</a>
+            <a href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/ImageMain.aspx?DocIds=%7B7054AB8E-0000-CF18-98B4-28549FB1280B%7D%2C" target="_blank" rel="noopener noreferrer">Image Flow</a>
+          </div>
+          
+        </div>
+        
+        
+      </div>
+
+      <!-- 9. TEAM -->
+      <div class="report-section">
+        <div class="report-section-header">Team</div>
+        
+        <div class="team-row">
+          <div class="team-role">GC</div>
+          <div class="team-name">
+            Gaia Construction Inc; Lic. No.: 912485-B ,
+            
+            <span class="team-license">Lic #912485</span>
+            
+            
+            <a href="https://www2.cslb.ca.gov/OnlineServices/CheckLicenseII/LicenseDetail.aspx?LicNum=912485" target="_blank" class="team-link">CSLB Profile -></a>
+            
+          </div>
+        </div>
+        
+        
+        
+        <div class="team-row">
+          <div class="team-role">Architect</div>
+          <div class="team-name">
+            Desai,, Manish Mahesh; Lic. No.: C30479 169 1/2 SAN GABRIEL CT. SIERRA MADRE, CA 91024
+            
+          </div>
+        </div>
+        
+        
+        
+        <div class="team-row">
+          <div class="team-role">Engineer</div>
+          <div class="team-name">
+            Tuchscher,, James Todd; Lic. No.: C77649 5503 E 2ND ST LONG BEACH, CA 90803
+            
+          </div>
+        </div>
+        
+        
+        
+      </div>
+      
+      <!-- 10. STRATEGY NOTES -->
+      
+      
+      <div class="report-section">
+        <div class="report-section-header">Strategy Notes</div>
+        
+        
+        <div style="margin-bottom:16px;">
+          <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:#888; margin-bottom:8px;">Tactics</div>
+          <ul style="list-style:none; padding:0; margin:0;">
+            
+            <li style="padding:6px 0 6px 16px; position:relative; font-size:12px; color:#333; border-bottom:1px solid #f5f5f5;">
+              <span style="position:absolute; left:0; color:#059669; font-weight:700;">&#8226;</span>
+              Major construction project - ground-up build or substantial addition
+            </li>
+            
+            <li style="padding:6px 0 6px 16px; position:relative; font-size:12px; color:#333; border-bottom:1px solid #f5f5f5;">
+              <span style="position:absolute; left:0; color:#059669; font-weight:700;">&#8226;</span>
+              Added ADU to maximize density and rental income potential
+            </li>
+            
+            <li style="padding:6px 0 6px 16px; position:relative; font-size:12px; color:#333; border-bottom:1px solid #f5f5f5;">
+              <span style="position:absolute; left:0; color:#059669; font-weight:700;">&#8226;</span>
+              New structure built - maximized FAR utilization
+            </li>
+            
+            <li style="padding:6px 0 6px 16px; position:relative; font-size:12px; color:#333; border-bottom:1px solid #f5f5f5;">
+              <span style="position:absolute; left:0; color:#059669; font-weight:700;">&#8226;</span>
+              Ground-up new construction on cleared lot
+            </li>
+            
+            <li style="padding:6px 0 6px 16px; position:relative; font-size:12px; color:#333; border-bottom:1px solid #f5f5f5;">
+              <span style="position:absolute; left:0; color:#059669; font-weight:700;">&#8226;</span>
+              Pool added for market appeal in luxury segment
+            </li>
+            
+          </ul>
+        </div>
+        
+        
+        
+        <div style="margin-bottom:16px;">
+          <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:#888; margin-bottom:8px;">Risks</div>
+          <ul style="list-style:none; padding:0; margin:0;">
+            
+            <li style="padding:6px 0 6px 16px; position:relative; font-size:12px; color:#333; border-bottom:1px solid #f5f5f5;">
+              <span style="position:absolute; left:0; color:#dc2626; font-weight:700;">!</span>
+              Hillside/grading permits indicate challenging site conditions
+            </li>
+            
+            <li style="padding:6px 0 6px 16px; position:relative; font-size:12px; color:#333; border-bottom:1px solid #f5f5f5;">
+              <span style="position:absolute; left:0; color:#dc2626; font-weight:700;">!</span>
+              Fire sprinkler system required - adds to construction cost
+            </li>
+            
+            <li style="padding:6px 0 6px 16px; position:relative; font-size:12px; color:#333; border-bottom:1px solid #f5f5f5;">
+              <span style="position:absolute; left:0; color:#dc2626; font-weight:700;">!</span>
+              High permit complexity - multiple supplements and specialty permits
+            </li>
+            
+          </ul>
+        </div>
+        
+        
+        
+        <div>
+          <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:#888; margin-bottom:8px;">Insights</div>
+          <ul style="list-style:none; padding:0; margin:0;">
+            
+            <li style="padding:6px 0 6px 16px; position:relative; font-size:12px; color:#333; border-bottom:1px solid #f5f5f5;">
+              <span style="position:absolute; left:0; color:#3b82f6; font-weight:700;">-&gt;</span>
+              Insufficient data for market insights
+            </li>
+            
+          </ul>
+        </div>
+        
+        
+        
+        <div style="margin-top:12px; font-size:10px; color:#999; font-style:italic;">
+          Generated from permit data (AI unavailable)
+        </div>
+        
+      </div>
+      
+      
+      <!-- 11. REVIEW FLAGS -->
+      <div class="report-section">
+        <div class="report-section-header">Review Flags</div>
+        
+        <ul class="review-flags-list">
+          
+          <li>
+            <span class="review-flag-level review-flag-review">REVIEW</span>
+            <div class="review-flag-message">LADBS permits reference address labels that extend beyond the subject address; review the permit set for parcel/address crossover.</div>
+          </li>
+          
+        </ul>
+        
+      </div>
+
+      <!-- 12. DATA NOTES -->
+      <div class="report-section">
+        <div class="report-section-header">Data Notes</div>
+        
+        <ul class="data-notes-list">
+          
+          <li>Purchase price unknown (no prior developer sale in Redfin history); spread, ROI, and profit not computed.</li>
+          
+        </ul>
+        
+      </div>
+      
+      <!-- 13. LINKS -->
+      <div class="report-section">
+        <div class="report-section-header">Links</div>
+        <div class="links-list">
+          
+          <div class="link-item">
+            <span class="link-label">Redfin</span>
+            <a href="https://www.redfin.com/CA/Los-Angeles/2831-Malcolm-Ave-90064/home/6753382" target="_blank" rel="noopener noreferrer" class="link-url">https://www.redfin.com/CA/Los-Angeles/2831-Malcolm-Ave-90064/home/6753382</a>
+          </div>
+          
+          
+          
+          <div class="link-item">
+            <span class="link-label">LADBS</span>
+            <a href="https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr" target="_blank" rel="noopener noreferrer" class="link-url">https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr</a>
+          </div>
+          
+
+          
+          <div class="link-item">
+            <span class="link-label">ZIMAS</span>
+            <a href="https://zimas.lacity.org/map.aspx?pin=123B157%20%20%20607&amp;ajax=yes" target="_blank" rel="noopener noreferrer" class="link-url">https://zimas.lacity.org/map.aspx?pin=123B157%20%20%20607&amp;ajax=yes</a>
+          </div>
+          
+
+          
+          <div class="link-item">
+            <span class="link-label">LADBS Docs</span>
+            <a href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW" target="_blank" rel="noopener noreferrer" class="link-url">https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW</a>
+          </div>
+          
+          
+          
+          <div class="link-item">
+            <span class="link-label">GC CSLB</span>
+            <a href="https://www2.cslb.ca.gov/OnlineServices/CheckLicenseII/LicenseDetail.aspx?LicNum=912485" target="_blank" rel="noopener noreferrer" class="link-url">https://www2.cslb.ca.gov/OnlineServices/CheckLicenseII/LicenseDetail.aspx?LicNum=912485</a>
+          </div>
+          
+        </div>
+      </div>
+      
+    </div>
+    
+
+    <footer class="footer">
+      <div>&copy; 2025 BLDGBIT | Internal Tool</div>
+    </footer>
+  </main>
+
+</body>
+</html>

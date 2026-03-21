@@ -159,6 +159,7 @@ python -m app.qa_harness
 python -m app.qa_harness --json
 python -m app.qa_harness --property-file validation/los_angeles_five_property_pack.json
 python -m app.qa_harness --property-file validation/los_angeles_five_property_pack.json --json
+python -m app.report_acceptance --property-file validation/report_acceptance_property_pack.json --output-dir review_bundles/report_acceptance
 ```
 
 The property-data smoke validates the browserless ZIMAS parcel profile, the browserless LADBS records/documents search, and the existing LADBS permit flow together. It prints record counts plus public PDF viewer links when LADBS exposes digital images. Downloaded PDFs and generated artifacts remain out of git.
@@ -166,6 +167,8 @@ The property-data smoke validates the browserless ZIMAS parcel profile, the brow
 The QA harness layers Lucerne-specific expectations on top of the orchestrated payload and rendered report. It checks schema warnings, key source states, representative permit/document IDs, core ZIMAS values, and basic report cleanliness (`Review Flags`, `Data Notes`, no raw `None`/`null`).
 
 The five-property validation pack in `validation/los_angeles_five_property_pack.json` extends that same harness across a small real Los Angeles property set for broader live QA without adding new providers.
+
+The report-acceptance pack in `validation/report_acceptance_property_pack.json` is smaller and review-focused. It generates tracked per-property payload/report bundles plus `REVIEW_INDEX.md` so the rendered HTML can be inspected like a deliverable rather than just a smoke result.
 
 Exact Windows PowerShell env vars that produced the earlier PLR browser fallback green path in this repo:
 

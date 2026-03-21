@@ -850,7 +850,7 @@
       <div class="report-section">
         <div class="report-section-header">Permit Overview</div>
         <div style="margin-bottom:14px; font-size:11px; color:#666; padding:8px; background:#f8f8f8; border-radius:4px;">
-          <strong style="color:#111;">Summary:</strong> Building ({{ pc.building_count or 0 }}) | Demo ({{ pc.demo_count or 0 }}) | MEP ({{ pc.mep_count or 0 }}) | Other ({{ pc.other_count or 0 }})
+          <strong style="color:#111;">Summary:</strong> Building ({{ pc.building_count or 0 }}) | Demo ({{ pc.demo_count or 0 }}) | MEP ({{ pc.mep_count or 0 }}) | Supplement ({{ pc.supplement_count or 0 }}) | Other ({{ pc.other_count or 0 }})
           | <span class="scope-indicator scope-{{ (pc.scope_level or 'unknown')|lower }}">{{ pc.scope_level or "UNKNOWN" }}</span>
           | Complexity: <span class="scope-indicator scope-{% if pc.permit_complexity_score == 'HIGH' %}heavy{% elif pc.permit_complexity_score == 'LOW' %}light{% else %}medium{% endif %}">{{ pc.permit_complexity_score or "?" }}</span>
         </div>
@@ -868,10 +868,12 @@
         {% endif %}
         
         {% if permits %}
-        {% set building_permits = permits | selectattr('permit_type', 'match', '.*Bldg.*|.*Building.*') | list %}
-        {% set demo_permits = permits | selectattr('permit_type', 'match', '.*Demo.*') | list %}
-        {% set mep_permits = permits | selectattr('permit_type', 'match', '.*Electrical.*|.*Plumbing.*|.*Mechanical.*') | list %}
-        {% set other_permits = permits | rejectattr('permit_type', 'match', '.*Bldg.*|.*Building.*|.*Demo.*|.*Electrical.*|.*Plumbing.*|.*Mechanical.*') | list %}
+        {% set building_permits = pc.building_permits or [] %}
+        {% set mep_permits = pc.mep_permits or [] %}
+        {% set supplement_permits = pc.supplement_permits or [] %}
+        {% set other_bucket = pc.other_permits or [] %}
+        {% set demo_permits = other_bucket | selectattr('permit_type', 'match', '.*Demo.*|.*Demolition.*') | list %}
+        {% set other_permits = other_bucket | rejectattr('permit_type', 'match', '.*Demo.*|.*Demolition.*') | list %}
 
         {% if building_permits %}
         <div style="font-size:11px; font-weight:700; color:#666; margin:16px 0 10px; text-transform:uppercase; letter-spacing:0.5px;">Building Permits ({{ pc.building_count or building_permits | length }})</div>
@@ -911,6 +913,21 @@
             <span class="permit-type">{{ p.permit_type }}</span>
             <span class="permit-number">{{ p.permit_number }}</span>
           </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        {% if supplement_permits %}
+        <div style="font-size:11px; font-weight:700; color:#666; margin:16px 0 10px; text-transform:uppercase; letter-spacing:0.5px;">Supplements / Revisions ({{ pc.supplement_count or supplement_permits | length }})</div>
+        {% for p in supplement_permits %}
+        <div class="permit-item">
+          <div class="permit-header">
+            <span class="permit-type">{{ p.permit_type }}</span>
+            <span class="permit-number">{{ p.permit_number }}</span>
+          </div>
+          {% if p.Work_Description and p.Work_Description != 'N/A' %}
+          <div class="permit-desc">{{ p.Work_Description }}</div>
+          {% endif %}
         </div>
         {% endfor %}
         {% endif %}
