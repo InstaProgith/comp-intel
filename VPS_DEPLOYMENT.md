@@ -43,8 +43,10 @@ Optional LADBS overrides:
 - `LADBS_CHROMEDRIVER_PATH`
 - `SE_CACHE_PATH`
 - `LADBS_SELENIUM_PROFILE_DIR`
+- `LADBS_BROWSER_ENV_DIR`
 - `LADBS_DRIVER_START_RETRIES`
 - `LADBS_PAGE_LOAD_TIMEOUT`
+- `LADBS_RECORDS_MAX_PDF_RESOLUTIONS`
 
 ## 3. Verify before serving
 
@@ -52,9 +54,16 @@ Run the smoke suite:
 
 ```bash
 python -m unittest discover -s tests -v
+python -m compileall app tests
 ```
 
-Run the live LADBS smoke before exposing the app:
+Run the full Lucerne data smoke before exposing the app:
+
+```bash
+python -m app.property_data_smoke --redfin-url https://www.redfin.com/CA/Los-Angeles/1120-S-Lucerne-Blvd-90019/home/6911003
+```
+
+Run the live LADBS permit smoke before exposing the app:
 
 ```bash
 python -m app.ladbs_smoke --redfin-url https://www.redfin.com/CA/Los-Angeles/1120-S-Lucerne-Blvd-90019/home/6911003 --json
@@ -108,8 +117,10 @@ WantedBy=multi-user.target
 ## 6. Operational notes
 
 - The app now fails closed in production-like environments if `FLASK_SECRET_KEY` or `APP_ACCESS_PASSWORD` is missing.
+- `python -m app.property_data_smoke` is the repeatable post-deploy check for Redfin + browserless ZIMAS profile + browserless LADBS records + LADBS permits together.
 - LADBS browser bootstrap writes logs under `data/logs/ladbs/`.
 - Selenium cache and browser profiles should point to writable directories on the VPS.
 - `python -m app.ladbs_smoke` is the repeatable post-deploy check for the default ZIMAS PIN + LADBS by-PIN path.
 - `python -m app.ladbs_smoke --strategy plr` is the explicit browser fallback smoke command.
+- LADBS records/document links are resolved over HTTP. Public PDF viewer links should be treated as external artifacts and should not be committed into git.
 - `access_password.txt` is intentionally ignored by git and should only be used for local-only setups.

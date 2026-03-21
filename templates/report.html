@@ -247,6 +247,55 @@
       color: #666;
       line-height: 1.4;
     }
+
+    .source-meta {
+      margin-bottom: 12px;
+      padding: 8px 10px;
+      border-radius: 4px;
+      background: #f8f8f8;
+      color: #666;
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    .audit-list {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+
+    .audit-list td {
+      padding: 8px 0;
+      border-bottom: 1px solid #f5f5f5;
+      vertical-align: top;
+    }
+
+    .audit-list td:first-child {
+      width: 38%;
+      color: #666;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      font-size: 9px;
+    }
+
+    .doc-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 6px;
+      font-size: 10px;
+    }
+
+    .doc-links a {
+      color: #111;
+      text-decoration: none;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .doc-links a:hover {
+      border-bottom-color: #111;
+    }
     
     /* Team Section - Compact */
     .team-row {
@@ -474,6 +523,14 @@
     {% set pc = r.permit_categories or {} %}
     {% set team = r.team_network or {} %}
     {% set permits = r.ladbs.permits if r.ladbs and r.ladbs.permits else [] %}
+    {% set zimas = r.zimas_profile or {} %}
+    {% set zpi = zimas.parcel_identity or {} %}
+    {% set zctx = zimas.planning_context or {} %}
+    {% set zz = zimas.zoning_profile or {} %}
+    {% set zenv = zimas.environmental_profile or {} %}
+    {% set zhaz = zimas.hazard_profile or {} %}
+    {% set records = r.ladbs_records or {} %}
+    {% set record_docs = records.documents or [] %}
     {% set dn = r.data_notes or [] %}
     {% set links = r.links or {} %}
 
@@ -815,7 +872,100 @@
         {% endif %}
       </div>
       
-      <!-- 7. TEAM -->
+      <!-- 7. ZIMAS PARCEL PROFILE -->
+      <div class="report-section">
+        <div class="report-section-header">ZIMAS Parcel Profile</div>
+        <div class="source-meta">
+          <strong style="color:#111;">Source:</strong>
+          {{ zimas.source or "Unavailable" }}
+          {% if zimas.transport %} Â· {{ zimas.transport|upper }}{% endif %}
+          {% if zimas.pin_resolution_source %} Â· PIN via {{ zimas.pin_resolution_source }}{% endif %}
+        </div>
+        {% if zimas.source == "zimas_profile_v1" %}
+        <table class="audit-list">
+          <tr>
+            <td>PIN</td>
+            <td>{{ zimas.pin or zpi.pin or "Unknown" }}</td>
+          </tr>
+          <tr>
+            <td>APN</td>
+            <td>{{ zimas.apn or zpi.apn or "Unknown" }}</td>
+          </tr>
+          <tr>
+            <td>Zoning</td>
+            <td>{{ zz.zoning or "Unknown" }}</td>
+          </tr>
+          <tr>
+            <td>General Plan</td>
+            <td>{{ zz.general_plan_land_use or "Unknown" }}</td>
+          </tr>
+          <tr>
+            <td>Community Plan</td>
+            <td>{{ zctx.community_plan_area or "Unknown" }}</td>
+          </tr>
+          <tr>
+            <td>Council District</td>
+            <td>{{ zctx.council_district or "Unknown" }}</td>
+          </tr>
+          <tr>
+            <td>Lot Area</td>
+            <td>{% if zpi.lot_area_sqft %}{{ "{:,.1f}".format(zpi.lot_area_sqft) }} SF{% else %}Unknown{% endif %}</td>
+          </tr>
+          <tr>
+            <td>Flood Zone</td>
+            <td>{{ zenv.flood_zone or "Unknown" }}</td>
+          </tr>
+          <tr>
+            <td>Methane</td>
+            <td>{{ zenv.methane_hazard_site or "Unknown" }}</td>
+          </tr>
+          <tr>
+            <td>Nearest Fault</td>
+            <td>{{ zhaz.nearest_fault or "Unknown" }}</td>
+          </tr>
+        </table>
+        {% else %}
+        <p class="value-muted" style="font-size:13px;">{{ zimas.note or "ZIMAS parcel profile unavailable." }}</p>
+        {% endif %}
+      </div>
+
+      <!-- 8. LADBS RECORDS -->
+      <div class="report-section">
+        <div class="report-section-header">LADBS Records</div>
+        <div class="source-meta">
+          <strong style="color:#111;">Source:</strong>
+          {{ records.source or "Unavailable" }}
+          {% if records.transport %} Â· {{ records.transport|upper }}{% endif %}
+          {% if records.preselected_addresses %}
+            Â· {{ records.preselected_addresses|join(", ") }}
+          {% endif %}
+        </div>
+        {% if record_docs %}
+        {% for doc in record_docs %}
+        <div class="permit-item">
+          <div class="permit-header">
+            <span class="permit-type">{{ doc.doc_type or "Document" }}{% if doc.sub_type %} Â· {{ doc.sub_type }}{% endif %}</span>
+            <span class="permit-number">{{ doc.doc_number or "No number" }}</span>
+          </div>
+          <div class="permit-desc">
+            {% if doc.doc_date %}{{ doc.doc_date }}{% else %}Date unknown{% endif %}
+            {% if doc.description %} Â· {{ doc.description }}{% endif %}
+          </div>
+          {% if doc.summary_url or doc.pdf_url or doc.image_main_url %}
+          <div class="doc-links">
+            {% if doc.summary_url %}<a href="{{ doc.summary_url }}" target="_blank" rel="noopener noreferrer">Summary</a>{% endif %}
+            {% if doc.pdf_url %}<a href="{{ doc.pdf_url }}" target="_blank" rel="noopener noreferrer">PDF</a>{% endif %}
+            {% if doc.image_main_url %}<a href="{{ doc.image_main_url }}" target="_blank" rel="noopener noreferrer">Image Flow</a>{% endif %}
+          </div>
+          {% endif %}
+        </div>
+        {% endfor %}
+        {% else %}
+        <p class="value-muted" style="font-size:13px;">{{ records.note or "No LADBS records found for this property." }}</p>
+        {% endif %}
+      </div>
+
+      <!-- 9. TEAM -->
       <div class="report-section">
         <div class="report-section-header">Team</div>
         {% if team.primary_gc %}
@@ -862,7 +1012,7 @@
         {% endif %}
       </div>
       
-      <!-- 8. STRATEGY NOTES -->
+      <!-- 10. STRATEGY NOTES -->
       {% set sn = r.strategy_notes or {} %}
       {% if sn.tactics or sn.risks or sn.insights %}
       <div class="report-section">
@@ -918,7 +1068,7 @@
       </div>
       {% endif %}
       
-      <!-- 9. DATA NOTES -->
+      <!-- 11. DATA NOTES -->
       <div class="report-section">
         <div class="report-section-header">Data Notes</div>
         {% if dn %}
@@ -932,7 +1082,7 @@
         {% endif %}
       </div>
       
-      <!-- 9. LINKS -->
+      <!-- 12. LINKS -->
       <div class="report-section">
         <div class="report-section-header">Links</div>
         <div class="links-list">
@@ -947,6 +1097,20 @@
           <div class="link-item">
             <span class="link-label">LADBS</span>
             <a href="{{ links.ladbs_url or r.ladbs_url }}" target="_blank" rel="noopener noreferrer" class="link-url">{{ links.ladbs_url or r.ladbs_url }}</a>
+          </div>
+          {% endif %}
+
+          {% if links.zimas_url %}
+          <div class="link-item">
+            <span class="link-label">ZIMAS</span>
+            <a href="{{ links.zimas_url }}" target="_blank" rel="noopener noreferrer" class="link-url">{{ links.zimas_url }}</a>
+          </div>
+          {% endif %}
+
+          {% if links.ladbs_records_url %}
+          <div class="link-item">
+            <span class="link-label">LADBS Docs</span>
+            <a href="{{ links.ladbs_records_url }}" target="_blank" rel="noopener noreferrer" class="link-url">{{ links.ladbs_records_url }}</a>
           </div>
           {% endif %}
           

@@ -346,3 +346,116 @@ Use the new browserless-by-default path as the repo baseline:
 1. Keep validating `python -m app.ladbs_smoke --redfin-url <property> --json` on real properties to learn where the by-PIN path succeeds or needs PLR fallback.
 2. Once the PIN-first path is stable across a broader sample, promote that metadata into reports/templates where useful.
 3. Only after that, start the next expansion into ZIMAS zoning/profile data or LADBS building-record/PDF retrieval.
+
+## Feature Pass: Browserless ZIMAS Parcel Profile + LADBS Records
+
+This pass continued from the stable PIN-first LADBS baseline on branch `codex/zimas-records-pass`. The goal was to add browserless ZIMAS parcel-profile data and browserless LADBS records/document retrieval without destabilizing the Lucerne permit smoke.
+
+### What changed in this pass
+
+- Added `app/zimas_client.py` as the browserless ZIMAS parcel-profile client.
+- Added `app/ladbs_records_client.py` as the browserless LADBS records/document search client.
+- Added `app/property_data_smoke.py` as a repeatable Lucerne-style smoke entrypoint for Redfin + ZIMAS + LADBS permits + LADBS records.
+- Extended `app/orchestrator.py` so the report payload now includes:
+  - `zimas_profile`
+  - `ladbs_records`
+  - source/path metadata for both
+- Extended `templates/report.html` with:
+  - a ZIMAS parcel-profile section
+  - a LADBS records/documents section
+  - source metadata and public document/PDF viewer links
+- Added regression coverage in:
+  - `tests/test_zimas_client.py`
+  - `tests/test_ladbs_records_client.py`
+
+### Key implementation choices kept
+
+- Preserved the existing Lucerne-proven permit path in `app/ladbs_scraper.py`.
+- Kept the legacy PLR browser route as fallback only.
+- Did not store downloaded PDFs, raw HTML, screenshots, or other generated artifacts in git.
+
+### Important findings learned in this pass
+
+- ZIMAS APN lookup returns the parcel PIN with meaningful internal spacing, and that spacing must be preserved for `map.aspx?pin=...&ajax=yes` to resolve the correct parcel profile.
+- The LADBS records flow is replayable over plain HTTP:
+  - bootstrap with `DefaultCustom.aspx`
+  - post the APN search to `DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW`
+  - if the site returns address candidates, submit only the chosen checkbox rows and the clicked `Continue` button
+  - parse the result grid and then resolve digital document links through `ImageMain.aspx -> ImageList.aspx -> StPdfViewer.aspx`
+- The critical ASP.NET form detail is that unclicked submit/reset controls must not be echoed back in the POST payload. Once those controls were excluded, the records flow worked browserlessly.
+
+### Exact commands run in this pass
+
+- `.\.venv\Scripts\python.exe -m compileall app tests`
+- `.\.venv\Scripts\python.exe -m unittest discover -s tests -v`
+- `.\.venv\Scripts\python.exe -m app.property_data_smoke --redfin-url "https://www.redfin.com/CA/Los-Angeles/1120-S-Lucerne-Blvd-90019/home/6911003"`
+- `.\.venv\Scripts\python.exe -m app.property_data_smoke --redfin-url "https://www.redfin.com/CA/Los-Angeles/1120-S-Lucerne-Blvd-90019/home/6911003" --json`
+- `.\.venv\Scripts\python.exe -m app.ladbs_smoke --redfin-url "https://www.redfin.com/CA/Los-Angeles/1120-S-Lucerne-Blvd-90019/home/6911003" --json`
+- Live Flask report render via `app.ui_server` test client posting to `/report` with the Lucerne Redfin URL
+
+### Tests run and results
+
+- `.\.venv\Scripts\python.exe -m unittest discover -s tests -v` -> `26/26` passed
+- `.\.venv\Scripts\python.exe -m compileall app tests` -> passed
+
+### Live Lucerne smoke result
+
+Primary smoke command:
+
+- `python -m app.property_data_smoke --redfin-url "https://www.redfin.com/CA/Los-Angeles/1120-S-Lucerne-Blvd-90019/home/6911003"`
+
+Observed result:
+
+- Redfin source: `redfin_parsed_v3`
+- ZIMAS source: `zimas_profile_v1`
+- ZIMAS transport: `http`
+- ZIMAS PIN: `129B185   131`
+- ZIMAS APN: `5082004025`
+- ZIMAS zoning: `R1-1-O`
+- ZIMAS general plan: `Low II Residential`
+- ZIMAS community plan: `Wilshire`
+- ZIMAS nearest fault: `Puente Hills Blind Thrust`
+- LADBS permit source: `ladbs_pin_v1`
+- LADBS permit count: `7`
+- LADBS records source: `ladbs_records_v1`
+- LADBS records transport: `http`
+- LADBS records count: `14`
+- LADBS records with digital images: `10`
+- LADBS records with resolved public PDF viewer links: `10`
+
+Representative LADBS records returned:
+
+- `06014-70000-09673` - `BUILDING PERMIT` - `10/27/2006`
+- `06016-70000-21824` - `BUILDING PERMIT` - `10/30/2006`
+- `06014-70001-09673` - `BUILDING PERMIT` - `11/14/2006`
+- `CERT 40332` - `CERTIFICATE OF OCCUPANCY` - `2/16/2016`
+- `25041-90000-59794` - `ELECTRICAL PERMIT` - `12/22/2025`
+- `25042-90000-22280` - `MECHANICAL PERMIT` - `12/22/2025`
+
+### Live report render result
+
+The actual Flask report render for Lucerne returned `200` and the HTML contained:
+
+- `ZIMAS Parcel Profile`
+- `LADBS Records`
+- `R1-1-O`
+- `25041-90000-59794`
+- `06014-70000-09673`
+- `StPdfViewer.aspx`
+
+This confirmed the new browserless ZIMAS and LADBS records data made it all the way into the report template without breaking the current pipeline.
+
+### Remaining blockers
+
+- No blocker remains for the Lucerne browserless ZIMAS profile path.
+- No blocker remains for the Lucerne browserless LADBS records/document path.
+- The legacy PLR browser fallback still depends on writable Chrome profile/cache/temp directories when it is needed for non-PIN cases.
+- The current LADBS records client intentionally returns the public result rows as surfaced by LADBS, including cases where multiple document numbers point at the same underlying record ID.
+
+### Exact next best step
+
+Build on this baseline by moving into richer parcel/report coverage, not more transport debugging:
+
+1. Add a normalized ZIMAS field map for the highest-signal parcel/zoning fields used repeatedly in investment decisions.
+2. Add optional artifact-download plumbing that can save selected LADBS PDFs outside git when explicitly requested.
+3. Expand live validation to a broader set of properties so the browserless records and parcel-profile paths are proven beyond Lucerne.

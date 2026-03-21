@@ -12,11 +12,15 @@ import threading
 try:
     from app.redfin_scraper import get_redfin_data  # type: ignore
     from app.ladbs_scraper import get_ladbs_data  # type: ignore
+    from app.ladbs_records_client import get_ladbs_records  # type: ignore
+    from app.zimas_client import get_zimas_profile  # type: ignore
     from app.ai_summarizer import summarize_comp  # type: ignore
     from app.cslb_lookup import lookup_cslb_license  # type: ignore
 except ImportError:
     from redfin_scraper import get_redfin_data  # type: ignore
     from ladbs_scraper import get_ladbs_data  # type: ignore
+    from ladbs_records_client import get_ladbs_records  # type: ignore
+    from zimas_client import get_zimas_profile  # type: ignore
     from ai_summarizer import summarize_comp  # type: ignore
     from cslb_lookup import lookup_cslb_license  # type: ignore
 
@@ -1499,7 +1503,9 @@ def _build_data_notes(
     cost_model: Dict[str, Any],
     construction_summary: Dict[str, Any],
     redfin_ok: bool,
-    ladbs_ok: bool
+    ladbs_ok: bool,
+    zimas_ok: bool = True,
+    ladbs_records_ok: bool = True,
 ) -> List[str]:
     """
     Build list of data notes explaining missing/weak data.
@@ -1519,6 +1525,12 @@ def _build_data_notes(
     
     if not ladbs_ok:
         notes.append("LADBS data unavailable; permit history not verified.")
+
+    if not zimas_ok:
+        notes.append("ZIMAS parcel profile unavailable; zoning and parcel context may be incomplete.")
+
+    if not ladbs_records_ok:
+        notes.append("LADBS records search unavailable; building-record document links may be incomplete.")
     
     # CRITICAL: Purchase price unknown
     if not metrics.get("purchase_price"):
@@ -1560,7 +1572,12 @@ def _build_data_notes(
     return notes
 
 
-def _build_links(url: str, team_network: Dict[str, Any]) -> Dict[str, Any]:
+def _build_links(
+    url: str,
+    team_network: Dict[str, Any],
+    zimas_profile: Optional[Dict[str, Any]] = None,
+    ladbs_records: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
     """
     Build links section for report.
     """
@@ -1570,10 +1587,19 @@ def _build_links(url: str, team_network: Dict[str, Any]) -> Dict[str, Any]:
     
     # LADBS permit search URL (generic search page)
     ladbs_url = "https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr"
+    zimas_url = None
+    if zimas_profile and zimas_profile.get("links"):
+        zimas_url = zimas_profile["links"].get("profile_url")
+
+    ladbs_records_url = None
+    if ladbs_records and ladbs_records.get("links"):
+        ladbs_records_url = ladbs_records["links"].get("search_url")
     
     return {
         "redfin_url": url,
         "ladbs_url": ladbs_url,
+        "zimas_url": zimas_url,
+        "ladbs_records_url": ladbs_records_url,
         "gc_cslb_url": gc_cslb_url,
     }
 
@@ -1613,6 +1639,23 @@ def run_full_comp_pipeline(url: str) -> Dict[str, Any]:
 
     address = redfin_data.get("address")
 
+    # Fetch ZIMAS parcel profile with error handling
+    zimas_data: Dict[str, Any] = {}
+    try:
+        zimas_data = get_zimas_profile(apn=apn, address=address, redfin_url=url)
+        print("[INFO] ZIMAS parcel profile fetched.")
+    except Exception as e:
+        print(f"[ERROR] ZIMAS fetch failed: {e}")
+        _log_failure(LOGS_DIR, url, "zimas", e)
+        zimas_data = {
+            "source": "zimas_profile_error",
+            "pin": None,
+            "apn": apn,
+            "address": address,
+            "section_rows": {},
+            "note": "ZIMAS parcel profile unavailable due to error.",
+        }
+
     # Fetch LADBS data with error handling
     ladbs_data: Dict[str, Any] = {}
     try:
@@ -1632,6 +1675,26 @@ def run_full_comp_pipeline(url: str) -> Dict[str, Any]:
         ladbs_data = {"source": "ladbs_invalid", "permits": [], "note": "Invalid LADBS data."}
     if "permits" not in ladbs_data:
         ladbs_data["permits"] = []
+
+    # Fetch LADBS records/documents with error handling
+    ladbs_records_data: Dict[str, Any] = {}
+    try:
+        ladbs_records_data = get_ladbs_records(
+            apn=apn,
+            pin=zimas_data.get("pin"),
+            address=address,
+            redfin_url=url,
+            zimas_profile=zimas_data,
+        )
+        print("[INFO] LADBS records data fetched.")
+    except Exception as e:
+        print(f"[ERROR] LADBS records fetch failed: {e}")
+        _log_failure(LOGS_DIR, url, "ladbs_records", e)
+        ladbs_records_data = {
+            "source": "ladbs_records_error",
+            "documents": [],
+            "note": "LADBS records data unavailable due to error.",
+        }
 
     # Parse permit timeline FIRST to get earliest permit date
     permits = ladbs_data.get("permits") or []
@@ -1682,6 +1745,14 @@ def run_full_comp_pipeline(url: str) -> Dict[str, Any]:
     ladbs_source = ladbs_data.get("source", "")
     ladbs_ok = not (ladbs_source.startswith("ladbs_stub_") or ladbs_source == "ladbs_error" or ladbs_source == "ladbs_invalid")
     ladbs_error = None if ladbs_ok else ladbs_data.get("note", "LADBS data unavailable")
+    
+    zimas_source = zimas_data.get("source", "")
+    zimas_ok = zimas_source == "zimas_profile_v1"
+    zimas_error = None if zimas_ok else zimas_data.get("note", "ZIMAS data unavailable")
+
+    ladbs_records_source = ladbs_records_data.get("source", "")
+    ladbs_records_ok = ladbs_records_source in {"ladbs_records_v1", "ladbs_records_no_results"}
+    ladbs_records_error = None if ladbs_records_ok else ladbs_records_data.get("note", "LADBS records unavailable")
 
     # Build new report sections
     property_snapshot = _build_property_snapshot(redfin_data, metrics, ladbs_data.get("permits", []))
@@ -1694,9 +1765,9 @@ def run_full_comp_pipeline(url: str) -> Dict[str, Any]:
     
     data_notes = _build_data_notes(
         metrics, property_snapshot, permit_timeline, timeline_summary,
-        cost_model, construction_summary, redfin_ok, ladbs_ok
+        cost_model, construction_summary, redfin_ok, ladbs_ok, zimas_ok, ladbs_records_ok
     )
-    links = _build_links(url, team_network)
+    links = _build_links(url, team_network, zimas_data, ladbs_records_data)
 
     # Calculate hold_months for display
     hold_days = metrics.get("hold_days")
@@ -1742,6 +1813,10 @@ def run_full_comp_pipeline(url: str) -> Dict[str, Any]:
         "redfin_error": redfin_error,
         "ladbs_ok": ladbs_ok,
         "ladbs_error": ladbs_error,
+        "zimas_ok": zimas_ok,
+        "zimas_error": zimas_error,
+        "ladbs_records_ok": ladbs_records_ok,
+        "ladbs_records_error": ladbs_records_error,
         "cslb_ok": cslb_ok,
         "cslb_error": cslb_error,
         # NEW REPORT SECTIONS
@@ -1754,6 +1829,8 @@ def run_full_comp_pipeline(url: str) -> Dict[str, Any]:
         "data_notes": data_notes,
         "links": links,
         "hold_months": hold_months,
+        "zimas_profile": zimas_data,
+        "ladbs_records": ladbs_records_data,
     }
 
     # summary_markdown is deprecated, strategy_notes is used instead
