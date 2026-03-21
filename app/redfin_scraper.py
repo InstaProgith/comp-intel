@@ -95,6 +95,28 @@ def _regex_first_group(pattern: str, text: str) -> Optional[str]:
     return None
 
 
+def _is_active_listing_page(soup: BeautifulSoup, html_text: str) -> bool:
+    """
+    Redfin sold/off-market pages can still expose `abp-price`, but that value is an
+    estimate banner rather than the current asking price. Gate price extraction on
+    page-level status so sold pages do not masquerade as active listings.
+    """
+    meta_description = ""
+    meta_description_el = soup.find("meta", attrs={"name": "description"})
+    if meta_description_el:
+        meta_description = meta_description_el.get("content", "") or ""
+
+    if re.search(r"^\s*Sold:", meta_description, re.I):
+        return False
+    if re.search(r"^\s*Off\s*market", meta_description, re.I):
+        return False
+    if re.search(r"\bOFF MARKET\b", html_text, re.I):
+        return False
+    if "twitter-card-corner-sold.png" in html_text:
+        return False
+    return True
+
+
 def parse_redfin_html_listing(soup: BeautifulSoup, html_text: str) -> Dict[str, Any]:
     """
     Parse the listing (top-of-page) stats:
@@ -109,8 +131,9 @@ def parse_redfin_html_listing(soup: BeautifulSoup, html_text: str) -> Dict[str, 
       - price_per_sf
       - sold_status (SOLD banner detection)
     
-    CRITICAL RULE: list_price comes ONLY from [data-rf-test-id="abp-price"].
-    NEVER use tax amounts, assessed values, or tax table numbers as list_price.
+    CRITICAL RULE: list_price comes ONLY from [data-rf-test-id="abp-price"] on
+    active listing pages. NEVER use tax amounts, assessed values, sold-page estimate
+    banners, or tax table numbers as list_price.
     """
     # Address - ensure proper formatting with spaces after commas
     address_text: Optional[str] = None
@@ -166,19 +189,20 @@ def parse_redfin_html_listing(soup: BeautifulSoup, html_text: str) -> Dict[str, 
             except (ValueError, IndexError):
                 continue
 
-    # Current list price from price banner ONLY
-    # RULE: ONLY from data-rf-test-id="abp-price" - NEVER from tax table
+    # Current list price from price banner ONLY on active listing pages.
+    # Sold/off-market pages reuse abp-price for estimate banners, so ignore it there.
     list_price_val: Optional[float] = None
-    price_el = soup.select_one('[data-rf-test-id="abp-price"]')
-    if price_el:
-        price_text = price_el.get_text(strip=True)
-        # Extract numeric value from "$3,849,000" format
-        price_match = re.search(r'\$?([\d,]+)', price_text)
-        if price_match:
-            try:
-                list_price_val = float(price_match.group(1).replace(",", ""))
-            except ValueError:
-                pass
+    if _is_active_listing_page(soup, html_text):
+        price_el = soup.select_one('[data-rf-test-id="abp-price"]')
+        if price_el:
+            price_text = price_el.get_text(strip=True)
+            # Extract numeric value from "$3,849,000" format
+            price_match = re.search(r'\$?([\d,]+)', price_text)
+            if price_match:
+                try:
+                    list_price_val = float(price_match.group(1).replace(",", ""))
+                except ValueError:
+                    pass
 
     # Listing year built (e.g. "2025 Year Built" or "Year Built: 2022")
     listing_year_built: Optional[int] = None
@@ -594,7 +618,6 @@ def get_redfin_data(url: str) -> Dict[str, Any]:
         "Public Record: "
     )
     
-    lot_sf = public_parsed.get("public_lot_sf")
     if lot_sf:
         # Format lot size nicely with acres if available
         lot_summary = f"Lot: {int(lot_sf):,} SF"

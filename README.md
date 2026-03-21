@@ -15,7 +15,7 @@ Generates development analysis reports for residential properties:
 
 ## Quick Start
 
-**Prerequisites:** Python 3.11+, Git, Chrome + ChromeDriver
+**Prerequisites:** Python 3.11+, Git, and optional Chrome + ChromeDriver for LADBS browser fallback
 
 **Run locally:**
 ```bash
@@ -26,20 +26,34 @@ source .venv/bin/activate
 pip install -r requirements.txt
 python -m app.ui_server
 # Open http://localhost:5000
-# Password: see access_password.txt
+# Password: APP_ACCESS_PASSWORD, local access_password.txt, or CHANGE_ME_DEV in local debug-style runs
 ```
+
+**Local config:**
+- Set `FLASK_SECRET_KEY` and `APP_ACCESS_PASSWORD` in your environment or `.env`
+- Optional local-only fallback: create an untracked `access_password.txt`
+- Safe examples live in `.env.example` and `access_password.example.txt`
 
 ## Environment Variables
 
 **Production (required):**
 - `FLASK_SECRET_KEY` - Session encryption key (generate random string)
-- `APP_ACCESS_PASSWORD` - Login password (overrides access_password.txt)
+- `APP_ACCESS_PASSWORD` - Login password (preferred over local file)
+- `APP_ENV=production` - Enables fail-closed production config behavior
 
 **Optional:**
 - `ONE_MIN_AI_API_KEY` - For AI-generated summaries
 - `FLASK_DEBUG` - Set to "1" for debug mode (never in production)
+- `LADBS_CHROME_BINARY` - Explicit Chrome binary path if Chrome is not on PATH
+- `LADBS_CHROMEDRIVER_PATH` - Explicit ChromeDriver path if needed
+- `SE_CACHE_PATH` - Writable Selenium Manager cache directory
+- `LADBS_SELENIUM_PROFILE_DIR` - Writable browser profile root for LADBS sessions
+- `LADBS_BROWSER_ENV_DIR` - Writable browser env directory used for LOCALAPPDATA/TEMP overrides
+- `LADBS_DRIVER_START_RETRIES` - Chrome startup retry count
+- `LADBS_PAGE_LOAD_TIMEOUT` - LADBS page-load timeout in seconds
+- `LADBS_HEADLESS` - Set to "0" to force headed LADBS fallback browser runs
 
-**Password priority:** Environment var `APP_ACCESS_PASSWORD` > `access_password.txt` > fallback "CHANGE_ME_DEV"
+**Password priority:** `APP_ACCESS_PASSWORD` > local `access_password.txt` > fallback `CHANGE_ME_DEV` outside production-like environments only
 
 ## Deployment (Render/Heroku)
 
@@ -48,6 +62,7 @@ python -m app.ui_server
 - Set environment variables in platform dashboard
 - Runs on port assigned by `PORT` env var (or 5000 default)
 - Python version: see `runtime.txt`
+- VPS guide: see `VPS_DEPLOYMENT.md`
 
 ## Usage
 
@@ -64,21 +79,26 @@ https://www.redfin.com/CA/Los-Angeles/540-N-Gardner-St-90036/home/198348544
 ## Project Structure
 
 - `app/` - Python modules (scrapers, orchestrator, Flask server, AI)
+- `app/ladbs_smoke.py` - Repeatable LADBS smoke entrypoint for Redfin URL or direct-address checks
+- `app/zimas_pin_client.py` - Browserless ZIMAS PIN resolver used by the new LADBS pin-first path
 - `templates/` - HTML templates (home, report, history pages)
 - `static/` - CSS styles
 - `data/raw/` - Cached HTML (gitignored)
 - `requirements.txt` - Python dependencies
 - `runtime.txt` - Python version for deployment
-- `access_password.txt` - Default password (dev/internal use only)
+- `.env.example` - Safe environment variable template
+- `access_password.example.txt` - Safe local password-file example
+- `tests/` - Stdlib smoke tests for config, Flask routes, and parser logic
 
 ## Data Pipeline
 
 1. `redfin_scraper.py` - Extracts property data from Redfin HTML
-2. `ladbs_scraper.py` - Scrapes LA building permits via Selenium
-3. `cslb_lookup.py` - Validates contractor licenses
-4. `orchestrator.py` - Combines all sources, computes metrics, builds timeline
-5. `ai_summarizer.py` - Generates AI analysis (optional)
-6. `ui_server.py` - Flask routes and web interface
+2. `zimas_pin_client.py` - Resolves parcel/PIN from ZIMAS address search
+3. `ladbs_scraper.py` - Fetches LADBS permits by PIN over HTTP first, with Selenium PLR fallback if needed
+4. `cslb_lookup.py` - Validates contractor licenses
+5. `orchestrator.py` - Combines all sources, computes metrics, builds timeline
+6. `ai_summarizer.py` - Generates AI analysis (optional)
+7. `ui_server.py` - Flask routes and web interface
 
 ## Cost Model Rates
 
@@ -94,6 +114,35 @@ https://www.redfin.com/CA/Los-Angeles/540-N-Gardner-St-90036/home/198348544
 ## Troubleshooting
 
 - Missing modules: activate venv (`source .venv/bin/activate`), reinstall (`pip install -r requirements.txt`)
-- LADBS scraping fails: verify Chrome/ChromeDriver installed
+- LADBS scraping fails: first try the default `pin-first` smoke path, then verify Chrome/ChromeDriver and review `data/logs/ladbs/` only if browser fallback is still needed
+- LADBS on Windows/Codex: if Chromium cannot lock a profile under the repo path, point `LADBS_SELENIUM_PROFILE_DIR`, `LADBS_BROWSER_ENV_DIR`, and `SE_CACHE_PATH` to a writable `%LOCALAPPDATA%` location before re-running the smoke command
 - No AI summary: set `ONE_MIN_AI_API_KEY` in environment
 - Empty permits: property may have no permit history or LADBS temporarily unavailable
+- Production startup fails: set `APP_ENV=production`, `FLASK_SECRET_KEY`, and `APP_ACCESS_PASSWORD`
+
+## Tests
+
+Run the smoke suite with:
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+Repeatable LADBS smoke commands:
+
+```bash
+python -m app.ladbs_smoke --redfin-url https://www.redfin.com/CA/Los-Angeles/1120-S-Lucerne-Blvd-90019/home/6911003 --json
+python -m app.ladbs_smoke --address "1120 S Lucerne Blvd, Los Angeles, CA 90019" --json
+python -m app.ladbs_smoke --strategy plr --address "1120 S Lucerne Blvd, Los Angeles, CA 90019" --json
+```
+
+The default smoke strategy is now `pin-first`, which resolves ZIMAS PIN data and fetches LADBS permits over HTTP before any browser fallback is attempted.
+
+Exact Windows PowerShell env vars that produced the earlier PLR browser fallback green path in this repo:
+
+```powershell
+$env:LADBS_SELENIUM_PROFILE_DIR = Join-Path $env:LOCALAPPDATA 'comp-intel-ladbs\profiles'
+$env:LADBS_BROWSER_ENV_DIR = Join-Path $env:LOCALAPPDATA 'comp-intel-ladbs\browser-env'
+$env:SE_CACHE_PATH = Join-Path $env:LOCALAPPDATA 'comp-intel-ladbs\selenium-cache'
+python -m app.ladbs_smoke --strategy plr --show-diagnostics --json
+```

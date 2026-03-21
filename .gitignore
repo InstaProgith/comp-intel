@@ -37,15 +37,20 @@ env/
 .env
 .env.*
 .env.local
+!.env.example
 
-# Password file (optional - remove from repo for production)
-# access_password.txt
+# Password file (local-only)
+access_password.txt
+chromedriver/
 
 # Data cache (HTML snapshots)
 data/raw/*.html
 data/raw/*.png
 data/results/
 data/cache/
+data/browser/
+data/selenium-cache/
+data/test-temp/
 
 # OS
 .DS_Store
