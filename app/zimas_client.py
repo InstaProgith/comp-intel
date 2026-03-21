@@ -3,7 +3,9 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
 from urllib.parse import quote
+import os
 import re
+import time
 
 import requests
 from bs4 import BeautifulSoup
@@ -13,6 +15,56 @@ from app.zimas_pin_client import DEFAULT_HEADERS, REQUEST_TIMEOUT_SECONDS, ZIMAS
 ZIMAS_PROFILE_URL = "https://zimas.lacity.org/map.aspx"
 SECTION_KEY_PATTERN = re.compile(r"(divTab\d+):\s*\"((?:\\.|[^\"\\])*)\"", re.S)
 DOUBLE_QUOTED_VALUE_TEMPLATE = r"{key}:\s*\"((?:\\.|[^\"\\])*)\""
+
+
+def _env_int(name: str, default: int) -> int:
+    try:
+        return int(os.environ.get(name, str(default)).strip())
+    except (AttributeError, ValueError):
+        return default
+
+
+def _env_float(name: str, default: float) -> float:
+    try:
+        return float(os.environ.get(name, str(default)).strip())
+    except (AttributeError, ValueError):
+        return default
+
+
+def _request_with_retries(
+    session: requests.Session,
+    *,
+    url: str,
+    params: Dict[str, Any],
+    timeout: int,
+) -> Tuple[Optional[requests.Response], List[Dict[str, Any]], Optional[str]]:
+    attempts = max(1, _env_int("ZIMAS_HTTP_ATTEMPTS", 3))
+    retry_delay_seconds = max(0.0, _env_float("ZIMAS_HTTP_RETRY_DELAY_SECONDS", 1.5))
+    attempt_diagnostics: List[Dict[str, Any]] = []
+    last_error: Optional[str] = None
+
+    for attempt in range(1, attempts + 1):
+        try:
+            response = session.get(
+                url,
+                params=params,
+                timeout=timeout,
+            )
+            response.raise_for_status()
+            attempt_diagnostics.append(
+                {
+                    "attempt": attempt,
+                    "status_code": getattr(response, "status_code", None),
+                }
+            )
+            return response, attempt_diagnostics, None
+        except requests.RequestException as exc:
+            last_error = str(exc)
+            attempt_diagnostics.append({"attempt": attempt, "error": last_error})
+            if attempt < attempts:
+                time.sleep(retry_delay_seconds * attempt)
+
+    return None, attempt_diagnostics, last_error
 
 
 def _collapse_whitespace(value: Optional[str]) -> Optional[str]:
@@ -194,21 +246,22 @@ def _resolve_pin_from_apn(apn: str, session: requests.Session) -> Dict[str, Any]
         "request_url": ZIMAS_SEARCH_URL,
         "request_params": {"search": "apn", "apn": apn},
         "response_preview": None,
+        "request_attempts": [],
     }
 
-    try:
-        response = session.get(
-            ZIMAS_SEARCH_URL,
-            params=diagnostics["request_params"],
-            timeout=REQUEST_TIMEOUT_SECONDS,
-        )
-        response.raise_for_status()
-    except requests.RequestException as exc:
+    response, attempt_diagnostics, error_message = _request_with_retries(
+        session,
+        url=ZIMAS_SEARCH_URL,
+        params=diagnostics["request_params"],
+        timeout=REQUEST_TIMEOUT_SECONDS,
+    )
+    diagnostics["request_attempts"] = attempt_diagnostics
+    if response is None:
         return {
             "pin": None,
             "matched_address": None,
             "source": "zimas_apn_error",
-            "note": f"ZIMAS APN lookup failed: {exc}",
+            "note": f"ZIMAS APN lookup failed: {error_message}",
             "diagnostics": diagnostics,
         }
 
@@ -280,14 +333,14 @@ def get_zimas_profile(
         }
 
     profile_url = f"{ZIMAS_PROFILE_URL}?pin={quote(resolved_pin)}&ajax=yes"
-    try:
-        response = session_to_use.get(
-            ZIMAS_PROFILE_URL,
-            params={"pin": resolved_pin, "ajax": "yes"},
-            timeout=REQUEST_TIMEOUT_SECONDS,
-        )
-        response.raise_for_status()
-    except requests.RequestException as exc:
+    profile_params = {"pin": resolved_pin, "ajax": "yes"}
+    response, profile_attempts, error_message = _request_with_retries(
+        session_to_use,
+        url=ZIMAS_PROFILE_URL,
+        params=profile_params,
+        timeout=REQUEST_TIMEOUT_SECONDS,
+    )
+    if response is None:
         return {
             "source": "zimas_profile_error",
             "transport": "http",
@@ -295,10 +348,11 @@ def get_zimas_profile(
             "pin": resolved_pin,
             "apn": normalized_apn,
             "address": address,
-            "note": f"ZIMAS parcel-profile request failed: {exc}",
+            "note": f"ZIMAS parcel-profile request failed: {error_message}",
             "diagnostics": {
                 "pin_resolution": pin_resolution,
                 "profile_url": profile_url,
+                "request_attempts": profile_attempts,
             },
             "section_rows": {},
         }
@@ -334,6 +388,7 @@ def get_zimas_profile(
         "diagnostics": {
             "pin_resolution": pin_resolution,
             "profile_url": profile_url,
+            "request_attempts": profile_attempts,
             "tab_keys": sorted(parsed["section_rows"].keys()),
         },
     }

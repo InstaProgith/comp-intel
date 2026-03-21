@@ -11,6 +11,172 @@ TEST_TMP_ROOT.mkdir(parents=True, exist_ok=True)
 
 
 class LadbsScraperTests(TestCase):
+    def test_fetch_pin_route_data_retries_service_unavailable_results_page(self) -> None:
+        class _FakeResponse:
+            def __init__(self, text: str) -> None:
+                self.text = text
+
+            def raise_for_status(self) -> None:
+                return None
+
+        class _FakeSession:
+            def __init__(self) -> None:
+                self.calls = []
+
+            def get(self, url: str, params=None, timeout=None):  # type: ignore[override]
+                self.calls.append({"url": url, "params": params, "timeout": timeout})
+                if url == ladbs_scraper.LADBS_PERMIT_RESULTS_BY_PIN_URL:
+                    return _FakeResponse("permit-results")
+                if url == ladbs_scraper.LADBS_PIN_ADDRESS_PARTIAL_URL:
+                    return _FakeResponse("address-partial")
+                if "lucerne" in url:
+                    return _FakeResponse("lucerne-section")
+                return _FakeResponse("permit-detail")
+
+        fake_session = _FakeSession()
+
+        with (
+            mock.patch.object(ladbs_scraper, "_build_http_session", return_value=fake_session),
+            mock.patch.object(
+                ladbs_scraper,
+                "_parse_pin_results_summary",
+                side_effect=[
+                    {"text": "busy", "count_text": None, "permit_count": None, "service_unavailable": True},
+                    {"text": "ok", "count_text": "1", "permit_count": 1, "service_unavailable": False},
+                ],
+            ),
+            mock.patch.object(
+                ladbs_scraper,
+                "_parse_pin_address_sections",
+                return_value=[{"label": "1120 S LUCERNE BLVD 90019", "query_suffix": "lucerne"}],
+            ),
+            mock.patch.object(
+                ladbs_scraper,
+                "_parse_pin_permit_rows",
+                return_value=[
+                    {
+                        "permit_number": "25014-10000-03595",
+                        "url": "https://example.com/detail/lucerne",
+                        "job_number": "B25LA33094",
+                        "type": "Bldg-Addition",
+                        "status_text": "Issued on 11/17/2025",
+                        "status_date": "11/17/2025",
+                        "work_description": "Major remodel",
+                        "address_label": "1120 S LUCERNE BLVD 90019",
+                    }
+                ],
+            ),
+            mock.patch.object(
+                ladbs_scraper,
+                "parse_pcis_detail_html",
+                return_value={"permit_number": "25014-10000-03595", "contact_information": {}, "status_history": []},
+            ),
+            mock.patch.object(ladbs_scraper.time, "sleep"),
+        ):
+            result = ladbs_scraper._fetch_pin_route_data(
+                pin="129B185   131",
+                apn="5082004025",
+                address="1120 S Lucerne Blvd, Los Angeles, CA 90019",
+                fetched_at="2026-03-21 02:00:00",
+                pin_resolution={"source": "zimas_ajax_v1", "matched_address": "1120 S LUCERNE BLVD"},
+            )
+
+        self.assertEqual(result["source"], "ladbs_pin_v1")
+        self.assertEqual(len(result["permits"]), 1)
+        self.assertEqual(len(result["pin_route"]["request_attempts"]), 2)
+        self.assertTrue(result["pin_route"]["request_attempts"][0]["page_summary"]["service_unavailable"])
+        self.assertFalse(result["pin_route"]["request_attempts"][1]["page_summary"]["service_unavailable"])
+
+    def test_fetch_pin_route_data_filters_unrelated_address_sections(self) -> None:
+        class _FakeResponse:
+            def __init__(self, text: str) -> None:
+                self.text = text
+
+            def raise_for_status(self) -> None:
+                return None
+
+        class _FakeSession:
+            def __init__(self) -> None:
+                self.calls = []
+
+            def get(self, url: str, params=None, timeout=None):  # type: ignore[override]
+                self.calls.append({"url": url, "params": params, "timeout": timeout})
+                if url == ladbs_scraper.LADBS_PERMIT_RESULTS_BY_PIN_URL:
+                    return _FakeResponse("permit-results")
+                if url == ladbs_scraper.LADBS_PIN_ADDRESS_PARTIAL_URL:
+                    return _FakeResponse("address-partial")
+                if "malcolm" in url:
+                    return _FakeResponse("malcolm-section")
+                if "albers" in url:
+                    return _FakeResponse("albers-section")
+                return _FakeResponse("permit-detail")
+
+        fake_session = _FakeSession()
+        section_rows = {
+            "malcolm-section": [
+                {
+                    "permit_number": "23010-20000-03343",
+                    "url": "https://example.com/detail/malcolm",
+                    "job_number": "B23VN11182",
+                    "type": "Bldg-New",
+                    "status_text": "Issued on 4/1/2024",
+                    "status_date": "4/1/2024",
+                    "work_description": "ADU",
+                    "address_label": "2831-2831 1/2 S MALCOLM AVE 90064",
+                }
+            ],
+            "albers-section": [
+                {
+                    "permit_number": "99999-99999-99999",
+                    "url": "https://example.com/detail/albers",
+                    "job_number": "X",
+                    "type": "Bldg-New",
+                    "status_text": "Issued on 1/1/2024",
+                    "status_date": "1/1/2024",
+                    "work_description": "Wrong parcel",
+                    "address_label": "24137 W ALBERS ST 91367",
+                }
+            ],
+        }
+
+        def _parse_rows(html_text: str, address_label: str):
+            return list(section_rows[html_text])
+
+        with (
+            mock.patch.object(ladbs_scraper, "_build_http_session", return_value=fake_session),
+            mock.patch.object(
+                ladbs_scraper,
+                "_parse_pin_results_summary",
+                return_value={"text": "ok", "count_text": "2", "permit_count": 2, "service_unavailable": False},
+            ),
+            mock.patch.object(
+                ladbs_scraper,
+                "_parse_pin_address_sections",
+                return_value=[
+                    {"label": "24137 W ALBERS ST 91367", "query_suffix": "albers"},
+                    {"label": "2831-2831 1/2 S MALCOLM AVE 90064", "query_suffix": "malcolm"},
+                ],
+            ),
+            mock.patch.object(ladbs_scraper, "_parse_pin_permit_rows", side_effect=_parse_rows),
+            mock.patch.object(
+                ladbs_scraper,
+                "parse_pcis_detail_html",
+                return_value={"permit_number": "23010-20000-03343", "contact_information": {}, "status_history": []},
+            ),
+        ):
+            result = ladbs_scraper._fetch_pin_route_data(
+                pin="123B157   607",
+                apn="4255013007",
+                address="2831 Malcolm Ave, Los Angeles, CA 90064",
+                fetched_at="2026-03-21 02:00:00",
+                pin_resolution={"source": "zimas_ajax_v1", "matched_address": "2831 1/2 S MALCOLM AVE"},
+            )
+
+        self.assertEqual(result["source"], "ladbs_pin_v1")
+        self.assertEqual([permit["permit_number"] for permit in result["permits"]], ["23010-20000-03343"])
+        self.assertEqual(result["pin_route"]["address_sections"], ["2831-2831 1/2 S MALCOLM AVE 90064"])
+        self.assertEqual(result["pin_route"]["ignored_address_sections"], ["24137 W ALBERS ST 91367"])
+
     def test_driver_settings_use_writable_workspace_dirs(self) -> None:
         test_dir = TEST_TMP_ROOT / "ladbs-scraper-test"
         shutil.rmtree(test_dir, ignore_errors=True)

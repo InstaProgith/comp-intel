@@ -129,3 +129,62 @@ class OrchestratorContractTests(TestCase):
         self.assertIsInstance(payload["ladbs_records"], dict)
         self.assertIsInstance(payload["source_diagnostics"], dict)
         self.assertEqual(payload["data_notes"], ["Pipeline error while processing this property."])
+        self.assertEqual(payload["current_summary"], "N/A")
+        self.assertEqual(payload["public_record_summary"], "N/A")
+        self.assertEqual(payload["lot_summary"], "N/A")
+        self.assertEqual(payload["permit_summary"], "N/A")
+        self.assertIsNone(payload["summary_markdown"])
+
+    def test_run_full_comp_pipeline_marks_ladbs_pin_error_as_not_ok(self) -> None:
+        redfin_data = {
+            "source": "redfin_parsed_v3",
+            "address": "2831 Malcolm Ave, Los Angeles, CA 90064",
+            "tax": {"apn": "4255013007"},
+            "timeline": [{"event": "sold", "date": "2026-02-10", "price": 3700000}],
+            "current_summary": "Sold for $3,700,000",
+            "public_record_summary": "Built 1945",
+            "lot_summary": "Lot: 6,800 SF",
+            "public_records": {"lot_sf": 6800.0, "building_sf": 1946.0},
+            "building_sf": 1946.0,
+        }
+        zimas_data = {
+            "source": "zimas_profile_v1",
+            "transport": "http",
+            "pin": "123B157   607",
+            "apn": "4255013007",
+            "parcel_identity": {"lot_area_sqft": 6800.0},
+            "planning_context": {"community_plan_area": "West Los Angeles"},
+            "zoning_profile": {"zoning": "R1-1", "general_plan_land_use": "Low Residential"},
+        }
+        ladbs_data = {
+            "source": "ladbs_pin_error",
+            "pin": "123B157   607",
+            "permits": [],
+            "note": "LADBS PermitResultsbyPin loaded, but the site reported service-unavailable content for this PIN request.",
+        }
+        ladbs_records_data = {
+            "source": "ladbs_records_v1",
+            "transport": "http",
+            "documents": [{"doc_number": "23010-20000-03343", "doc_date": "8/9/2023"}],
+        }
+
+        with (
+            mock.patch.object(orchestrator, "get_redfin_data", return_value=redfin_data),
+            mock.patch.object(orchestrator, "get_zimas_profile", return_value=zimas_data),
+            mock.patch.object(orchestrator, "get_ladbs_data", return_value=ladbs_data),
+            mock.patch.object(orchestrator, "get_ladbs_records", return_value=ladbs_records_data),
+            mock.patch.object(orchestrator, "lookup_cslb_license", return_value=None),
+            mock.patch.object(orchestrator, "append_to_search_log"),
+            mock.patch("pathlib.Path.write_text", return_value=0),
+        ):
+            result = orchestrator.run_full_comp_pipeline(
+                "https://www.redfin.com/CA/Los-Angeles/2831-Malcolm-Ave-90064/home/6753382"
+            )
+
+        self.assertFalse(result["ladbs_ok"])
+        self.assertEqual(result["ladbs"]["source"], "ladbs_pin_error")
+        self.assertEqual(
+            result["ladbs_error"],
+            "LADBS PermitResultsbyPin loaded, but the site reported service-unavailable content for this PIN request.",
+        )
+        self.assertFalse(result["source_diagnostics"]["source_states"]["ladbs_permits"]["ok"])

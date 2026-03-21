@@ -78,13 +78,11 @@ def _load_property_file(path_text: str) -> List[Dict[str, Any]]:
         if isinstance(item, str):
             results.append({"name": f"property-{index + 1}", "redfin_url": item})
         elif isinstance(item, dict) and item.get("redfin_url"):
-            results.append(
-                {
-                    "name": item.get("name") or f"property-{index + 1}",
-                    "redfin_url": item["redfin_url"],
-                    "expectations": item.get("expectations") or {},
-                }
-            )
+            case = dict(item)
+            case["name"] = item.get("name") or f"property-{index + 1}"
+            case["redfin_url"] = item["redfin_url"]
+            case["expectations"] = item.get("expectations") or {}
+            results.append(case)
     return results
 
 
@@ -109,6 +107,37 @@ def _render_report_html(payload: Dict[str, Any]) -> str:
         return render_template("report.html", r=payload)
 
 
+def _build_report_checks(report_html: str) -> Dict[str, Any]:
+    return {
+        "contains_none": ">None<" in report_html,
+        "contains_null": "null" in report_html,
+        "has_review_flags": "Review Flags" in report_html,
+        "has_data_notes": "Data Notes" in report_html,
+        "has_zimas_section": "ZIMAS Parcel Profile" in report_html,
+        "has_ladbs_records_section": "LADBS Records" in report_html,
+    }
+
+
+def _build_key_fields(payload: Dict[str, Any]) -> Dict[str, Any]:
+    zimas = payload.get("zimas_profile") or {}
+    zoning_profile = zimas.get("zoning_profile") or {}
+    planning_context = zimas.get("planning_context") or {}
+    hazard_profile = zimas.get("hazard_profile") or {}
+    documents = (payload.get("ladbs_records") or {}).get("documents") or []
+    return {
+        "address": payload.get("address"),
+        "pin": zimas.get("pin"),
+        "apn": zimas.get("apn"),
+        "zoning": zoning_profile.get("zoning"),
+        "general_plan_land_use": zoning_profile.get("general_plan_land_use"),
+        "community_plan_area": planning_context.get("community_plan_area"),
+        "nearest_fault": hazard_profile.get("nearest_fault"),
+        "permit_count": len((payload.get("ladbs") or {}).get("permits") or []),
+        "record_count": len(documents),
+        "pdf_link_count": sum(1 for document in documents if isinstance(document, dict) and document.get("pdf_url")),
+    }
+
+
 def _evaluate_expectations(case: Dict[str, Any], payload: Dict[str, Any], report_html: str) -> List[str]:
     expectations = case.get("expectations") or {}
     failures: List[str] = []
@@ -118,10 +147,16 @@ def _evaluate_expectations(case: Dict[str, Any], payload: Dict[str, Any], report
     planning_context = zimas.get("planning_context") or {}
     permits = (payload.get("ladbs") or {}).get("permits") or []
     documents = (payload.get("ladbs_records") or {}).get("documents") or []
+    ladbs = payload.get("ladbs") or {}
+    records = payload.get("ladbs_records") or {}
 
     def expect_equal(label: str, actual: Any, expected: Any) -> None:
         if actual != expected:
             failures.append(f"{label} expected {expected!r} but got {actual!r}")
+
+    def expect_in(label: str, actual: Any, allowed_values: List[Any]) -> None:
+        if allowed_values and actual not in allowed_values:
+            failures.append(f"{label} expected one of {allowed_values!r} but got {actual!r}")
 
     if expectations.get("address_contains") and expectations["address_contains"].lower() not in address.lower():
         failures.append(
@@ -155,6 +190,18 @@ def _evaluate_expectations(case: Dict[str, Any], payload: Dict[str, Any], report
     if isinstance(min_record_count, int) and len(documents) < min_record_count:
         failures.append(f"record count expected at least {min_record_count}, got {len(documents)}")
 
+    min_pdf_count = expectations.get("min_pdf_count")
+    pdf_count = sum(1 for document in documents if isinstance(document, dict) and document.get("pdf_url"))
+    if isinstance(min_pdf_count, int) and pdf_count < min_pdf_count:
+        failures.append(f"pdf link count expected at least {min_pdf_count}, got {pdf_count}")
+
+    if expectations.get("allowed_permit_sources"):
+        expect_in("permit source", ladbs.get("source"), list(expectations["allowed_permit_sources"]))
+    if expectations.get("allowed_records_sources"):
+        expect_in("records source", records.get("source"), list(expectations["allowed_records_sources"]))
+    if expectations.get("allowed_zimas_sources"):
+        expect_in("zimas source", zimas.get("source"), list(expectations["allowed_zimas_sources"]))
+
     permit_numbers = {str(permit.get("permit_number")) for permit in permits if isinstance(permit, dict)}
     for permit_number in expectations.get("required_permit_numbers") or []:
         if permit_number not in permit_numbers:
@@ -173,6 +220,10 @@ def _evaluate_expectations(case: Dict[str, Any], payload: Dict[str, Any], report
         if text in report_html:
             failures.append(f"forbidden report text present: {text}")
 
+    for snippet in expectations.get("required_data_note_substrings") or []:
+        if not any(snippet in str(note) for note in (payload.get("data_notes") or [])):
+            failures.append(f"required data note missing substring: {snippet}")
+
     return failures
 
 
@@ -181,17 +232,34 @@ def _build_summary(case: Dict[str, Any], payload: Dict[str, Any], report_html: s
     permits = ((payload.get("ladbs") or {}).get("permits") or [])[:3]
     documents = ((payload.get("ladbs_records") or {}).get("documents") or [])[:3]
     qa_failures = _evaluate_expectations(case, payload, report_html)
+    review_flags = [
+        {
+            "code": anomaly.get("code"),
+            "severity": anomaly.get("severity"),
+            "message": anomaly.get("message"),
+        }
+        for anomaly in (payload.get("anomalies") or [])
+    ]
     return {
         "name": case.get("name"),
+        "tags": case.get("tags") or [],
         "redfin_url": case.get("redfin_url"),
         "address": payload.get("address"),
+        "known_truths": case.get("known_truths") or {},
+        "key_fields_to_verify": case.get("key_fields_to_verify") or [],
+        "acceptable_uncertainty_notes": case.get("acceptable_uncertainty_notes") or [],
+        "key_fields": _build_key_fields(payload),
         "schema_warnings": (payload.get("source_diagnostics") or {}).get("schema_warnings") or [],
         "anomaly_count": len(payload.get("anomalies") or []),
         "anomaly_codes": (payload.get("source_diagnostics") or {}).get("anomaly_codes") or [],
+        "review_flags": review_flags,
         "source_states": source_states,
         "permit_numbers": [permit.get("permit_number") for permit in permits if isinstance(permit, dict)],
         "document_numbers": [document.get("doc_number") for document in documents if isinstance(document, dict)],
+        "data_notes": payload.get("data_notes") or [],
+        "report_checks": _build_report_checks(report_html),
         "qa_failures": qa_failures,
+        "qa_failure_count": len(qa_failures),
         "qa_passed": not qa_failures,
     }
 
@@ -218,6 +286,8 @@ def main() -> int:
             print(f"[QA] anomaly_count={summary['anomaly_count']}")
             if summary["anomaly_codes"]:
                 print(f"[QA] anomaly_codes={summary['anomaly_codes']}")
+            print("[QA] key_fields=" + json.dumps(summary["key_fields"], sort_keys=True))
+            print("[QA] report_checks=" + json.dumps(summary["report_checks"], sort_keys=True))
             print(
                 "[QA] sources="
                 + json.dumps(summary["source_states"], sort_keys=True)
@@ -226,6 +296,8 @@ def main() -> int:
                 print(f"[QA] permit_numbers={summary['permit_numbers']}")
             if summary["document_numbers"]:
                 print(f"[QA] document_numbers={summary['document_numbers']}")
+            if summary["data_notes"]:
+                print(f"[QA] data_notes={summary['data_notes']}")
             if summary["qa_failures"]:
                 print(f"[QA] qa_failures={summary['qa_failures']}")
 

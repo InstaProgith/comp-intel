@@ -434,6 +434,62 @@ def _normalize_address_variant(value: Optional[str]) -> Optional[str]:
     return normalized or None
 
 
+def _normalize_review_address_variant(value: Optional[str]) -> Optional[str]:
+    normalized = _normalize_address_variant(value)
+    if not normalized:
+        return None
+    normalized = re.sub(r"\bTEMP\b", " ", normalized)
+    normalized = " ".join(normalized.split())
+    return normalized or None
+
+
+def _extract_address_numbers(value: Optional[str]) -> List[str]:
+    normalized = _normalize_review_address_variant(value)
+    if not normalized:
+        return []
+    tokens = normalized.split()
+    if tokens and re.fullmatch(r"\d{5}", tokens[-1]):
+        tokens = tokens[:-1]
+    return [token for token in tokens if re.fullmatch(r"\d{3,5}", token)]
+
+
+def _extract_street_signature(value: Optional[str]) -> Optional[str]:
+    normalized = _normalize_review_address_variant(value)
+    if not normalized:
+        return None
+    tokens = normalized.split()
+    if tokens and re.fullmatch(r"\d{5}", tokens[-1]):
+        tokens = tokens[:-1]
+    tokens = [token for token in tokens if not re.fullmatch(r"\d{3,5}", token)]
+    signature = " ".join(tokens)
+    return signature or None
+
+
+def _looks_like_certificate_bundle(documents: List[Dict[str, Any]]) -> bool:
+    doc_types = {
+        str(_as_dict(document).get("doc_type") or "").strip().upper()
+        for document in documents
+        if isinstance(document, dict)
+    }
+    doc_dates = {
+        str(_as_dict(document).get("doc_date") or "").strip()
+        for document in documents
+        if isinstance(document, dict)
+    }
+    doc_numbers = {
+        str(_as_dict(document).get("doc_number") or "").strip().upper()
+        for document in documents
+        if isinstance(document, dict)
+    }
+    if not doc_numbers or not doc_types or not doc_dates:
+        return False
+    if doc_types != {"CERTIFICATE OF OCCUPANCY"}:
+        return False
+    if len(doc_dates) != 1:
+        return False
+    return any(doc_number.startswith("CERT ") for doc_number in doc_numbers)
+
+
 def _parse_document_date(value: Optional[str]) -> Optional[datetime]:
     if _is_missing_text(value):
         return None
@@ -486,11 +542,25 @@ def _build_source_diagnostics(payload: Dict[str, Any], anomalies: List[Dict[str,
     records = _as_dict(payload.get("ladbs_records"))
     documents = _as_list(records.get("documents"))
 
+    grouped_record_documents: Dict[str, List[Dict[str, Any]]] = {}
+    for document in documents:
+        if not isinstance(document, dict):
+            continue
+        record_id = document.get("record_id")
+        if not record_id:
+            continue
+        grouped_record_documents.setdefault(str(record_id), []).append(document)
     duplicate_record_ids = {
         record_id
-        for record_id in [doc.get("record_id") for doc in documents if isinstance(doc, dict)]
-        if record_id
-        if sum(1 for doc in documents if isinstance(doc, dict) and doc.get("record_id") == record_id) > 1
+        for record_id, grouped_documents in grouped_record_documents.items()
+        if len(
+            {
+                str(document.get("doc_number"))
+                for document in grouped_documents
+                if document.get("doc_number")
+            }
+        ) > 1
+        and not _looks_like_certificate_bundle(grouped_documents)
     }
 
     return {
@@ -570,45 +640,71 @@ def detect_payload_anomalies(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
         {
             normalized
             for normalized in (
-                _normalize_address_variant(_as_dict(permit).get("address_label"))
+                _normalize_review_address_variant(_as_dict(permit).get("address_label"))
                 for permit in permits
                 if isinstance(permit, dict)
             )
             if normalized
         }
     )
-    if len(address_labels) > 1:
+    subject_address = payload.get("address") or zimas.get("address") or ladbs.get("address")
+    subject_number = next(iter(_extract_address_numbers(subject_address)), None)
+    address_number_sets = [set(_extract_address_numbers(label)) for label in address_labels]
+    street_signatures = {
+        signature
+        for signature in (_extract_street_signature(label) for label in address_labels)
+        if signature
+    }
+    all_variants_include_subject = bool(subject_number) and all(
+        address_numbers and subject_number in address_numbers
+        for address_numbers in address_number_sets
+    )
+    if len(street_signatures) > 1 or (len(address_labels) > 1 and not all_variants_include_subject):
         anomalies.append(
             {
                 "code": "permit_address_variants",
                 "severity": "review",
-                "message": "LADBS permits reference multiple address variants; review the permit set for unit/address crossover.",
+                "message": "LADBS permits reference address labels that extend beyond the subject address; review the permit set for parcel/address crossover.",
                 "details": {
                     "address_labels": address_labels,
+                    "subject_address": subject_address,
+                    "subject_number": subject_number,
                 },
             }
         )
 
-    record_id_map: Dict[str, List[str]] = {}
+    record_id_map: Dict[str, List[Dict[str, Any]]] = {}
     for document in documents:
         if not isinstance(document, dict):
             continue
         record_id = document.get("record_id")
-        doc_number = document.get("doc_number")
-        if not record_id or not doc_number:
+        if not record_id:
             continue
-        record_id_map.setdefault(str(record_id), []).append(str(doc_number))
+        record_id_map.setdefault(str(record_id), []).append(_as_dict(document))
     duplicate_record_ids = {
-        record_id: sorted(set(doc_numbers))
-        for record_id, doc_numbers in record_id_map.items()
-        if len(set(doc_numbers)) > 1
+        record_id: sorted(
+            {
+                str(document.get("doc_number"))
+                for document in grouped_documents
+                if document.get("doc_number")
+            }
+        )
+        for record_id, grouped_documents in record_id_map.items()
+        if len(
+            {
+                str(document.get("doc_number"))
+                for document in grouped_documents
+                if document.get("doc_number")
+            }
+        ) > 1
+        and not _looks_like_certificate_bundle(grouped_documents)
     }
     if duplicate_record_ids:
         anomalies.append(
             {
                 "code": "shared_record_ids",
                 "severity": "review",
-                "message": "LADBS records reuse the same underlying record ID for multiple document numbers.",
+                "message": "LADBS records reuse the same underlying record ID for multiple unrelated document numbers.",
                 "details": {
                     "record_ids": duplicate_record_ids,
                 },

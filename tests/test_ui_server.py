@@ -222,3 +222,64 @@ class UIServerTests(TestCase):
             self.assertIn("0 days", html)
             self.assertNotIn(">None<", html)
             self.assertNotIn("null", html)
+
+    def test_single_report_render_keeps_review_flags_section_when_empty(self) -> None:
+        with mock.patch.dict(
+            os.environ,
+            {
+                "APP_ENV": "development",
+                "APP_TESTING": "1",
+                "FLASK_SECRET_KEY": "test-secret-key",
+                "APP_ACCESS_PASSWORD": "test-password",
+            },
+            clear=False,
+        ):
+            os.environ.pop("PORT", None)
+            os.environ.pop("GUNICORN_CMD_ARGS", None)
+            os.environ.pop("SERVER_SOFTWARE", None)
+            os.environ.pop("FLASK_ENV", None)
+            os.environ.pop("FLASK_DEBUG", None)
+
+            ui_server = _load_ui_server()
+            client = ui_server.app.test_client()
+
+            client.post("/", data={"password": "test-password"}, follow_redirects=True)
+
+            fake_result = apply_payload_contract(
+                {
+                    "address": "3629 Rosewood Ave, Los Angeles, CA 90066",
+                    "url": "https://www.redfin.com/CA/Los-Angeles/3629-Rosewood-Ave-90066/home/6746236",
+                    "zimas_profile": {
+                        "source": "zimas_profile_v1",
+                        "transport": "http",
+                        "pin": "111B149   315",
+                        "apn": "4245011018",
+                        "planning_context": {"community_plan_area": "Palms - Mar Vista - Del Rey"},
+                        "zoning_profile": {"zoning": "R1V2", "general_plan_land_use": "Low Residential"},
+                    },
+                    "ladbs": {
+                        "source": "ladbs_pin_v1",
+                        "permits": [{"permit_number": "26016-30000-03655", "address_label": "3629 S ROSEWOOD AVE 90066"}],
+                    },
+                    "ladbs_records": {
+                        "source": "ladbs_records_v1",
+                        "transport": "http",
+                        "documents": [{"doc_number": "CERT 275679", "doc_date": "11/29/2025"}],
+                    },
+                }
+            )
+
+            self.assertEqual(fake_result["anomalies"], [])
+
+            with mock.patch.object(ui_server, "run_full_comp_pipeline", return_value=fake_result):
+                report = client.post(
+                    "/report",
+                    data={
+                        "redfin_url": "https://www.redfin.com/CA/Los-Angeles/3629-Rosewood-Ave-90066/home/6746236"
+                    },
+                )
+
+            self.assertEqual(report.status_code, 200)
+            html = report.get_data(as_text=True)
+            self.assertIn("Review Flags", html)
+            self.assertIn("No review flags.", html)
