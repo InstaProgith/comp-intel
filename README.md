@@ -7,10 +7,12 @@ Flask web app that analyzes LA single-family home development projects by scrapi
 Generates development analysis reports for residential properties:
 - Property snapshot (address, beds/baths/SF, lot size, year built, sale status)
 - Transaction analysis (purchase/exit price, hold period, spread, ROI)
+- ZIMAS parcel profile (parcel identity, zoning, planning context, environmental and hazard context)
 - Development timeline (construction stages from permits to completion)
 - Construction summary (existing SF, added SF, scope level)
 - Cost model (estimated construction costs using industry rates)
 - Permit overview (building, demolition, MEP permits)
+- LADBS records/documents lookup with auditable summary links and public PDF viewer links when available
 - Team info (general contractor, architect, engineer with license data)
 
 ## Quick Start
@@ -52,6 +54,7 @@ python -m app.ui_server
 - `LADBS_DRIVER_START_RETRIES` - Chrome startup retry count
 - `LADBS_PAGE_LOAD_TIMEOUT` - LADBS page-load timeout in seconds
 - `LADBS_HEADLESS` - Set to "0" to force headed LADBS fallback browser runs
+- `LADBS_RECORDS_MAX_PDF_RESOLUTIONS` - Limit the number of LADBS record rows that resolve PDF viewer links during a single request
 
 **Password priority:** `APP_ACCESS_PASSWORD` > local `access_password.txt` > fallback `CHANGE_ME_DEV` outside production-like environments only
 
@@ -80,7 +83,10 @@ https://www.redfin.com/CA/Los-Angeles/540-N-Gardner-St-90036/home/198348544
 
 - `app/` - Python modules (scrapers, orchestrator, Flask server, AI)
 - `app/ladbs_smoke.py` - Repeatable LADBS smoke entrypoint for Redfin URL or direct-address checks
+- `app/property_data_smoke.py` - Repeatable Lucerne-style smoke for Redfin + ZIMAS + LADBS permits + LADBS records
 - `app/zimas_pin_client.py` - Browserless ZIMAS PIN resolver used by the new LADBS pin-first path
+- `app/zimas_client.py` - Browserless ZIMAS parcel-profile client
+- `app/ladbs_records_client.py` - Browserless LADBS records/document search client with PDF-link resolution
 - `templates/` - HTML templates (home, report, history pages)
 - `static/` - CSS styles
 - `data/raw/` - Cached HTML (gitignored)
@@ -94,11 +100,13 @@ https://www.redfin.com/CA/Los-Angeles/540-N-Gardner-St-90036/home/198348544
 
 1. `redfin_scraper.py` - Extracts property data from Redfin HTML
 2. `zimas_pin_client.py` - Resolves parcel/PIN from ZIMAS address search
-3. `ladbs_scraper.py` - Fetches LADBS permits by PIN over HTTP first, with Selenium PLR fallback if needed
-4. `cslb_lookup.py` - Validates contractor licenses
-5. `orchestrator.py` - Combines all sources, computes metrics, builds timeline
-6. `ai_summarizer.py` - Generates AI analysis (optional)
-7. `ui_server.py` - Flask routes and web interface
+3. `zimas_client.py` - Fetches the browserless ZIMAS parcel profile
+4. `ladbs_scraper.py` - Fetches LADBS permits by PIN over HTTP first, with Selenium PLR fallback if needed
+5. `ladbs_records_client.py` - Fetches LADBS records/documents and resolves public PDF viewer links when available
+6. `cslb_lookup.py` - Validates contractor licenses
+7. `orchestrator.py` - Combines all sources, computes metrics, and builds the report payload
+8. `ai_summarizer.py` - Generates AI analysis (optional)
+9. `ui_server.py` - Flask routes and web interface
 
 ## Cost Model Rates
 
@@ -114,10 +122,12 @@ https://www.redfin.com/CA/Los-Angeles/540-N-Gardner-St-90036/home/198348544
 ## Troubleshooting
 
 - Missing modules: activate venv (`source .venv/bin/activate`), reinstall (`pip install -r requirements.txt`)
+- Full Lucerne data smoke: run `python -m app.property_data_smoke --redfin-url https://www.redfin.com/CA/Los-Angeles/1120-S-Lucerne-Blvd-90019/home/6911003`
 - LADBS scraping fails: first try the default `pin-first` smoke path, then verify Chrome/ChromeDriver and review `data/logs/ladbs/` only if browser fallback is still needed
 - LADBS on Windows/Codex: if Chromium cannot lock a profile under the repo path, point `LADBS_SELENIUM_PROFILE_DIR`, `LADBS_BROWSER_ENV_DIR`, and `SE_CACHE_PATH` to a writable `%LOCALAPPDATA%` location before re-running the smoke command
 - No AI summary: set `ONE_MIN_AI_API_KEY` in environment
 - Empty permits: property may have no permit history or LADBS temporarily unavailable
+- Empty LADBS records: verify the APN is present, then rerun the property-data smoke to inspect the selected address candidates and records metadata
 - Production startup fails: set `APP_ENV=production`, `FLASK_SECRET_KEY`, and `APP_ACCESS_PASSWORD`
 
 ## Tests
@@ -126,6 +136,7 @@ Run the smoke suite with:
 
 ```bash
 python -m unittest discover -s tests -v
+python -m compileall app tests
 ```
 
 Repeatable LADBS smoke commands:
@@ -137,6 +148,15 @@ python -m app.ladbs_smoke --strategy plr --address "1120 S Lucerne Blvd, Los Ang
 ```
 
 The default smoke strategy is now `pin-first`, which resolves ZIMAS PIN data and fetches LADBS permits over HTTP before any browser fallback is attempted.
+
+Repeatable Lucerne full-data smoke command:
+
+```bash
+python -m app.property_data_smoke --redfin-url https://www.redfin.com/CA/Los-Angeles/1120-S-Lucerne-Blvd-90019/home/6911003
+python -m app.property_data_smoke --redfin-url https://www.redfin.com/CA/Los-Angeles/1120-S-Lucerne-Blvd-90019/home/6911003 --json
+```
+
+The property-data smoke validates the browserless ZIMAS parcel profile, the browserless LADBS records/documents search, and the existing LADBS permit flow together. It prints record counts plus public PDF viewer links when LADBS exposes digital images. Downloaded PDFs and generated artifacts remain out of git.
 
 Exact Windows PowerShell env vars that produced the earlier PLR browser fallback green path in this repo:
 
