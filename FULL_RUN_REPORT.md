@@ -255,3 +255,94 @@ Promote the successful LADBS smoke path into your normal local/VPS workflow:
 3. Once that is stable, move into ZIMAS and building-record/PDF expansion work.
 
 Once LADBS is green, the baseline is stable enough to expand into ZIMAS, building-record PDF retrieval, and final PDF export work.
+
+## Follow-Up Pass: ZIMAS PIN-First LADBS Path
+
+This pass stayed on `codex/lucerne-full-run-hardening` and implemented the targeted ZIMAS PIN-first LADBS strategy without starting broader ZIMAS feature work or building-record PDF expansion.
+
+### What changed in this pass
+
+- Added `app/zimas_pin_client.py` for browserless ZIMAS PIN resolution from either a Redfin URL or a direct address.
+- Updated `app/ladbs_scraper.py` so `get_ladbs_data(...)` now defaults to `pin-first`:
+  - resolve parcel PIN from ZIMAS
+  - fetch LADBS `PermitResultsbyPin`
+  - load permit drilldown partials over HTTP
+  - fetch `PcisPermitDetail` pages over HTTP
+  - fall back to the existing Selenium PLR flow only if the PIN route is not usable
+- Added result metadata for `pin`, `pin_source`, `requested_strategy`, `retrieval_strategy`, `fallback_used`, `pin_route_source`, and `pin_route_note`.
+- Added parser and strategy regression tests for the new ZIMAS and LADBS by-PIN code paths.
+- Hardened LADBS runtime-directory creation so `SE_CACHE_PATH` or related browser dirs can recover when a target path already exists as a file.
+- Updated `app/ladbs_smoke.py`, `README.md`, and `VPS_DEPLOYMENT.md` with the new repeatable commands and strategy documentation.
+
+### Exact commands used in this pass
+
+- `.\.venv\Scripts\python.exe -m unittest discover -s tests -v`
+- `.\.venv\Scripts\python.exe -m compileall app tests`
+- `.\.venv\Scripts\python.exe -m app.ladbs_smoke --redfin-url "https://www.redfin.com/CA/Los-Angeles/1120-S-Lucerne-Blvd-90019/home/6911003" --json`
+- `.\.venv\Scripts\python.exe -m app.ladbs_smoke --redfin-url "https://www.redfin.com/CA/Los-Angeles/1120-S-Lucerne-Blvd-90019/home/6911003"`
+- `.\.venv\Scripts\python.exe -m app.ladbs_smoke --address "1120 S Lucerne Blvd, Los Angeles, CA 90019"`
+- `.\.venv\Scripts\python.exe -m app.ladbs_smoke --strategy plr --address "1120 S Lucerne Blvd, Los Angeles, CA 90019"` with writable `%LOCALAPPDATA%` LADBS env vars
+
+### Tests run and results
+
+- `.\.venv\Scripts\python.exe -m unittest discover -s tests -v` -> `17/17` passed
+- `.\.venv\Scripts\python.exe -m compileall app tests` -> passed
+
+### Live Lucerne smoke-test result
+
+Primary live command:
+
+- `python -m app.ladbs_smoke --redfin-url "https://www.redfin.com/CA/Los-Angeles/1120-S-Lucerne-Blvd-90019/home/6911003" --json`
+
+Result:
+
+- source: `ladbs_pin_v1`
+- retrieval strategy: `pin-first`
+- fallback used: `False`
+- ZIMAS PIN: `129B185   131`
+- ZIMAS PIN source: `zimas_ajax_v1`
+- permits found with status date >= 2018: `7`
+- representative permit numbers:
+  - `25041-90000-59794`
+  - `25042-90000-22280`
+  - `25014-10000-03595`
+  - `25016-10000-27059`
+  - `25041-10001-59794`
+  - `26044-20000-01885`
+  - `25042-10001-22280`
+
+Direct-address smoke also succeeded:
+
+- command shape: `python -m app.ladbs_smoke --address "1120 S Lucerne Blvd, Los Angeles, CA 90019"`
+- source: `ladbs_pin_v1`
+- fallback used: `False`
+- permits found with status date >= 2018: `7`
+
+Preserved PLR fallback also re-verified after the directory-hardening fix:
+
+- command shape: `python -m app.ladbs_smoke --strategy plr --address "1120 S Lucerne Blvd, Los Angeles, CA 90019"`
+- source: `ladbs_plr_v6`
+- retrieval strategy: `plr-address`
+- permits found with status date >= 2018: `3`
+
+### What was learned
+
+- The Lucerne property no longer needs browser startup for the main LADBS permit flow.
+- ZIMAS address search can resolve the parcel PIN browserlessly through `ajaxSearchResults.aspx`.
+- LADBS `PermitResultsbyPin`, `_PcisAddressPartial2`, `_IparPcisAddressDrillDownPartial`, and `PcisPermitDetail` are replayable over HTTP for this case.
+- The previous Selenium PLR path remains useful as a guarded fallback, but it is no longer the preferred Lucerne path.
+- Browser fallback path handling is also more resilient now because runtime cache/profile/env dirs can auto-step aside from file collisions instead of crashing immediately.
+
+### Remaining blockers
+
+- No blocker remains for the Lucerne permit path on the new `pin-first` strategy.
+- Browser fallback still depends on writable Chrome profile/cache/temp directories if it is needed for other properties.
+- ZIMAS parcel/PIN resolution is intentionally limited to this lookup use case in this pass; broader zoning/profile integration is still future work.
+
+### Exact next best step
+
+Use the new browserless-by-default path as the repo baseline:
+
+1. Keep validating `python -m app.ladbs_smoke --redfin-url <property> --json` on real properties to learn where the by-PIN path succeeds or needs PLR fallback.
+2. Once the PIN-first path is stable across a broader sample, promote that metadata into reports/templates where useful.
+3. Only after that, start the next expansion into ZIMAS zoning/profile data or LADBS building-record/PDF retrieval.

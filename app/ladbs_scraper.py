@@ -4,7 +4,7 @@ from dataclasses import asdict, dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
-from urllib.parse import urlparse
+from urllib.parse import urljoin
 import os
 import re
 import shutil
@@ -12,6 +12,15 @@ import subprocess
 import tempfile
 import time
 import traceback
+
+import requests
+from bs4 import BeautifulSoup
+
+from app.zimas_pin_client import (
+    extract_address_from_redfin_url as zimas_extract_address_from_redfin_url,
+    extract_address_from_text as zimas_extract_address_from_text,
+    resolve_pin,
+)
 
 try:
     from selenium import webdriver
@@ -28,6 +37,9 @@ except ImportError:
 LADBS_PLR_URL = (
     "https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr"
 )
+LADBS_PERMIT_REPORT_BASE_URL = "https://www.ladbsservices2.lacity.org/OnlineServices/PermitReport/"
+LADBS_PERMIT_RESULTS_BY_PIN_URL = urljoin(LADBS_PERMIT_REPORT_BASE_URL, "PermitResultsbyPin")
+LADBS_PIN_ADDRESS_PARTIAL_URL = urljoin(LADBS_PERMIT_REPORT_BASE_URL, "_PcisAddressPartial2")
 CUTOFF_YEAR = 2018
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -47,28 +59,6 @@ INHERITED_BROWSER_ENV_KEYS_TO_REMOVE = {
     "CHROME_CRASHPAD_PIPE_NAME",
     "CHROME_HEADLESS",
     "ELECTRON_RUN_AS_NODE",
-}
-STREET_NOISE_TOKENS = {
-    "N",
-    "S",
-    "E",
-    "W",
-    "NE",
-    "NW",
-    "SE",
-    "SW",
-    "BLVD",
-    "ST",
-    "AVE",
-    "RD",
-    "PL",
-    "DR",
-    "CT",
-    "LN",
-    "WAY",
-    "PKWY",
-    "TER",
-    "HWY",
 }
 
 
@@ -172,18 +162,33 @@ def _discover_chromedriver_path() -> Tuple[Optional[str], Optional[str]]:
     return _first_existing_path(env_candidates + path_candidates + repo_candidates)
 
 
+def _ensure_runtime_directory(path: Path) -> Path:
+    candidate = path
+    for _ in range(3):
+        if candidate.exists() and not candidate.is_dir():
+            candidate = candidate.with_name(f"{candidate.name}-dir")
+            continue
+        try:
+            candidate.mkdir(parents=True, exist_ok=True)
+            return candidate
+        except FileExistsError:
+            candidate = candidate.with_name(f"{candidate.name}-dir")
+    raise RuntimeError(f"Could not create a writable runtime directory for {path}")
+
+
 def _resolve_driver_settings() -> DriverSettings:
-    cache_dir = Path(os.environ.get("SE_CACHE_PATH") or (DATA_DIR / "selenium-cache"))
-    profile_root = Path(
-        os.environ.get("LADBS_SELENIUM_PROFILE_DIR") or (DATA_DIR / "browser" / "chrome")
+    cache_dir = _ensure_runtime_directory(
+        Path(os.environ.get("SE_CACHE_PATH") or (DATA_DIR / "selenium-cache"))
     )
-    browser_env_root = Path(os.environ.get("LADBS_BROWSER_ENV_DIR") or (DATA_DIR / "browser-env"))
-    logs_dir = DATA_DIR / "logs" / "ladbs"
+    profile_root = _ensure_runtime_directory(
+        Path(os.environ.get("LADBS_SELENIUM_PROFILE_DIR") or (DATA_DIR / "browser" / "chrome"))
+    )
+    browser_env_root = _ensure_runtime_directory(
+        Path(os.environ.get("LADBS_BROWSER_ENV_DIR") or (DATA_DIR / "browser-env"))
+    )
+    logs_dir = _ensure_runtime_directory(DATA_DIR / "logs" / "ladbs")
     chrome_binary, chrome_binary_source = _discover_chrome_binary()
     chromedriver_path, chromedriver_source = _discover_chromedriver_path()
-
-    for path in (cache_dir, profile_root, browser_env_root, logs_dir):
-        path.mkdir(parents=True, exist_ok=True)
 
     return DriverSettings(
         chrome_binary=chrome_binary,
@@ -215,51 +220,425 @@ def get_driver_settings() -> Dict[str, Any]:
 
 
 def extract_address_from_redfin_url(redfin_url: str) -> Tuple[Optional[str], Optional[str]]:
-    try:
-        path = urlparse(redfin_url).path
-        parts = path.split("/")
-        if len(parts) < 4:
-            return None, None
-        address_part = parts[3]
-
-        address_components = address_part.split("-")[:-1]
-        if not address_components:
-            return None, None
-
-        street_number = address_components[0]
-        street_name = _normalize_street_name_parts(address_components[1:])
-        return street_number, street_name
-    except Exception as exc:
-        print(f"[LADBS] Error extracting address from URL: {exc}")
-        return None, None
-
-
-def _normalize_street_name_parts(parts: List[str]) -> Optional[str]:
-    clean_parts: List[str] = []
-    for part in parts:
-        cleaned = re.sub(r"[^A-Za-z0-9]", "", part).strip()
-        if not cleaned:
-            continue
-        if cleaned.upper() in STREET_NOISE_TOKENS:
-            continue
-        clean_parts.append(cleaned)
-    if not clean_parts:
-        return None
-    return " ".join(clean_parts)
+    return zimas_extract_address_from_redfin_url(redfin_url)
 
 
 def extract_address_from_text(address: str) -> Tuple[Optional[str], Optional[str]]:
+    return zimas_extract_address_from_text(address)
+
+
+def _build_http_session() -> requests.Session:
+    session = requests.Session()
+    session.headers.update(
+        {
+            "User-Agent": (
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                "AppleWebKit/537.36 (KHTML, like Gecko) "
+                "Chrome/133.0.0.0 Safari/537.36"
+            ),
+            "Referer": LADBS_PERMIT_REPORT_BASE_URL,
+        }
+    )
+    return session
+
+
+def _extract_ladbs_search_terms(
+    *,
+    redfin_url: Optional[str],
+    address: Optional[str],
+) -> Tuple[Optional[str], Optional[str], Optional[str]]:
+    street_number: Optional[str] = None
+    street_name: Optional[str] = None
+    address_source = None
+    if redfin_url:
+        street_number, street_name = extract_address_from_redfin_url(redfin_url)
+        address_source = "redfin_url"
+    if (not street_number or not street_name) and address:
+        street_number, street_name = extract_address_from_text(address)
+        address_source = "address"
+    return street_number, street_name, address_source
+
+
+def _parse_status_date(value: Optional[str]) -> Optional[str]:
+    if not value:
+        return None
+    match = re.search(r"(\d{1,2}/\d{1,2}/\d{4})", value)
+    return match.group(1) if match else None
+
+
+def _coerce_status_year(status_date: Optional[str]) -> Optional[int]:
+    if not status_date:
+        return None
     try:
-        street_line = (address or "").split(",", 1)[0].strip()
-        match = re.match(r"^(\d+[A-Za-z]?)\s+(.+)$", street_line)
-        if not match:
-            return None, None
-        street_number = match.group(1)
-        street_name = _normalize_street_name_parts(match.group(2).split())
-        return street_number, street_name
-    except Exception as exc:
-        print(f"[LADBS] Error extracting address from text: {exc}")
-        return None, None
+        return datetime.strptime(status_date, "%m/%d/%Y").year
+    except ValueError:
+        return None
+
+
+def _build_basic_permit_summary(permit_basic: Dict[str, Any], detail_note: Optional[str] = None) -> Dict[str, Any]:
+    status_text = permit_basic.get("status_text") or "N/A"
+    issued_date = permit_basic.get("status_date") or "N/A"
+    permit_type = permit_basic.get("type") or "N/A"
+    raw_details = {
+        "permit_url": permit_basic.get("url"),
+        "address_label": permit_basic.get("address_label"),
+        "job_number": permit_basic.get("job_number"),
+    }
+    if detail_note:
+        raw_details["detail_note"] = detail_note
+
+    return {
+        "permit_number": permit_basic.get("permit_number", "N/A"),
+        "job_number": permit_basic.get("job_number"),
+        "permit_type": permit_type,
+        "Type": permit_type,
+        "Status": status_text,
+        "status_date": permit_basic.get("status_date"),
+        "Work_Description": permit_basic.get("work_description"),
+        "Issued_Date": issued_date,
+        "contractor": None,
+        "contractor_license": None,
+        "architect": None,
+        "architect_license": None,
+        "engineer": None,
+        "engineer_license": None,
+        "address_label": permit_basic.get("address_label"),
+        "raw_details": raw_details,
+    }
+
+
+def _find_header_table_soup(soup: BeautifulSoup, header_text: str) -> Optional[Any]:
+    header = soup.find(
+        lambda tag: tag.name in {"h2", "h3", "h4"} and header_text in tag.get_text(" ", strip=True)
+    )
+    if not header:
+        return None
+    return header.find_next("table")
+
+
+def _get_detail_value_from_soup(soup: BeautifulSoup, label_text: str) -> Optional[str]:
+    for dt in soup.find_all("dt"):
+        normalized = " ".join(dt.get_text(" ", strip=True).split())
+        if label_text not in normalized:
+            continue
+        dd = dt.find_next_sibling("dd")
+        if not dd:
+            return None
+        return " ".join(dd.get_text(" ", strip=True).split())
+    return None
+
+
+def parse_pcis_detail_html(html_text: str) -> Dict[str, Any]:
+    soup = BeautifulSoup(html_text, "lxml")
+    details: Dict[str, Any] = {}
+
+    general_info_map = {
+        "Application / Permit": "permit_number",
+        "Plan Check / Job No.": "job_number",
+        "Group": "group",
+        "Type": "type",
+        "Sub-Type": "sub_type",
+        "Primary Use": "primary_use",
+        "Work Description": "work_description",
+        "Permit Issued": "permit_issued",
+        "Current Status": "current_status",
+        "Issuing Office": "issuing_office",
+        "Certificate of Occupancy": "certificate_of_occupancy",
+    }
+
+    for label_text, key in general_info_map.items():
+        value = _get_detail_value_from_soup(soup, label_text)
+        if value:
+            details[key] = value
+
+    contact_information: Dict[str, str] = {}
+    contact_table = _find_header_table_soup(soup, "Contact Information")
+    if contact_table:
+        for row in contact_table.find_all("tr"):
+            cols = row.find_all("td")
+            if len(cols) >= 2:
+                role = cols[0].get_text(" ", strip=True).replace(":", "")
+                value = " ".join(
+                    filter(
+                        None,
+                        (" ".join(col.get_text(" ", strip=True).split()) for col in cols[1:]),
+                    )
+                )
+                if role and value:
+                    contact_information[role] = value
+    details["contact_information"] = contact_information
+
+    status_history: List[Dict[str, str]] = []
+    status_table = _find_header_table_soup(soup, "Permit Application Status History")
+    if status_table:
+        for row in status_table.find_all("tr"):
+            cols = row.find_all("td")
+            if len(cols) >= 3:
+                status_history.append(
+                    {
+                        "event": cols[0].get_text(" ", strip=True),
+                        "date": cols[1].get_text(" ", strip=True),
+                        "person": cols[2].get_text(" ", strip=True),
+                    }
+                )
+    details["status_history"] = status_history
+    return details
+
+
+def _parse_pin_results_summary(html_text: str) -> Dict[str, Any]:
+    soup = BeautifulSoup(html_text, "lxml")
+    text = " ".join(soup.get_text(" ", strip=True).split())
+    digit_match = re.search(r"Permit Information found:\s*(\d+)", text)
+    permit_count = int(digit_match.group(1)) if digit_match else None
+    count_match = re.search(
+        r"Permit Information found:\s*(.+?)(?=Code Enforcement Information:|Soft-story Retrofit Program Information:|Services Plan Review|$)",
+        text,
+    )
+    count_text = count_match.group(1).strip() if count_match else None
+    if permit_count is not None:
+        count_text = str(permit_count)
+
+    return {
+        "text": text,
+        "count_text": count_text,
+        "permit_count": permit_count,
+        "service_unavailable": "Service not available at this time" in text,
+    }
+
+
+def _extract_pin_section_query(onclick_value: Optional[str]) -> Optional[str]:
+    match = re.search(r"showSection\(this,'([^']+)'\)", onclick_value or "")
+    return match.group(1) if match else None
+
+
+def _parse_pin_address_sections(html_text: str) -> List[Dict[str, str]]:
+    soup = BeautifulSoup(html_text, "lxml")
+    sections: List[Dict[str, str]] = []
+    for header in soup.select("h3.accordianAddress"):
+        query_suffix = _extract_pin_section_query(header.get("onclick"))
+        if not query_suffix:
+            continue
+        sections.append(
+            {
+                "label": " ".join(header.get_text(" ", strip=True).split()),
+                "query_suffix": query_suffix,
+            }
+        )
+    return sections
+
+
+def _parse_pin_permit_rows(html_text: str, address_label: str) -> List[Dict[str, Any]]:
+    soup = BeautifulSoup(html_text, "lxml")
+    permits: List[Dict[str, Any]] = []
+    for table in soup.find_all("table"):
+        headers = [" ".join(th.get_text(" ", strip=True).split()) for th in table.find_all("th")]
+        if not any("Application/Permit" in header for header in headers):
+            continue
+
+        for row in table.find_all("tr")[1:]:
+            cols = row.find_all("td")
+            if len(cols) < 4:
+                continue
+
+            link = cols[0].find("a", href=True)
+            if not link:
+                continue
+
+            permit_number_text = " ".join(cols[0].get_text(" ", strip=True).split())
+            permit_number_match = re.search(r"\d{5}-\d{5}-\d{5}", permit_number_text)
+            permit_number = permit_number_match.group(0) if permit_number_match else link.get_text(" ", strip=True)
+            status_text = " ".join(cols[3].get_text(" ", strip=True).split())
+            status_date = _parse_status_date(status_text)
+            status_year = _coerce_status_year(status_date)
+            if status_year and status_year < CUTOFF_YEAR:
+                continue
+
+            permits.append(
+                {
+                    "permit_number": permit_number,
+                    "url": urljoin(LADBS_PERMIT_REPORT_BASE_URL, link["href"]),
+                    "job_number": " ".join(cols[1].get_text(" ", strip=True).split()) or None,
+                    "type": " ".join(cols[2].get_text(" ", strip=True).split()) or None,
+                    "status_text": status_text,
+                    "status_date": status_date,
+                    "work_description": (
+                        " ".join(cols[4].get_text(" ", strip=True).split()) if len(cols) > 4 else None
+                    ),
+                    "address_label": address_label,
+                }
+            )
+    return permits
+
+
+def _fetch_pin_route_data(
+    *,
+    pin: str,
+    apn: Optional[str],
+    address: Optional[str],
+    fetched_at: str,
+    pin_resolution: Dict[str, Any],
+) -> Dict[str, Any]:
+    session = _build_http_session()
+    diagnostics: Dict[str, Any] = {
+        "pin_results_url": LADBS_PERMIT_RESULTS_BY_PIN_URL,
+        "address_partial_url": LADBS_PIN_ADDRESS_PARTIAL_URL,
+        "page_summary": None,
+        "address_sections": [],
+        "detail_fetch_failures": [],
+    }
+
+    try:
+        results_response = session.get(
+            LADBS_PERMIT_RESULTS_BY_PIN_URL,
+            params={"pin": pin},
+            timeout=30,
+        )
+        results_response.raise_for_status()
+    except requests.RequestException as exc:
+        return {
+            "source": "ladbs_pin_error",
+            "apn": apn,
+            "address": address,
+            "fetched_at": fetched_at,
+            "permits": [],
+            "pin": pin,
+            "pin_source": pin_resolution.get("source"),
+            "note": f"LADBS by-PIN request failed: {exc}",
+            "pin_route": diagnostics,
+        }
+
+    page_summary = _parse_pin_results_summary(results_response.text)
+    diagnostics["page_summary"] = page_summary
+    if page_summary["service_unavailable"]:
+        return {
+            "source": "ladbs_pin_error",
+            "apn": apn,
+            "address": address,
+            "fetched_at": fetched_at,
+            "permits": [],
+            "pin": pin,
+            "pin_source": pin_resolution.get("source"),
+            "note": (
+                "LADBS PermitResultsbyPin loaded, but the site reported "
+                "service-unavailable content for this PIN request."
+            ),
+            "pin_route": diagnostics,
+        }
+
+    try:
+        address_partial_response = session.get(
+            LADBS_PIN_ADDRESS_PARTIAL_URL,
+            params={"pin": pin},
+            timeout=30,
+        )
+        address_partial_response.raise_for_status()
+    except requests.RequestException as exc:
+        return {
+            "source": "ladbs_pin_error",
+            "apn": apn,
+            "address": address,
+            "fetched_at": fetched_at,
+            "permits": [],
+            "pin": pin,
+            "pin_source": pin_resolution.get("source"),
+            "note": f"LADBS by-PIN address-section request failed: {exc}",
+            "pin_route": diagnostics,
+        }
+
+    address_sections = _parse_pin_address_sections(address_partial_response.text)
+    diagnostics["address_sections"] = [section["label"] for section in address_sections]
+    permit_basics: Dict[str, Dict[str, Any]] = {}
+
+    for section in address_sections:
+        section_url = f"{LADBS_PERMIT_REPORT_BASE_URL}_IparPcisAddressDrillDownPartial{section['query_suffix']}"
+        try:
+            section_response = session.get(section_url, timeout=30)
+            section_response.raise_for_status()
+        except requests.RequestException as exc:
+            diagnostics["detail_fetch_failures"].append(
+                {
+                    "stage": "address_drilldown",
+                    "address_label": section["label"],
+                    "url": section_url,
+                    "error": str(exc),
+                }
+            )
+            continue
+
+        for permit_basic in _parse_pin_permit_rows(section_response.text, section["label"]):
+            permit_basics.setdefault(permit_basic["permit_number"], permit_basic)
+
+    if not permit_basics:
+        return {
+            "source": "ladbs_pin_no_results",
+            "apn": apn,
+            "address": address,
+            "fetched_at": fetched_at,
+            "permits": [],
+            "pin": pin,
+            "pin_source": pin_resolution.get("source"),
+            "note": "No permits with status date >= 2018 were returned for this LADBS PIN.",
+            "pin_route": diagnostics,
+        }
+
+    permits_slim: List[Dict[str, Any]] = []
+    for permit_number, permit_basic in permit_basics.items():
+        try:
+            detail_response = session.get(permit_basic["url"], timeout=30)
+            detail_response.raise_for_status()
+            details = parse_pcis_detail_html(detail_response.text)
+        except requests.RequestException as exc:
+            diagnostics["detail_fetch_failures"].append(
+                {
+                    "stage": "permit_detail_fetch",
+                    "permit_number": permit_number,
+                    "url": permit_basic["url"],
+                    "error": str(exc),
+                }
+            )
+            permits_slim.append(_build_basic_permit_summary(permit_basic, detail_note=str(exc)))
+            continue
+
+        if details:
+            details.setdefault("permit_number", permit_basic["permit_number"])
+            details.setdefault("job_number", permit_basic.get("job_number"))
+            details.setdefault("type", permit_basic.get("type"))
+            details.setdefault("work_description", permit_basic.get("work_description"))
+            details.setdefault("current_status", permit_basic.get("status_text"))
+            details.setdefault("status_date", permit_basic.get("status_date"))
+            details.setdefault("address_label", permit_basic.get("address_label"))
+            permit_summary = _summarize_permit(details)
+            permit_summary["address_label"] = permit_basic.get("address_label")
+            permit_summary.setdefault("raw_details", {})
+            permit_summary["raw_details"]["address_label"] = permit_basic.get("address_label")
+            permits_slim.append(permit_summary)
+        else:
+            diagnostics["detail_fetch_failures"].append(
+                {
+                    "stage": "permit_detail_parse",
+                    "permit_number": permit_number,
+                    "url": permit_basic["url"],
+                    "error": "No detail fields parsed from PcisPermitDetail response.",
+                }
+            )
+            permits_slim.append(
+                _build_basic_permit_summary(
+                    permit_basic,
+                    detail_note="No detail fields parsed from PcisPermitDetail response.",
+                )
+            )
+
+    return {
+        "source": "ladbs_pin_v1",
+        "apn": apn,
+        "address": address,
+        "fetched_at": fetched_at,
+        "permits": permits_slim,
+        "pin": pin,
+        "pin_source": pin_resolution.get("source"),
+        "note": f"Resolved ZIMAS PIN {pin} and fetched {len(permits_slim)} LADBS permit(s) by PIN.",
+        "pin_route": diagnostics,
+    }
 
 
 def _build_startup_modes(settings: DriverSettings) -> List[BrowserStartupMode]:
@@ -937,92 +1316,143 @@ def _summarize_permit(details: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-def get_ladbs_data(
+def _annotate_ladbs_result(
+    result: Dict[str, Any],
+    *,
+    requested_strategy: str,
+    retrieval_strategy: str,
+    address_source: Optional[str],
+    pin_resolution: Optional[Dict[str, Any]] = None,
+    pin_route: Optional[Dict[str, Any]] = None,
+    fallback_used: bool = False,
+    pin_route_source: Optional[str] = None,
+    pin_route_note: Optional[str] = None,
+) -> Dict[str, Any]:
+    annotated = dict(result)
+    annotated["requested_strategy"] = requested_strategy
+    annotated["retrieval_strategy"] = retrieval_strategy
+    annotated["fallback_used"] = fallback_used
+    annotated["address_source"] = address_source
+    annotated["pin"] = annotated.get("pin") or (pin_resolution or {}).get("pin")
+    annotated["pin_source"] = annotated.get("pin_source") or (pin_resolution or {}).get("source")
+    annotated["pin_resolution"] = pin_resolution
+    if pin_route is not None:
+        annotated["pin_route"] = pin_route
+    elif "pin_route" not in annotated:
+        annotated["pin_route"] = None
+    if pin_route_source is not None:
+        annotated["pin_route_source"] = pin_route_source
+    if pin_route_note is not None:
+        annotated["pin_route_note"] = pin_route_note
+    return annotated
+
+
+def _get_ladbs_data_via_plr(
+    *,
     apn: Optional[str],
     address: Optional[str],
-    redfin_url: Optional[str],
+    fetched_at: str,
+    street_number: str,
+    street_name: str,
+    address_source: Optional[str],
+    requested_strategy: str,
+    pin_resolution: Optional[Dict[str, Any]] = None,
+    pin_route_source: Optional[str] = None,
+    pin_route_note: Optional[str] = None,
+    fallback_used: bool = False,
 ) -> Dict[str, Any]:
-    fetched_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
     if not SELENIUM_AVAILABLE:
-        return {
-            "source": "ladbs_stub_no_selenium",
-            "apn": apn,
-            "address": address,
-            "fetched_at": fetched_at,
-            "permits": [],
-            "note": "Selenium not installed; LADBS not queried.",
-        }
-
-    street_number: Optional[str] = None
-    street_name: Optional[str] = None
-    address_source = None
-    if redfin_url:
-        street_number, street_name = extract_address_from_redfin_url(redfin_url)
-        address_source = "redfin_url"
-    if (not street_number or not street_name) and address:
-        street_number, street_name = extract_address_from_text(address)
-        address_source = "address"
-
-    if not street_number or not street_name:
-        return {
-            "source": "ladbs_stub_bad_address",
-            "apn": apn,
-            "address": address,
-            "fetched_at": fetched_at,
-            "permits": [],
-            "note": (
-                "Could not extract LADBS street number/name from the provided inputs. "
-                f"redfin_url={redfin_url!r} address={address!r}"
-            ),
-        }
+        return _annotate_ladbs_result(
+            {
+                "source": "ladbs_stub_no_selenium",
+                "apn": apn,
+                "address": address,
+                "fetched_at": fetched_at,
+                "permits": [],
+                "note": "Selenium not installed; LADBS not queried.",
+            },
+            requested_strategy=requested_strategy,
+            retrieval_strategy="plr-address-fallback" if fallback_used else "plr-address",
+            address_source=address_source,
+            pin_resolution=pin_resolution,
+            fallback_used=fallback_used,
+            pin_route_source=pin_route_source,
+            pin_route_note=pin_route_note,
+        )
 
     driver = setup_driver()
     if not driver:
         settings = _resolve_driver_settings()
-        return {
-            "source": "ladbs_stub_driver_error",
-            "apn": apn,
-            "address": address,
-            "fetched_at": fetched_at,
-            "permits": [],
-            "note": (
-                f"{LAST_DRIVER_ERROR_SUMMARY} "
-                f"Chrome={settings.chrome_binary or 'not-found'} "
-                f"({settings.chrome_binary_source or 'no-source'}); "
-                f"ChromeDriver={settings.chromedriver_path or 'selenium-manager'} "
-                f"({settings.chromedriver_source or 'auto'}). "
-                f"Review LADBS logs under {settings.logs_dir}."
-            ),
-        }
+        return _annotate_ladbs_result(
+            {
+                "source": "ladbs_stub_driver_error",
+                "apn": apn,
+                "address": address,
+                "fetched_at": fetched_at,
+                "permits": [],
+                "note": (
+                    f"{LAST_DRIVER_ERROR_SUMMARY} "
+                    f"Chrome={settings.chrome_binary or 'not-found'} "
+                    f"({settings.chrome_binary_source or 'no-source'}); "
+                    f"ChromeDriver={settings.chromedriver_path or 'selenium-manager'} "
+                    f"({settings.chromedriver_source or 'auto'}). "
+                    f"Review LADBS logs under {settings.logs_dir}."
+                ),
+            },
+            requested_strategy=requested_strategy,
+            retrieval_strategy="plr-address-fallback" if fallback_used else "plr-address",
+            address_source=address_source,
+            pin_resolution=pin_resolution,
+            fallback_used=fallback_used,
+            pin_route_source=pin_route_source,
+            pin_route_note=pin_route_note,
+        )
 
     permits_slim: List[Dict[str, Any]] = []
 
     try:
         results_url = search_plr(driver, street_number, street_name)
         if not results_url:
-            return {
-                "source": "ladbs_no_results_page",
-                "apn": apn,
-                "address": address,
-                "fetched_at": fetched_at,
-                "permits": [],
-                "note": (
-                    f"PLR search did not return a results page for {street_number} {street_name} "
-                    f"(derived from {address_source})."
-                ),
-            }
+            return _annotate_ladbs_result(
+                {
+                    "source": "ladbs_no_results_page",
+                    "apn": apn,
+                    "address": address,
+                    "fetched_at": fetched_at,
+                    "permits": [],
+                    "note": (
+                        f"PLR search did not return a results page for {street_number} {street_name} "
+                        f"(derived from {address_source})."
+                    ),
+                },
+                requested_strategy=requested_strategy,
+                retrieval_strategy="plr-address-fallback" if fallback_used else "plr-address",
+                address_source=address_source,
+                pin_resolution=pin_resolution,
+                fallback_used=fallback_used,
+                pin_route_source=pin_route_source,
+                pin_route_note=pin_route_note,
+            )
 
         permits_basic = get_permit_list(driver)
         if not permits_basic:
-            return {
-                "source": "ladbs_no_permits_found",
-                "apn": apn,
-                "address": address,
-                "fetched_at": fetched_at,
-                "permits": [],
-                "note": f"No permits with status date >= {CUTOFF_YEAR} found for this address.",
-            }
+            return _annotate_ladbs_result(
+                {
+                    "source": "ladbs_no_permits_found",
+                    "apn": apn,
+                    "address": address,
+                    "fetched_at": fetched_at,
+                    "permits": [],
+                    "note": f"No permits with status date >= {CUTOFF_YEAR} found for this address.",
+                },
+                requested_strategy=requested_strategy,
+                retrieval_strategy="plr-address-fallback" if fallback_used else "plr-address",
+                address_source=address_source,
+                pin_resolution=pin_resolution,
+                fallback_used=fallback_used,
+                pin_route_source=pin_route_source,
+                pin_route_note=pin_route_note,
+            )
 
         for permit_basic in permits_basic:
             details = get_permit_details(driver, permit_basic["url"])
@@ -1030,17 +1460,157 @@ def get_ladbs_data(
                 if permit_basic.get("status_date"):
                     details.setdefault("status_date", permit_basic["status_date"])
                 permits_slim.append(_summarize_permit(details))
+            else:
+                permits_slim.append(
+                    _build_basic_permit_summary(
+                        permit_basic,
+                        detail_note="No detail fields parsed from Selenium permit detail page.",
+                    )
+                )
     finally:
         cleanup_driver(driver)
 
-    return {
-        "source": "ladbs_plr_v6",
-        "apn": apn,
-        "address": address,
-        "fetched_at": fetched_at,
-        "permits": permits_slim,
-        "note": f"Found {len(permits_slim)} permits with status date >= {CUTOFF_YEAR} via PLR.",
-    }
+    return _annotate_ladbs_result(
+        {
+            "source": "ladbs_plr_v6",
+            "apn": apn,
+            "address": address,
+            "fetched_at": fetched_at,
+            "permits": permits_slim,
+            "note": f"Found {len(permits_slim)} permits with status date >= {CUTOFF_YEAR} via PLR.",
+        },
+        requested_strategy=requested_strategy,
+        retrieval_strategy="plr-address-fallback" if fallback_used else "plr-address",
+        address_source=address_source,
+        pin_resolution=pin_resolution,
+        fallback_used=fallback_used,
+        pin_route_source=pin_route_source,
+        pin_route_note=pin_route_note,
+    )
+
+
+def get_ladbs_data(
+    apn: Optional[str],
+    address: Optional[str],
+    redfin_url: Optional[str],
+    strategy: str = "pin-first",
+) -> Dict[str, Any]:
+    fetched_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    street_number, street_name, address_source = _extract_ladbs_search_terms(
+        redfin_url=redfin_url,
+        address=address,
+    )
+
+    if not street_number or not street_name:
+        return _annotate_ladbs_result(
+            {
+                "source": "ladbs_stub_bad_address",
+                "apn": apn,
+                "address": address,
+                "fetched_at": fetched_at,
+                "permits": [],
+                "note": (
+                    "Could not extract LADBS street number/name from the provided inputs. "
+                    f"redfin_url={redfin_url!r} address={address!r}"
+                ),
+            },
+            requested_strategy=strategy,
+            retrieval_strategy="none",
+            address_source=address_source,
+        )
+
+    if strategy != "pin-first":
+        return _get_ladbs_data_via_plr(
+            apn=apn,
+            address=address,
+            fetched_at=fetched_at,
+            street_number=street_number,
+            street_name=street_name,
+            address_source=address_source,
+            requested_strategy=strategy,
+            fallback_used=False,
+        )
+
+    pin_resolution = resolve_pin(
+        redfin_url=redfin_url,
+        address=address,
+        street_number=street_number,
+        street_name=street_name,
+    )
+    if not pin_resolution.get("pin"):
+        pin_failure = _annotate_ladbs_result(
+            {
+                "source": "ladbs_pin_resolution_failed",
+                "apn": apn,
+                "address": address,
+                "fetched_at": fetched_at,
+                "permits": [],
+                "note": (
+                    "PIN-first LADBS lookup could not resolve a ZIMAS parcel PIN. "
+                    f"{pin_resolution.get('note')}"
+                ),
+            },
+            requested_strategy=strategy,
+            retrieval_strategy="pin-first",
+            address_source=address_source,
+            pin_resolution=pin_resolution,
+            pin_route_source="ladbs_pin_resolution_failed",
+            pin_route_note=pin_resolution.get("note"),
+        )
+        plr_result = _get_ladbs_data_via_plr(
+            apn=apn,
+            address=address,
+            fetched_at=fetched_at,
+            street_number=street_number,
+            street_name=street_name,
+            address_source=address_source,
+            requested_strategy=strategy,
+            pin_resolution=pin_resolution,
+            pin_route_source=pin_failure["source"],
+            pin_route_note=pin_failure["note"],
+            fallback_used=True,
+        )
+        if plr_result.get("source") not in {"ladbs_stub_no_selenium", "ladbs_stub_driver_error"}:
+            return plr_result
+        return pin_failure
+
+    pin_result = _fetch_pin_route_data(
+        pin=pin_resolution["pin"],
+        apn=apn,
+        address=address,
+        fetched_at=fetched_at,
+        pin_resolution=pin_resolution,
+    )
+    pin_result = _annotate_ladbs_result(
+        pin_result,
+        requested_strategy=strategy,
+        retrieval_strategy="pin-first",
+        address_source=address_source,
+        pin_resolution=pin_resolution,
+        pin_route=pin_result.get("pin_route"),
+        pin_route_source=pin_result.get("source"),
+        pin_route_note=pin_result.get("note"),
+    )
+    if pin_result.get("source") in {"ladbs_pin_v1", "ladbs_pin_no_results"}:
+        return pin_result
+
+    plr_result = _get_ladbs_data_via_plr(
+        apn=apn,
+        address=address,
+        fetched_at=fetched_at,
+        street_number=street_number,
+        street_name=street_name,
+        address_source=address_source,
+        requested_strategy=strategy,
+        pin_resolution=pin_resolution,
+        pin_route_source=pin_result.get("source"),
+        pin_route_note=pin_result.get("note"),
+        fallback_used=True,
+    )
+    if plr_result.get("source") not in {"ladbs_stub_no_selenium", "ladbs_stub_driver_error"}:
+        return plr_result
+    return pin_result
 
 
 if __name__ == "__main__":

@@ -1,10 +1,10 @@
 # VPS Deployment
 
-This app is ready to run on an Ubuntu VPS with Gunicorn once the required environment variables and Chrome dependencies are in place.
+This app is ready to run on an Ubuntu VPS with Gunicorn once the required environment variables are in place. Chrome and ChromeDriver are only needed if LADBS browser fallback is still required after the default pin-first path.
 
 ## 1. System packages
 
-Install Python 3.11, Git, Google Chrome, and a matching ChromeDriver.
+Install Python 3.11 and Git. Install Google Chrome and a matching ChromeDriver only if you need LADBS browser fallback.
 
 Example package list:
 
@@ -60,6 +60,12 @@ Run the live LADBS smoke before exposing the app:
 python -m app.ladbs_smoke --redfin-url https://www.redfin.com/CA/Los-Angeles/1120-S-Lucerne-Blvd-90019/home/6911003 --json
 ```
 
+If you want to explicitly test the older browser-backed fallback path:
+
+```bash
+python -m app.ladbs_smoke --strategy plr --address "1120 S Lucerne Blvd, Los Angeles, CA 90019" --json
+```
+
 Optional LADBS runtime env vars:
 
 - `LADBS_CHROME_BINARY`
@@ -104,5 +110,6 @@ WantedBy=multi-user.target
 - The app now fails closed in production-like environments if `FLASK_SECRET_KEY` or `APP_ACCESS_PASSWORD` is missing.
 - LADBS browser bootstrap writes logs under `data/logs/ladbs/`.
 - Selenium cache and browser profiles should point to writable directories on the VPS.
-- `python -m app.ladbs_smoke` is the repeatable post-deploy check for browser startup + live LADBS search flow.
+- `python -m app.ladbs_smoke` is the repeatable post-deploy check for the default ZIMAS PIN + LADBS by-PIN path.
+- `python -m app.ladbs_smoke --strategy plr` is the explicit browser fallback smoke command.
 - `access_password.txt` is intentionally ignored by git and should only be used for local-only setups.

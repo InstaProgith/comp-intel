@@ -15,7 +15,7 @@ Generates development analysis reports for residential properties:
 
 ## Quick Start
 
-**Prerequisites:** Python 3.11+, Git, Chrome + ChromeDriver
+**Prerequisites:** Python 3.11+, Git, and optional Chrome + ChromeDriver for LADBS browser fallback
 
 **Run locally:**
 ```bash
@@ -48,8 +48,10 @@ python -m app.ui_server
 - `LADBS_CHROMEDRIVER_PATH` - Explicit ChromeDriver path if needed
 - `SE_CACHE_PATH` - Writable Selenium Manager cache directory
 - `LADBS_SELENIUM_PROFILE_DIR` - Writable browser profile root for LADBS sessions
+- `LADBS_BROWSER_ENV_DIR` - Writable browser env directory used for LOCALAPPDATA/TEMP overrides
 - `LADBS_DRIVER_START_RETRIES` - Chrome startup retry count
 - `LADBS_PAGE_LOAD_TIMEOUT` - LADBS page-load timeout in seconds
+- `LADBS_HEADLESS` - Set to "0" to force headed LADBS fallback browser runs
 
 **Password priority:** `APP_ACCESS_PASSWORD` > local `access_password.txt` > fallback `CHANGE_ME_DEV` outside production-like environments only
 
@@ -78,6 +80,7 @@ https://www.redfin.com/CA/Los-Angeles/540-N-Gardner-St-90036/home/198348544
 
 - `app/` - Python modules (scrapers, orchestrator, Flask server, AI)
 - `app/ladbs_smoke.py` - Repeatable LADBS smoke entrypoint for Redfin URL or direct-address checks
+- `app/zimas_pin_client.py` - Browserless ZIMAS PIN resolver used by the new LADBS pin-first path
 - `templates/` - HTML templates (home, report, history pages)
 - `static/` - CSS styles
 - `data/raw/` - Cached HTML (gitignored)
@@ -90,11 +93,12 @@ https://www.redfin.com/CA/Los-Angeles/540-N-Gardner-St-90036/home/198348544
 ## Data Pipeline
 
 1. `redfin_scraper.py` - Extracts property data from Redfin HTML
-2. `ladbs_scraper.py` - Scrapes LA building permits via Selenium
-3. `cslb_lookup.py` - Validates contractor licenses
-4. `orchestrator.py` - Combines all sources, computes metrics, builds timeline
-5. `ai_summarizer.py` - Generates AI analysis (optional)
-6. `ui_server.py` - Flask routes and web interface
+2. `zimas_pin_client.py` - Resolves parcel/PIN from ZIMAS address search
+3. `ladbs_scraper.py` - Fetches LADBS permits by PIN over HTTP first, with Selenium PLR fallback if needed
+4. `cslb_lookup.py` - Validates contractor licenses
+5. `orchestrator.py` - Combines all sources, computes metrics, builds timeline
+6. `ai_summarizer.py` - Generates AI analysis (optional)
+7. `ui_server.py` - Flask routes and web interface
 
 ## Cost Model Rates
 
@@ -110,7 +114,7 @@ https://www.redfin.com/CA/Los-Angeles/540-N-Gardner-St-90036/home/198348544
 ## Troubleshooting
 
 - Missing modules: activate venv (`source .venv/bin/activate`), reinstall (`pip install -r requirements.txt`)
-- LADBS scraping fails: verify Chrome/ChromeDriver installed and review `data/logs/ladbs/`
+- LADBS scraping fails: first try the default `pin-first` smoke path, then verify Chrome/ChromeDriver and review `data/logs/ladbs/` only if browser fallback is still needed
 - LADBS on Windows/Codex: if Chromium cannot lock a profile under the repo path, point `LADBS_SELENIUM_PROFILE_DIR`, `LADBS_BROWSER_ENV_DIR`, and `SE_CACHE_PATH` to a writable `%LOCALAPPDATA%` location before re-running the smoke command
 - No AI summary: set `ONE_MIN_AI_API_KEY` in environment
 - Empty permits: property may have no permit history or LADBS temporarily unavailable
@@ -127,15 +131,18 @@ python -m unittest discover -s tests -v
 Repeatable LADBS smoke commands:
 
 ```bash
-python -m app.ladbs_smoke --show-diagnostics --json
+python -m app.ladbs_smoke --redfin-url https://www.redfin.com/CA/Los-Angeles/1120-S-Lucerne-Blvd-90019/home/6911003 --json
 python -m app.ladbs_smoke --address "1120 S Lucerne Blvd, Los Angeles, CA 90019" --json
+python -m app.ladbs_smoke --strategy plr --address "1120 S Lucerne Blvd, Los Angeles, CA 90019" --json
 ```
 
-Exact Windows PowerShell env vars that produced a green Lucerne LADBS smoke in this repo:
+The default smoke strategy is now `pin-first`, which resolves ZIMAS PIN data and fetches LADBS permits over HTTP before any browser fallback is attempted.
+
+Exact Windows PowerShell env vars that produced the earlier PLR browser fallback green path in this repo:
 
 ```powershell
 $env:LADBS_SELENIUM_PROFILE_DIR = Join-Path $env:LOCALAPPDATA 'comp-intel-ladbs\profiles'
 $env:LADBS_BROWSER_ENV_DIR = Join-Path $env:LOCALAPPDATA 'comp-intel-ladbs\browser-env'
 $env:SE_CACHE_PATH = Join-Path $env:LOCALAPPDATA 'comp-intel-ladbs\selenium-cache'
-python -m app.ladbs_smoke --show-diagnostics --json
+python -m app.ladbs_smoke --strategy plr --show-diagnostics --json
 ```
