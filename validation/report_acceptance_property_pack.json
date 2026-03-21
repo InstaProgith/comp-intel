@@ -1,0 +1,145 @@
+{
+  "properties": [
+    {
+      "name": "lucerne",
+      "role": "flagship-baseline",
+      "redfin_url": "https://www.redfin.com/CA/Los-Angeles/1120-S-Lucerne-Blvd-90019/home/6911003",
+      "known_truths": {
+        "address": "1120 S Lucerne Blvd, Los Angeles, CA 90019",
+        "apn": "5082004025",
+        "pin": "129B185   131",
+        "zoning": "R1-1-O",
+        "general_plan_land_use": "Low II Residential",
+        "community_plan_area": "Wilshire"
+      },
+      "acceptable_uncertainty_notes": [
+        "This property is the flagship baseline and should be fully reviewable without hiding the remaining uncertainty that Redfin does not expose the prior developer acquisition event."
+      ],
+      "review_checks": {
+        "focus": [
+          "full-report usefulness",
+          "section ordering",
+          "permit and record correctness",
+          "flag/data-note quality"
+        ]
+      },
+      "expectations": {
+        "min_permit_count": 7,
+        "min_record_count": 14,
+        "min_pdf_count": 10,
+        "required_permit_numbers": [
+          "25041-90000-59794",
+          "25042-90000-22280",
+          "25014-10000-03595"
+        ],
+        "required_document_numbers": [
+          "06014-70000-09673",
+          "06016-70000-21824",
+          "06014-70001-09673"
+        ]
+      }
+    },
+    {
+      "name": "malcolm",
+      "role": "sparse-noisy-review-case",
+      "redfin_url": "https://www.redfin.com/CA/Los-Angeles/2831-Malcolm-Ave-90064/home/6753382",
+      "known_truths": {
+        "address": "2831 Malcolm Ave, Los Angeles, CA 90064",
+        "apn": "4255013007",
+        "pin": "123B157   607",
+        "zoning": "R1-1",
+        "general_plan_land_use": "Low Residential",
+        "community_plan_area": "West Los Angeles"
+      },
+      "acceptable_uncertainty_notes": [
+        "LADBS parcel-level permit output may span 2831 and 2831 1/2 labels; that should remain an explicit review item rather than being silently suppressed."
+      ],
+      "review_checks": {
+        "focus": [
+          "review-flag usefulness",
+          "sparse-document presentation",
+          "report cleanliness under uncertainty"
+        ]
+      },
+      "expectations": {
+        "min_permit_count": 10,
+        "min_record_count": 1,
+        "min_pdf_count": 1,
+        "required_permit_numbers": [
+          "23010-10000-05197"
+        ],
+        "required_document_numbers": [
+          "23010-20000-03343"
+        ]
+      }
+    },
+    {
+      "name": "rosewood",
+      "role": "clean-report-case",
+      "redfin_url": "https://www.redfin.com/CA/Los-Angeles/3629-Rosewood-Ave-90066/home/6746236",
+      "known_truths": {
+        "address": "3629 Rosewood Ave, Los Angeles, CA 90066",
+        "apn": "4245011018",
+        "pin": "111B149   315",
+        "zoning": "R1V2",
+        "general_plan_land_use": "Low Residential",
+        "community_plan_area": "Palms - Mar Vista - Del Rey"
+      },
+      "acceptable_uncertainty_notes": [
+        "Range-style and TEMP address variants should not create noisy review output when the property is otherwise clean."
+      ],
+      "review_checks": {
+        "focus": [
+          "clean no-flag presentation",
+          "recent permit/doc usefulness",
+          "wording quality"
+        ]
+      },
+      "expectations": {
+        "min_permit_count": 8,
+        "min_record_count": 9,
+        "min_pdf_count": 8,
+        "required_permit_numbers": [
+          "26016-30000-03655"
+        ],
+        "required_document_numbers": [
+          "CERT 275679"
+        ]
+      }
+    },
+    {
+      "name": "kelton",
+      "role": "dense-document-case",
+      "redfin_url": "https://www.redfin.com/CA/Los-Angeles/3104-Kelton-Ave-90034/home/6752630",
+      "known_truths": {
+        "address": "3104 Kelton Ave, Los Angeles, CA 90034",
+        "apn": "4254007013",
+        "pin": "120B157   124",
+        "zoning": "R1-1",
+        "general_plan_land_use": "Low Residential",
+        "community_plan_area": "Palms - Mar Vista - Del Rey"
+      },
+      "acceptable_uncertainty_notes": [
+        "Certificate-of-occupancy bundles can reuse a record ID; the report should present them cleanly without implying a suspicious duplicate."
+      ],
+      "review_checks": {
+        "focus": [
+          "dense-record readability",
+          "pdf-link rendering",
+          "certificate bundle clarity"
+        ]
+      },
+      "expectations": {
+        "min_permit_count": 6,
+        "min_record_count": 18,
+        "min_pdf_count": 9,
+        "required_permit_numbers": [
+          "24014-20000-00638"
+        ],
+        "required_document_numbers": [
+          "CERT 273648"
+        ]
+      }
+    }
+  ]
+}
