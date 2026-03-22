@@ -300,6 +300,7 @@ class ReportAcceptanceTests(TestCase):
         local_links = {item["key"]: item for item in context["local_actions"]}
         source_links = {item["key"]: item for item in context["source_links"]}
         generic_links = {item["key"]: item for item in context["generic_links"]}
+        fallback_links = {item["key"]: item for item in context["fallback_links"]}
         first_summary_doc = next(
             document for document in payload["ladbs_records"]["documents"] if document.get("summary_url")
         )
@@ -313,9 +314,20 @@ class ReportAcceptanceTests(TestCase):
         self.assertEqual(local_links["open_payload"]["url"], "payload.normalized.json")
         self.assertEqual(source_links["first_ladbs_record"]["url"], first_summary_doc["summary_url"])
         self.assertEqual(source_links["first_ladbs_pdf"]["url"], first_pdf_doc["pdf_url"])
-        self.assertTrue(source_links["pin_permit_results"]["url"].startswith("https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr"))
+        self.assertEqual(source_links["zimas_parcel_page"]["classification"], "canonical")
+        self.assertEqual(source_links["zimas_parcel_page"]["source_basis"], "payload_field")
+        self.assertTrue(source_links["zimas_parcel_page"]["primary"])
+        self.assertEqual(source_links["first_ladbs_record"]["classification"], "canonical")
+        self.assertEqual(source_links["first_ladbs_pdf"]["classification"], "canonical")
         self.assertEqual(generic_links["permit_search_home"]["label"], "Permit search home")
         self.assertEqual(generic_links["docs_search_home"]["label"], "Docs search home")
+        self.assertEqual(generic_links["permit_search_home"]["classification"], "generic")
+        self.assertEqual(generic_links["permit_search_home"]["source_basis"], "generic_home")
+        self.assertFalse(generic_links["permit_search_home"]["primary"])
+        self.assertEqual(fallback_links["pin_permit_results"]["label"], "PIN permit search fallback")
+        self.assertEqual(fallback_links["pin_permit_results"]["classification"], "synthetic")
+        self.assertEqual(fallback_links["pin_permit_results"]["source_basis"], "pin_derived")
+        self.assertFalse(fallback_links["pin_permit_results"]["primary"])
 
     def test_build_review_bundle_context_marks_missing_values_unavailable(self) -> None:
         payload = self._build_payload()
@@ -333,12 +345,13 @@ class ReportAcceptanceTests(TestCase):
 
         source_links = {item["key"]: item for item in context["source_links"]}
         generic_links = {item["key"]: item for item in context["generic_links"]}
+        fallback_links = {item["key"]: item for item in context["fallback_links"]}
         self.assertEqual(source_links["zimas_parcel_page"]["status"], "unavailable")
-        self.assertEqual(source_links["pin_permit_results"]["status"], "unavailable")
         self.assertEqual(source_links["first_ladbs_record"]["status"], "unavailable")
         self.assertEqual(source_links["first_ladbs_pdf"]["status"], "unavailable")
         self.assertEqual(generic_links["permit_search_home"]["status"], "unavailable")
         self.assertEqual(generic_links["docs_search_home"]["status"], "unavailable")
+        self.assertEqual(fallback_links["pin_permit_results"]["status"], "unavailable")
 
     def test_render_report_html_renders_grouped_toolbar_and_explicit_unavailable_states(self) -> None:
         payload = self._build_payload()
@@ -352,13 +365,14 @@ class ReportAcceptanceTests(TestCase):
 
         soup = BeautifulSoup(report_html, "lxml")
         toolbar_groups = [node["data-group"] for node in soup.select(".review-toolbar [data-group]")]
-        self.assertEqual(toolbar_groups, ["local", "source", "generic"])
+        self.assertEqual(toolbar_groups, ["local", "verified_source", "generic", "fallback"])
         self.assertIn("Back to review bundles", soup.get_text(" ", strip=True))
         self.assertIn(
             "ZIMAS parcel page unavailable: No canonical ZIMAS parcel page was available in the payload.",
             soup.get_text(" ", strip=True),
         )
         self.assertIn("Permit search home", soup.get_text(" ", strip=True))
+        self.assertIn("PIN permit search fallback", soup.get_text(" ", strip=True))
         self.assertEqual(
             soup.select_one('.review-toolbar [data-link-key="open_summary"]')["href"],
             "summary.html",
@@ -405,11 +419,11 @@ class ReportAcceptanceTests(TestCase):
                 )
                 self.assertEqual(
                     [node["data-group"] for node in report_soup.select(".review-toolbar [data-group]")],
-                    ["local", "source", "generic"],
+                    ["local", "verified_source", "generic", "fallback"],
                 )
                 self.assertEqual(
                     [node["data-group"] for node in summary_soup.select(".bundle-toolbar-panel [data-group]")],
-                    ["local", "source", "generic"],
+                    ["local", "verified_source", "generic", "fallback"],
                 )
 
                 self._assert_local_href_resolves(
@@ -464,6 +478,8 @@ class ReportAcceptanceTests(TestCase):
                 generic_group_text = report_soup.select_one('[data-group="generic"]').get_text(" ", strip=True)
                 self.assertIn("Permit search home", generic_group_text)
                 self.assertIn("Docs search home", generic_group_text)
+                fallback_group_text = report_soup.select_one('[data-group="fallback"]').get_text(" ", strip=True)
+                self.assertIn("PIN permit search fallback", fallback_group_text)
 
     def test_generated_bundle_links_and_displayed_facts_match_payloads(self) -> None:
         with self._generated_bundle() as (_, bundle_root, _review_index_path, summaries):
@@ -516,12 +532,28 @@ class ReportAcceptanceTests(TestCase):
                     page_kind="summary",
                 )
                 for link in expected_summary_context["source_links"]:
-                    rendered = summary_soup.select_one(f'[data-group="source"] [data-link-key="{link["key"]}"]')
+                    rendered = summary_soup.select_one(
+                        f'[data-group="verified_source"] [data-link-key="{link["key"]}"]'
+                    )
                     self.assertIsNotNone(rendered)
                     if link["status"] == "available":
                         self.assertEqual(rendered["href"], link["url"])
                     else:
                         self.assertIn(link["reason"], rendered.get_text(" ", strip=True))
+                    self.assertIn(link["classification"], {"canonical", "verified_derived"})
+                    self.assertTrue(link["primary"])
+
+                for link in expected_summary_context["generic_links"]:
+                    rendered = summary_soup.select_one(f'[data-group="generic"] [data-link-key="{link["key"]}"]')
+                    self.assertIsNotNone(rendered)
+                    self.assertEqual(link["classification"], "generic")
+                    self.assertFalse(link["primary"])
+
+                for link in expected_summary_context["fallback_links"]:
+                    rendered = summary_soup.select_one(f'[data-group="fallback"] [data-link-key="{link["key"]}"]')
+                    self.assertIsNotNone(rendered)
+                    self.assertEqual(link["classification"], "synthetic")
+                    self.assertFalse(link["primary"])
 
                 expected_report_context = report_acceptance._build_review_bundle_context(
                     payload,
@@ -529,7 +561,9 @@ class ReportAcceptanceTests(TestCase):
                     page_kind="report",
                 )
                 for link in expected_report_context["source_links"]:
-                    rendered = report_soup.select_one(f'.review-toolbar [data-group="source"] [data-link-key="{link["key"]}"]')
+                    rendered = report_soup.select_one(
+                        f'.review-toolbar [data-group="verified_source"] [data-link-key="{link["key"]}"]'
+                    )
                     self.assertIsNotNone(rendered)
                     if link["status"] == "available":
                         self.assertEqual(rendered["href"], link["url"])

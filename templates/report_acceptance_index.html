@@ -54,6 +54,12 @@
       color: #fff;
     }
 
+    .bundle-pill-secondary {
+      background: #f8fafc;
+      border-style: dashed;
+      color: #475569;
+    }
+
     .bundle-pill-muted {
       color: #6b7280;
       background: #f3f4f6;
@@ -292,7 +298,7 @@
             <ul class="bundle-id-list">
               <li>Open summary for the quickest human-readable review pass.</li>
               <li>Open report for the full offline report layout.</li>
-              <li>Use the property-specific source links to confirm parcel and document targets.</li>
+              <li>Use verified source links first; any fallback link is explicitly labeled as fallback.</li>
             </ul>
           </div>
         </div>
@@ -305,7 +311,7 @@
               {% if link.status == "available" %}
               <a
                 data-link-key="{{ link.key }}"
-                class="bundle-pill {% if group.key == 'local' %}bundle-pill-primary{% endif %}"
+                class="bundle-pill {% if group.key == 'local' %}bundle-pill-primary{% elif group.key in ('generic', 'fallback') %}bundle-pill-secondary{% endif %}"
                 href="{{ link.url }}"
                 {% if link.external %}target="_blank" rel="noopener noreferrer"{% endif %}
               >{{ link.label }}</a>
