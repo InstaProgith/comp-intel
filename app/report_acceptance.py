@@ -6,6 +6,7 @@ import os
 import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+from urllib.parse import quote
 
 from bs4 import BeautifulSoup
 from flask import render_template
@@ -48,6 +49,11 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Directory where per-property review bundles should be written.",
     )
     parser.add_argument("--json", action="store_true", help="Print the acceptance summary payload as JSON.")
+    parser.add_argument(
+        "--offline-existing",
+        action="store_true",
+        help="Reuse existing payload.normalized.json files from the output directory instead of running live providers.",
+    )
     return parser
 
 
@@ -88,6 +94,72 @@ def _normalize_text(value: Any) -> str:
 
 def _normalize_compare_text(value: Any) -> str:
     return re.sub(r"[^a-z0-9]+", " ", _normalize_text(value).lower()).strip()
+
+
+def _pin_permit_results_url(pin: Optional[str]) -> Optional[str]:
+    normalized_pin = _normalize_text(pin)
+    if not normalized_pin:
+        return None
+    return "https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&view=permit&pin=" + quote(
+        normalized_pin
+    )
+
+
+def _build_review_links(
+    payload: Dict[str, Any],
+    *,
+    bundle_dir: Optional[Path] = None,
+    bundle_href_prefix: str = "",
+) -> List[Dict[str, str]]:
+    links = payload.get("links") or {}
+    zimas = payload.get("zimas_profile") or {}
+    ladbs = payload.get("ladbs") or {}
+    records = payload.get("ladbs_records") or {}
+    documents = records.get("documents") or []
+    first_doc = documents[0] if documents else {}
+    pin = zimas.get("pin") or ladbs.get("pin")
+    zimas_page = links.get("zimas_url") or ((zimas.get("links") or {}).get("profile_url"))
+    docs_page = links.get("ladbs_records_url") or ((records.get("links") or {}).get("search_url"))
+    pin_results = _pin_permit_results_url(pin)
+
+    review_links = [
+        {"label": "Local report", "url": f"{bundle_href_prefix}report.html" if bundle_dir else None},
+        {"label": "Normalized payload", "url": f"{bundle_href_prefix}payload.normalized.json" if bundle_dir else None},
+        {"label": "Summary", "url": f"{bundle_href_prefix}summary.md" if bundle_dir else None},
+        {"label": "ZIMAS page", "url": zimas_page},
+        {"label": "LADBS permit portal", "url": links.get("ladbs_url")},
+        {"label": "LADBS docs page", "url": docs_page},
+        {"label": "First record summary link", "url": first_doc.get("summary_url")},
+        {"label": "First available PDF link", "url": first_doc.get("pdf_url")},
+        {"label": "PIN-based LADBS permit-results link", "url": pin_results},
+    ]
+
+    for item in review_links:
+        if item["url"]:
+            item["status"] = "available"
+        else:
+            item["status"] = "unavailable"
+            item["reason"] = "Unavailable offline"
+    return review_links
+
+
+def _attach_review_bundle(payload: Dict[str, Any], *, bundle_dir: Optional[Path] = None) -> Dict[str, Any]:
+    enriched = dict(payload)
+    enriched["review_bundle"] = {
+        "links": _build_review_links(payload, bundle_dir=bundle_dir),
+    }
+    return enriched
+
+
+def _load_existing_payload(bundle_root: Path, case: Dict[str, Any]) -> Dict[str, Any]:
+    payload_path = bundle_root / case["name"] / "payload.normalized.json"
+    return apply_payload_contract(json.loads(payload_path.read_text(encoding="utf-8")))
+
+
+def _load_payload(case: Dict[str, Any], bundle_root: Path, offline_existing: bool) -> Dict[str, Any]:
+    if offline_existing:
+        return _load_existing_payload(bundle_root, case)
+    return apply_payload_contract(run_full_comp_pipeline(case["redfin_url"]))
 
 
 def _extract_section_map(report_html: str) -> Dict[str, Any]:
@@ -333,6 +405,7 @@ def _build_property_summary_markdown(summary: Dict[str, Any], bundle_dir: Path) 
     source_states = summary["source_states"]
     review_flags = summary["review_flags"]
     report_checks = summary["report_checks"]
+    review_links = _build_review_links(summary.get("payload") or {}, bundle_dir=bundle_dir)
     lines = [
         f"# {summary['name'].replace('-', ' ').title()} Review Summary",
         "",
@@ -403,6 +476,13 @@ def _build_property_summary_markdown(summary: Dict[str, Any], bundle_dir: Path) 
     else:
         lines.append("- None")
 
+    lines.extend(["", "## Browser Review Links", ""])
+    for link in review_links:
+        if link["status"] == "available":
+            lines.append(f"- {link['label']}: [{link['url']}]({link['url']})")
+        else:
+            lines.append(f"- {link['label']}: {link['reason']}")
+
     lines.extend(["", "## Mismatches / Issues", ""])
     if summary["fact_mismatches"] or summary["report_issues"]:
         for item in summary["fact_mismatches"]:
@@ -423,9 +503,82 @@ def _write_bundle(bundle_root: Path, payload: Dict[str, Any], report_html: str, 
         encoding="utf-8",
     )
     (bundle_dir / "report.html").write_text(report_html, encoding="utf-8")
+    summary_with_payload = dict(summary)
+    summary_with_payload["payload"] = payload
     (bundle_dir / "summary.md").write_text(
-        _build_property_summary_markdown(summary, bundle_dir),
+        _build_property_summary_markdown(summary_with_payload, bundle_dir),
         encoding="utf-8",
+    )
+
+
+def _build_landing_page(bundle_root: Path, summaries: List[Dict[str, Any]]) -> str:
+    cards: List[str] = []
+    for summary in summaries:
+        facts = summary["actual_facts"]
+        bundle_path = bundle_root / summary["name"]
+        review_links = _build_review_links(
+            summary.get("payload") or {},
+            bundle_dir=bundle_path,
+            bundle_href_prefix=f"{summary['name']}/",
+        )
+        rendered_links: List[str] = []
+        for link in review_links:
+            if link["status"] == "available":
+                rendered_links.append(
+                    f'<a href="{link["url"]}" target="_blank" rel="noopener noreferrer">{link["label"]}</a>'
+                )
+            else:
+                rendered_links.append(f'<span class="unavailable">{link["label"]}: {link["reason"]}</span>')
+        cards.append(
+            "\n".join(
+                [
+                    '<section class="property-card">',
+                    f"<h2>{summary['name']}</h2>",
+                    (
+                        f"<p class=\"meta\"><strong>{summary['address']}</strong> &middot; "
+                        f"{summary.get('role') or 'review'} &middot; <code>{summary['verdict']}</code></p>"
+                    ),
+                    (
+                        f"<p class=\"facts\">PIN <code>{facts['pin']}</code> &middot; "
+                        f"APN <code>{facts['apn']}</code> &middot; permits <code>{facts['permit_count']}</code> "
+                        f"&middot; records <code>{facts['record_count']}</code></p>"
+                    ),
+                    f"<div class=\"link-grid\">{' '.join(rendered_links)}</div>",
+                    "</section>",
+                ]
+            )
+        )
+
+    return (
+        """<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Report Acceptance Review Bundles</title>
+  <style>
+    body { font-family: Inter, Arial, sans-serif; margin: 0; background: #f5f5f5; color: #111; }
+    main { max-width: 1120px; margin: 0 auto; padding: 24px 16px 48px; }
+    .property-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+    .meta, .facts { margin: 8px 0; color: #4b5563; }
+    .link-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .link-grid a, .link-grid span { font-size: 13px; text-decoration: none; border-radius: 999px; padding: 6px 10px; border: 1px solid #d1d5db; background: #fff; color: #111; }
+    .link-grid a:hover { border-color: #111; background: #f9fafb; }
+    .unavailable { color: #6b7280; background: #f3f4f6; }
+    code { font-family: ui-monospace, SFMono-Regular, monospace; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Report Acceptance Review Bundles</h1>
+    <p>Static offline landing page for browser-first review of accepted bundle artifacts.</p>
+    """
+        + "\n".join(cards)
+        + """
+  </main>
+</body>
+</html>
+"""
     )
 
 
@@ -433,13 +586,26 @@ def _build_index_markdown(bundle_root: Path, summaries: List[Dict[str, Any]]) ->
     lines = [
         "# Report Review Index",
         "",
-        "| Property | Role | Verdict | Address | Key Facts | Flags | Bundle |",
-        "| --- | --- | --- | --- | --- | --- | --- |",
+        "- Static landing page: [review_bundles/report_acceptance/index.html](./review_bundles/report_acceptance/index.html)",
+        "",
+        "| Property | Role | Verdict | Address | Key Facts | Flags | Bundle | Review Links |",
+        "| --- | --- | --- | --- | --- | --- | --- | --- |",
     ]
     for summary in summaries:
         facts = summary["actual_facts"]
         flags = ", ".join(flag.get("code") or "review" for flag in summary["review_flags"]) or "none"
         bundle_path = bundle_root / summary["name"]
+        review_links = _build_review_links(
+            summary.get("payload") or {},
+            bundle_dir=bundle_path,
+            bundle_href_prefix=f"./{summary['name']}/",
+        )
+        available_review_links = ", ".join(
+            f"[{link['label']}]({link['url']})" for link in review_links if link["status"] == "available"
+        )
+        unavailable_review_links = ", ".join(
+            link["label"] for link in review_links if link["status"] != "available"
+        ) or "none"
         lines.append(
             "| "
             + f"{summary['name']} | "
@@ -450,7 +616,8 @@ def _build_index_markdown(bundle_root: Path, summaries: List[Dict[str, Any]]) ->
             + f"{flags} | "
             + f"[summary](./{bundle_path.as_posix().replace((BASE_DIR.as_posix() + '/'), '')}/summary.md) / "
             + f"[payload](./{bundle_path.as_posix().replace((BASE_DIR.as_posix() + '/'), '')}/payload.normalized.json) / "
-            + f"[html](./{bundle_path.as_posix().replace((BASE_DIR.as_posix() + '/'), '')}/report.html) |"
+            + f"[html](./{bundle_path.as_posix().replace((BASE_DIR.as_posix() + '/'), '')}/report.html) | "
+            + f"{available_review_links} ; unavailable: {unavailable_review_links} |"
         )
 
     lines.extend(["", "## Questionable Items", ""])
@@ -476,15 +643,18 @@ def main() -> int:
 
     summaries: List[Dict[str, Any]] = []
     for case in cases:
-        payload = apply_payload_contract(run_full_comp_pipeline(case["redfin_url"]))
-        report_html = _render_report_html(payload)
+        payload = _load_payload(case, bundle_root, args.offline_existing)
+        report_html = _render_report_html(_attach_review_bundle(payload, bundle_dir=bundle_root / case["name"]))
         report_checks = _extract_report_checks(payload, report_html)
         summary = _evaluate_property(case, payload, report_checks)
+        summary["payload"] = payload
         summaries.append(summary)
+        report_html = _render_report_html(_attach_review_bundle(payload, bundle_dir=bundle_root / case["name"]))
         _write_bundle(bundle_root, payload, report_html, summary)
 
     review_index = _build_index_markdown(bundle_root, summaries)
     (BASE_DIR / "REVIEW_INDEX.md").write_text(review_index, encoding="utf-8")
+    (bundle_root / "index.html").write_text(_build_landing_page(bundle_root, summaries), encoding="utf-8")
 
     if args.json:
         print(json.dumps({"properties": summaries}, indent=2, sort_keys=True))

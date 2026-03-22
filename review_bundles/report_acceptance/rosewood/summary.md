@@ -54,6 +54,18 @@
 - Purchase price unknown (no prior developer sale in Redfin history); spread, ROI, and profit not computed.
 - Range-style and TEMP address variants should not create noisy review output when the property is otherwise clean.
 
+## Browser Review Links
+
+- Local report: [report.html](report.html)
+- Normalized payload: [payload.normalized.json](payload.normalized.json)
+- Summary: [summary.md](summary.md)
+- ZIMAS page: [https://zimas.lacity.org/map.aspx?pin=111B149%20%20%20315&ajax=yes](https://zimas.lacity.org/map.aspx?pin=111B149%20%20%20315&ajax=yes)
+- LADBS permit portal: [https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr](https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr)
+- LADBS docs page: [https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW](https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW)
+- First record summary link: [https://ladbsdoc.lacity.org/IDISPublic_Records/idis/Report.aspx?Record_Id=130935075&Image=Visible&ImageToOpen=%7B7DC809F2-8FDA-46C7-BF44-5524BC08D604%7D%2C](https://ladbsdoc.lacity.org/IDISPublic_Records/idis/Report.aspx?Record_Id=130935075&Image=Visible&ImageToOpen=%7B7DC809F2-8FDA-46C7-BF44-5524BC08D604%7D%2C)
+- First available PDF link: [https://ladbsdoc.lacity.org/IDISPublic_Records/idis/StPdfViewer.aspx?Library=IDIS&Id=%7B7DC809F2-8FDA-46C7-BF44-5524BC08D604%7D&ObjType=2&Op=View](https://ladbsdoc.lacity.org/IDISPublic_Records/idis/StPdfViewer.aspx?Library=IDIS&Id=%7B7DC809F2-8FDA-46C7-BF44-5524BC08D604%7D&ObjType=2&Op=View)
+- PIN-based LADBS permit-results link: [https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&view=permit&pin=111B149%20315](https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&view=permit&pin=111B149%20315)
+
 ## Mismatches / Issues
 
 - None

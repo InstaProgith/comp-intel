@@ -54,6 +54,18 @@
 - Purchase price unknown (no prior developer sale in Redfin history); spread, ROI, and profit not computed.
 - Certificate-of-occupancy bundles can reuse a record ID; the report should present them cleanly without implying a suspicious duplicate.
 
+## Browser Review Links
+
+- Local report: [report.html](report.html)
+- Normalized payload: [payload.normalized.json](payload.normalized.json)
+- Summary: [summary.md](summary.md)
+- ZIMAS page: [https://zimas.lacity.org/map.aspx?pin=120B157%20%20%20124&ajax=yes](https://zimas.lacity.org/map.aspx?pin=120B157%20%20%20124&ajax=yes)
+- LADBS permit portal: [https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr](https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr)
+- LADBS docs page: [https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW](https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW)
+- First record summary link: [https://ladbsdoc.lacity.org/IDISPublic_Records/idis/Report.aspx?Record_Id=130935079&Image=Visible&ImageToOpen=%7BE49F2A15-4A63-459B-BDE4-40F16BCB55BB%7D%2C](https://ladbsdoc.lacity.org/IDISPublic_Records/idis/Report.aspx?Record_Id=130935079&Image=Visible&ImageToOpen=%7BE49F2A15-4A63-459B-BDE4-40F16BCB55BB%7D%2C)
+- First available PDF link: [https://ladbsdoc.lacity.org/IDISPublic_Records/idis/StPdfViewer.aspx?Library=IDIS&Id=%7BE49F2A15-4A63-459B-BDE4-40F16BCB55BB%7D&ObjType=2&Op=View](https://ladbsdoc.lacity.org/IDISPublic_Records/idis/StPdfViewer.aspx?Library=IDIS&Id=%7BE49F2A15-4A63-459B-BDE4-40F16BCB55BB%7D&ObjType=2&Op=View)
+- PIN-based LADBS permit-results link: [https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&view=permit&pin=120B157%20124](https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&view=permit&pin=120B157%20124)
+
 ## Mismatches / Issues
 
 - None

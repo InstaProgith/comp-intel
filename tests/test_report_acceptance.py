@@ -1,6 +1,9 @@
 from __future__ import annotations
 
+from pathlib import Path
 from unittest import TestCase
+
+from bs4 import BeautifulSoup
 
 from app.payload_contract import apply_payload_contract
 from app import report_acceptance
@@ -127,7 +130,12 @@ class ReportAcceptanceTests(TestCase):
                         },
                     ],
                 },
-                "links": {"redfin_url": "https://www.redfin.com/CA/Los-Angeles/1120-S-Lucerne-Blvd-90019/home/6911003"},
+                "links": {
+                    "redfin_url": "https://www.redfin.com/CA/Los-Angeles/1120-S-Lucerne-Blvd-90019/home/6911003",
+                    "zimas_url": "https://zimas.lacity.org/map.aspx?pin=129B185%20%20%20131&ajax=yes",
+                    "ladbs_url": "https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr",
+                    "ladbs_records_url": "https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW",
+                },
                 "data_notes": ["Purchase price unknown (no prior developer sale in Redfin history); spread, ROI, and profit not computed."],
             }
         )
@@ -316,3 +324,76 @@ class ReportAcceptanceTests(TestCase):
         checks = report_acceptance._extract_report_checks(payload, report_html)
 
         self.assertEqual(checks["permit_items_rendered"], 2)
+
+    def test_build_review_links_includes_expected_destinations(self) -> None:
+        payload = self._build_payload()
+
+        links = report_acceptance._build_review_links(payload, bundle_dir=Path("review_bundles/report_acceptance/lucerne"))
+
+        labels = {item["label"]: item for item in links}
+        self.assertEqual(labels["Local report"]["url"], "report.html")
+        self.assertTrue(labels["ZIMAS page"]["url"].startswith("https://"))
+        self.assertIn("pin=", labels["PIN-based LADBS permit-results link"]["url"])
+        self.assertEqual(labels["First record summary link"]["status"], "unavailable")
+        self.assertTrue(labels["First available PDF link"]["url"].startswith("https://"))
+
+    def test_build_review_links_marks_missing_values_unavailable(self) -> None:
+        payload = self._build_payload()
+        payload["zimas_profile"]["pin"] = None
+        payload["links"]["zimas_url"] = None
+        payload["ladbs_records"]["documents"] = [{}]
+
+        links = report_acceptance._build_review_links(payload, bundle_dir=Path("review_bundles/report_acceptance/lucerne"))
+
+        labels = {item["label"]: item for item in links}
+        self.assertEqual(labels["ZIMAS page"]["status"], "unavailable")
+        self.assertEqual(labels["First available PDF link"]["status"], "unavailable")
+        self.assertEqual(labels["PIN-based LADBS permit-results link"]["status"], "unavailable")
+
+    def test_render_report_html_renders_review_toolbar_and_unavailable_labels(self) -> None:
+        payload = self._build_payload()
+        payload["zimas_profile"]["pin"] = None
+        payload["links"]["zimas_url"] = None
+        payload["ladbs_records"]["documents"] = [{}]
+
+        report_html = report_acceptance._render_report_html(
+            report_acceptance._attach_review_bundle(
+                payload,
+                bundle_dir=Path("review_bundles/report_acceptance/lucerne"),
+            )
+        )
+
+        soup = BeautifulSoup(report_html, "lxml")
+        toolbar = soup.select_one(".review-toolbar")
+        self.assertIsNotNone(toolbar)
+        self.assertIn("Local report", toolbar.get_text(" ", strip=True))
+        self.assertIn("ZIMAS page: Unavailable offline", toolbar.get_text(" ", strip=True))
+
+    def test_build_landing_page_renders_property_cards(self) -> None:
+        payload = self._build_payload()
+        summary = report_acceptance._evaluate_property(
+            {
+                "name": "lucerne",
+                "role": "flagship-baseline",
+                "redfin_url": "https://example.com",
+                "known_truths": {},
+                "expectations": {},
+                "acceptable_uncertainty_notes": [],
+            },
+            payload,
+            report_acceptance._extract_report_checks(
+                payload,
+                report_acceptance._render_report_html(
+                    report_acceptance._attach_review_bundle(
+                        payload, bundle_dir=Path("review_bundles/report_acceptance/lucerne")
+                    )
+                ),
+            ),
+        )
+        summary["payload"] = payload
+
+        html = report_acceptance._build_landing_page(Path("review_bundles/report_acceptance"), [summary])
+
+        self.assertIn("Report Acceptance Review Bundles", html)
+        self.assertIn("lucerne", html)
+        self.assertIn("report.html", html)
