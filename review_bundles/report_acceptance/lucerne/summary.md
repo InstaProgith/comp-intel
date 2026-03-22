@@ -4,6 +4,7 @@
 - Role: `flagship-baseline`
 - Address: `1120 S Lucerne Blvd, Los Angeles, CA 90019`
 - URL: https://www.redfin.com/CA/Los-Angeles/1120-S-Lucerne-Blvd-90019/home/6911003
+- Browser summary: [summary.html](summary.html)
 - Payload: [payload.normalized.json](payload.normalized.json)
 - Rendered report: [report.html](report.html)
 
@@ -59,15 +60,21 @@
 
 ## Browser Review Links
 
-- Local report: [report.html](report.html)
-- Normalized payload: [payload.normalized.json](payload.normalized.json)
-- Summary: [summary.md](summary.md)
-- ZIMAS page: [https://zimas.lacity.org/map.aspx?pin=129B185%20%20%20131&ajax=yes](https://zimas.lacity.org/map.aspx?pin=129B185%20%20%20131&ajax=yes)
-- LADBS permit portal: [https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr](https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr)
-- LADBS docs page: [https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW](https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW)
-- First record summary link: [https://ladbsdoc.lacity.org/IDISPublic_Records/idis/Report.aspx?Record_Id=130956837&Image=Visible&ImageToOpen=%7B3C68DACC-76D6-4917-9351-1DE52ABAF138%7D%2C](https://ladbsdoc.lacity.org/IDISPublic_Records/idis/Report.aspx?Record_Id=130956837&Image=Visible&ImageToOpen=%7B3C68DACC-76D6-4917-9351-1DE52ABAF138%7D%2C)
-- First available PDF link: [https://ladbsdoc.lacity.org/IDISPublic_Records/idis/StPdfViewer.aspx?Library=IDIS&Id=%7B3C68DACC-76D6-4917-9351-1DE52ABAF138%7D&ObjType=2&Op=View](https://ladbsdoc.lacity.org/IDISPublic_Records/idis/StPdfViewer.aspx?Library=IDIS&Id=%7B3C68DACC-76D6-4917-9351-1DE52ABAF138%7D&ObjType=2&Op=View)
-- PIN-based LADBS permit-results link: [https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&view=permit&pin=129B185%20131](https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&view=permit&pin=129B185%20131)
+### Local review actions
+- Back to review bundles: [../index.html](../index.html)
+- Open report: [report.html](report.html)
+- Open payload: [payload.normalized.json](payload.normalized.json)
+
+### Property-specific source links
+- ZIMAS parcel page: [https://zimas.lacity.org/map.aspx?pin=129B185%20%20%20131&ajax=yes](https://zimas.lacity.org/map.aspx?pin=129B185%20%20%20131&ajax=yes)
+- PIN permit results: [https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&view=permit&pin=129B185%20131](https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&view=permit&pin=129B185%20131)
+- First LADBS record: [https://ladbsdoc.lacity.org/IDISPublic_Records/idis/Report.aspx?Record_Id=130956837&Image=Visible&ImageToOpen=%7B3C68DACC-76D6-4917-9351-1DE52ABAF138%7D%2C](https://ladbsdoc.lacity.org/IDISPublic_Records/idis/Report.aspx?Record_Id=130956837&Image=Visible&ImageToOpen=%7B3C68DACC-76D6-4917-9351-1DE52ABAF138%7D%2C)
+- First LADBS PDF: [https://ladbsdoc.lacity.org/IDISPublic_Records/idis/StPdfViewer.aspx?Library=IDIS&Id=%7B3C68DACC-76D6-4917-9351-1DE52ABAF138%7D&ObjType=2&Op=View](https://ladbsdoc.lacity.org/IDISPublic_Records/idis/StPdfViewer.aspx?Library=IDIS&Id=%7B3C68DACC-76D6-4917-9351-1DE52ABAF138%7D&ObjType=2&Op=View)
+
+### Generic search/home pages
+- Permit search home: [https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr](https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr)
+- Docs search home: [https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW](https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW)
+
 
 ## Mismatches / Issues
 

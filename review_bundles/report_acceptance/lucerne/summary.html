@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BLDGBIT - Lucerne Summary</title>
+  <link rel="stylesheet" href="../_assets/css/comp.css">
+  <style>
+    .bundle-shell {
+      max-width: 1120px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .bundle-hero {
+      align-items: flex-start;
+    }
+
+    .bundle-header-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .bundle-chip,
+    .bundle-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      border: 1px solid #d9d9d9;
+      background: #fff;
+      color: #111;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px 12px;
+      text-decoration: none;
+    }
+
+    .bundle-pill:hover {
+      border-color: #111;
+      background: #fafafa;
+    }
+
+    .bundle-pill-primary {
+      background: #111;
+      border-color: #111;
+      color: #fff;
+    }
+
+    .bundle-pill-primary:hover {
+      background: #222;
+      color: #fff;
+    }
+
+    .bundle-pill-muted {
+      color: #6b7280;
+      background: #f3f4f6;
+    }
+
+    .bundle-toolbar-panel {
+      display: grid;
+      gap: 16px;
+    }
+
+    .bundle-link-group {
+      display: grid;
+      gap: 10px;
+    }
+
+    .bundle-group-label {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #475569;
+    }
+
+    .bundle-link-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .bundle-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .bundle-note {
+      font-size: 13px;
+      color: #555;
+      line-height: 1.7;
+    }
+
+    .bundle-note a {
+      color: #111;
+      font-weight: 600;
+    }
+
+    .context-columns {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .context-card {
+      background: #fafafa;
+      border: 1px solid #ececec;
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .context-title {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #475569;
+      margin-bottom: 10px;
+    }
+
+    .context-list,
+    .record-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    .context-list li,
+    .record-list li {
+      border-top: 1px solid #ececec;
+      padding-top: 10px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #333;
+    }
+
+    .context-list li:first-child,
+    .record-list li:first-child {
+      border-top: none;
+      padding-top: 0;
+    }
+
+    .record-id {
+      display: inline-block;
+      font-family: "Monaco", "Courier New", monospace;
+      font-size: 11px;
+      background: #f5f5f5;
+      border-radius: 6px;
+      padding: 4px 8px;
+      margin-bottom: 6px;
+      color: #111;
+    }
+
+    .record-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #111;
+      margin-bottom: 4px;
+    }
+
+    .record-meta {
+      font-size: 12px;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    .empty-state {
+      font-size: 13px;
+      color: #6b7280;
+      font-style: italic;
+    }
+
+    @media (max-width: 900px) {
+      .bundle-grid,
+      .context-columns {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-layer"></div>
+
+  <main class="shell bundle-shell" data-property="lucerne">
+    <section class="hero-card bundle-hero">
+      <div class="logo-wrap">
+        <div class="logo-plate"></div>
+        <img class="logo-img" src="../_assets/LG.png" alt="BLDGBIT" />
+      </div>
+      <div class="hero-text">
+        <div class="eyebrow">Offline Review Summary</div>
+        <div class="hero-title">Lucerne</div>
+        <div class="hero-subtitle">1120 S Lucerne Blvd, Los Angeles, CA 90019</div>
+        <div class="bundle-header-meta">
+          <span class="bundle-chip">Verdict: accepted-with-review</span>
+          <span class="bundle-chip">Role: flagship-baseline</span>
+          <span class="bundle-chip">Permits: 7</span>
+          <span class="bundle-chip">Records: 14</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel bundle-toolbar-panel">
+      
+      <div class="bundle-link-group" data-group="local">
+        <div class="bundle-group-label">Local review actions</div>
+        <div class="bundle-link-row">
+          
+            
+            <a
+              data-link-key="back_to_bundles"
+              class="bundle-pill bundle-pill-primary"
+              href="../index.html"
+              
+            >Back to review bundles</a>
+            
+          
+            
+            <a
+              data-link-key="open_report"
+              class="bundle-pill bundle-pill-primary"
+              href="report.html"
+              
+            >Open report</a>
+            
+          
+            
+            <a
+              data-link-key="open_payload"
+              class="bundle-pill bundle-pill-primary"
+              href="payload.normalized.json"
+              
+            >Open payload</a>
+            
+          
+        </div>
+      </div>
+      
+      <div class="bundle-link-group" data-group="source">
+        <div class="bundle-group-label">Property-specific source links</div>
+        <div class="bundle-link-row">
+          
+            
+            <a
+              data-link-key="zimas_parcel_page"
+              class="bundle-pill "
+              href="https://zimas.lacity.org/map.aspx?pin=129B185%20%20%20131&amp;ajax=yes"
+              target="_blank" rel="noopener noreferrer"
+            >ZIMAS parcel page</a>
+            
+          
+            
+            <a
+              data-link-key="pin_permit_results"
+              class="bundle-pill "
+              href="https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&amp;view=permit&amp;pin=129B185%20131"
+              target="_blank" rel="noopener noreferrer"
+            >PIN permit results</a>
+            
+          
+            
+            <a
+              data-link-key="first_ladbs_record"
+              class="bundle-pill "
+              href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/Report.aspx?Record_Id=130956837&amp;Image=Visible&amp;ImageToOpen=%7B3C68DACC-76D6-4917-9351-1DE52ABAF138%7D%2C"
+              target="_blank" rel="noopener noreferrer"
+            >First LADBS record</a>
+            
+          
+            
+            <a
+              data-link-key="first_ladbs_pdf"
+              class="bundle-pill "
+              href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/StPdfViewer.aspx?Library=IDIS&amp;Id=%7B3C68DACC-76D6-4917-9351-1DE52ABAF138%7D&amp;ObjType=2&amp;Op=View"
+              target="_blank" rel="noopener noreferrer"
+            >First LADBS PDF</a>
+            
+          
+        </div>
+      </div>
+      
+      <div class="bundle-link-group" data-group="generic">
+        <div class="bundle-group-label">Generic search/home pages</div>
+        <div class="bundle-link-row">
+          
+            
+            <a
+              data-link-key="permit_search_home"
+              class="bundle-pill "
+              href="https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr"
+              target="_blank" rel="noopener noreferrer"
+            >Permit search home</a>
+            
+          
+            
+            <a
+              data-link-key="docs_search_home"
+              class="bundle-pill "
+              href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW"
+              target="_blank" rel="noopener noreferrer"
+            >Docs search home</a>
+            
+          
+        </div>
+      </div>
+      
+    </section>
+
+    <section class="panel">
+      <div class="section-header">
+        <h2 class="section-title">Key Facts</h2>
+        <span class="section-count">lucerne</span>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-pill">
+          <div class="stat-label">APN</div>
+          <div class="stat-value">5082004025</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-label">PIN</div>
+          <div class="stat-value">129B185   131</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-label">Zoning</div>
+          <div class="stat-value">R1-1-O</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-label">General Plan</div>
+          <div class="stat-value">Low II Residential</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-label">Community Plan</div>
+          <div class="stat-value">Wilshire</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-label">Redfin Listing</div>
+          <div class="stat-value">
+            
+            <a href="https://www.redfin.com/CA/Los-Angeles/1120-S-Lucerne-Blvd-90019/home/6911003" target="_blank" rel="noopener noreferrer">Open Redfin listing</a>
+            
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-header">
+        <h2 class="section-title">Review Context</h2>
+        <span class="section-count">4</span>
+      </div>
+      <div class="context-columns">
+        <div class="context-card">
+          <div class="context-title">Review Flags</div>
+          
+          <ul class="context-list">
+            
+            <li><strong>permit_address_variants</strong>: LADBS permits reference address labels that extend beyond the subject address; review the permit set for parcel/address crossover.</li>
+            
+          </ul>
+          
+        </div>
+        <div class="context-card">
+          <div class="context-title">Data Notes</div>
+          
+          <ul class="context-list">
+            
+            <li>Purchase price unknown (no prior developer sale in Redfin history); spread, ROI, and profit not computed.</li>
+            
+            <li>Certificate of Occupancy date not found; construction completion timing uncertain.</li>
+            
+          </ul>
+          
+        </div>
+        <div class="context-card">
+          <div class="context-title">Questionable Items / Honest Uncertainties</div>
+          
+          <ul class="context-list">
+            
+            <li>LADBS permits reference address labels that extend beyond the subject address; review the permit set for parcel/address crossover.</li>
+            
+            <li>Purchase price unknown (no prior developer sale in Redfin history); spread, ROI, and profit not computed.</li>
+            
+            <li>Certificate of Occupancy date not found; construction completion timing uncertain.</li>
+            
+            <li>This property is the flagship baseline and should be fully reviewable without hiding the remaining uncertainty that Redfin does not expose the prior developer acquisition event.</li>
+            
+          </ul>
+          
+        </div>
+      </div>
+    </section>
+
+    <section class="bundle-grid">
+      <section class="panel">
+        <div class="section-header">
+          <h2 class="section-title">Representative Permits</h2>
+          <span class="section-count">4</span>
+        </div>
+        
+        <ul class="record-list">
+          
+          <li>
+            <div class="record-id">26044-20000-01885</div>
+            <div class="record-title">HVAC - 1 or 2 Family Dwelling</div>
+            <div class="record-meta">Issued on 2/28/2026</div>
+            <div class="record-meta">Garage to ADU conversion Mini split system Kitchen hood range Bath humidity fan</div>
+          </li>
+          
+          <li>
+            <div class="record-id">25042-10001-22280</div>
+            <div class="record-title">Plumbing - 1 or 2 Family Dwelling</div>
+            <div class="record-meta">Issued on 2/28/2026</div>
+            <div class="record-meta">Supplemental Permit #25042-90000-22280 to change address from 1120 S Lucerne Blvd to 122 S Lucerne Blvd</div>
+          </li>
+          
+          <li>
+            <div class="record-id">25041-10001-59794</div>
+            <div class="record-title">Electrical - 1 or 2 Family Dwelling</div>
+            <div class="record-meta">Issued on 2/28/2026</div>
+            <div class="record-meta">Supplemental permit to 25041-90000-59794 to change address from 120 S Lucerne Blvd to 122 S Lucerne Blvd</div>
+          </li>
+          
+          <li>
+            <div class="record-id">25042-90000-22280</div>
+            <div class="record-title">Plumbing - 1 or 2 Family Dwelling</div>
+            <div class="record-meta">Issued on 12/22/2025</div>
+            <div class="record-meta">Garage to ADU conversion</div>
+          </li>
+          
+        </ul>
+        
+      </section>
+
+      <section class="panel">
+        <div class="section-header">
+          <h2 class="section-title">Representative Documents</h2>
+          <span class="section-count">4</span>
+        </div>
+        
+        <ul class="record-list">
+          
+          <li>
+            <div class="record-id">25042-90000-22280</div>
+            <div class="record-title">MECHANICAL PERMIT</div>
+            <div class="record-meta">12/22/2025</div>
+            <div class="record-meta">GARAGE TO ADU CONVERSION</div>
+          </li>
+          
+          <li>
+            <div class="record-id">25041-90000-59794</div>
+            <div class="record-title">ELECTRICAL PERMIT</div>
+            <div class="record-meta">12/22/2025</div>
+            <div class="record-meta">GARAGE TO ADU CONVERSION</div>
+          </li>
+          
+          <li>
+            <div class="record-id">CERT 40332</div>
+            <div class="record-title">CERTIFICATE OF OCCUPANCY</div>
+            <div class="record-meta">2/16/2016</div>
+            <div class="record-meta">ONE STORY, TYPE V-N , 56 SQUARE FOOT ADDITION TO AN EXISTING - STORY, T SINGLE FAMILY DWELLING. R-3 OCCUPANCY</div>
+          </li>
+          
+          <li>
+            <div class="record-id">06014-70002-09673</div>
+            <div class="record-title">CERTIFICATE OF OCCUPANCY</div>
+            <div class="record-meta">2/16/2016</div>
+            <div class="record-meta">ONE STORY, TYPE V-N , 56 SQUARE FOOT ADDITION TO AN EXISTING - STORY, T SINGLE FAMILY DWELLING. R-3 OCCUPANCY</div>
+          </li>
+          
+        </ul>
+        
+      </section>
+    </section>
+  </main>
+</body>
+</html>

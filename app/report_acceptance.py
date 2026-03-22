@@ -4,6 +4,7 @@ import argparse
 import json
 import os
 import re
+import shutil
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 from urllib.parse import quote
@@ -17,6 +18,11 @@ from app.payload_contract import apply_payload_contract
 BASE_DIR = Path(__file__).resolve().parent.parent
 DEFAULT_OUTPUT_DIR = BASE_DIR / "review_bundles" / "report_acceptance"
 DEFAULT_PROPERTY_FILE = BASE_DIR / "validation" / "report_acceptance_property_pack.json"
+STATIC_DIR = BASE_DIR / "static"
+STATIC_CSS_PATH = STATIC_DIR / "css" / "comp.css"
+STATIC_LOGO_PATH = STATIC_DIR / "LG.png"
+STATIC_FALLBACK_ASSET_NAMES = ("LG.png",)
+BUNDLE_ASSETS_DIRNAME = "_assets"
 EXPECTED_SECTION_ORDER = [
     "Developer Snapshot",
     "Timeline Summary",
@@ -77,7 +83,7 @@ def _load_property_file(path_text: str) -> List[Dict[str, Any]]:
     return results
 
 
-def _render_report_html(payload: Dict[str, Any]) -> str:
+def _render_template_html(template_name: str, **context: Any) -> str:
     os.environ.setdefault("APP_ENV", "development")
     os.environ.setdefault("APP_TESTING", "1")
     os.environ.setdefault("FLASK_SECRET_KEY", "report-acceptance-secret")
@@ -85,7 +91,11 @@ def _render_report_html(payload: Dict[str, Any]) -> str:
     from app.ui_server import app as ui_app
 
     with ui_app.test_request_context("/report"):
-        return render_template("report.html", r=payload)
+        return render_template(template_name, **context)
+
+
+def _render_report_html(payload: Dict[str, Any]) -> str:
+    return _render_template_html("report.html", r=payload)
 
 
 def _normalize_text(value: Any) -> str:
@@ -105,49 +115,255 @@ def _pin_permit_results_url(pin: Optional[str]) -> Optional[str]:
     )
 
 
-def _build_review_links(
+def _slug_title(slug: str) -> str:
+    return slug.replace("-", " ").title()
+
+
+def _extract_css_asset_paths(css_text: str) -> List[str]:
+    asset_paths: List[str] = []
+    for match in re.findall(r"url\(([^)]+)\)", css_text):
+        candidate = match.strip().strip("'\"")
+        if not candidate or candidate.startswith(("data:", "http:", "https:", "//")):
+            continue
+        candidate = candidate.split("?", 1)[0].split("#", 1)[0]
+        asset_paths.append(candidate)
+    return list(dict.fromkeys(asset_paths))
+
+
+def _copy_bundle_assets(bundle_root: Path) -> None:
+    assets_root = bundle_root / BUNDLE_ASSETS_DIRNAME
+    css_dir = assets_root / "css"
+    css_dir.mkdir(parents=True, exist_ok=True)
+    css_text = STATIC_CSS_PATH.read_text(encoding="utf-8")
+    (css_dir / STATIC_CSS_PATH.name).write_text(css_text, encoding="utf-8")
+
+    assets_root_resolved = assets_root.resolve()
+    for relative_asset_path in _extract_css_asset_paths(css_text):
+        source_path = (STATIC_CSS_PATH.parent / relative_asset_path).resolve()
+        destination_path = (css_dir / relative_asset_path).resolve()
+        try:
+            destination_path.relative_to(assets_root_resolved)
+        except ValueError as exc:
+            raise ValueError(f"CSS asset path escapes bundle assets root: {relative_asset_path!r}") from exc
+        if not source_path.exists():
+            raise FileNotFoundError(f"Missing CSS asset referenced by comp.css: {source_path}")
+        destination_path.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source_path, destination_path)
+
+    for asset_name in STATIC_FALLBACK_ASSET_NAMES:
+        source_path = STATIC_DIR / asset_name
+        if source_path.exists():
+            shutil.copy2(source_path, assets_root / asset_name)
+
+
+def _bundle_asset_prefix(page_kind: str) -> str:
+    return BUNDLE_ASSETS_DIRNAME if page_kind == "index" else f"../{BUNDLE_ASSETS_DIRNAME}"
+
+
+def _build_link_item(
+    key: str,
+    label: str,
+    url: Optional[str],
+    *,
+    unavailable_reason: str,
+    external: bool,
+) -> Dict[str, Any]:
+    normalized_url = _normalize_text(url)
+    item: Dict[str, Any] = {
+        "key": key,
+        "label": label,
+        "external": external,
+    }
+    if normalized_url:
+        item["status"] = "available"
+        item["url"] = normalized_url
+    else:
+        item["status"] = "unavailable"
+        item["reason"] = unavailable_reason
+    return item
+
+
+def _first_document_with_url(documents: List[Dict[str, Any]], field_name: str) -> Optional[Dict[str, Any]]:
+    for document in documents:
+        if isinstance(document, dict) and _normalize_text(document.get(field_name)):
+            return document
+    return None
+
+
+def _build_review_bundle_context(
     payload: Dict[str, Any],
     *,
-    bundle_dir: Optional[Path] = None,
-    bundle_href_prefix: str = "",
-) -> List[Dict[str, str]]:
+    property_name: str,
+    page_kind: str,
+) -> Dict[str, Any]:
     links = payload.get("links") or {}
     zimas = payload.get("zimas_profile") or {}
     ladbs = payload.get("ladbs") or {}
     records = payload.get("ladbs_records") or {}
     documents = records.get("documents") or []
-    first_doc = documents[0] if documents else {}
+    first_doc_with_summary = _first_document_with_url(documents, "summary_url")
+    first_doc_with_pdf = _first_document_with_url(documents, "pdf_url")
     pin = zimas.get("pin") or ladbs.get("pin")
     zimas_page = links.get("zimas_url") or ((zimas.get("links") or {}).get("profile_url"))
     docs_page = links.get("ladbs_records_url") or ((records.get("links") or {}).get("search_url"))
-    pin_results = _pin_permit_results_url(pin)
+    asset_prefix = _bundle_asset_prefix(page_kind)
 
-    review_links = [
-        {"label": "Local report", "url": f"{bundle_href_prefix}report.html" if bundle_dir else None},
-        {"label": "Normalized payload", "url": f"{bundle_href_prefix}payload.normalized.json" if bundle_dir else None},
-        {"label": "Summary", "url": f"{bundle_href_prefix}summary.md" if bundle_dir else None},
-        {"label": "ZIMAS page", "url": zimas_page},
-        {"label": "LADBS permit portal", "url": links.get("ladbs_url")},
-        {"label": "LADBS docs page", "url": docs_page},
-        {"label": "First record summary link", "url": first_doc.get("summary_url")},
-        {"label": "First available PDF link", "url": first_doc.get("pdf_url")},
-        {"label": "PIN-based LADBS permit-results link", "url": pin_results},
+    if page_kind == "report":
+        local_actions = [
+            _build_link_item(
+                "back_to_bundles",
+                "Back to review bundles",
+                "../index.html",
+                unavailable_reason="Bundle index is unavailable.",
+                external=False,
+            ),
+            _build_link_item(
+                "open_summary",
+                "Open summary",
+                "summary.html",
+                unavailable_reason="Summary page is unavailable.",
+                external=False,
+            ),
+            _build_link_item(
+                "open_payload",
+                "Open payload",
+                "payload.normalized.json",
+                unavailable_reason="Normalized payload is unavailable.",
+                external=False,
+            ),
+        ]
+    elif page_kind == "summary":
+        local_actions = [
+            _build_link_item(
+                "back_to_bundles",
+                "Back to review bundles",
+                "../index.html",
+                unavailable_reason="Bundle index is unavailable.",
+                external=False,
+            ),
+            _build_link_item(
+                "open_report",
+                "Open report",
+                "report.html",
+                unavailable_reason="Report page is unavailable.",
+                external=False,
+            ),
+            _build_link_item(
+                "open_payload",
+                "Open payload",
+                "payload.normalized.json",
+                unavailable_reason="Normalized payload is unavailable.",
+                external=False,
+            ),
+        ]
+    elif page_kind == "index":
+        local_prefix = f"{property_name}/"
+        local_actions = [
+            _build_link_item(
+                "open_report",
+                "Open report",
+                f"{local_prefix}report.html",
+                unavailable_reason="Report page is unavailable.",
+                external=False,
+            ),
+            _build_link_item(
+                "open_summary",
+                "Open summary",
+                f"{local_prefix}summary.html",
+                unavailable_reason="Summary page is unavailable.",
+                external=False,
+            ),
+            _build_link_item(
+                "open_payload",
+                "Open payload",
+                f"{local_prefix}payload.normalized.json",
+                unavailable_reason="Normalized payload is unavailable.",
+                external=False,
+            ),
+        ]
+    else:
+        raise ValueError(f"Unsupported page kind: {page_kind!r}")
+
+    source_links = [
+        _build_link_item(
+            "zimas_parcel_page",
+            "ZIMAS parcel page",
+            zimas_page,
+            unavailable_reason="No canonical ZIMAS parcel page was available in the payload.",
+            external=True,
+        ),
+        _build_link_item(
+            "pin_permit_results",
+            "PIN permit results",
+            _pin_permit_results_url(pin),
+            unavailable_reason="No normalized PIN was available for a property-specific permit results link.",
+            external=True,
+        ),
+        _build_link_item(
+            "first_ladbs_record",
+            "First LADBS record",
+            first_doc_with_summary.get("summary_url") if first_doc_with_summary else None,
+            unavailable_reason="No LADBS record summary URL was available in the payload documents.",
+            external=True,
+        ),
+        _build_link_item(
+            "first_ladbs_pdf",
+            "First LADBS PDF",
+            first_doc_with_pdf.get("pdf_url") if first_doc_with_pdf else None,
+            unavailable_reason="No LADBS PDF URL was available in the payload documents.",
+            external=True,
+        ),
     ]
 
-    for item in review_links:
-        if item["url"]:
-            item["status"] = "available"
-        else:
-            item["status"] = "unavailable"
-            item["reason"] = "Unavailable offline"
-    return review_links
+    generic_links = [
+        _build_link_item(
+            "permit_search_home",
+            "Permit search home",
+            links.get("ladbs_url"),
+            unavailable_reason="No generic LADBS permit search home URL was available in the payload.",
+            external=True,
+        ),
+        _build_link_item(
+            "docs_search_home",
+            "Docs search home",
+            docs_page,
+            unavailable_reason="No generic LADBS docs search home URL was available in the payload.",
+            external=True,
+        ),
+    ]
 
+    link_groups = [
+        {"key": "local", "title": "Local review actions", "links": local_actions},
+        {"key": "source", "title": "Property-specific source links", "links": source_links},
+        {"key": "generic", "title": "Generic search/home pages", "links": generic_links},
+    ]
 
-def _attach_review_bundle(payload: Dict[str, Any], *, bundle_dir: Optional[Path] = None) -> Dict[str, Any]:
-    enriched = dict(payload)
-    enriched["review_bundle"] = {
-        "links": _build_review_links(payload, bundle_dir=bundle_dir),
+    return {
+        "offline_bundle": True,
+        "include_remote_fonts": False,
+        "page_kind": page_kind,
+        "property_name": property_name,
+        "stylesheet_href": f"{asset_prefix}/css/{STATIC_CSS_PATH.name}",
+        "logo_href": f"{asset_prefix}/{STATIC_LOGO_PATH.name}",
+        "link_groups": link_groups,
+        "local_actions": local_actions,
+        "source_links": source_links,
+        "generic_links": generic_links,
     }
+
+
+def _attach_review_bundle(
+    payload: Dict[str, Any],
+    *,
+    property_name: str,
+    page_kind: str = "report",
+) -> Dict[str, Any]:
+    enriched = dict(payload)
+    enriched["review_bundle"] = _build_review_bundle_context(
+        payload,
+        property_name=property_name,
+        page_kind=page_kind,
+    )
     return enriched
 
 
@@ -247,6 +463,49 @@ def _extract_report_checks(payload: Dict[str, Any], report_html: str) -> Dict[st
         "zimas_rows": zimas_rows,
         "key_field_render_mismatches": key_field_mismatches,
     }
+
+
+def _build_representative_permit_details(
+    payload: Dict[str, Any],
+    *,
+    limit: int = 4,
+) -> List[Dict[str, str]]:
+    permits = (payload.get("ladbs") or {}).get("permits") or []
+    details: List[Dict[str, str]] = []
+    for permit in permits[:limit]:
+        if not isinstance(permit, dict):
+            continue
+        details.append(
+            {
+                "permit_number": _normalize_text(permit.get("permit_number")) or "Unknown permit number",
+                "permit_type": _normalize_text(permit.get("permit_type") or permit.get("Type"))
+                or "Unknown permit type",
+                "status": _normalize_text(permit.get("Status")) or "Status unavailable",
+                "description": _normalize_text(permit.get("Work_Description")) or "Description unavailable",
+            }
+        )
+    return details
+
+
+def _build_representative_document_details(
+    payload: Dict[str, Any],
+    *,
+    limit: int = 4,
+) -> List[Dict[str, str]]:
+    documents = (payload.get("ladbs_records") or {}).get("documents") or []
+    details: List[Dict[str, str]] = []
+    for document in documents[:limit]:
+        if not isinstance(document, dict):
+            continue
+        details.append(
+            {
+                "doc_number": _normalize_text(document.get("doc_number")) or "Unknown document number",
+                "doc_type": _normalize_text(document.get("doc_type")) or "Unknown document type",
+                "doc_date": _normalize_text(document.get("doc_date")) or "Date unavailable",
+                "description": _normalize_text(document.get("description")) or "Description unavailable",
+            }
+        )
+    return details
 
 
 def _evaluate_property(case: Dict[str, Any], payload: Dict[str, Any], report_checks: Dict[str, Any]) -> Dict[str, Any]:
@@ -377,6 +636,7 @@ def _evaluate_property(case: Dict[str, Any], payload: Dict[str, Any], report_che
         "redfin_url": case.get("redfin_url"),
         "address": payload.get("address"),
         "verdict": verdict,
+        "acceptable_uncertainty_notes": case.get("acceptable_uncertainty_notes") or [],
         "known_truths": known_truths,
         "actual_facts": {
             "apn": zimas.get("apn"),
@@ -390,14 +650,69 @@ def _evaluate_property(case: Dict[str, Any], payload: Dict[str, Any], report_che
         },
         "representative_permits": representative_permits,
         "representative_documents": representative_documents,
+        "representative_permit_details": _build_representative_permit_details(payload),
+        "representative_document_details": _build_representative_document_details(payload),
         "source_states": source_states,
         "fact_mismatches": fact_mismatches,
         "report_issues": report_issues,
         "questionable_items": questionable_items,
+        "review_context_items": questionable_items[:4],
         "review_flags": payload.get("anomalies") or [],
         "data_notes": payload.get("data_notes") or [],
         "report_checks": report_checks,
     }
+
+
+def _build_property_page_context(summary: Dict[str, Any], *, page_kind: str) -> Dict[str, Any]:
+    payload = summary["payload"]
+    review_bundle = _build_review_bundle_context(
+        payload,
+        property_name=summary["name"],
+        page_kind=page_kind,
+    )
+    facts = summary["actual_facts"]
+    return {
+        "slug": summary["name"],
+        "display_name": _slug_title(summary["name"]),
+        "address": summary["address"],
+        "role": summary.get("role") or "review",
+        "verdict": summary["verdict"],
+        "redfin_url": summary.get("redfin_url"),
+        "facts": facts,
+        "review_flags": summary.get("review_flags") or [],
+        "data_notes": summary.get("data_notes") or [],
+        "acceptable_uncertainty_notes": summary.get("acceptable_uncertainty_notes") or [],
+        "questionable_items": summary.get("questionable_items") or [],
+        "review_context_items": summary.get("review_context_items") or [],
+        "representative_permits": summary.get("representative_permit_details") or [],
+        "representative_documents": summary.get("representative_document_details") or [],
+        "review_bundle": review_bundle,
+        "review_link_groups": review_bundle["link_groups"],
+        "local_actions": review_bundle["local_actions"],
+        "source_links": review_bundle["source_links"],
+        "generic_links": review_bundle["generic_links"],
+    }
+
+
+def _render_summary_html(summary: Dict[str, Any]) -> str:
+    return _render_template_html(
+        "report_acceptance_summary.html",
+        page=_build_property_page_context(summary, page_kind="summary"),
+    )
+
+
+def _render_landing_page_html(summaries: List[Dict[str, Any]]) -> str:
+    cards = [_build_property_page_context(summary, page_kind="index") for summary in summaries]
+    return _render_template_html(
+        "report_acceptance_index.html",
+        bundle={
+            "title": "Report Acceptance Review Bundles",
+            "property_count": len(cards),
+            "stylesheet_href": f"{BUNDLE_ASSETS_DIRNAME}/css/{STATIC_CSS_PATH.name}",
+            "logo_href": f"{BUNDLE_ASSETS_DIRNAME}/{STATIC_LOGO_PATH.name}",
+            "cards": cards,
+        },
+    )
 
 
 def _build_property_summary_markdown(summary: Dict[str, Any], bundle_dir: Path) -> str:
@@ -405,7 +720,11 @@ def _build_property_summary_markdown(summary: Dict[str, Any], bundle_dir: Path) 
     source_states = summary["source_states"]
     review_flags = summary["review_flags"]
     report_checks = summary["report_checks"]
-    review_links = _build_review_links(summary.get("payload") or {}, bundle_dir=bundle_dir)
+    review_bundle = _build_review_bundle_context(
+        summary.get("payload") or {},
+        property_name=summary["name"],
+        page_kind="summary",
+    )
     lines = [
         f"# {summary['name'].replace('-', ' ').title()} Review Summary",
         "",
@@ -413,6 +732,7 @@ def _build_property_summary_markdown(summary: Dict[str, Any], bundle_dir: Path) 
         f"- Role: `{summary.get('role') or 'review'}`",
         f"- Address: `{summary['address']}`",
         f"- URL: {summary['redfin_url']}",
+        f"- Browser summary: [summary.html](summary.html)",
         f"- Payload: [payload.normalized.json](payload.normalized.json)",
         f"- Rendered report: [report.html](report.html)",
         "",
@@ -477,11 +797,14 @@ def _build_property_summary_markdown(summary: Dict[str, Any], bundle_dir: Path) 
         lines.append("- None")
 
     lines.extend(["", "## Browser Review Links", ""])
-    for link in review_links:
-        if link["status"] == "available":
-            lines.append(f"- {link['label']}: [{link['url']}]({link['url']})")
-        else:
-            lines.append(f"- {link['label']}: {link['reason']}")
+    for group in review_bundle["link_groups"]:
+        lines.append(f"### {group['title']}")
+        for link in group["links"]:
+            if link["status"] == "available":
+                lines.append(f"- {link['label']}: [{link['url']}]({link['url']})")
+            else:
+                lines.append(f"- {link['label']}: {link['reason']}")
+        lines.append("")
 
     lines.extend(["", "## Mismatches / Issues", ""])
     if summary["fact_mismatches"] or summary["report_issues"]:
@@ -505,6 +828,10 @@ def _write_bundle(bundle_root: Path, payload: Dict[str, Any], report_html: str, 
     (bundle_dir / "report.html").write_text(report_html, encoding="utf-8")
     summary_with_payload = dict(summary)
     summary_with_payload["payload"] = payload
+    (bundle_dir / "summary.html").write_text(
+        _render_summary_html(summary_with_payload),
+        encoding="utf-8",
+    )
     (bundle_dir / "summary.md").write_text(
         _build_property_summary_markdown(summary_with_payload, bundle_dir),
         encoding="utf-8",
@@ -512,74 +839,7 @@ def _write_bundle(bundle_root: Path, payload: Dict[str, Any], report_html: str, 
 
 
 def _build_landing_page(bundle_root: Path, summaries: List[Dict[str, Any]]) -> str:
-    cards: List[str] = []
-    for summary in summaries:
-        facts = summary["actual_facts"]
-        bundle_path = bundle_root / summary["name"]
-        review_links = _build_review_links(
-            summary.get("payload") or {},
-            bundle_dir=bundle_path,
-            bundle_href_prefix=f"{summary['name']}/",
-        )
-        rendered_links: List[str] = []
-        for link in review_links:
-            if link["status"] == "available":
-                rendered_links.append(
-                    f'<a href="{link["url"]}" target="_blank" rel="noopener noreferrer">{link["label"]}</a>'
-                )
-            else:
-                rendered_links.append(f'<span class="unavailable">{link["label"]}: {link["reason"]}</span>')
-        cards.append(
-            "\n".join(
-                [
-                    '<section class="property-card">',
-                    f"<h2>{summary['name']}</h2>",
-                    (
-                        f"<p class=\"meta\"><strong>{summary['address']}</strong> &middot; "
-                        f"{summary.get('role') or 'review'} &middot; <code>{summary['verdict']}</code></p>"
-                    ),
-                    (
-                        f"<p class=\"facts\">PIN <code>{facts['pin']}</code> &middot; "
-                        f"APN <code>{facts['apn']}</code> &middot; permits <code>{facts['permit_count']}</code> "
-                        f"&middot; records <code>{facts['record_count']}</code></p>"
-                    ),
-                    f"<div class=\"link-grid\">{' '.join(rendered_links)}</div>",
-                    "</section>",
-                ]
-            )
-        )
-
-    return (
-        """<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Report Acceptance Review Bundles</title>
-  <style>
-    body { font-family: Inter, Arial, sans-serif; margin: 0; background: #f5f5f5; color: #111; }
-    main { max-width: 1120px; margin: 0 auto; padding: 24px 16px 48px; }
-    .property-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px; margin-bottom: 16px; }
-    .meta, .facts { margin: 8px 0; color: #4b5563; }
-    .link-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-    .link-grid a, .link-grid span { font-size: 13px; text-decoration: none; border-radius: 999px; padding: 6px 10px; border: 1px solid #d1d5db; background: #fff; color: #111; }
-    .link-grid a:hover { border-color: #111; background: #f9fafb; }
-    .unavailable { color: #6b7280; background: #f3f4f6; }
-    code { font-family: ui-monospace, SFMono-Regular, monospace; }
-  </style>
-</head>
-<body>
-  <main>
-    <h1>Report Acceptance Review Bundles</h1>
-    <p>Static offline landing page for browser-first review of accepted bundle artifacts.</p>
-    """
-        + "\n".join(cards)
-        + """
-  </main>
-</body>
-</html>
-"""
-    )
+    return _render_landing_page_html(summaries)
 
 
 def _build_index_markdown(bundle_root: Path, summaries: List[Dict[str, Any]]) -> str:
@@ -588,24 +848,44 @@ def _build_index_markdown(bundle_root: Path, summaries: List[Dict[str, Any]]) ->
         "",
         "- Static landing page: [review_bundles/report_acceptance/index.html](./review_bundles/report_acceptance/index.html)",
         "",
-        "| Property | Role | Verdict | Address | Key Facts | Flags | Bundle | Review Links |",
-        "| --- | --- | --- | --- | --- | --- | --- | --- |",
+        "| Property | Role | Verdict | Address | Key Facts | Review Context | Local Review | Source Links | Generic Search |",
+        "| --- | --- | --- | --- | --- | --- | --- | --- | --- |",
     ]
     for summary in summaries:
         facts = summary["actual_facts"]
-        flags = ", ".join(flag.get("code") or "review" for flag in summary["review_flags"]) or "none"
-        bundle_path = bundle_root / summary["name"]
-        review_links = _build_review_links(
+        review_bundle = _build_review_bundle_context(
             summary.get("payload") or {},
-            bundle_dir=bundle_path,
-            bundle_href_prefix=f"./{summary['name']}/",
+            property_name=summary["name"],
+            page_kind="index",
         )
-        available_review_links = ", ".join(
-            f"[{link['label']}]({link['url']})" for link in review_links if link["status"] == "available"
+        review_context = " / ".join(summary.get("review_context_items") or []) or "none"
+        local_review_links = ", ".join(
+            f"[{link['label']}]({link['url']})" for link in review_bundle["local_actions"] if link["status"] == "available"
         )
-        unavailable_review_links = ", ".join(
-            link["label"] for link in review_links if link["status"] != "available"
-        ) or "none"
+        property_source_links = ", ".join(
+            f"[{link['label']}]({link['url']})" for link in review_bundle["source_links"] if link["status"] == "available"
+        )
+        generic_search_links = ", ".join(
+            f"[{link['label']}]({link['url']})" for link in review_bundle["generic_links"] if link["status"] == "available"
+        )
+        unavailable_source_links = ", ".join(
+            link["label"] for link in review_bundle["source_links"] if link["status"] != "available"
+        )
+        unavailable_generic_links = ", ".join(
+            link["label"] for link in review_bundle["generic_links"] if link["status"] != "available"
+        )
+        if unavailable_source_links:
+            property_source_links = (
+                f"{property_source_links} ; unavailable: {unavailable_source_links}"
+                if property_source_links
+                else f"unavailable: {unavailable_source_links}"
+            )
+        if unavailable_generic_links:
+            generic_search_links = (
+                f"{generic_search_links} ; unavailable: {unavailable_generic_links}"
+                if generic_search_links
+                else f"unavailable: {unavailable_generic_links}"
+            )
         lines.append(
             "| "
             + f"{summary['name']} | "
@@ -613,11 +893,10 @@ def _build_index_markdown(bundle_root: Path, summaries: List[Dict[str, Any]]) ->
             + f"`{summary['verdict']}` | "
             + f"{summary['address']} | "
             + f"PIN `{facts['pin']}` / APN `{facts['apn']}` / permits `{facts['permit_count']}` / records `{facts['record_count']}` | "
-            + f"{flags} | "
-            + f"[summary](./{bundle_path.as_posix().replace((BASE_DIR.as_posix() + '/'), '')}/summary.md) / "
-            + f"[payload](./{bundle_path.as_posix().replace((BASE_DIR.as_posix() + '/'), '')}/payload.normalized.json) / "
-            + f"[html](./{bundle_path.as_posix().replace((BASE_DIR.as_posix() + '/'), '')}/report.html) | "
-            + f"{available_review_links} ; unavailable: {unavailable_review_links} |"
+            + f"{review_context} | "
+            + f"{local_review_links or 'none'} | "
+            + f"{property_source_links or 'none'} | "
+            + f"{generic_search_links or 'none'} |"
         )
 
     lines.extend(["", "## Questionable Items", ""])
@@ -634,27 +913,48 @@ def _build_index_markdown(bundle_root: Path, summaries: List[Dict[str, Any]]) ->
     return "\n".join(lines)
 
 
-def main() -> int:
-    parser = _build_parser()
-    args = parser.parse_args()
-    bundle_root = Path(args.output_dir)
+def generate_review_bundle_outputs(
+    *,
+    cases: List[Dict[str, Any]],
+    bundle_root: Path,
+    offline_existing: bool,
+    review_index_path: Path,
+) -> List[Dict[str, Any]]:
     bundle_root.mkdir(parents=True, exist_ok=True)
-    cases = _load_property_file(args.property_file)
+    _copy_bundle_assets(bundle_root)
 
     summaries: List[Dict[str, Any]] = []
     for case in cases:
-        payload = _load_payload(case, bundle_root, args.offline_existing)
-        report_html = _render_report_html(_attach_review_bundle(payload, bundle_dir=bundle_root / case["name"]))
+        payload = _load_payload(case, bundle_root, offline_existing)
+        report_payload = _attach_review_bundle(
+            payload,
+            property_name=case["name"],
+            page_kind="report",
+        )
+        report_html = _render_report_html(report_payload)
         report_checks = _extract_report_checks(payload, report_html)
         summary = _evaluate_property(case, payload, report_checks)
         summary["payload"] = payload
         summaries.append(summary)
-        report_html = _render_report_html(_attach_review_bundle(payload, bundle_dir=bundle_root / case["name"]))
         _write_bundle(bundle_root, payload, report_html, summary)
 
     review_index = _build_index_markdown(bundle_root, summaries)
-    (BASE_DIR / "REVIEW_INDEX.md").write_text(review_index, encoding="utf-8")
+    review_index_path.write_text(review_index, encoding="utf-8")
     (bundle_root / "index.html").write_text(_build_landing_page(bundle_root, summaries), encoding="utf-8")
+    return summaries
+
+
+def main() -> int:
+    parser = _build_parser()
+    args = parser.parse_args()
+    bundle_root = Path(args.output_dir)
+    cases = _load_property_file(args.property_file)
+    summaries = generate_review_bundle_outputs(
+        cases=cases,
+        bundle_root=bundle_root,
+        offline_existing=args.offline_existing,
+        review_index_path=BASE_DIR / "REVIEW_INDEX.md",
+    )
 
     if args.json:
         print(json.dumps({"properties": summaries}, indent=2, sort_keys=True))

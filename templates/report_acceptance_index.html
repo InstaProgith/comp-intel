@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ bundle.title }}</title>
+  <link rel="stylesheet" href="{{ bundle.stylesheet_href }}">
+  <style>
+    .bundle-shell {
+      max-width: 1200px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .bundle-hero {
+      align-items: flex-start;
+    }
+
+    .bundle-hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .bundle-chip,
+    .bundle-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      border: 1px solid #d9d9d9;
+      background: #fff;
+      color: #111;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px 12px;
+      text-decoration: none;
+    }
+
+    .bundle-pill:hover {
+      border-color: #111;
+      background: #fafafa;
+    }
+
+    .bundle-pill-primary {
+      background: #111;
+      border-color: #111;
+      color: #fff;
+    }
+
+    .bundle-pill-primary:hover {
+      background: #222;
+      color: #fff;
+    }
+
+    .bundle-pill-muted {
+      color: #6b7280;
+      background: #f3f4f6;
+    }
+
+    .bundle-card-grid {
+      display: grid;
+      gap: 24px;
+    }
+
+    .bundle-property-card {
+      display: grid;
+      gap: 18px;
+    }
+
+    .bundle-card-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .bundle-card-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: #111;
+      letter-spacing: -0.4px;
+      line-height: 1.2;
+      margin-bottom: 6px;
+    }
+
+    .bundle-card-subtitle {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    .bundle-card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .bundle-facts-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .bundle-fact {
+      border: 1px solid #ececec;
+      border-radius: 10px;
+      padding: 14px;
+      background: #fafafa;
+    }
+
+    .bundle-fact-label {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #475569;
+      margin-bottom: 6px;
+    }
+
+    .bundle-fact-value {
+      font-size: 14px;
+      font-weight: 700;
+      color: #111;
+      line-height: 1.5;
+      word-break: break-word;
+    }
+
+    .bundle-two-column {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 20px;
+    }
+
+    .bundle-context-box,
+    .bundle-id-box {
+      border: 1px solid #ececec;
+      border-radius: 12px;
+      padding: 16px;
+      background: #fafafa;
+    }
+
+    .bundle-section-label {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #475569;
+      margin-bottom: 10px;
+    }
+
+    .bundle-context-list,
+    .bundle-id-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    .bundle-context-list li,
+    .bundle-id-list li {
+      border-top: 1px solid #ececec;
+      padding-top: 10px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #333;
+    }
+
+    .bundle-context-list li:first-child,
+    .bundle-id-list li:first-child {
+      border-top: none;
+      padding-top: 0;
+    }
+
+    .bundle-id-code {
+      display: inline-block;
+      font-family: "Monaco", "Courier New", monospace;
+      font-size: 11px;
+      background: #f5f5f5;
+      border-radius: 6px;
+      padding: 4px 8px;
+      margin-right: 8px;
+      color: #111;
+    }
+
+    .bundle-link-group {
+      display: grid;
+      gap: 10px;
+    }
+
+    .bundle-link-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .empty-state {
+      font-size: 13px;
+      color: #6b7280;
+      font-style: italic;
+    }
+
+    @media (max-width: 960px) {
+      .bundle-facts-grid,
+      .bundle-two-column {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-layer"></div>
+
+  <main class="shell bundle-shell">
+    <section class="hero-card bundle-hero">
+      <div class="logo-wrap">
+        <div class="logo-plate"></div>
+        <img class="logo-img" src="{{ bundle.logo_href }}" alt="BLDGBIT" />
+      </div>
+      <div class="hero-text">
+        <div class="eyebrow">Offline Review Hub</div>
+        <div class="hero-title">{{ bundle.title }}</div>
+        <div class="hero-subtitle">Self-contained review package for browser-first inspection from a local extracted bundle.</div>
+        <div class="bundle-hero-meta">
+          <span class="bundle-chip">Properties: {{ bundle.property_count }}</span>
+          <span class="bundle-chip">Primary action: Open summary or report from each card</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="bundle-card-grid">
+      {% for card in bundle.cards %}
+      <section class="panel bundle-property-card" data-property="{{ card.slug }}">
+        <div class="bundle-card-header">
+          <div>
+            <div class="eyebrow">{{ card.role }}</div>
+            <div class="bundle-card-title">{{ card.display_name }}</div>
+            <div class="bundle-card-subtitle">{{ card.address }}</div>
+          </div>
+          <div class="bundle-card-meta">
+            <span class="bundle-chip">Verdict: {{ card.verdict }}</span>
+            <span class="bundle-chip">Permits: {{ card.facts.permit_count }}</span>
+            <span class="bundle-chip">Records: {{ card.facts.record_count }}</span>
+          </div>
+        </div>
+
+        <div class="bundle-facts-grid">
+          <div class="bundle-fact">
+            <div class="bundle-fact-label">APN</div>
+            <div class="bundle-fact-value">{{ card.facts.apn or "Unknown" }}</div>
+          </div>
+          <div class="bundle-fact">
+            <div class="bundle-fact-label">PIN</div>
+            <div class="bundle-fact-value">{{ card.facts.pin or "Unknown" }}</div>
+          </div>
+          <div class="bundle-fact">
+            <div class="bundle-fact-label">Representative Permits</div>
+            <div class="bundle-fact-value">
+              {% for permit in card.representative_permits[:3] %}
+              <div><span class="bundle-id-code">{{ permit.permit_number }}</span></div>
+              {% endfor %}
+            </div>
+          </div>
+          <div class="bundle-fact">
+            <div class="bundle-fact-label">Representative Documents</div>
+            <div class="bundle-fact-value">
+              {% for document in card.representative_documents[:3] %}
+              <div><span class="bundle-id-code">{{ document.doc_number }}</span></div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <div class="bundle-two-column">
+          <div class="bundle-context-box">
+            <div class="bundle-section-label">Review Context</div>
+            {% if card.review_context_items %}
+            <ul class="bundle-context-list">
+              {% for item in card.review_context_items %}
+              <li>{{ item }}</li>
+              {% endfor %}
+            </ul>
+            {% else %}
+            <div class="empty-state">No explicit review context items.</div>
+            {% endif %}
+          </div>
+          <div class="bundle-id-box">
+            <div class="bundle-section-label">What To Click First</div>
+            <ul class="bundle-id-list">
+              <li>Open summary for the quickest human-readable review pass.</li>
+              <li>Open report for the full offline report layout.</li>
+              <li>Use the property-specific source links to confirm parcel and document targets.</li>
+            </ul>
+          </div>
+        </div>
+
+        {% for group in card.review_link_groups %}
+        <div class="bundle-link-group" data-group="{{ group.key }}">
+          <div class="bundle-section-label">{{ group.title }}</div>
+          <div class="bundle-link-row">
+            {% for link in group.links %}
+              {% if link.status == "available" %}
+              <a
+                data-link-key="{{ link.key }}"
+                class="bundle-pill {% if group.key == 'local' %}bundle-pill-primary{% endif %}"
+                href="{{ link.url }}"
+                {% if link.external %}target="_blank" rel="noopener noreferrer"{% endif %}
+              >{{ link.label }}</a>
+              {% else %}
+              <span data-link-key="{{ link.key }}" class="bundle-pill bundle-pill-muted">{{ link.label }} unavailable: {{ link.reason }}</span>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+      </section>
+      {% endfor %}
+    </section>
+  </main>
+</body>
+</html>

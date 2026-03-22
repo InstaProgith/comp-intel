@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BLDGBIT - Malcolm Summary</title>
+  <link rel="stylesheet" href="../_assets/css/comp.css">
+  <style>
+    .bundle-shell {
+      max-width: 1120px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .bundle-hero {
+      align-items: flex-start;
+    }
+
+    .bundle-header-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .bundle-chip,
+    .bundle-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      border: 1px solid #d9d9d9;
+      background: #fff;
+      color: #111;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px 12px;
+      text-decoration: none;
+    }
+
+    .bundle-pill:hover {
+      border-color: #111;
+      background: #fafafa;
+    }
+
+    .bundle-pill-primary {
+      background: #111;
+      border-color: #111;
+      color: #fff;
+    }
+
+    .bundle-pill-primary:hover {
+      background: #222;
+      color: #fff;
+    }
+
+    .bundle-pill-muted {
+      color: #6b7280;
+      background: #f3f4f6;
+    }
+
+    .bundle-toolbar-panel {
+      display: grid;
+      gap: 16px;
+    }
+
+    .bundle-link-group {
+      display: grid;
+      gap: 10px;
+    }
+
+    .bundle-group-label {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #475569;
+    }
+
+    .bundle-link-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .bundle-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .bundle-note {
+      font-size: 13px;
+      color: #555;
+      line-height: 1.7;
+    }
+
+    .bundle-note a {
+      color: #111;
+      font-weight: 600;
+    }
+
+    .context-columns {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .context-card {
+      background: #fafafa;
+      border: 1px solid #ececec;
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .context-title {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #475569;
+      margin-bottom: 10px;
+    }
+
+    .context-list,
+    .record-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    .context-list li,
+    .record-list li {
+      border-top: 1px solid #ececec;
+      padding-top: 10px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #333;
+    }
+
+    .context-list li:first-child,
+    .record-list li:first-child {
+      border-top: none;
+      padding-top: 0;
+    }
+
+    .record-id {
+      display: inline-block;
+      font-family: "Monaco", "Courier New", monospace;
+      font-size: 11px;
+      background: #f5f5f5;
+      border-radius: 6px;
+      padding: 4px 8px;
+      margin-bottom: 6px;
+      color: #111;
+    }
+
+    .record-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #111;
+      margin-bottom: 4px;
+    }
+
+    .record-meta {
+      font-size: 12px;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    .empty-state {
+      font-size: 13px;
+      color: #6b7280;
+      font-style: italic;
+    }
+
+    @media (max-width: 900px) {
+      .bundle-grid,
+      .context-columns {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-layer"></div>
+
+  <main class="shell bundle-shell" data-property="malcolm">
+    <section class="hero-card bundle-hero">
+      <div class="logo-wrap">
+        <div class="logo-plate"></div>
+        <img class="logo-img" src="../_assets/LG.png" alt="BLDGBIT" />
+      </div>
+      <div class="hero-text">
+        <div class="eyebrow">Offline Review Summary</div>
+        <div class="hero-title">Malcolm</div>
+        <div class="hero-subtitle">2831 Malcolm Ave, Los Angeles, CA 90064</div>
+        <div class="bundle-header-meta">
+          <span class="bundle-chip">Verdict: accepted-with-review</span>
+          <span class="bundle-chip">Role: sparse-noisy-review-case</span>
+          <span class="bundle-chip">Permits: 14</span>
+          <span class="bundle-chip">Records: 1</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel bundle-toolbar-panel">
+      
+      <div class="bundle-link-group" data-group="local">
+        <div class="bundle-group-label">Local review actions</div>
+        <div class="bundle-link-row">
+          
+            
+            <a
+              data-link-key="back_to_bundles"
+              class="bundle-pill bundle-pill-primary"
+              href="../index.html"
+              
+            >Back to review bundles</a>
+            
+          
+            
+            <a
+              data-link-key="open_report"
+              class="bundle-pill bundle-pill-primary"
+              href="report.html"
+              
+            >Open report</a>
+            
+          
+            
+            <a
+              data-link-key="open_payload"
+              class="bundle-pill bundle-pill-primary"
+              href="payload.normalized.json"
+              
+            >Open payload</a>
+            
+          
+        </div>
+      </div>
+      
+      <div class="bundle-link-group" data-group="source">
+        <div class="bundle-group-label">Property-specific source links</div>
+        <div class="bundle-link-row">
+          
+            
+            <a
+              data-link-key="zimas_parcel_page"
+              class="bundle-pill "
+              href="https://zimas.lacity.org/map.aspx?pin=123B157%20%20%20607&amp;ajax=yes"
+              target="_blank" rel="noopener noreferrer"
+            >ZIMAS parcel page</a>
+            
+          
+            
+            <a
+              data-link-key="pin_permit_results"
+              class="bundle-pill "
+              href="https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&amp;view=permit&amp;pin=123B157%20607"
+              target="_blank" rel="noopener noreferrer"
+            >PIN permit results</a>
+            
+          
+            
+            <a
+              data-link-key="first_ladbs_record"
+              class="bundle-pill "
+              href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/Report.aspx?Record_Id=126286468&amp;Image=Visible&amp;ImageToOpen=%7B7054AB8E-0000-CF18-98B4-28549FB1280B%7D%2C"
+              target="_blank" rel="noopener noreferrer"
+            >First LADBS record</a>
+            
+          
+            
+            <a
+              data-link-key="first_ladbs_pdf"
+              class="bundle-pill "
+              href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/StPdfViewer.aspx?Library=IDIS&amp;Id=%7B7054AB8E-0000-CF18-98B4-28549FB1280B%7D&amp;ObjType=2&amp;Op=View"
+              target="_blank" rel="noopener noreferrer"
+            >First LADBS PDF</a>
+            
+          
+        </div>
+      </div>
+      
+      <div class="bundle-link-group" data-group="generic">
+        <div class="bundle-group-label">Generic search/home pages</div>
+        <div class="bundle-link-row">
+          
+            
+            <a
+              data-link-key="permit_search_home"
+              class="bundle-pill "
+              href="https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr"
+              target="_blank" rel="noopener noreferrer"
+            >Permit search home</a>
+            
+          
+            
+            <a
+              data-link-key="docs_search_home"
+              class="bundle-pill "
+              href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW"
+              target="_blank" rel="noopener noreferrer"
+            >Docs search home</a>
+            
+          
+        </div>
+      </div>
+      
+    </section>
+
+    <section class="panel">
+      <div class="section-header">
+        <h2 class="section-title">Key Facts</h2>
+        <span class="section-count">malcolm</span>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-pill">
+          <div class="stat-label">APN</div>
+          <div class="stat-value">4255013007</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-label">PIN</div>
+          <div class="stat-value">123B157   607</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-label">Zoning</div>
+          <div class="stat-value">R1-1</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-label">General Plan</div>
+          <div class="stat-value">Low Residential</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-label">Community Plan</div>
+          <div class="stat-value">West Los Angeles</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-label">Redfin Listing</div>
+          <div class="stat-value">
+            
+            <a href="https://www.redfin.com/CA/Los-Angeles/2831-Malcolm-Ave-90064/home/6753382" target="_blank" rel="noopener noreferrer">Open Redfin listing</a>
+            
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-header">
+        <h2 class="section-title">Review Context</h2>
+        <span class="section-count">3</span>
+      </div>
+      <div class="context-columns">
+        <div class="context-card">
+          <div class="context-title">Review Flags</div>
+          
+          <ul class="context-list">
+            
+            <li><strong>permit_address_variants</strong>: LADBS permits reference address labels that extend beyond the subject address; review the permit set for parcel/address crossover.</li>
+            
+          </ul>
+          
+        </div>
+        <div class="context-card">
+          <div class="context-title">Data Notes</div>
+          
+          <ul class="context-list">
+            
+            <li>Purchase price unknown (no prior developer sale in Redfin history); spread, ROI, and profit not computed.</li>
+            
+          </ul>
+          
+        </div>
+        <div class="context-card">
+          <div class="context-title">Questionable Items / Honest Uncertainties</div>
+          
+          <ul class="context-list">
+            
+            <li>LADBS permits reference address labels that extend beyond the subject address; review the permit set for parcel/address crossover.</li>
+            
+            <li>Purchase price unknown (no prior developer sale in Redfin history); spread, ROI, and profit not computed.</li>
+            
+            <li>LADBS parcel-level permit output may span 2831 and 2831 1/2 labels; that should remain an explicit review item rather than being silently suppressed.</li>
+            
+          </ul>
+          
+        </div>
+      </div>
+    </section>
+
+    <section class="bundle-grid">
+      <section class="panel">
+        <div class="section-header">
+          <h2 class="section-title">Representative Permits</h2>
+          <span class="section-count">4</span>
+        </div>
+        
+        <ul class="record-list">
+          
+          <li>
+            <div class="record-id">24047-10000-00180</div>
+            <div class="record-title">Swimming-Pool/Spa - 1 or 2 Family Dwelling</div>
+            <div class="record-meta">CofO Issued on 7/19/2025</div>
+            <div class="record-meta">New swimming pool with spa and pool cover STD plan 268.</div>
+          </li>
+          
+          <li>
+            <div class="record-id">23010-10000-05197</div>
+            <div class="record-title">Bldg-New - 1 or 2 Family Dwelling</div>
+            <div class="record-meta">CofO Issued on 7/19/2025</div>
+            <div class="record-meta">*EPLAN* NEW 2-STORY SINGLE FAMILY DWELLING WITH ATTACHED 2-CAR GARAGE, ATTACHED ADU PER LAMC 12.22A.33(c) AND (e) AND ATTACHED TRELLIS. NFPA 13D</div>
+          </li>
+          
+          <li>
+            <div class="record-id">24030-10000-00868</div>
+            <div class="record-title">Grading - 1 or 2 Family Dwelling</div>
+            <div class="record-meta">Permit Finaled on 6/24/2025</div>
+            <div class="record-meta">GRADING FOR NEW POOL WITH SPA.</div>
+          </li>
+          
+          <li>
+            <div class="record-id">24043-10000-03548</div>
+            <div class="record-title">Fire Sprinkler - 1 or 2 Family Dwelling</div>
+            <div class="record-meta">Permit Finaled on 5/22/2025</div>
+            <div class="record-meta">NEW FIRE SPRINKLER SYSTEM PER NFPA 13D. INCLUDES 1&#34; WATER METER AND NO BACKFLOW. **SFD &amp; ATTACHED ADU**</div>
+          </li>
+          
+        </ul>
+        
+      </section>
+
+      <section class="panel">
+        <div class="section-header">
+          <h2 class="section-title">Representative Documents</h2>
+          <span class="section-count">1</span>
+        </div>
+        
+        <ul class="record-list">
+          
+          <li>
+            <div class="record-id">23010-20000-03343</div>
+            <div class="record-title">BUILDING PERMIT</div>
+            <div class="record-meta">4/1/2024</div>
+            <div class="record-meta">EPLAN. NEW 1-STORY DETACHED ACCESSORY DWELLING UNIT PER LAMC 12.22 A.33(C)-(D).</div>
+          </li>
+          
+        </ul>
+        
+      </section>
+    </section>
+  </main>
+</body>
+</html>

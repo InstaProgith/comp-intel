@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BLDGBIT - {{ page.display_name }} Summary</title>
+  <link rel="stylesheet" href="{{ page.review_bundle.stylesheet_href }}">
+  <style>
+    .bundle-shell {
+      max-width: 1120px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .bundle-hero {
+      align-items: flex-start;
+    }
+
+    .bundle-header-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .bundle-chip,
+    .bundle-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      border: 1px solid #d9d9d9;
+      background: #fff;
+      color: #111;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px 12px;
+      text-decoration: none;
+    }
+
+    .bundle-pill:hover {
+      border-color: #111;
+      background: #fafafa;
+    }
+
+    .bundle-pill-primary {
+      background: #111;
+      border-color: #111;
+      color: #fff;
+    }
+
+    .bundle-pill-primary:hover {
+      background: #222;
+      color: #fff;
+    }
+
+    .bundle-pill-muted {
+      color: #6b7280;
+      background: #f3f4f6;
+    }
+
+    .bundle-toolbar-panel {
+      display: grid;
+      gap: 16px;
+    }
+
+    .bundle-link-group {
+      display: grid;
+      gap: 10px;
+    }
+
+    .bundle-group-label {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #475569;
+    }
+
+    .bundle-link-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .bundle-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .bundle-note {
+      font-size: 13px;
+      color: #555;
+      line-height: 1.7;
+    }
+
+    .bundle-note a {
+      color: #111;
+      font-weight: 600;
+    }
+
+    .context-columns {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .context-card {
+      background: #fafafa;
+      border: 1px solid #ececec;
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .context-title {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #475569;
+      margin-bottom: 10px;
+    }
+
+    .context-list,
+    .record-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    .context-list li,
+    .record-list li {
+      border-top: 1px solid #ececec;
+      padding-top: 10px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #333;
+    }
+
+    .context-list li:first-child,
+    .record-list li:first-child {
+      border-top: none;
+      padding-top: 0;
+    }
+
+    .record-id {
+      display: inline-block;
+      font-family: "Monaco", "Courier New", monospace;
+      font-size: 11px;
+      background: #f5f5f5;
+      border-radius: 6px;
+      padding: 4px 8px;
+      margin-bottom: 6px;
+      color: #111;
+    }
+
+    .record-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #111;
+      margin-bottom: 4px;
+    }
+
+    .record-meta {
+      font-size: 12px;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    .empty-state {
+      font-size: 13px;
+      color: #6b7280;
+      font-style: italic;
+    }
+
+    @media (max-width: 900px) {
+      .bundle-grid,
+      .context-columns {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-layer"></div>
+
+  <main class="shell bundle-shell" data-property="{{ page.slug }}">
+    <section class="hero-card bundle-hero">
+      <div class="logo-wrap">
+        <div class="logo-plate"></div>
+        <img class="logo-img" src="{{ page.review_bundle.logo_href }}" alt="BLDGBIT" />
+      </div>
+      <div class="hero-text">
+        <div class="eyebrow">Offline Review Summary</div>
+        <div class="hero-title">{{ page.display_name }}</div>
+        <div class="hero-subtitle">{{ page.address }}</div>
+        <div class="bundle-header-meta">
+          <span class="bundle-chip">Verdict: {{ page.verdict }}</span>
+          <span class="bundle-chip">Role: {{ page.role }}</span>
+          <span class="bundle-chip">Permits: {{ page.facts.permit_count }}</span>
+          <span class="bundle-chip">Records: {{ page.facts.record_count }}</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel bundle-toolbar-panel">
+      {% for group in page.review_link_groups %}
+      <div class="bundle-link-group" data-group="{{ group.key }}">
+        <div class="bundle-group-label">{{ group.title }}</div>
+        <div class="bundle-link-row">
+          {% for link in group.links %}
+            {% if link.status == "available" %}
+            <a
+              data-link-key="{{ link.key }}"
+              class="bundle-pill {% if group.key == 'local' %}bundle-pill-primary{% endif %}"
+              href="{{ link.url }}"
+              {% if link.external %}target="_blank" rel="noopener noreferrer"{% endif %}
+            >{{ link.label }}</a>
+            {% else %}
+            <span data-link-key="{{ link.key }}" class="bundle-pill bundle-pill-muted">{{ link.label }} unavailable: {{ link.reason }}</span>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </section>
+
+    <section class="panel">
+      <div class="section-header">
+        <h2 class="section-title">Key Facts</h2>
+        <span class="section-count">{{ page.slug }}</span>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-pill">
+          <div class="stat-label">APN</div>
+          <div class="stat-value">{{ page.facts.apn or "Unknown" }}</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-label">PIN</div>
+          <div class="stat-value">{{ page.facts.pin or "Unknown" }}</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-label">Zoning</div>
+          <div class="stat-value">{{ page.facts.zoning or "Unknown" }}</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-label">General Plan</div>
+          <div class="stat-value">{{ page.facts.general_plan_land_use or "Unknown" }}</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-label">Community Plan</div>
+          <div class="stat-value">{{ page.facts.community_plan_area or "Unknown" }}</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-label">Redfin Listing</div>
+          <div class="stat-value">
+            {% if page.redfin_url %}
+            <a href="{{ page.redfin_url }}" target="_blank" rel="noopener noreferrer">Open Redfin listing</a>
+            {% else %}
+            Unknown
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-header">
+        <h2 class="section-title">Review Context</h2>
+        <span class="section-count">{{ page.questionable_items|length }}</span>
+      </div>
+      <div class="context-columns">
+        <div class="context-card">
+          <div class="context-title">Review Flags</div>
+          {% if page.review_flags %}
+          <ul class="context-list">
+            {% for flag in page.review_flags %}
+            <li><strong>{{ flag.code or "review" }}</strong>: {{ flag.message }}</li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <div class="empty-state">No explicit review flags for this property.</div>
+          {% endif %}
+        </div>
+        <div class="context-card">
+          <div class="context-title">Data Notes</div>
+          {% if page.data_notes %}
+          <ul class="context-list">
+            {% for note in page.data_notes %}
+            <li>{{ note }}</li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <div class="empty-state">No additional data notes.</div>
+          {% endif %}
+        </div>
+        <div class="context-card">
+          <div class="context-title">Questionable Items / Honest Uncertainties</div>
+          {% if page.questionable_items %}
+          <ul class="context-list">
+            {% for item in page.questionable_items %}
+            <li>{{ item }}</li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <div class="empty-state">No open review concerns.</div>
+          {% endif %}
+        </div>
+      </div>
+    </section>
+
+    <section class="bundle-grid">
+      <section class="panel">
+        <div class="section-header">
+          <h2 class="section-title">Representative Permits</h2>
+          <span class="section-count">{{ page.representative_permits|length }}</span>
+        </div>
+        {% if page.representative_permits %}
+        <ul class="record-list">
+          {% for permit in page.representative_permits %}
+          <li>
+            <div class="record-id">{{ permit.permit_number }}</div>
+            <div class="record-title">{{ permit.permit_type }}</div>
+            <div class="record-meta">{{ permit.status }}</div>
+            <div class="record-meta">{{ permit.description }}</div>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <div class="empty-state">No representative permits were available.</div>
+        {% endif %}
+      </section>
+
+      <section class="panel">
+        <div class="section-header">
+          <h2 class="section-title">Representative Documents</h2>
+          <span class="section-count">{{ page.representative_documents|length }}</span>
+        </div>
+        {% if page.representative_documents %}
+        <ul class="record-list">
+          {% for document in page.representative_documents %}
+          <li>
+            <div class="record-id">{{ document.doc_number }}</div>
+            <div class="record-title">{{ document.doc_type }}</div>
+            <div class="record-meta">{{ document.doc_date }}</div>
+            <div class="record-meta">{{ document.description }}</div>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <div class="empty-state">No representative documents were available.</div>
+        {% endif %}
+      </section>
+    </section>
+  </main>
+</body>
+</html>

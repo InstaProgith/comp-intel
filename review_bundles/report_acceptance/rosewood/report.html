@@ -5,11 +5,10 @@
   <title>BLDGBIT - Property Report</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  
+  
 
-  <link rel="stylesheet" href="/static/css/comp.css">
+  <link rel="stylesheet" href="../_assets/css/comp.css">
   <style>
     /* Report-specific styles - Compact & Scannable */
     .report-shell {
@@ -28,21 +27,31 @@
     }
 
     .review-toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
+      display: grid;
+      gap: 12px;
       padding: 14px 16px;
       border-bottom: 1px solid #ececec;
       background: #f8fafc;
     }
 
+    .review-toolbar-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
     .review-toolbar-label {
-      width: 100%;
       font-size: 10px;
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.8px;
       color: #475569;
+    }
+
+    .review-toolbar-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
     }
 
     .review-toolbar a,
@@ -59,6 +68,11 @@
     .review-toolbar span {
       color: #6b7280;
       background: #f3f4f6;
+    }
+
+    .review-toolbar a:hover {
+      border-color: #111;
+      background: #fdfdfd;
     }
     
     .report-section {
@@ -468,6 +482,27 @@
     }
     
     /* Links Section - Clean with proper hyperlinks */
+    .links-groups {
+      display: grid;
+      gap: 16px;
+    }
+
+    .links-group {
+      border: 1px solid #ececec;
+      border-radius: 8px;
+      padding: 12px;
+      background: #fafafa;
+    }
+
+    .links-group-title {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #475569;
+      margin-bottom: 10px;
+    }
+
     .links-list {
       display: flex;
       flex-direction: column;
@@ -503,6 +538,12 @@
     .link-url:hover {
       border-bottom-color: #111;
       background: #fafafa;
+    }
+
+    .link-unavailable {
+      color: #6b7280;
+      word-break: break-word;
+      flex: 1;
     }
     
     /* Scope Badge */
@@ -632,43 +673,63 @@
       
       
       <div class="review-toolbar">
-        <div class="review-toolbar-label">Review Links</div>
         
-          
-          <a href="report.html" target="_blank" rel="noopener noreferrer">Local report</a>
-          
+        <div class="review-toolbar-group" data-group="local">
+          <div class="review-toolbar-label">Local review actions</div>
+          <div class="review-toolbar-links">
+            
+              
+              <a data-link-key="back_to_bundles" href="../index.html" >Back to review bundles</a>
+              
+            
+              
+              <a data-link-key="open_summary" href="summary.html" >Open summary</a>
+              
+            
+              
+              <a data-link-key="open_payload" href="payload.normalized.json" >Open payload</a>
+              
+            
+          </div>
+        </div>
         
-          
-          <a href="payload.normalized.json" target="_blank" rel="noopener noreferrer">Normalized payload</a>
-          
+        <div class="review-toolbar-group" data-group="source">
+          <div class="review-toolbar-label">Property-specific source links</div>
+          <div class="review-toolbar-links">
+            
+              
+              <a data-link-key="zimas_parcel_page" href="https://zimas.lacity.org/map.aspx?pin=111B149%20%20%20315&amp;ajax=yes" target="_blank" rel="noopener noreferrer">ZIMAS parcel page</a>
+              
+            
+              
+              <a data-link-key="pin_permit_results" href="https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&amp;view=permit&amp;pin=111B149%20315" target="_blank" rel="noopener noreferrer">PIN permit results</a>
+              
+            
+              
+              <a data-link-key="first_ladbs_record" href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/Report.aspx?Record_Id=130935075&amp;Image=Visible&amp;ImageToOpen=%7B7DC809F2-8FDA-46C7-BF44-5524BC08D604%7D%2C" target="_blank" rel="noopener noreferrer">First LADBS record</a>
+              
+            
+              
+              <a data-link-key="first_ladbs_pdf" href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/StPdfViewer.aspx?Library=IDIS&amp;Id=%7B7DC809F2-8FDA-46C7-BF44-5524BC08D604%7D&amp;ObjType=2&amp;Op=View" target="_blank" rel="noopener noreferrer">First LADBS PDF</a>
+              
+            
+          </div>
+        </div>
         
-          
-          <a href="summary.md" target="_blank" rel="noopener noreferrer">Summary</a>
-          
-        
-          
-          <a href="https://zimas.lacity.org/map.aspx?pin=111B149%20%20%20315&amp;ajax=yes" target="_blank" rel="noopener noreferrer">ZIMAS page</a>
-          
-        
-          
-          <a href="https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr" target="_blank" rel="noopener noreferrer">LADBS permit portal</a>
-          
-        
-          
-          <a href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW" target="_blank" rel="noopener noreferrer">LADBS docs page</a>
-          
-        
-          
-          <a href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/Report.aspx?Record_Id=130935075&amp;Image=Visible&amp;ImageToOpen=%7B7DC809F2-8FDA-46C7-BF44-5524BC08D604%7D%2C" target="_blank" rel="noopener noreferrer">First record summary link</a>
-          
-        
-          
-          <a href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/StPdfViewer.aspx?Library=IDIS&amp;Id=%7B7DC809F2-8FDA-46C7-BF44-5524BC08D604%7D&amp;ObjType=2&amp;Op=View" target="_blank" rel="noopener noreferrer">First available PDF link</a>
-          
-        
-          
-          <a href="https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&amp;view=permit&amp;pin=111B149%20315" target="_blank" rel="noopener noreferrer">PIN-based LADBS permit-results link</a>
-          
+        <div class="review-toolbar-group" data-group="generic">
+          <div class="review-toolbar-label">Generic search/home pages</div>
+          <div class="review-toolbar-links">
+            
+              
+              <a data-link-key="permit_search_home" href="https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr" target="_blank" rel="noopener noreferrer">Permit search home</a>
+              
+            
+              
+              <a data-link-key="docs_search_home" href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW" target="_blank" rel="noopener noreferrer">Docs search home</a>
+              
+            
+          </div>
+        </div>
         
       </div>
       
@@ -1380,42 +1441,112 @@
       <!-- 13. LINKS -->
       <div class="report-section">
         <div class="report-section-header">Links</div>
-        <div class="links-list">
+        
+        <div class="links-groups">
           
-          <div class="link-item">
-            <span class="link-label">Redfin</span>
-            <a href="https://www.redfin.com/CA/Los-Angeles/3629-Rosewood-Ave-90066/home/6746236" target="_blank" rel="noopener noreferrer" class="link-url">https://www.redfin.com/CA/Los-Angeles/3629-Rosewood-Ave-90066/home/6746236</a>
+          <div class="links-group" data-group="local">
+            <div class="links-group-title">Local review actions</div>
+            <div class="links-list">
+              
+              <div class="link-item">
+                <span class="link-label">Back to review bundles</span>
+                
+                <a data-link-key="back_to_bundles" href="../index.html"  class="link-url">../index.html</a>
+                
+              </div>
+              
+              <div class="link-item">
+                <span class="link-label">Open summary</span>
+                
+                <a data-link-key="open_summary" href="summary.html"  class="link-url">summary.html</a>
+                
+              </div>
+              
+              <div class="link-item">
+                <span class="link-label">Open payload</span>
+                
+                <a data-link-key="open_payload" href="payload.normalized.json"  class="link-url">payload.normalized.json</a>
+                
+              </div>
+              
+            </div>
+          </div>
+          
+          <div class="links-group" data-group="source">
+            <div class="links-group-title">Property-specific source links</div>
+            <div class="links-list">
+              
+              <div class="link-item">
+                <span class="link-label">ZIMAS parcel page</span>
+                
+                <a data-link-key="zimas_parcel_page" href="https://zimas.lacity.org/map.aspx?pin=111B149%20%20%20315&amp;ajax=yes" target="_blank" rel="noopener noreferrer" class="link-url">https://zimas.lacity.org/map.aspx?pin=111B149%20%20%20315&amp;ajax=yes</a>
+                
+              </div>
+              
+              <div class="link-item">
+                <span class="link-label">PIN permit results</span>
+                
+                <a data-link-key="pin_permit_results" href="https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&amp;view=permit&amp;pin=111B149%20315" target="_blank" rel="noopener noreferrer" class="link-url">https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&amp;view=permit&amp;pin=111B149%20315</a>
+                
+              </div>
+              
+              <div class="link-item">
+                <span class="link-label">First LADBS record</span>
+                
+                <a data-link-key="first_ladbs_record" href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/Report.aspx?Record_Id=130935075&amp;Image=Visible&amp;ImageToOpen=%7B7DC809F2-8FDA-46C7-BF44-5524BC08D604%7D%2C" target="_blank" rel="noopener noreferrer" class="link-url">https://ladbsdoc.lacity.org/IDISPublic_Records/idis/Report.aspx?Record_Id=130935075&amp;Image=Visible&amp;ImageToOpen=%7B7DC809F2-8FDA-46C7-BF44-5524BC08D604%7D%2C</a>
+                
+              </div>
+              
+              <div class="link-item">
+                <span class="link-label">First LADBS PDF</span>
+                
+                <a data-link-key="first_ladbs_pdf" href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/StPdfViewer.aspx?Library=IDIS&amp;Id=%7B7DC809F2-8FDA-46C7-BF44-5524BC08D604%7D&amp;ObjType=2&amp;Op=View" target="_blank" rel="noopener noreferrer" class="link-url">https://ladbsdoc.lacity.org/IDISPublic_Records/idis/StPdfViewer.aspx?Library=IDIS&amp;Id=%7B7DC809F2-8FDA-46C7-BF44-5524BC08D604%7D&amp;ObjType=2&amp;Op=View</a>
+                
+              </div>
+              
+            </div>
+          </div>
+          
+          <div class="links-group" data-group="generic">
+            <div class="links-group-title">Generic search/home pages</div>
+            <div class="links-list">
+              
+              <div class="link-item">
+                <span class="link-label">Permit search home</span>
+                
+                <a data-link-key="permit_search_home" href="https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr" target="_blank" rel="noopener noreferrer" class="link-url">https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr</a>
+                
+              </div>
+              
+              <div class="link-item">
+                <span class="link-label">Docs search home</span>
+                
+                <a data-link-key="docs_search_home" href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW" target="_blank" rel="noopener noreferrer" class="link-url">https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW</a>
+                
+              </div>
+              
+            </div>
           </div>
           
           
-          
-          <div class="link-item">
-            <span class="link-label">LADBS</span>
-            <a href="https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr" target="_blank" rel="noopener noreferrer" class="link-url">https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr</a>
-          </div>
-          
-
-          
-          <div class="link-item">
-            <span class="link-label">ZIMAS</span>
-            <a href="https://zimas.lacity.org/map.aspx?pin=111B149%20%20%20315&amp;ajax=yes" target="_blank" rel="noopener noreferrer" class="link-url">https://zimas.lacity.org/map.aspx?pin=111B149%20%20%20315&amp;ajax=yes</a>
-          </div>
-          
-
-          
-          <div class="link-item">
-            <span class="link-label">LADBS Docs</span>
-            <a href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW" target="_blank" rel="noopener noreferrer" class="link-url">https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW</a>
-          </div>
-          
-          
-          
-          <div class="link-item">
-            <span class="link-label">GC CSLB</span>
-            <a href="https://www2.cslb.ca.gov/OnlineServices/CheckLicenseII/LicenseDetail.aspx?LicNum=965244" target="_blank" rel="noopener noreferrer" class="link-url">https://www2.cslb.ca.gov/OnlineServices/CheckLicenseII/LicenseDetail.aspx?LicNum=965244</a>
+          <div class="links-group" data-group="reference">
+            <div class="links-group-title">Reference Links</div>
+            <div class="links-list">
+              <div class="link-item">
+                <span class="link-label">Redfin Listing</span>
+                <a href="https://www.redfin.com/CA/Los-Angeles/3629-Rosewood-Ave-90066/home/6746236" target="_blank" rel="noopener noreferrer" class="link-url">https://www.redfin.com/CA/Los-Angeles/3629-Rosewood-Ave-90066/home/6746236</a>
+              </div>
+              
+              <div class="link-item">
+                <span class="link-label">GC CSLB</span>
+                <a href="https://www2.cslb.ca.gov/OnlineServices/CheckLicenseII/LicenseDetail.aspx?LicNum=965244" target="_blank" rel="noopener noreferrer" class="link-url">https://www2.cslb.ca.gov/OnlineServices/CheckLicenseII/LicenseDetail.aspx?LicNum=965244</a>
+              </div>
+              
+            </div>
           </div>
           
         </div>
+        
       </div>
       
     </div>
