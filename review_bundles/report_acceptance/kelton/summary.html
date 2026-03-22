@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BLDGBIT - Kelton Summary</title>
+  <link rel="stylesheet" href="../_assets/css/comp.css">
+  <style>
+    .bundle-shell {
+      max-width: 1120px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .bundle-hero {
+      align-items: flex-start;
+    }
+
+    .bundle-header-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .bundle-chip,
+    .bundle-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      border: 1px solid #d9d9d9;
+      background: #fff;
+      color: #111;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px 12px;
+      text-decoration: none;
+    }
+
+    .bundle-pill:hover {
+      border-color: #111;
+      background: #fafafa;
+    }
+
+    .bundle-pill-primary {
+      background: #111;
+      border-color: #111;
+      color: #fff;
+    }
+
+    .bundle-pill-primary:hover {
+      background: #222;
+      color: #fff;
+    }
+
+    .bundle-pill-muted {
+      color: #6b7280;
+      background: #f3f4f6;
+    }
+
+    .bundle-toolbar-panel {
+      display: grid;
+      gap: 16px;
+    }
+
+    .bundle-link-group {
+      display: grid;
+      gap: 10px;
+    }
+
+    .bundle-group-label {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #475569;
+    }
+
+    .bundle-link-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .bundle-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .bundle-note {
+      font-size: 13px;
+      color: #555;
+      line-height: 1.7;
+    }
+
+    .bundle-note a {
+      color: #111;
+      font-weight: 600;
+    }
+
+    .context-columns {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .context-card {
+      background: #fafafa;
+      border: 1px solid #ececec;
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .context-title {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #475569;
+      margin-bottom: 10px;
+    }
+
+    .context-list,
+    .record-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    .context-list li,
+    .record-list li {
+      border-top: 1px solid #ececec;
+      padding-top: 10px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #333;
+    }
+
+    .context-list li:first-child,
+    .record-list li:first-child {
+      border-top: none;
+      padding-top: 0;
+    }
+
+    .record-id {
+      display: inline-block;
+      font-family: "Monaco", "Courier New", monospace;
+      font-size: 11px;
+      background: #f5f5f5;
+      border-radius: 6px;
+      padding: 4px 8px;
+      margin-bottom: 6px;
+      color: #111;
+    }
+
+    .record-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #111;
+      margin-bottom: 4px;
+    }
+
+    .record-meta {
+      font-size: 12px;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    .empty-state {
+      font-size: 13px;
+      color: #6b7280;
+      font-style: italic;
+    }
+
+    @media (max-width: 900px) {
+      .bundle-grid,
+      .context-columns {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-layer"></div>
+
+  <main class="shell bundle-shell" data-property="kelton">
+    <section class="hero-card bundle-hero">
+      <div class="logo-wrap">
+        <div class="logo-plate"></div>
+        <img class="logo-img" src="../_assets/LG.png" alt="BLDGBIT" />
+      </div>
+      <div class="hero-text">
+        <div class="eyebrow">Offline Review Summary</div>
+        <div class="hero-title">Kelton</div>
+        <div class="hero-subtitle">3104 Kelton Ave, Los Angeles, CA 90034</div>
+        <div class="bundle-header-meta">
+          <span class="bundle-chip">Verdict: accepted-with-review</span>
+          <span class="bundle-chip">Role: dense-document-case</span>
+          <span class="bundle-chip">Permits: 7</span>
+          <span class="bundle-chip">Records: 20</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel bundle-toolbar-panel">
+      
+      <div class="bundle-link-group" data-group="local">
+        <div class="bundle-group-label">Local review actions</div>
+        <div class="bundle-link-row">
+          
+            
+            <a
+              data-link-key="back_to_bundles"
+              class="bundle-pill bundle-pill-primary"
+              href="../index.html"
+              
+            >Back to review bundles</a>
+            
+          
+            
+            <a
+              data-link-key="open_report"
+              class="bundle-pill bundle-pill-primary"
+              href="report.html"
+              
+            >Open report</a>
+            
+          
+            
+            <a
+              data-link-key="open_payload"
+              class="bundle-pill bundle-pill-primary"
+              href="payload.normalized.json"
+              
+            >Open payload</a>
+            
+          
+        </div>
+      </div>
+      
+      <div class="bundle-link-group" data-group="source">
+        <div class="bundle-group-label">Property-specific source links</div>
+        <div class="bundle-link-row">
+          
+            
+            <a
+              data-link-key="zimas_parcel_page"
+              class="bundle-pill "
+              href="https://zimas.lacity.org/map.aspx?pin=120B157%20%20%20124&amp;ajax=yes"
+              target="_blank" rel="noopener noreferrer"
+            >ZIMAS parcel page</a>
+            
+          
+            
+            <a
+              data-link-key="pin_permit_results"
+              class="bundle-pill "
+              href="https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&amp;view=permit&amp;pin=120B157%20124"
+              target="_blank" rel="noopener noreferrer"
+            >PIN permit results</a>
+            
+          
+            
+            <a
+              data-link-key="first_ladbs_record"
+              class="bundle-pill "
+              href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/Report.aspx?Record_Id=130935079&amp;Image=Visible&amp;ImageToOpen=%7BE49F2A15-4A63-459B-BDE4-40F16BCB55BB%7D%2C"
+              target="_blank" rel="noopener noreferrer"
+            >First LADBS record</a>
+            
+          
+            
+            <a
+              data-link-key="first_ladbs_pdf"
+              class="bundle-pill "
+              href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/StPdfViewer.aspx?Library=IDIS&amp;Id=%7BE49F2A15-4A63-459B-BDE4-40F16BCB55BB%7D&amp;ObjType=2&amp;Op=View"
+              target="_blank" rel="noopener noreferrer"
+            >First LADBS PDF</a>
+            
+          
+        </div>
+      </div>
+      
+      <div class="bundle-link-group" data-group="generic">
+        <div class="bundle-group-label">Generic search/home pages</div>
+        <div class="bundle-link-row">
+          
+            
+            <a
+              data-link-key="permit_search_home"
+              class="bundle-pill "
+              href="https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr"
+              target="_blank" rel="noopener noreferrer"
+            >Permit search home</a>
+            
+          
+            
+            <a
+              data-link-key="docs_search_home"
+              class="bundle-pill "
+              href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW"
+              target="_blank" rel="noopener noreferrer"
+            >Docs search home</a>
+            
+          
+        </div>
+      </div>
+      
+    </section>
+
+    <section class="panel">
+      <div class="section-header">
+        <h2 class="section-title">Key Facts</h2>
+        <span class="section-count">kelton</span>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-pill">
+          <div class="stat-label">APN</div>
+          <div class="stat-value">4254007013</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-label">PIN</div>
+          <div class="stat-value">120B157   124</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-label">Zoning</div>
+          <div class="stat-value">R1-1</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-label">General Plan</div>
+          <div class="stat-value">Low Residential</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-label">Community Plan</div>
+          <div class="stat-value">Palms - Mar Vista - Del Rey</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-label">Redfin Listing</div>
+          <div class="stat-value">
+            
+            <a href="https://www.redfin.com/CA/Los-Angeles/3104-Kelton-Ave-90034/home/6752630" target="_blank" rel="noopener noreferrer">Open Redfin listing</a>
+            
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-header">
+        <h2 class="section-title">Review Context</h2>
+        <span class="section-count">2</span>
+      </div>
+      <div class="context-columns">
+        <div class="context-card">
+          <div class="context-title">Review Flags</div>
+          
+          <div class="empty-state">No explicit review flags for this property.</div>
+          
+        </div>
+        <div class="context-card">
+          <div class="context-title">Data Notes</div>
+          
+          <ul class="context-list">
+            
+            <li>Purchase price unknown (no prior developer sale in Redfin history); spread, ROI, and profit not computed.</li>
+            
+          </ul>
+          
+        </div>
+        <div class="context-card">
+          <div class="context-title">Questionable Items / Honest Uncertainties</div>
+          
+          <ul class="context-list">
+            
+            <li>Purchase price unknown (no prior developer sale in Redfin history); spread, ROI, and profit not computed.</li>
+            
+            <li>Certificate-of-occupancy bundles can reuse a record ID; the report should present them cleanly without implying a suspicious duplicate.</li>
+            
+          </ul>
+          
+        </div>
+      </div>
+    </section>
+
+    <section class="bundle-grid">
+      <section class="panel">
+        <div class="section-header">
+          <h2 class="section-title">Representative Permits</h2>
+          <span class="section-count">4</span>
+        </div>
+        
+        <ul class="record-list">
+          
+          <li>
+            <div class="record-id">24014-20000-00638</div>
+            <div class="record-title">Bldg-Addition - 1 or 2 Family Dwelling</div>
+            <div class="record-meta">CofO Issued on 11/29/2025</div>
+            <div class="record-meta">Addition and Major Remodel to existing 1-story Single Family Dwelling, 68 linear feet of exterior wall and foundation to remain on front and West side portion of Lot. Rebuilt as 2-story (64&#39; 6&#34; x 40&#39; Irregular Shaped) Single Family Dwelling, attached garage and attached Trellis in the back. NFPA 13D Fire Sprinklers Throughout. All work done per engineer.</div>
+          </li>
+          
+          <li>
+            <div class="record-id">24030-70000-01144</div>
+            <div class="record-title">Grading - 1 or 2 Family Dwelling</div>
+            <div class="record-meta">Permit Finaled on 11/21/2025</div>
+            <div class="record-meta">Demolition of existing swimming pool to backfill with certified compacted fill.</div>
+          </li>
+          
+          <li>
+            <div class="record-id">24014-20001-00638</div>
+            <div class="record-title">Bldg-Alter/Repair - 1 or 2 Family Dwelling</div>
+            <div class="record-meta">Permit Finaled on 11/21/2025</div>
+            <div class="record-meta">Supplemental permit to 24014-20000-00638 to remove (E) 20&#39; East facing garage wall and replace it with new wall, revise structural details.</div>
+          </li>
+          
+          <li>
+            <div class="record-id">24041-90000-40218</div>
+            <div class="record-title">Electrical - 1 or 2 Family Dwelling</div>
+            <div class="record-meta">Permit Finaled on 10/1/2025</div>
+            <div class="record-meta">100 amp power pole permit only</div>
+          </li>
+          
+        </ul>
+        
+      </section>
+
+      <section class="panel">
+        <div class="section-header">
+          <h2 class="section-title">Representative Documents</h2>
+          <span class="section-count">4</span>
+        </div>
+        
+        <ul class="record-list">
+          
+          <li>
+            <div class="record-id">CERT 273648</div>
+            <div class="record-title">CERTIFICATE OF OCCUPANCY</div>
+            <div class="record-meta">11/29/2025</div>
+            <div class="record-meta">2-STORY ADDITION TO AN EXISTING, 1-STORY, SINGLE FAMILY DWELLING WITH AN ATTACHED GARAGE AND ATTACHED OPEN ROOF TRELLIS. R-3/U OCCUPANCY.</div>
+          </li>
+          
+          <li>
+            <div class="record-id">24014-20001-00638</div>
+            <div class="record-title">CERTIFICATE OF OCCUPANCY</div>
+            <div class="record-meta">11/29/2025</div>
+            <div class="record-meta">2-STORY ADDITION TO AN EXISTING, 1-STORY, SINGLE FAMILY DWELLING WITH AN ATTACHED GARAGE AND ATTACHED OPEN ROOF TRELLIS. R-3/U OCCUPANCY.</div>
+          </li>
+          
+          <li>
+            <div class="record-id">24014-20000-00638</div>
+            <div class="record-title">CERTIFICATE OF OCCUPANCY</div>
+            <div class="record-meta">11/29/2025</div>
+            <div class="record-meta">2-STORY ADDITION TO AN EXISTING, 1-STORY, SINGLE FAMILY DWELLING WITH AN ATTACHED GARAGE AND ATTACHED OPEN ROOF TRELLIS. R-3/U OCCUPANCY.</div>
+          </li>
+          
+          <li>
+            <div class="record-id">25043-10000-00730</div>
+            <div class="record-title">MECHANICAL PERMIT</div>
+            <div class="record-meta">2/20/2025</div>
+            <div class="record-meta">NEW SPRINKLER SYSTEM PER NFPA 13D. 1&#34; DOMESTIC METER NO BACKFLOW.</div>
+          </li>
+          
+        </ul>
+        
+      </section>
+    </section>
+  </main>
+</body>
+</html>

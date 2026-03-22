@@ -4,46 +4,946 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Report Acceptance Review Bundles</title>
+  <link rel="stylesheet" href="_assets/css/comp.css">
   <style>
-    body { font-family: Inter, Arial, sans-serif; margin: 0; background: #f5f5f5; color: #111; }
-    main { max-width: 1120px; margin: 0 auto; padding: 24px 16px 48px; }
-    .property-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px; margin-bottom: 16px; }
-    .meta, .facts { margin: 8px 0; color: #4b5563; }
-    .link-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-    .link-grid a, .link-grid span { font-size: 13px; text-decoration: none; border-radius: 999px; padding: 6px 10px; border: 1px solid #d1d5db; background: #fff; color: #111; }
-    .link-grid a:hover { border-color: #111; background: #f9fafb; }
-    .unavailable { color: #6b7280; background: #f3f4f6; }
-    code { font-family: ui-monospace, SFMono-Regular, monospace; }
+    .bundle-shell {
+      max-width: 1200px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .bundle-hero {
+      align-items: flex-start;
+    }
+
+    .bundle-hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .bundle-chip,
+    .bundle-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      border: 1px solid #d9d9d9;
+      background: #fff;
+      color: #111;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px 12px;
+      text-decoration: none;
+    }
+
+    .bundle-pill:hover {
+      border-color: #111;
+      background: #fafafa;
+    }
+
+    .bundle-pill-primary {
+      background: #111;
+      border-color: #111;
+      color: #fff;
+    }
+
+    .bundle-pill-primary:hover {
+      background: #222;
+      color: #fff;
+    }
+
+    .bundle-pill-muted {
+      color: #6b7280;
+      background: #f3f4f6;
+    }
+
+    .bundle-card-grid {
+      display: grid;
+      gap: 24px;
+    }
+
+    .bundle-property-card {
+      display: grid;
+      gap: 18px;
+    }
+
+    .bundle-card-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .bundle-card-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: #111;
+      letter-spacing: -0.4px;
+      line-height: 1.2;
+      margin-bottom: 6px;
+    }
+
+    .bundle-card-subtitle {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    .bundle-card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .bundle-facts-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .bundle-fact {
+      border: 1px solid #ececec;
+      border-radius: 10px;
+      padding: 14px;
+      background: #fafafa;
+    }
+
+    .bundle-fact-label {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #475569;
+      margin-bottom: 6px;
+    }
+
+    .bundle-fact-value {
+      font-size: 14px;
+      font-weight: 700;
+      color: #111;
+      line-height: 1.5;
+      word-break: break-word;
+    }
+
+    .bundle-two-column {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 20px;
+    }
+
+    .bundle-context-box,
+    .bundle-id-box {
+      border: 1px solid #ececec;
+      border-radius: 12px;
+      padding: 16px;
+      background: #fafafa;
+    }
+
+    .bundle-section-label {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #475569;
+      margin-bottom: 10px;
+    }
+
+    .bundle-context-list,
+    .bundle-id-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    .bundle-context-list li,
+    .bundle-id-list li {
+      border-top: 1px solid #ececec;
+      padding-top: 10px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #333;
+    }
+
+    .bundle-context-list li:first-child,
+    .bundle-id-list li:first-child {
+      border-top: none;
+      padding-top: 0;
+    }
+
+    .bundle-id-code {
+      display: inline-block;
+      font-family: "Monaco", "Courier New", monospace;
+      font-size: 11px;
+      background: #f5f5f5;
+      border-radius: 6px;
+      padding: 4px 8px;
+      margin-right: 8px;
+      color: #111;
+    }
+
+    .bundle-link-group {
+      display: grid;
+      gap: 10px;
+    }
+
+    .bundle-link-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .empty-state {
+      font-size: 13px;
+      color: #6b7280;
+      font-style: italic;
+    }
+
+    @media (max-width: 960px) {
+      .bundle-facts-grid,
+      .bundle-two-column {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
-  <main>
-    <h1>Report Acceptance Review Bundles</h1>
-    <p>Static offline landing page for browser-first review of accepted bundle artifacts.</p>
-    <section class="property-card">
-<h2>lucerne</h2>
-<p class="meta"><strong>1120 S Lucerne Blvd, Los Angeles, CA 90019</strong> &middot; flagship-baseline &middot; <code>accepted-with-review</code></p>
-<p class="facts">PIN <code>129B185   131</code> &middot; APN <code>5082004025</code> &middot; permits <code>7</code> &middot; records <code>14</code></p>
-<div class="link-grid"><a href="lucerne/report.html" target="_blank" rel="noopener noreferrer">Local report</a> <a href="lucerne/payload.normalized.json" target="_blank" rel="noopener noreferrer">Normalized payload</a> <a href="lucerne/summary.md" target="_blank" rel="noopener noreferrer">Summary</a> <a href="https://zimas.lacity.org/map.aspx?pin=129B185%20%20%20131&ajax=yes" target="_blank" rel="noopener noreferrer">ZIMAS page</a> <a href="https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr" target="_blank" rel="noopener noreferrer">LADBS permit portal</a> <a href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW" target="_blank" rel="noopener noreferrer">LADBS docs page</a> <a href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/Report.aspx?Record_Id=130956837&Image=Visible&ImageToOpen=%7B3C68DACC-76D6-4917-9351-1DE52ABAF138%7D%2C" target="_blank" rel="noopener noreferrer">First record summary link</a> <a href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/StPdfViewer.aspx?Library=IDIS&Id=%7B3C68DACC-76D6-4917-9351-1DE52ABAF138%7D&ObjType=2&Op=View" target="_blank" rel="noopener noreferrer">First available PDF link</a> <a href="https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&view=permit&pin=129B185%20131" target="_blank" rel="noopener noreferrer">PIN-based LADBS permit-results link</a></div>
-</section>
-<section class="property-card">
-<h2>malcolm</h2>
-<p class="meta"><strong>2831 Malcolm Ave, Los Angeles, CA 90064</strong> &middot; sparse-noisy-review-case &middot; <code>accepted-with-review</code></p>
-<p class="facts">PIN <code>123B157   607</code> &middot; APN <code>4255013007</code> &middot; permits <code>14</code> &middot; records <code>1</code></p>
-<div class="link-grid"><a href="malcolm/report.html" target="_blank" rel="noopener noreferrer">Local report</a> <a href="malcolm/payload.normalized.json" target="_blank" rel="noopener noreferrer">Normalized payload</a> <a href="malcolm/summary.md" target="_blank" rel="noopener noreferrer">Summary</a> <a href="https://zimas.lacity.org/map.aspx?pin=123B157%20%20%20607&ajax=yes" target="_blank" rel="noopener noreferrer">ZIMAS page</a> <a href="https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr" target="_blank" rel="noopener noreferrer">LADBS permit portal</a> <a href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW" target="_blank" rel="noopener noreferrer">LADBS docs page</a> <a href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/Report.aspx?Record_Id=126286468&Image=Visible&ImageToOpen=%7B7054AB8E-0000-CF18-98B4-28549FB1280B%7D%2C" target="_blank" rel="noopener noreferrer">First record summary link</a> <a href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/StPdfViewer.aspx?Library=IDIS&Id=%7B7054AB8E-0000-CF18-98B4-28549FB1280B%7D&ObjType=2&Op=View" target="_blank" rel="noopener noreferrer">First available PDF link</a> <a href="https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&view=permit&pin=123B157%20607" target="_blank" rel="noopener noreferrer">PIN-based LADBS permit-results link</a></div>
-</section>
-<section class="property-card">
-<h2>rosewood</h2>
-<p class="meta"><strong>3629 Rosewood Ave, Los Angeles, CA 90066</strong> &middot; clean-report-case &middot; <code>accepted-with-review</code></p>
-<p class="facts">PIN <code>111B149   315</code> &middot; APN <code>4245011018</code> &middot; permits <code>9</code> &middot; records <code>10</code></p>
-<div class="link-grid"><a href="rosewood/report.html" target="_blank" rel="noopener noreferrer">Local report</a> <a href="rosewood/payload.normalized.json" target="_blank" rel="noopener noreferrer">Normalized payload</a> <a href="rosewood/summary.md" target="_blank" rel="noopener noreferrer">Summary</a> <a href="https://zimas.lacity.org/map.aspx?pin=111B149%20%20%20315&ajax=yes" target="_blank" rel="noopener noreferrer">ZIMAS page</a> <a href="https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr" target="_blank" rel="noopener noreferrer">LADBS permit portal</a> <a href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW" target="_blank" rel="noopener noreferrer">LADBS docs page</a> <a href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/Report.aspx?Record_Id=130935075&Image=Visible&ImageToOpen=%7B7DC809F2-8FDA-46C7-BF44-5524BC08D604%7D%2C" target="_blank" rel="noopener noreferrer">First record summary link</a> <a href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/StPdfViewer.aspx?Library=IDIS&Id=%7B7DC809F2-8FDA-46C7-BF44-5524BC08D604%7D&ObjType=2&Op=View" target="_blank" rel="noopener noreferrer">First available PDF link</a> <a href="https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&view=permit&pin=111B149%20315" target="_blank" rel="noopener noreferrer">PIN-based LADBS permit-results link</a></div>
-</section>
-<section class="property-card">
-<h2>kelton</h2>
-<p class="meta"><strong>3104 Kelton Ave, Los Angeles, CA 90034</strong> &middot; dense-document-case &middot; <code>accepted-with-review</code></p>
-<p class="facts">PIN <code>120B157   124</code> &middot; APN <code>4254007013</code> &middot; permits <code>7</code> &middot; records <code>20</code></p>
-<div class="link-grid"><a href="kelton/report.html" target="_blank" rel="noopener noreferrer">Local report</a> <a href="kelton/payload.normalized.json" target="_blank" rel="noopener noreferrer">Normalized payload</a> <a href="kelton/summary.md" target="_blank" rel="noopener noreferrer">Summary</a> <a href="https://zimas.lacity.org/map.aspx?pin=120B157%20%20%20124&ajax=yes" target="_blank" rel="noopener noreferrer">ZIMAS page</a> <a href="https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr" target="_blank" rel="noopener noreferrer">LADBS permit portal</a> <a href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW" target="_blank" rel="noopener noreferrer">LADBS docs page</a> <a href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/Report.aspx?Record_Id=130935079&Image=Visible&ImageToOpen=%7BE49F2A15-4A63-459B-BDE4-40F16BCB55BB%7D%2C" target="_blank" rel="noopener noreferrer">First record summary link</a> <a href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/StPdfViewer.aspx?Library=IDIS&Id=%7BE49F2A15-4A63-459B-BDE4-40F16BCB55BB%7D&ObjType=2&Op=View" target="_blank" rel="noopener noreferrer">First available PDF link</a> <a href="https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&view=permit&pin=120B157%20124" target="_blank" rel="noopener noreferrer">PIN-based LADBS permit-results link</a></div>
-</section>
+  <div class="bg-layer"></div>
+
+  <main class="shell bundle-shell">
+    <section class="hero-card bundle-hero">
+      <div class="logo-wrap">
+        <div class="logo-plate"></div>
+        <img class="logo-img" src="_assets/LG.png" alt="BLDGBIT" />
+      </div>
+      <div class="hero-text">
+        <div class="eyebrow">Offline Review Hub</div>
+        <div class="hero-title">Report Acceptance Review Bundles</div>
+        <div class="hero-subtitle">Self-contained review package for browser-first inspection from a local extracted bundle.</div>
+        <div class="bundle-hero-meta">
+          <span class="bundle-chip">Properties: 4</span>
+          <span class="bundle-chip">Primary action: Open summary or report from each card</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="bundle-card-grid">
+      
+      <section class="panel bundle-property-card" data-property="lucerne">
+        <div class="bundle-card-header">
+          <div>
+            <div class="eyebrow">flagship-baseline</div>
+            <div class="bundle-card-title">Lucerne</div>
+            <div class="bundle-card-subtitle">1120 S Lucerne Blvd, Los Angeles, CA 90019</div>
+          </div>
+          <div class="bundle-card-meta">
+            <span class="bundle-chip">Verdict: accepted-with-review</span>
+            <span class="bundle-chip">Permits: 7</span>
+            <span class="bundle-chip">Records: 14</span>
+          </div>
+        </div>
+
+        <div class="bundle-facts-grid">
+          <div class="bundle-fact">
+            <div class="bundle-fact-label">APN</div>
+            <div class="bundle-fact-value">5082004025</div>
+          </div>
+          <div class="bundle-fact">
+            <div class="bundle-fact-label">PIN</div>
+            <div class="bundle-fact-value">129B185   131</div>
+          </div>
+          <div class="bundle-fact">
+            <div class="bundle-fact-label">Representative Permits</div>
+            <div class="bundle-fact-value">
+              
+              <div><span class="bundle-id-code">26044-20000-01885</span></div>
+              
+              <div><span class="bundle-id-code">25042-10001-22280</span></div>
+              
+              <div><span class="bundle-id-code">25041-10001-59794</span></div>
+              
+            </div>
+          </div>
+          <div class="bundle-fact">
+            <div class="bundle-fact-label">Representative Documents</div>
+            <div class="bundle-fact-value">
+              
+              <div><span class="bundle-id-code">25042-90000-22280</span></div>
+              
+              <div><span class="bundle-id-code">25041-90000-59794</span></div>
+              
+              <div><span class="bundle-id-code">CERT 40332</span></div>
+              
+            </div>
+          </div>
+        </div>
+
+        <div class="bundle-two-column">
+          <div class="bundle-context-box">
+            <div class="bundle-section-label">Review Context</div>
+            
+            <ul class="bundle-context-list">
+              
+              <li>LADBS permits reference address labels that extend beyond the subject address; review the permit set for parcel/address crossover.</li>
+              
+              <li>Purchase price unknown (no prior developer sale in Redfin history); spread, ROI, and profit not computed.</li>
+              
+              <li>Certificate of Occupancy date not found; construction completion timing uncertain.</li>
+              
+              <li>This property is the flagship baseline and should be fully reviewable without hiding the remaining uncertainty that Redfin does not expose the prior developer acquisition event.</li>
+              
+            </ul>
+            
+          </div>
+          <div class="bundle-id-box">
+            <div class="bundle-section-label">What To Click First</div>
+            <ul class="bundle-id-list">
+              <li>Open summary for the quickest human-readable review pass.</li>
+              <li>Open report for the full offline report layout.</li>
+              <li>Use the property-specific source links to confirm parcel and document targets.</li>
+            </ul>
+          </div>
+        </div>
+
+        
+        <div class="bundle-link-group" data-group="local">
+          <div class="bundle-section-label">Local review actions</div>
+          <div class="bundle-link-row">
+            
+              
+              <a
+                data-link-key="open_report"
+                class="bundle-pill bundle-pill-primary"
+                href="lucerne/report.html"
+                
+              >Open report</a>
+              
+            
+              
+              <a
+                data-link-key="open_summary"
+                class="bundle-pill bundle-pill-primary"
+                href="lucerne/summary.html"
+                
+              >Open summary</a>
+              
+            
+              
+              <a
+                data-link-key="open_payload"
+                class="bundle-pill bundle-pill-primary"
+                href="lucerne/payload.normalized.json"
+                
+              >Open payload</a>
+              
+            
+          </div>
+        </div>
+        
+        <div class="bundle-link-group" data-group="source">
+          <div class="bundle-section-label">Property-specific source links</div>
+          <div class="bundle-link-row">
+            
+              
+              <a
+                data-link-key="zimas_parcel_page"
+                class="bundle-pill "
+                href="https://zimas.lacity.org/map.aspx?pin=129B185%20%20%20131&amp;ajax=yes"
+                target="_blank" rel="noopener noreferrer"
+              >ZIMAS parcel page</a>
+              
+            
+              
+              <a
+                data-link-key="pin_permit_results"
+                class="bundle-pill "
+                href="https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&amp;view=permit&amp;pin=129B185%20131"
+                target="_blank" rel="noopener noreferrer"
+              >PIN permit results</a>
+              
+            
+              
+              <a
+                data-link-key="first_ladbs_record"
+                class="bundle-pill "
+                href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/Report.aspx?Record_Id=130956837&amp;Image=Visible&amp;ImageToOpen=%7B3C68DACC-76D6-4917-9351-1DE52ABAF138%7D%2C"
+                target="_blank" rel="noopener noreferrer"
+              >First LADBS record</a>
+              
+            
+              
+              <a
+                data-link-key="first_ladbs_pdf"
+                class="bundle-pill "
+                href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/StPdfViewer.aspx?Library=IDIS&amp;Id=%7B3C68DACC-76D6-4917-9351-1DE52ABAF138%7D&amp;ObjType=2&amp;Op=View"
+                target="_blank" rel="noopener noreferrer"
+              >First LADBS PDF</a>
+              
+            
+          </div>
+        </div>
+        
+        <div class="bundle-link-group" data-group="generic">
+          <div class="bundle-section-label">Generic search/home pages</div>
+          <div class="bundle-link-row">
+            
+              
+              <a
+                data-link-key="permit_search_home"
+                class="bundle-pill "
+                href="https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr"
+                target="_blank" rel="noopener noreferrer"
+              >Permit search home</a>
+              
+            
+              
+              <a
+                data-link-key="docs_search_home"
+                class="bundle-pill "
+                href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW"
+                target="_blank" rel="noopener noreferrer"
+              >Docs search home</a>
+              
+            
+          </div>
+        </div>
+        
+      </section>
+      
+      <section class="panel bundle-property-card" data-property="malcolm">
+        <div class="bundle-card-header">
+          <div>
+            <div class="eyebrow">sparse-noisy-review-case</div>
+            <div class="bundle-card-title">Malcolm</div>
+            <div class="bundle-card-subtitle">2831 Malcolm Ave, Los Angeles, CA 90064</div>
+          </div>
+          <div class="bundle-card-meta">
+            <span class="bundle-chip">Verdict: accepted-with-review</span>
+            <span class="bundle-chip">Permits: 14</span>
+            <span class="bundle-chip">Records: 1</span>
+          </div>
+        </div>
+
+        <div class="bundle-facts-grid">
+          <div class="bundle-fact">
+            <div class="bundle-fact-label">APN</div>
+            <div class="bundle-fact-value">4255013007</div>
+          </div>
+          <div class="bundle-fact">
+            <div class="bundle-fact-label">PIN</div>
+            <div class="bundle-fact-value">123B157   607</div>
+          </div>
+          <div class="bundle-fact">
+            <div class="bundle-fact-label">Representative Permits</div>
+            <div class="bundle-fact-value">
+              
+              <div><span class="bundle-id-code">24047-10000-00180</span></div>
+              
+              <div><span class="bundle-id-code">23010-10000-05197</span></div>
+              
+              <div><span class="bundle-id-code">24030-10000-00868</span></div>
+              
+            </div>
+          </div>
+          <div class="bundle-fact">
+            <div class="bundle-fact-label">Representative Documents</div>
+            <div class="bundle-fact-value">
+              
+              <div><span class="bundle-id-code">23010-20000-03343</span></div>
+              
+            </div>
+          </div>
+        </div>
+
+        <div class="bundle-two-column">
+          <div class="bundle-context-box">
+            <div class="bundle-section-label">Review Context</div>
+            
+            <ul class="bundle-context-list">
+              
+              <li>LADBS permits reference address labels that extend beyond the subject address; review the permit set for parcel/address crossover.</li>
+              
+              <li>Purchase price unknown (no prior developer sale in Redfin history); spread, ROI, and profit not computed.</li>
+              
+              <li>LADBS parcel-level permit output may span 2831 and 2831 1/2 labels; that should remain an explicit review item rather than being silently suppressed.</li>
+              
+            </ul>
+            
+          </div>
+          <div class="bundle-id-box">
+            <div class="bundle-section-label">What To Click First</div>
+            <ul class="bundle-id-list">
+              <li>Open summary for the quickest human-readable review pass.</li>
+              <li>Open report for the full offline report layout.</li>
+              <li>Use the property-specific source links to confirm parcel and document targets.</li>
+            </ul>
+          </div>
+        </div>
+
+        
+        <div class="bundle-link-group" data-group="local">
+          <div class="bundle-section-label">Local review actions</div>
+          <div class="bundle-link-row">
+            
+              
+              <a
+                data-link-key="open_report"
+                class="bundle-pill bundle-pill-primary"
+                href="malcolm/report.html"
+                
+              >Open report</a>
+              
+            
+              
+              <a
+                data-link-key="open_summary"
+                class="bundle-pill bundle-pill-primary"
+                href="malcolm/summary.html"
+                
+              >Open summary</a>
+              
+            
+              
+              <a
+                data-link-key="open_payload"
+                class="bundle-pill bundle-pill-primary"
+                href="malcolm/payload.normalized.json"
+                
+              >Open payload</a>
+              
+            
+          </div>
+        </div>
+        
+        <div class="bundle-link-group" data-group="source">
+          <div class="bundle-section-label">Property-specific source links</div>
+          <div class="bundle-link-row">
+            
+              
+              <a
+                data-link-key="zimas_parcel_page"
+                class="bundle-pill "
+                href="https://zimas.lacity.org/map.aspx?pin=123B157%20%20%20607&amp;ajax=yes"
+                target="_blank" rel="noopener noreferrer"
+              >ZIMAS parcel page</a>
+              
+            
+              
+              <a
+                data-link-key="pin_permit_results"
+                class="bundle-pill "
+                href="https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&amp;view=permit&amp;pin=123B157%20607"
+                target="_blank" rel="noopener noreferrer"
+              >PIN permit results</a>
+              
+            
+              
+              <a
+                data-link-key="first_ladbs_record"
+                class="bundle-pill "
+                href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/Report.aspx?Record_Id=126286468&amp;Image=Visible&amp;ImageToOpen=%7B7054AB8E-0000-CF18-98B4-28549FB1280B%7D%2C"
+                target="_blank" rel="noopener noreferrer"
+              >First LADBS record</a>
+              
+            
+              
+              <a
+                data-link-key="first_ladbs_pdf"
+                class="bundle-pill "
+                href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/StPdfViewer.aspx?Library=IDIS&amp;Id=%7B7054AB8E-0000-CF18-98B4-28549FB1280B%7D&amp;ObjType=2&amp;Op=View"
+                target="_blank" rel="noopener noreferrer"
+              >First LADBS PDF</a>
+              
+            
+          </div>
+        </div>
+        
+        <div class="bundle-link-group" data-group="generic">
+          <div class="bundle-section-label">Generic search/home pages</div>
+          <div class="bundle-link-row">
+            
+              
+              <a
+                data-link-key="permit_search_home"
+                class="bundle-pill "
+                href="https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr"
+                target="_blank" rel="noopener noreferrer"
+              >Permit search home</a>
+              
+            
+              
+              <a
+                data-link-key="docs_search_home"
+                class="bundle-pill "
+                href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW"
+                target="_blank" rel="noopener noreferrer"
+              >Docs search home</a>
+              
+            
+          </div>
+        </div>
+        
+      </section>
+      
+      <section class="panel bundle-property-card" data-property="rosewood">
+        <div class="bundle-card-header">
+          <div>
+            <div class="eyebrow">clean-report-case</div>
+            <div class="bundle-card-title">Rosewood</div>
+            <div class="bundle-card-subtitle">3629 Rosewood Ave, Los Angeles, CA 90066</div>
+          </div>
+          <div class="bundle-card-meta">
+            <span class="bundle-chip">Verdict: accepted-with-review</span>
+            <span class="bundle-chip">Permits: 9</span>
+            <span class="bundle-chip">Records: 10</span>
+          </div>
+        </div>
+
+        <div class="bundle-facts-grid">
+          <div class="bundle-fact">
+            <div class="bundle-fact-label">APN</div>
+            <div class="bundle-fact-value">4245011018</div>
+          </div>
+          <div class="bundle-fact">
+            <div class="bundle-fact-label">PIN</div>
+            <div class="bundle-fact-value">111B149   315</div>
+          </div>
+          <div class="bundle-fact">
+            <div class="bundle-fact-label">Representative Permits</div>
+            <div class="bundle-fact-value">
+              
+              <div><span class="bundle-id-code">26016-30000-03655</span></div>
+              
+              <div><span class="bundle-id-code">24014-30000-03980</span></div>
+              
+              <div><span class="bundle-id-code">25041-10000-37476</span></div>
+              
+            </div>
+          </div>
+          <div class="bundle-fact">
+            <div class="bundle-fact-label">Representative Documents</div>
+            <div class="bundle-fact-value">
+              
+              <div><span class="bundle-id-code">CERT 275679</span></div>
+              
+              <div><span class="bundle-id-code">24014-30002-03980</span></div>
+              
+              <div><span class="bundle-id-code">24014-30001-03980</span></div>
+              
+            </div>
+          </div>
+        </div>
+
+        <div class="bundle-two-column">
+          <div class="bundle-context-box">
+            <div class="bundle-section-label">Review Context</div>
+            
+            <ul class="bundle-context-list">
+              
+              <li>Purchase price unknown (no prior developer sale in Redfin history); spread, ROI, and profit not computed.</li>
+              
+              <li>Range-style and TEMP address variants should not create noisy review output when the property is otherwise clean.</li>
+              
+            </ul>
+            
+          </div>
+          <div class="bundle-id-box">
+            <div class="bundle-section-label">What To Click First</div>
+            <ul class="bundle-id-list">
+              <li>Open summary for the quickest human-readable review pass.</li>
+              <li>Open report for the full offline report layout.</li>
+              <li>Use the property-specific source links to confirm parcel and document targets.</li>
+            </ul>
+          </div>
+        </div>
+
+        
+        <div class="bundle-link-group" data-group="local">
+          <div class="bundle-section-label">Local review actions</div>
+          <div class="bundle-link-row">
+            
+              
+              <a
+                data-link-key="open_report"
+                class="bundle-pill bundle-pill-primary"
+                href="rosewood/report.html"
+                
+              >Open report</a>
+              
+            
+              
+              <a
+                data-link-key="open_summary"
+                class="bundle-pill bundle-pill-primary"
+                href="rosewood/summary.html"
+                
+              >Open summary</a>
+              
+            
+              
+              <a
+                data-link-key="open_payload"
+                class="bundle-pill bundle-pill-primary"
+                href="rosewood/payload.normalized.json"
+                
+              >Open payload</a>
+              
+            
+          </div>
+        </div>
+        
+        <div class="bundle-link-group" data-group="source">
+          <div class="bundle-section-label">Property-specific source links</div>
+          <div class="bundle-link-row">
+            
+              
+              <a
+                data-link-key="zimas_parcel_page"
+                class="bundle-pill "
+                href="https://zimas.lacity.org/map.aspx?pin=111B149%20%20%20315&amp;ajax=yes"
+                target="_blank" rel="noopener noreferrer"
+              >ZIMAS parcel page</a>
+              
+            
+              
+              <a
+                data-link-key="pin_permit_results"
+                class="bundle-pill "
+                href="https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&amp;view=permit&amp;pin=111B149%20315"
+                target="_blank" rel="noopener noreferrer"
+              >PIN permit results</a>
+              
+            
+              
+              <a
+                data-link-key="first_ladbs_record"
+                class="bundle-pill "
+                href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/Report.aspx?Record_Id=130935075&amp;Image=Visible&amp;ImageToOpen=%7B7DC809F2-8FDA-46C7-BF44-5524BC08D604%7D%2C"
+                target="_blank" rel="noopener noreferrer"
+              >First LADBS record</a>
+              
+            
+              
+              <a
+                data-link-key="first_ladbs_pdf"
+                class="bundle-pill "
+                href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/StPdfViewer.aspx?Library=IDIS&amp;Id=%7B7DC809F2-8FDA-46C7-BF44-5524BC08D604%7D&amp;ObjType=2&amp;Op=View"
+                target="_blank" rel="noopener noreferrer"
+              >First LADBS PDF</a>
+              
+            
+          </div>
+        </div>
+        
+        <div class="bundle-link-group" data-group="generic">
+          <div class="bundle-section-label">Generic search/home pages</div>
+          <div class="bundle-link-row">
+            
+              
+              <a
+                data-link-key="permit_search_home"
+                class="bundle-pill "
+                href="https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr"
+                target="_blank" rel="noopener noreferrer"
+              >Permit search home</a>
+              
+            
+              
+              <a
+                data-link-key="docs_search_home"
+                class="bundle-pill "
+                href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW"
+                target="_blank" rel="noopener noreferrer"
+              >Docs search home</a>
+              
+            
+          </div>
+        </div>
+        
+      </section>
+      
+      <section class="panel bundle-property-card" data-property="kelton">
+        <div class="bundle-card-header">
+          <div>
+            <div class="eyebrow">dense-document-case</div>
+            <div class="bundle-card-title">Kelton</div>
+            <div class="bundle-card-subtitle">3104 Kelton Ave, Los Angeles, CA 90034</div>
+          </div>
+          <div class="bundle-card-meta">
+            <span class="bundle-chip">Verdict: accepted-with-review</span>
+            <span class="bundle-chip">Permits: 7</span>
+            <span class="bundle-chip">Records: 20</span>
+          </div>
+        </div>
+
+        <div class="bundle-facts-grid">
+          <div class="bundle-fact">
+            <div class="bundle-fact-label">APN</div>
+            <div class="bundle-fact-value">4254007013</div>
+          </div>
+          <div class="bundle-fact">
+            <div class="bundle-fact-label">PIN</div>
+            <div class="bundle-fact-value">120B157   124</div>
+          </div>
+          <div class="bundle-fact">
+            <div class="bundle-fact-label">Representative Permits</div>
+            <div class="bundle-fact-value">
+              
+              <div><span class="bundle-id-code">24014-20000-00638</span></div>
+              
+              <div><span class="bundle-id-code">24030-70000-01144</span></div>
+              
+              <div><span class="bundle-id-code">24014-20001-00638</span></div>
+              
+            </div>
+          </div>
+          <div class="bundle-fact">
+            <div class="bundle-fact-label">Representative Documents</div>
+            <div class="bundle-fact-value">
+              
+              <div><span class="bundle-id-code">CERT 273648</span></div>
+              
+              <div><span class="bundle-id-code">24014-20001-00638</span></div>
+              
+              <div><span class="bundle-id-code">24014-20000-00638</span></div>
+              
+            </div>
+          </div>
+        </div>
+
+        <div class="bundle-two-column">
+          <div class="bundle-context-box">
+            <div class="bundle-section-label">Review Context</div>
+            
+            <ul class="bundle-context-list">
+              
+              <li>Purchase price unknown (no prior developer sale in Redfin history); spread, ROI, and profit not computed.</li>
+              
+              <li>Certificate-of-occupancy bundles can reuse a record ID; the report should present them cleanly without implying a suspicious duplicate.</li>
+              
+            </ul>
+            
+          </div>
+          <div class="bundle-id-box">
+            <div class="bundle-section-label">What To Click First</div>
+            <ul class="bundle-id-list">
+              <li>Open summary for the quickest human-readable review pass.</li>
+              <li>Open report for the full offline report layout.</li>
+              <li>Use the property-specific source links to confirm parcel and document targets.</li>
+            </ul>
+          </div>
+        </div>
+
+        
+        <div class="bundle-link-group" data-group="local">
+          <div class="bundle-section-label">Local review actions</div>
+          <div class="bundle-link-row">
+            
+              
+              <a
+                data-link-key="open_report"
+                class="bundle-pill bundle-pill-primary"
+                href="kelton/report.html"
+                
+              >Open report</a>
+              
+            
+              
+              <a
+                data-link-key="open_summary"
+                class="bundle-pill bundle-pill-primary"
+                href="kelton/summary.html"
+                
+              >Open summary</a>
+              
+            
+              
+              <a
+                data-link-key="open_payload"
+                class="bundle-pill bundle-pill-primary"
+                href="kelton/payload.normalized.json"
+                
+              >Open payload</a>
+              
+            
+          </div>
+        </div>
+        
+        <div class="bundle-link-group" data-group="source">
+          <div class="bundle-section-label">Property-specific source links</div>
+          <div class="bundle-link-row">
+            
+              
+              <a
+                data-link-key="zimas_parcel_page"
+                class="bundle-pill "
+                href="https://zimas.lacity.org/map.aspx?pin=120B157%20%20%20124&amp;ajax=yes"
+                target="_blank" rel="noopener noreferrer"
+              >ZIMAS parcel page</a>
+              
+            
+              
+              <a
+                data-link-key="pin_permit_results"
+                class="bundle-pill "
+                href="https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&amp;view=permit&amp;pin=120B157%20124"
+                target="_blank" rel="noopener noreferrer"
+              >PIN permit results</a>
+              
+            
+              
+              <a
+                data-link-key="first_ladbs_record"
+                class="bundle-pill "
+                href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/Report.aspx?Record_Id=130935079&amp;Image=Visible&amp;ImageToOpen=%7BE49F2A15-4A63-459B-BDE4-40F16BCB55BB%7D%2C"
+                target="_blank" rel="noopener noreferrer"
+              >First LADBS record</a>
+              
+            
+              
+              <a
+                data-link-key="first_ladbs_pdf"
+                class="bundle-pill "
+                href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/StPdfViewer.aspx?Library=IDIS&amp;Id=%7BE49F2A15-4A63-459B-BDE4-40F16BCB55BB%7D&amp;ObjType=2&amp;Op=View"
+                target="_blank" rel="noopener noreferrer"
+              >First LADBS PDF</a>
+              
+            
+          </div>
+        </div>
+        
+        <div class="bundle-link-group" data-group="generic">
+          <div class="bundle-section-label">Generic search/home pages</div>
+          <div class="bundle-link-row">
+            
+              
+              <a
+                data-link-key="permit_search_home"
+                class="bundle-pill "
+                href="https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr"
+                target="_blank" rel="noopener noreferrer"
+              >Permit search home</a>
+              
+            
+              
+              <a
+                data-link-key="docs_search_home"
+                class="bundle-pill "
+                href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW"
+                target="_blank" rel="noopener noreferrer"
+              >Docs search home</a>
+              
+            
+          </div>
+        </div>
+        
+      </section>
+      
+    </section>
   </main>
 </body>
 </html>

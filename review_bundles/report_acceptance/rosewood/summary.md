@@ -4,6 +4,7 @@
 - Role: `clean-report-case`
 - Address: `3629 Rosewood Ave, Los Angeles, CA 90066`
 - URL: https://www.redfin.com/CA/Los-Angeles/3629-Rosewood-Ave-90066/home/6746236
+- Browser summary: [summary.html](summary.html)
 - Payload: [payload.normalized.json](payload.normalized.json)
 - Rendered report: [report.html](report.html)
 
@@ -56,15 +57,21 @@
 
 ## Browser Review Links
 
-- Local report: [report.html](report.html)
-- Normalized payload: [payload.normalized.json](payload.normalized.json)
-- Summary: [summary.md](summary.md)
-- ZIMAS page: [https://zimas.lacity.org/map.aspx?pin=111B149%20%20%20315&ajax=yes](https://zimas.lacity.org/map.aspx?pin=111B149%20%20%20315&ajax=yes)
-- LADBS permit portal: [https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr](https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr)
-- LADBS docs page: [https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW](https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW)
-- First record summary link: [https://ladbsdoc.lacity.org/IDISPublic_Records/idis/Report.aspx?Record_Id=130935075&Image=Visible&ImageToOpen=%7B7DC809F2-8FDA-46C7-BF44-5524BC08D604%7D%2C](https://ladbsdoc.lacity.org/IDISPublic_Records/idis/Report.aspx?Record_Id=130935075&Image=Visible&ImageToOpen=%7B7DC809F2-8FDA-46C7-BF44-5524BC08D604%7D%2C)
-- First available PDF link: [https://ladbsdoc.lacity.org/IDISPublic_Records/idis/StPdfViewer.aspx?Library=IDIS&Id=%7B7DC809F2-8FDA-46C7-BF44-5524BC08D604%7D&ObjType=2&Op=View](https://ladbsdoc.lacity.org/IDISPublic_Records/idis/StPdfViewer.aspx?Library=IDIS&Id=%7B7DC809F2-8FDA-46C7-BF44-5524BC08D604%7D&ObjType=2&Op=View)
-- PIN-based LADBS permit-results link: [https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&view=permit&pin=111B149%20315](https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&view=permit&pin=111B149%20315)
+### Local review actions
+- Back to review bundles: [../index.html](../index.html)
+- Open report: [report.html](report.html)
+- Open payload: [payload.normalized.json](payload.normalized.json)
+
+### Property-specific source links
+- ZIMAS parcel page: [https://zimas.lacity.org/map.aspx?pin=111B149%20%20%20315&ajax=yes](https://zimas.lacity.org/map.aspx?pin=111B149%20%20%20315&ajax=yes)
+- PIN permit results: [https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&view=permit&pin=111B149%20315](https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&view=permit&pin=111B149%20315)
+- First LADBS record: [https://ladbsdoc.lacity.org/IDISPublic_Records/idis/Report.aspx?Record_Id=130935075&Image=Visible&ImageToOpen=%7B7DC809F2-8FDA-46C7-BF44-5524BC08D604%7D%2C](https://ladbsdoc.lacity.org/IDISPublic_Records/idis/Report.aspx?Record_Id=130935075&Image=Visible&ImageToOpen=%7B7DC809F2-8FDA-46C7-BF44-5524BC08D604%7D%2C)
+- First LADBS PDF: [https://ladbsdoc.lacity.org/IDISPublic_Records/idis/StPdfViewer.aspx?Library=IDIS&Id=%7B7DC809F2-8FDA-46C7-BF44-5524BC08D604%7D&ObjType=2&Op=View](https://ladbsdoc.lacity.org/IDISPublic_Records/idis/StPdfViewer.aspx?Library=IDIS&Id=%7B7DC809F2-8FDA-46C7-BF44-5524BC08D604%7D&ObjType=2&Op=View)
+
+### Generic search/home pages
+- Permit search home: [https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr](https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr)
+- Docs search home: [https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW](https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW)
+
 
 ## Mismatches / Issues
 
