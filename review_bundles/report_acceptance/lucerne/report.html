@@ -26,6 +26,40 @@
       overflow: hidden;
       box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     }
+
+    .review-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 14px 16px;
+      border-bottom: 1px solid #ececec;
+      background: #f8fafc;
+    }
+
+    .review-toolbar-label {
+      width: 100%;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #475569;
+    }
+
+    .review-toolbar a,
+    .review-toolbar span {
+      font-size: 11px;
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      color: #111;
+      background: #fff;
+    }
+
+    .review-toolbar span {
+      color: #6b7280;
+      background: #f3f4f6;
+    }
     
     .report-section {
       padding: 16px 20px;
@@ -594,6 +628,50 @@
     
 
     <div class="report-card">
+      
+      
+      
+      <div class="review-toolbar">
+        <div class="review-toolbar-label">Review Links</div>
+        
+          
+          <a href="report.html" target="_blank" rel="noopener noreferrer">Local report</a>
+          
+        
+          
+          <a href="payload.normalized.json" target="_blank" rel="noopener noreferrer">Normalized payload</a>
+          
+        
+          
+          <a href="summary.md" target="_blank" rel="noopener noreferrer">Summary</a>
+          
+        
+          
+          <a href="https://zimas.lacity.org/map.aspx?pin=129B185%20%20%20131&amp;ajax=yes" target="_blank" rel="noopener noreferrer">ZIMAS page</a>
+          
+        
+          
+          <a href="https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr" target="_blank" rel="noopener noreferrer">LADBS permit portal</a>
+          
+        
+          
+          <a href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW" target="_blank" rel="noopener noreferrer">LADBS docs page</a>
+          
+        
+          
+          <a href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/Report.aspx?Record_Id=130956837&amp;Image=Visible&amp;ImageToOpen=%7B3C68DACC-76D6-4917-9351-1DE52ABAF138%7D%2C" target="_blank" rel="noopener noreferrer">First record summary link</a>
+          
+        
+          
+          <a href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/StPdfViewer.aspx?Library=IDIS&amp;Id=%7B3C68DACC-76D6-4917-9351-1DE52ABAF138%7D&amp;ObjType=2&amp;Op=View" target="_blank" rel="noopener noreferrer">First available PDF link</a>
+          
+        
+          
+          <a href="https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&amp;view=permit&amp;pin=129B185%20131" target="_blank" rel="noopener noreferrer">PIN-based LADBS permit-results link</a>
+          
+        
+      </div>
+      
       
       <!-- 1. PROPERTY SNAPSHOT -->
       <div class="property-header">

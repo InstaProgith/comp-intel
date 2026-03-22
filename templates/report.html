@@ -26,6 +26,40 @@
       overflow: hidden;
       box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     }
+
+    .review-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 14px 16px;
+      border-bottom: 1px solid #ececec;
+      background: #f8fafc;
+    }
+
+    .review-toolbar-label {
+      width: 100%;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #475569;
+    }
+
+    .review-toolbar a,
+    .review-toolbar span {
+      font-size: 11px;
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      color: #111;
+      background: #fff;
+    }
+
+    .review-toolbar span {
+      color: #6b7280;
+      background: #f3f4f6;
+    }
     
     .report-section {
       padding: 16px 20px;
@@ -594,6 +628,20 @@
     {% set links = r.links or {} %}
 
     <div class="report-card">
+      {% set review_bundle = r.review_bundle or {} %}
+      {% set review_bundle_links = review_bundle.links or [] %}
+      {% if review_bundle_links %}
+      <div class="review-toolbar">
+        <div class="review-toolbar-label">Review Links</div>
+        {% for review_link in review_bundle_links %}
+          {% if review_link.status == "available" %}
+          <a href="{{ review_link.url }}" target="_blank" rel="noopener noreferrer">{{ review_link.label }}</a>
+          {% else %}
+          <span>{{ review_link.label }}: {{ review_link.reason|default("Unavailable offline") }}</span>
+          {% endif %}
+        {% endfor %}
+      </div>
+      {% endif %}
       
       <!-- 1. PROPERTY SNAPSHOT -->
       <div class="property-header">

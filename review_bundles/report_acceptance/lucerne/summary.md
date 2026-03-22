@@ -57,6 +57,18 @@
 - Certificate of Occupancy date not found; construction completion timing uncertain.
 - This property is the flagship baseline and should be fully reviewable without hiding the remaining uncertainty that Redfin does not expose the prior developer acquisition event.
 
+## Browser Review Links
+
+- Local report: [report.html](report.html)
+- Normalized payload: [payload.normalized.json](payload.normalized.json)
+- Summary: [summary.md](summary.md)
+- ZIMAS page: [https://zimas.lacity.org/map.aspx?pin=129B185%20%20%20131&ajax=yes](https://zimas.lacity.org/map.aspx?pin=129B185%20%20%20131&ajax=yes)
+- LADBS permit portal: [https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr](https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr)
+- LADBS docs page: [https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW](https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW)
+- First record summary link: [https://ladbsdoc.lacity.org/IDISPublic_Records/idis/Report.aspx?Record_Id=130956837&Image=Visible&ImageToOpen=%7B3C68DACC-76D6-4917-9351-1DE52ABAF138%7D%2C](https://ladbsdoc.lacity.org/IDISPublic_Records/idis/Report.aspx?Record_Id=130956837&Image=Visible&ImageToOpen=%7B3C68DACC-76D6-4917-9351-1DE52ABAF138%7D%2C)
+- First available PDF link: [https://ladbsdoc.lacity.org/IDISPublic_Records/idis/StPdfViewer.aspx?Library=IDIS&Id=%7B3C68DACC-76D6-4917-9351-1DE52ABAF138%7D&ObjType=2&Op=View](https://ladbsdoc.lacity.org/IDISPublic_Records/idis/StPdfViewer.aspx?Library=IDIS&Id=%7B3C68DACC-76D6-4917-9351-1DE52ABAF138%7D&ObjType=2&Op=View)
+- PIN-based LADBS permit-results link: [https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&view=permit&pin=129B185%20131](https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&view=permit&pin=129B185%20131)
+
 ## Mismatches / Issues
 
 - None
