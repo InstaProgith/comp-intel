@@ -1461,6 +1461,11 @@ def _build_chronology(truth: Dict[str, Any], docs_manifest: List[Dict[str, Any]]
     return deduped[:8]
 
 
+def _is_tooling_capture_note(note: Optional[str]) -> bool:
+    text = _normalize_text(note).lower()
+    return "pypdf is not installed" in text or "pdf preserved locally without text extraction" in text
+
+
 def _build_cautions(
     truth: Dict[str, Any],
     permit_notes: Iterable[str],
@@ -1545,7 +1550,7 @@ def _build_property_context(
     parcel_doc = next((doc for doc in docs_manifest if doc.get("id") == "parcel-navigatela-profile"), None)
     bas_doc = next((doc for doc in docs_manifest if doc.get("id") == "parcel-bas-profile"), None)
 
-    source_links = [{"label": "Redfin live listing", "url": redfin_url}]
+    audit_source_links = [{"label": "Redfin live listing", "url": redfin_url}]
     if parcel_doc:
         navigate_source = next(
             (
@@ -1556,7 +1561,7 @@ def _build_property_context(
             None,
         )
         if navigate_source:
-            source_links.append({"label": "NavigateLA reports page", "url": navigate_source.get("url")})
+            audit_source_links.append({"label": "NavigateLA reports page", "url": navigate_source.get("url")})
     if bas_doc:
         bas_source = next(
             (
@@ -1567,12 +1572,17 @@ def _build_property_context(
             None,
         )
         if bas_source:
-            source_links.append({"label": "BAS parcel profile", "url": bas_source.get("url")})
+            audit_source_links.append({"label": "BAS parcel profile", "url": bas_source.get("url")})
     if permit_results_url:
-        source_links.append({"label": "LADBS permit results by PIN", "url": permit_results_url})
+        audit_source_links.append(
+            {
+                "label": "LADBS permit results by PIN (known undercount here)",
+                "url": permit_results_url,
+            }
+        )
     if not parcel_diagnostics.get("navigate_pdf_captured") and _normalize_text(zimas_url):
-        source_links.append({"label": "ZIMAS parcel page fallback", "url": zimas_url})
-    source_links = [link for link in source_links if _normalize_text(link.get("url"))]
+        audit_source_links.append({"label": "ZIMAS parcel page fallback", "url": zimas_url})
+    audit_source_links = [link for link in audit_source_links if _normalize_text(link.get("url"))]
 
     audit_links = [
         {"label": "Open payload", "href": "payload.normalized.json"},
@@ -1580,6 +1590,7 @@ def _build_property_context(
         {"label": "Open docs manifest", "href": "docs_manifest.json"},
     ]
 
+    tooling_notes: List[str] = []
     grouped_docs: List[Dict[str, Any]] = []
     for group_key in [
         "parcel_zoning",
@@ -1588,7 +1599,22 @@ def _build_property_context(
         "certificate_of_occupancy",
         "other_records",
     ]:
-        group_docs = [doc for doc in docs_manifest if _doc_group_key(doc) == group_key]
+        group_docs = []
+        for doc in docs_manifest:
+            if _doc_group_key(doc) != group_key:
+                continue
+            display_capture_notes = []
+            for note in doc.get("capture_notes") or []:
+                if _is_tooling_capture_note(note):
+                    tooling_notes.append(note)
+                    continue
+                display_capture_notes.append(note)
+            group_docs.append(
+                {
+                    **doc,
+                    "display_capture_notes": display_capture_notes,
+                }
+            )
         grouped_docs.append(
             {
                 "key": group_key,
@@ -1610,6 +1636,9 @@ def _build_property_context(
             )
 
     chronology = _build_chronology(truth, docs_manifest)
+    permit_count = len([doc for doc in docs_manifest if doc.get("category") == "permit"])
+    record_count = len([doc for doc in docs_manifest if doc.get("category") == "record"])
+    parcel_doc_count = len([doc for doc in docs_manifest if doc.get("category") == "parcel"])
 
     historical_attempts = record_diagnostics.get("search_attempts") or []
     search_summary = []
@@ -1633,6 +1662,21 @@ def _build_property_context(
                 + (f" for {query_value}." if query_value else ".")
             )
 
+    review_posture_summary = (
+        f"Captured {len(docs_manifest)} local artifacts across {parcel_doc_count} parcel/profile doc(s), "
+        f"{permit_count} permit detail page(s), and {record_count} LADBS record doc(s). "
+        + (
+            "NavigateLA parcel PDF was captured locally and leads the review path. "
+            if parcel_diagnostics.get("navigate_pdf_captured")
+            else "NavigateLA parcel PDF was unavailable, so parcel review falls back to web sources. "
+        )
+        + (
+            "No certificate-of-occupancy doc was surfaced in the accessible LADBS searches."
+            if not any(_doc_group_key(doc) == "certificate_of_occupancy" for doc in docs_manifest)
+            else "At least one certificate-of-occupancy artifact was captured."
+        )
+    )
+
     return {
         "package_title": f"BLDGBIT | ParcelIQ - {_normalize_text(truth.get('address')) or 'Property Package'}",
         "stylesheet_href": "_assets/css/comp.css",
@@ -1650,18 +1694,20 @@ def _build_property_context(
         "grouped_docs": grouped_docs,
         "team_summary": team_summary,
         "scope_summary": scope_summary,
+        "review_posture_summary": review_posture_summary,
         "chronology": chronology,
         "cautions": cautions,
         "audit_links": audit_links,
-        "source_links": source_links,
+        "audit_source_links": audit_source_links,
+        "tooling_notes": list(dict.fromkeys(tooling_notes)),
         "primary_parcel_local": primary_parcel_local,
         "navigate_pdf_captured": bool(parcel_diagnostics.get("navigate_pdf_captured")),
         "search_summary": search_summary,
         "parcel_diagnostics": parcel_diagnostics,
         "permit_page_summary": permit_diagnostics.get("page_summary"),
         "record_diagnostics": record_diagnostics,
-        "permit_count": len([doc for doc in docs_manifest if doc.get("category") == "permit"]),
-        "record_count": len([doc for doc in docs_manifest if doc.get("category") == "record"]),
+        "permit_count": permit_count,
+        "record_count": record_count,
         "doc_capture_count": len(docs_manifest),
         "output_dir": str(output_dir),
     }

@@ -73,11 +73,7 @@
       letter-spacing: .9px;
       color: var(--muted);
     }
-    .package-layout {
-      display: grid;
-      grid-template-columns: minmax(0, 1.3fr) minmax(320px, .7fr);
-      gap: 22px;
-    }
+    .package-layout { display: grid; gap: 22px; }
     .package-stack { display: grid; gap: 22px; }
     .package-panel {
       border: 1px solid rgba(203, 212, 222, 0.9);
@@ -257,7 +253,6 @@
       margin: 0 0 12px;
     }
     @media (max-width: 980px) {
-      .package-layout { grid-template-columns: 1fr; }
       .package-meta-grid,
       .package-kpi-grid { grid-template-columns: 1fr 1fr; }
     }
@@ -308,44 +303,105 @@
               
               <a class="package-pill package-pill-secondary" href="#docs">Jump to captured docs</a>
               <a class="package-pill" href="#team">Review team extraction</a>
-              <a class="package-pill" href="#coverage">Review search coverage</a>
-            </div>
-          </div>
-          <div class="package-link-group" style="margin-top: 16px;">
-            <div class="package-group-label">Verified Source References</div>
-            <div class="package-link-row">
-              
-              <a class="package-pill" href="https://www.redfin.com/CA/Los-Angeles/3030-Midvale-Ave-90034/home/6752668" target="_blank" rel="noopener noreferrer">Redfin live listing</a>
-              
-              <a class="package-pill" href="https://navigatela.lacity.org/navigatela/reports/dc_parcel_reports.cfm?PK=123B157-1268" target="_blank" rel="noopener noreferrer">NavigateLA reports page</a>
-              
-              <a class="package-pill" href="https://www.ladbsservices2.lacity.org/OnlineServices/PermitReport/ParcelProfileDetail2?pin=123B157-1268" target="_blank" rel="noopener noreferrer">BAS parcel profile</a>
-              
-              <a class="package-pill" href="https://www.ladbsservices2.lacity.org/OnlineServices/PermitReport/PermitResultsbyPin?pin=123B157%201268" target="_blank" rel="noopener noreferrer">LADBS permit results by PIN</a>
-              
+              <a class="package-pill" href="#cautions">Review cautions</a>
+              <a class="package-pill" href="#audit">Audit raw data</a>
             </div>
           </div>
           
         </section>
 
         <section class="package-panel package-copy">
-          <h2 class="package-section-title">What Happened Here</h2>
+          <h2 class="package-section-title">Executive Summary</h2>
           <div class="package-summary-card">
-            <div class="package-summary-kicker">Transaction</div>
-            <div class="package-summary-copy">Latest Redfin sale: Dec 18, 2025 for $1,125,000. No prior Redfin sale event is exposed in the current live timeline, so prior buy/flip logic is not discoverable.</div>
-          </div>
-          <div class="package-summary-card">
-            <div class="package-summary-kicker">Scope</div>
+            <div class="package-summary-kicker">What Happened Here</div>
             <div class="package-summary-copy">Current LADBS activity centers on 26014-10000-00017: EPLAN. TWO STORY ADDITION TO EXISTING SINGLE FAMILY DWELLING TO ENLARGE AND MODIFY THE EXISTING MAIN HOUSE. PROJECT INCLUDES THE CONSTRUCTION OF A FULLY COMPLIANT ATTACHED ACCESSORY DWELLING UNIT (ADU) PER GC .66323(D)(2); 26030-10000-01235: GPI Written Notices for the addition to the existing single-family dwelling. Older captured permit/doc history includes 16041-10000-23545: 200A UPGRADE; 16044-90000-05282: INSTALL GAS WALL FURNACE; 1940LA04746: ALTER/REPAIR.</div>
           </div>
           <div class="package-summary-card">
-            <div class="package-summary-kicker">Coverage</div>
-            <div class="package-summary-copy">
-              
-                assessor apn: 1 result(s) for 3030 S MIDVALE AVE. address exact: 1 result(s) for 3030 S MIDVALE AVE. address history: 2 result(s) for 3030 MIDVALE AVE. doc number:26030-10000-01235: no record docs surfaced for 26030-10000-01235. doc number:26014-10000-00017: no record docs surfaced for 26014-10000-00017. doc number:16041-10000-23545: no record docs surfaced for 16041-10000-23545.
-              
+            <div class="package-summary-kicker">Evidence Posture</div>
+            <div class="package-summary-copy">Captured 8 local artifacts across 3 parcel/profile doc(s), 3 permit detail page(s), and 2 LADBS record doc(s). NavigateLA parcel PDF was captured locally and leads the review path. No certificate-of-occupancy doc was surfaced in the accessible LADBS searches.</div>
+          </div>
+        </section>
+
+        <section class="package-panel">
+          <h2 class="package-section-title">Live Truth Snapshot</h2>
+          <div class="package-kpi-grid">
+            <div class="package-fact">
+              <div class="package-fact-label">Status</div>
+              <div class="package-fact-value">Sold</div>
+            </div>
+            <div class="package-fact">
+              <div class="package-fact-label">Last Sold</div>
+              <div class="package-fact-value">Dec 18, 2025</div>
+            </div>
+            <div class="package-fact">
+              <div class="package-fact-label">Last Sold Price</div>
+              <div class="package-fact-value">$1,125,000</div>
             </div>
           </div>
+          <div class="package-meta-grid" style="margin-top: 14px;">
+            <div class="package-fact">
+              <div class="package-fact-label">Beds / Baths</div>
+              <div class="package-fact-value">2 / 2</div>
+            </div>
+            <div class="package-fact">
+              <div class="package-fact-label">Year Built</div>
+              <div class="package-fact-value">1940</div>
+            </div>
+            <div class="package-fact">
+              <div class="package-fact-label">Living Area / Lot</div>
+              <div class="package-fact-value">1,076 SF</div>
+              <div class="package-fact-detail">5,256 lot SF</div>
+            </div>
+            <div class="package-fact">
+              <div class="package-fact-label">Property Type</div>
+              <div class="package-fact-value">Single-family</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="package-panel">
+          <h2 class="package-section-title">Parcel Identity Lock</h2>
+          <div class="package-kpi-grid">
+            <div class="package-fact">
+              <div class="package-fact-label">APN</div>
+              <div class="package-fact-value">4254008019</div>
+            </div>
+            <div class="package-fact">
+              <div class="package-fact-label">PIN</div>
+              <div class="package-fact-value">123B157  1268</div>
+            </div>
+            <div class="package-fact">
+              <div class="package-fact-label">Municipal Address</div>
+              <div class="package-fact-value">3030 S MIDVALE AVE</div>
+            </div>
+          </div>
+          <div class="package-meta-grid" style="margin-top: 14px;">
+            <div class="package-fact">
+              <div class="package-fact-label">Zoning</div>
+              <div class="package-fact-value">R1-1</div>
+            </div>
+            <div class="package-fact">
+              <div class="package-fact-label">Planning Context</div>
+              <div class="package-fact-value">Low Residential</div>
+              <div class="package-fact-detail">Palms - Mar Vista - Del Rey</div>
+            </div>
+          </div>
+          <ul class="package-list" style="margin-top: 14px;">
+            
+            <li>Redfin address: 3030 Midvale Ave, Los Angeles, CA 90034</li>
+            
+            <li>ZIMAS municipal address: 3030 S MIDVALE AVE</li>
+            
+            <li>APN: 4254008019</li>
+            
+            <li>PIN: 123B157 1268</li>
+            
+          </ul>
+        </section>
+
+        <section class="package-panel">
+          <h2 class="package-section-title">Sale / Flip Summary</h2>
+          <p class="package-section-intro">Latest Redfin sale: Dec 18, 2025 for $1,125,000. No prior Redfin sale event is exposed in the current live timeline, so prior buy/flip logic is not discoverable.</p>
         </section>
 
         <section class="package-panel">
@@ -402,45 +458,6 @@
             </article>
             
             
-          </div>
-        </section>
-
-        <section class="package-panel">
-          <h2 class="package-section-title">Locked Facts</h2>
-          <div class="package-kpi-grid">
-            <div class="package-fact">
-              <div class="package-fact-label">APN / PIN</div>
-              <div class="package-fact-value">4254008019</div>
-              <div class="package-fact-detail">123B157  1268</div>
-            </div>
-            <div class="package-fact">
-              <div class="package-fact-label">Municipal Address</div>
-              <div class="package-fact-value">3030 S MIDVALE AVE</div>
-            </div>
-            <div class="package-fact">
-              <div class="package-fact-label">Property Type</div>
-              <div class="package-fact-value">Single-family</div>
-            </div>
-          </div>
-          <div class="package-meta-grid" style="margin-top: 14px;">
-            <div class="package-fact">
-              <div class="package-fact-label">Beds / Baths</div>
-              <div class="package-fact-value">2 / 2</div>
-            </div>
-            <div class="package-fact">
-              <div class="package-fact-label">Year Built</div>
-              <div class="package-fact-value">1940</div>
-            </div>
-            <div class="package-fact">
-              <div class="package-fact-label">Living Area / Lot</div>
-              <div class="package-fact-value">1,076 SF</div>
-              <div class="package-fact-detail">5,256 lot SF</div>
-            </div>
-            <div class="package-fact">
-              <div class="package-fact-label">Planning Context</div>
-              <div class="package-fact-value">R1-1</div>
-              <div class="package-fact-detail">Low Residential | Palms - Mar Vista - Del Rey</div>
-            </div>
           </div>
         </section>
 
@@ -530,7 +547,7 @@
         </section>
 
         <section class="package-panel" id="docs">
-          <h2 class="package-section-title">Captured Docs</h2>
+          <h2 class="package-section-title">Key Docs</h2>
           <p class="package-section-intro">Local captured docs come first. Source links stay secondary and raw files stay out of the main review path.</p>
           <div class="package-stack">
             
@@ -583,17 +600,11 @@
                       
                       <a class="package-pill" href="https://navigatela.lacity.org/navigatela/reports/dc_parcel_reports.cfm?PK=123B157-1268" target="_blank" rel="noopener noreferrer">NavigateLA reports page</a>
                       
-                      <a class="package-pill" href="https://zimas.lacity.org/reports/0d5f9fcdfe9d43c9aa878a8e262623e6.pdf" target="_blank" rel="noopener noreferrer">Generated parcel profile source</a>
+                      <a class="package-pill" href="https://zimas.lacity.org/reports/9306164079dc4baaa927fca7a3dbbe1a.pdf" target="_blank" rel="noopener noreferrer">Generated parcel profile source</a>
                       
                     </div>
                   </div>
                   
-                  
-                  <ul class="package-list" style="margin-top: 14px;">
-                    
-                    <li>pypdf is not installed; PDF preserved locally without text extraction.</li>
-                    
-                  </ul>
                   
                 </article>
                 
@@ -675,17 +686,11 @@
                     <div class="package-group-label">Source Links</div>
                     <div class="package-link-row">
                       
-                      <a class="package-pill" href="https://navigatela.lacity.org/common/mapgallery/pdf/landbase_bw/123B157.pdf?r=0.0418666438014" target="_blank" rel="noopener noreferrer">Cadastral map source</a>
+                      <a class="package-pill" href="https://navigatela.lacity.org/common/mapgallery/pdf/landbase_bw/123B157.pdf?r=0.443054030116" target="_blank" rel="noopener noreferrer">Cadastral map source</a>
                       
                     </div>
                   </div>
                   
-                  
-                  <ul class="package-list" style="margin-top: 14px;">
-                    
-                    <li>pypdf is not installed; PDF preserved locally without text extraction.</li>
-                    
-                  </ul>
                   
                 </article>
                 
@@ -923,8 +928,6 @@
                   
                   <ul class="package-list" style="margin-top: 14px;">
                     
-                    <li>pypdf is not installed; PDF preserved locally without text extraction.</li>
-                    
                     <li>LADBS record summary URL was usable only inside the live search session and is not treated as a durable public link.</li>
                     
                     <li>The LADBS PDF URL yielded a real PDF only inside the live records session, so the local PDF is the durable artifact.</li>
@@ -986,8 +989,6 @@
                   
                   <ul class="package-list" style="margin-top: 14px;">
                     
-                    <li>pypdf is not installed; PDF preserved locally without text extraction.</li>
-                    
                     <li>LADBS record summary URL was usable only inside the live search session and is not treated as a durable public link.</li>
                     
                     <li>The LADBS PDF URL yielded a real PDF only inside the live records session, so the local PDF is the durable artifact.</li>
@@ -1002,59 +1003,8 @@
             
           </div>
         </section>
-      </div>
 
-      <div class="package-stack">
-        <section class="package-panel">
-          <h2 class="package-section-title">Scope Summary</h2>
-          <div class="package-summary-card">
-            <div class="package-summary-kicker">Current</div>
-            <ul class="package-list">
-              
-              <li>26014-10000-00017: EPLAN. TWO STORY ADDITION TO EXISTING SINGLE FAMILY DWELLING TO ENLARGE AND MODIFY THE EXISTING MAIN HOUSE. PROJECT INCLUDES THE CONSTRUCTION OF A FULLY COMPLIANT ATTACHED ACCESSORY DWELLING UNIT (ADU) PER GC .66323(D)(2)</li>
-              
-              <li>26030-10000-01235: GPI Written Notices for the addition to the existing single-family dwelling</li>
-              
-              
-            </ul>
-          </div>
-          <div class="package-summary-card">
-            <div class="package-summary-kicker">Historic</div>
-            <ul class="package-list">
-              
-              <li>16041-10000-23545: 200A UPGRADE</li>
-              
-              <li>16044-90000-05282: INSTALL GAS WALL FURNACE</li>
-              
-              <li>1940LA04746: ALTER/REPAIR</li>
-              
-              
-            </ul>
-          </div>
-        </section>
-
-        <section class="package-panel" id="coverage">
-          <h2 class="package-section-title">Historic LADBS Search Coverage</h2>
-          <p class="package-section-intro">These are the search paths explicitly attempted before concluding the package still has coverage gaps.</p>
-          <ul class="package-list">
-            
-            <li>assessor apn: 1 result(s) for 3030 S MIDVALE AVE.</li>
-            
-            <li>address exact: 1 result(s) for 3030 S MIDVALE AVE.</li>
-            
-            <li>address history: 2 result(s) for 3030 MIDVALE AVE.</li>
-            
-            <li>doc number:26030-10000-01235: no record docs surfaced for 26030-10000-01235.</li>
-            
-            <li>doc number:26014-10000-00017: no record docs surfaced for 26014-10000-00017.</li>
-            
-            <li>doc number:16041-10000-23545: no record docs surfaced for 16041-10000-23545.</li>
-            
-            
-          </ul>
-        </section>
-
-        <section class="package-panel package-warn">
+        <section class="package-panel package-warn" id="cautions">
           <h2 class="package-section-title">Key Cautions</h2>
           <ul class="package-list">
             
@@ -1077,18 +1027,67 @@
           </ul>
         </section>
 
-        <section class="package-panel">
+        <section class="package-panel" id="audit">
           <h2 class="package-section-title">Audit Data</h2>
-          <p class="package-audit-copy">Raw payload, live truth, and manifest files remain available for audit, but they stay below the primary ParcelIQ review path.</p>
-          <div class="package-link-row">
-            
-            <a class="package-pill" href="payload.normalized.json">Open payload</a>
-            
-            <a class="package-pill" href="live_truth.json">Open live truth JSON</a>
-            
-            <a class="package-pill" href="docs_manifest.json">Open docs manifest</a>
-            
+          <p class="package-audit-copy">Raw payload, live truth, secondary external sources, and search/debug traces remain available here, but they stay below the primary ParcelIQ review path.</p>
+          <div class="package-link-group">
+            <div class="package-group-label">Raw Data</div>
+            <div class="package-link-row">
+              
+              <a class="package-pill" href="payload.normalized.json">Open payload</a>
+              
+              <a class="package-pill" href="live_truth.json">Open live truth JSON</a>
+              
+              <a class="package-pill" href="docs_manifest.json">Open docs manifest</a>
+              
+            </div>
           </div>
+          
+          <div class="package-link-group" style="margin-top: 16px;">
+            <div class="package-group-label">Secondary Source References</div>
+            <div class="package-link-row">
+              
+              <a class="package-pill" href="https://www.redfin.com/CA/Los-Angeles/3030-Midvale-Ave-90034/home/6752668" target="_blank" rel="noopener noreferrer">Redfin live listing</a>
+              
+              <a class="package-pill" href="https://navigatela.lacity.org/navigatela/reports/dc_parcel_reports.cfm?PK=123B157-1268" target="_blank" rel="noopener noreferrer">NavigateLA reports page</a>
+              
+              <a class="package-pill" href="https://www.ladbsservices2.lacity.org/OnlineServices/PermitReport/ParcelProfileDetail2?pin=123B157-1268" target="_blank" rel="noopener noreferrer">BAS parcel profile</a>
+              
+              <a class="package-pill" href="https://www.ladbsservices2.lacity.org/OnlineServices/PermitReport/PermitResultsbyPin?pin=123B157%201268" target="_blank" rel="noopener noreferrer">LADBS permit results by PIN (known undercount here)</a>
+              
+            </div>
+          </div>
+          
+          <div style="margin-top: 18px;">
+          <h2 class="package-section-title">Historic LADBS Search Coverage</h2>
+          <p class="package-section-intro">These are the search paths explicitly attempted before concluding the package still has coverage gaps.</p>
+          <ul class="package-list">
+            
+            <li>assessor apn: 1 result(s) for 3030 S MIDVALE AVE.</li>
+            
+            <li>address exact: 1 result(s) for 3030 S MIDVALE AVE.</li>
+            
+            <li>address history: 2 result(s) for 3030 MIDVALE AVE.</li>
+            
+            <li>doc number:26030-10000-01235: no record docs surfaced for 26030-10000-01235.</li>
+            
+            <li>doc number:26014-10000-00017: no record docs surfaced for 26014-10000-00017.</li>
+            
+            <li>doc number:16041-10000-23545: no record docs surfaced for 16041-10000-23545.</li>
+            
+            
+          </ul>
+          </div>
+          
+          <div style="margin-top: 18px;">
+            <h2 class="package-section-title">Tooling Notes</h2>
+            <ul class="package-list">
+              
+              <li>pypdf is not installed; PDF preserved locally without text extraction.</li>
+              
+            </ul>
+          </div>
+          
         </section>
       </div>
     </div>

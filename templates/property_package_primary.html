@@ -73,11 +73,7 @@
       letter-spacing: .9px;
       color: var(--muted);
     }
-    .package-layout {
-      display: grid;
-      grid-template-columns: minmax(0, 1.3fr) minmax(320px, .7fr);
-      gap: 22px;
-    }
+    .package-layout { display: grid; gap: 22px; }
     .package-stack { display: grid; gap: 22px; }
     .package-panel {
       border: 1px solid rgba(203, 212, 222, 0.9);
@@ -257,7 +253,6 @@
       margin: 0 0 12px;
     }
     @media (max-width: 980px) {
-      .package-layout { grid-template-columns: 1fr; }
       .package-meta-grid,
       .package-kpi-grid { grid-template-columns: 1fr 1fr; }
     }
@@ -308,15 +303,8 @@
               {% endif %}
               <a class="package-pill package-pill-secondary" href="#docs">Jump to captured docs</a>
               <a class="package-pill" href="#team">Review team extraction</a>
-              <a class="package-pill" href="#coverage">Review search coverage</a>
-            </div>
-          </div>
-          <div class="package-link-group" style="margin-top: 16px;">
-            <div class="package-group-label">Verified Source References</div>
-            <div class="package-link-row">
-              {% for link in page.source_links %}
-              <a class="package-pill" href="{{ link.url }}" target="_blank" rel="noopener noreferrer">{{ link.label }}</a>
-              {% endfor %}
+              <a class="package-pill" href="#cautions">Review cautions</a>
+              <a class="package-pill" href="#audit">Audit raw data</a>
             </div>
           </div>
           {% if not page.navigate_pdf_captured %}
@@ -327,25 +315,91 @@
         </section>
 
         <section class="package-panel package-copy">
-          <h2 class="package-section-title">What Happened Here</h2>
+          <h2 class="package-section-title">Executive Summary</h2>
           <div class="package-summary-card">
-            <div class="package-summary-kicker">Transaction</div>
-            <div class="package-summary-copy">{{ page.truth.sold_flip_summary }}</div>
-          </div>
-          <div class="package-summary-card">
-            <div class="package-summary-kicker">Scope</div>
+            <div class="package-summary-kicker">What Happened Here</div>
             <div class="package-summary-copy">{{ page.scope_summary.summary }}</div>
           </div>
           <div class="package-summary-card">
-            <div class="package-summary-kicker">Coverage</div>
-            <div class="package-summary-copy">
-              {% if page.search_summary %}
-                {{ page.search_summary|join(' ') }}
-              {% else %}
-                No additional historical LADBS search coverage notes were recorded.
-              {% endif %}
+            <div class="package-summary-kicker">Evidence Posture</div>
+            <div class="package-summary-copy">{{ page.review_posture_summary }}</div>
+          </div>
+        </section>
+
+        <section class="package-panel">
+          <h2 class="package-section-title">Live Truth Snapshot</h2>
+          <div class="package-kpi-grid">
+            <div class="package-fact">
+              <div class="package-fact-label">Status</div>
+              <div class="package-fact-value">{{ page.truth.status }}</div>
+            </div>
+            <div class="package-fact">
+              <div class="package-fact-label">Last Sold</div>
+              <div class="package-fact-value">{{ page.truth.last_sold_date_display }}</div>
+            </div>
+            <div class="package-fact">
+              <div class="package-fact-label">Last Sold Price</div>
+              <div class="package-fact-value">{{ page.truth.last_sold_price_display }}</div>
             </div>
           </div>
+          <div class="package-meta-grid" style="margin-top: 14px;">
+            <div class="package-fact">
+              <div class="package-fact-label">Beds / Baths</div>
+              <div class="package-fact-value">{{ page.truth.beds_display }} / {{ page.truth.baths_display }}</div>
+            </div>
+            <div class="package-fact">
+              <div class="package-fact-label">Year Built</div>
+              <div class="package-fact-value">{{ page.truth.year_built }}</div>
+            </div>
+            <div class="package-fact">
+              <div class="package-fact-label">Living Area / Lot</div>
+              <div class="package-fact-value">{{ page.truth.living_area_sf_display }} SF</div>
+              <div class="package-fact-detail">{{ page.truth.lot_size_sf_display }} lot SF</div>
+            </div>
+            <div class="package-fact">
+              <div class="package-fact-label">Property Type</div>
+              <div class="package-fact-value">{{ page.truth.property_type }}</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="package-panel">
+          <h2 class="package-section-title">Parcel Identity Lock</h2>
+          <div class="package-kpi-grid">
+            <div class="package-fact">
+              <div class="package-fact-label">APN</div>
+              <div class="package-fact-value">{{ page.identity.apn }}</div>
+            </div>
+            <div class="package-fact">
+              <div class="package-fact-label">PIN</div>
+              <div class="package-fact-value">{{ page.identity.pin }}</div>
+            </div>
+            <div class="package-fact">
+              <div class="package-fact-label">Municipal Address</div>
+              <div class="package-fact-value">{{ page.identity.municipal_address }}</div>
+            </div>
+          </div>
+          <div class="package-meta-grid" style="margin-top: 14px;">
+            <div class="package-fact">
+              <div class="package-fact-label">Zoning</div>
+              <div class="package-fact-value">{{ page.identity.zoning }}</div>
+            </div>
+            <div class="package-fact">
+              <div class="package-fact-label">Planning Context</div>
+              <div class="package-fact-value">{{ page.identity.general_plan_land_use }}</div>
+              <div class="package-fact-detail">{{ page.identity.community_plan_area }}</div>
+            </div>
+          </div>
+          <ul class="package-list" style="margin-top: 14px;">
+            {% for item in page.identity.evidence %}
+            <li>{{ item }}</li>
+            {% endfor %}
+          </ul>
+        </section>
+
+        <section class="package-panel">
+          <h2 class="package-section-title">Sale / Flip Summary</h2>
+          <p class="package-section-intro">{{ page.truth.sold_flip_summary }}</p>
         </section>
 
         <section class="package-panel">
@@ -366,45 +420,6 @@
               <div class="package-timeline-detail">No chronology items were available from the current live run.</div>
             </article>
             {% endif %}
-          </div>
-        </section>
-
-        <section class="package-panel">
-          <h2 class="package-section-title">Locked Facts</h2>
-          <div class="package-kpi-grid">
-            <div class="package-fact">
-              <div class="package-fact-label">APN / PIN</div>
-              <div class="package-fact-value">{{ page.identity.apn }}</div>
-              <div class="package-fact-detail">{{ page.identity.pin }}</div>
-            </div>
-            <div class="package-fact">
-              <div class="package-fact-label">Municipal Address</div>
-              <div class="package-fact-value">{{ page.identity.municipal_address }}</div>
-            </div>
-            <div class="package-fact">
-              <div class="package-fact-label">Property Type</div>
-              <div class="package-fact-value">{{ page.truth.property_type }}</div>
-            </div>
-          </div>
-          <div class="package-meta-grid" style="margin-top: 14px;">
-            <div class="package-fact">
-              <div class="package-fact-label">Beds / Baths</div>
-              <div class="package-fact-value">{{ page.truth.beds_display }} / {{ page.truth.baths_display }}</div>
-            </div>
-            <div class="package-fact">
-              <div class="package-fact-label">Year Built</div>
-              <div class="package-fact-value">{{ page.truth.year_built }}</div>
-            </div>
-            <div class="package-fact">
-              <div class="package-fact-label">Living Area / Lot</div>
-              <div class="package-fact-value">{{ page.truth.living_area_sf_display }} SF</div>
-              <div class="package-fact-detail">{{ page.truth.lot_size_sf_display }} lot SF</div>
-            </div>
-            <div class="package-fact">
-              <div class="package-fact-label">Planning Context</div>
-              <div class="package-fact-value">{{ page.identity.zoning }}</div>
-              <div class="package-fact-detail">{{ page.identity.general_plan_land_use }} | {{ page.identity.community_plan_area }}</div>
-            </div>
           </div>
         </section>
 
@@ -475,7 +490,7 @@
         </section>
 
         <section class="package-panel" id="docs">
-          <h2 class="package-section-title">Captured Docs</h2>
+          <h2 class="package-section-title">Key Docs</h2>
           <p class="package-section-intro">Local captured docs come first. Source links stay secondary and raw files stay out of the main review path.</p>
           <div class="package-stack">
             {% for group in page.grouped_docs %}
@@ -519,9 +534,9 @@
                     </div>
                   </div>
                   {% endif %}
-                  {% if doc.capture_notes %}
+                  {% if doc.display_capture_notes %}
                   <ul class="package-list" style="margin-top: 14px;">
-                    {% for note in doc.capture_notes %}
+                    {% for note in doc.display_capture_notes %}
                     <li>{{ note }}</li>
                     {% endfor %}
                   </ul>
@@ -544,36 +559,38 @@
             {% endfor %}
           </div>
         </section>
-      </div>
 
-      <div class="package-stack">
-        <section class="package-panel">
-          <h2 class="package-section-title">Scope Summary</h2>
-          <div class="package-summary-card">
-            <div class="package-summary-kicker">Current</div>
-            <ul class="package-list">
-              {% for item in page.scope_summary.current_items %}
-              <li>{{ item }}</li>
-              {% endfor %}
-              {% if not page.scope_summary.current_items %}
-              <li>No active post-sale scope was exposed in the captured permit set.</li>
-              {% endif %}
-            </ul>
-          </div>
-          <div class="package-summary-card">
-            <div class="package-summary-kicker">Historic</div>
-            <ul class="package-list">
-              {% for item in page.scope_summary.historical_items %}
-              <li>{{ item }}</li>
-              {% endfor %}
-              {% if not page.scope_summary.historical_items %}
-              <li>No older permit or record scope was captured.</li>
-              {% endif %}
-            </ul>
-          </div>
+        <section class="package-panel package-warn" id="cautions">
+          <h2 class="package-section-title">Key Cautions</h2>
+          <ul class="package-list">
+            {% for caution in page.cautions %}
+            <li>{{ caution }}</li>
+            {% endfor %}
+          </ul>
         </section>
 
-        <section class="package-panel" id="coverage">
+        <section class="package-panel" id="audit">
+          <h2 class="package-section-title">Audit Data</h2>
+          <p class="package-audit-copy">Raw payload, live truth, secondary external sources, and search/debug traces remain available here, but they stay below the primary ParcelIQ review path.</p>
+          <div class="package-link-group">
+            <div class="package-group-label">Raw Data</div>
+            <div class="package-link-row">
+              {% for link in page.audit_links %}
+              <a class="package-pill" href="{{ link.href }}">{{ link.label }}</a>
+              {% endfor %}
+            </div>
+          </div>
+          {% if page.audit_source_links %}
+          <div class="package-link-group" style="margin-top: 16px;">
+            <div class="package-group-label">Secondary Source References</div>
+            <div class="package-link-row">
+              {% for link in page.audit_source_links %}
+              <a class="package-pill" href="{{ link.url }}" target="_blank" rel="noopener noreferrer">{{ link.label }}</a>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+          <div style="margin-top: 18px;">
           <h2 class="package-section-title">Historic LADBS Search Coverage</h2>
           <p class="package-section-intro">These are the search paths explicitly attempted before concluding the package still has coverage gaps.</p>
           <ul class="package-list">
@@ -584,25 +601,17 @@
             <li>No additional search-attempt detail was recorded.</li>
             {% endif %}
           </ul>
-        </section>
-
-        <section class="package-panel package-warn">
-          <h2 class="package-section-title">Key Cautions</h2>
-          <ul class="package-list">
-            {% for caution in page.cautions %}
-            <li>{{ caution }}</li>
-            {% endfor %}
-          </ul>
-        </section>
-
-        <section class="package-panel">
-          <h2 class="package-section-title">Audit Data</h2>
-          <p class="package-audit-copy">Raw payload, live truth, and manifest files remain available for audit, but they stay below the primary ParcelIQ review path.</p>
-          <div class="package-link-row">
-            {% for link in page.audit_links %}
-            <a class="package-pill" href="{{ link.href }}">{{ link.label }}</a>
-            {% endfor %}
           </div>
+          {% if page.tooling_notes %}
+          <div style="margin-top: 18px;">
+            <h2 class="package-section-title">Tooling Notes</h2>
+            <ul class="package-list">
+              {% for note in page.tooling_notes %}
+              <li>{{ note }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endif %}
         </section>
       </div>
     </div>
