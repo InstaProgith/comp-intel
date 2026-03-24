@@ -133,6 +133,7 @@ class ReportAcceptanceTests(TestCase):
                             "doc_date": "10/27/2006",
                             "record_id": "56658478",
                             "has_digital_image": True,
+                            "image_main_url": "https://ladbsdoc.lacity.org/IDISPublic_Records/idis/ImageMain.aspx?one",
                             "pdf_url": "https://ladbsdoc.lacity.org/IDISPublic_Records/idis/StPdfViewer.aspx?one",
                         },
                         {
@@ -145,6 +146,9 @@ class ReportAcceptanceTests(TestCase):
                             "pdf_url": "https://ladbsdoc.lacity.org/IDISPublic_Records/idis/StPdfViewer.aspx?two",
                         },
                     ],
+                    "diagnostics": {
+                        "bootstrap_url": "https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DefaultCustom.aspx",
+                    },
                 },
                 "links": {
                     "redfin_url": "https://www.redfin.com/CA/Los-Angeles/1120-S-Lucerne-Blvd-90019/home/6911003",
@@ -301,8 +305,8 @@ class ReportAcceptanceTests(TestCase):
         source_links = {item["key"]: item for item in context["source_links"]}
         generic_links = {item["key"]: item for item in context["generic_links"]}
         fallback_links = {item["key"]: item for item in context["fallback_links"]}
-        first_summary_doc = next(
-            document for document in payload["ladbs_records"]["documents"] if document.get("summary_url")
+        first_image_doc = next(
+            document for document in payload["ladbs_records"]["documents"] if document.get("image_main_url")
         )
         first_pdf_doc = next(
             document for document in payload["ladbs_records"]["documents"] if document.get("pdf_url")
@@ -312,8 +316,9 @@ class ReportAcceptanceTests(TestCase):
         self.assertEqual(local_links["back_to_bundles"]["url"], "../index.html")
         self.assertEqual(local_links["open_summary"]["url"], "summary.html")
         self.assertEqual(local_links["open_payload"]["url"], "payload.normalized.json")
-        self.assertEqual(source_links["first_ladbs_record"]["url"], first_summary_doc["summary_url"])
+        self.assertEqual(source_links["first_ladbs_record"]["url"], first_image_doc["image_main_url"])
         self.assertEqual(source_links["first_ladbs_pdf"]["url"], first_pdf_doc["pdf_url"])
+        self.assertEqual(source_links["first_ladbs_record"]["label"], "First LADBS document images")
         self.assertEqual(source_links["zimas_parcel_page"]["classification"], "canonical")
         self.assertEqual(source_links["zimas_parcel_page"]["source_basis"], "payload_field")
         self.assertTrue(source_links["zimas_parcel_page"]["primary"])
@@ -321,6 +326,10 @@ class ReportAcceptanceTests(TestCase):
         self.assertEqual(source_links["first_ladbs_pdf"]["classification"], "canonical")
         self.assertEqual(generic_links["permit_search_home"]["label"], "Permit search home")
         self.assertEqual(generic_links["docs_search_home"]["label"], "Docs search home")
+        self.assertEqual(
+            generic_links["docs_search_home"]["url"],
+            payload["ladbs_records"]["diagnostics"]["bootstrap_url"],
+        )
         self.assertEqual(generic_links["permit_search_home"]["classification"], "generic")
         self.assertEqual(generic_links["permit_search_home"]["source_basis"], "generic_home")
         self.assertFalse(generic_links["permit_search_home"]["primary"])
@@ -335,6 +344,7 @@ class ReportAcceptanceTests(TestCase):
         payload["links"]["zimas_url"] = None
         payload["links"]["ladbs_url"] = None
         payload["links"]["ladbs_records_url"] = None
+        payload["ladbs_records"]["diagnostics"]["bootstrap_url"] = None
         payload["ladbs_records"]["documents"] = [{}]
 
         context = report_acceptance._build_review_bundle_context(

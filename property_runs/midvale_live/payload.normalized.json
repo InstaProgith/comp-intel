@@ -1,0 +1,5011 @@
+{
+  "url": "https://www.redfin.com/CA/Los-Angeles/3030-Midvale-Ave-90034/home/6752668",
+  "address": "3030 Midvale Ave, Los Angeles, CA 90034",
+  "headline_metrics": {
+    "purchase_price": null,
+    "purchase_date": null,
+    "exit_price": 1125000,
+    "exit_date": "2025-12-18",
+    "spread": null,
+    "roi_pct": null,
+    "hold_days": null,
+    "spread_per_day": null,
+    "list_price": null,
+    "original_sf": null,
+    "new_sf": 1076.0,
+    "sf_added": null,
+    "sf_pct_change": null,
+    "land_sf": 5256.0,
+    "building_sf_before": null,
+    "building_sf_after": 1076.0,
+    "far_before": null,
+    "far_after": 0.2,
+    "purchase_psf": null,
+    "exit_psf": 1045.54,
+    "list_psf": null
+  },
+  "metrics": {
+    "purchase_price": null,
+    "purchase_date": null,
+    "exit_price": 1125000,
+    "exit_date": "2025-12-18",
+    "spread": null,
+    "roi_pct": null,
+    "hold_days": null,
+    "spread_per_day": null,
+    "list_price": null,
+    "original_sf": null,
+    "new_sf": 1076.0,
+    "sf_added": null,
+    "sf_pct_change": null,
+    "land_sf": 5256.0,
+    "building_sf_before": null,
+    "building_sf_after": 1076.0,
+    "far_before": null,
+    "far_after": 0.2,
+    "purchase_psf": null,
+    "exit_psf": 1045.54,
+    "list_psf": null
+  },
+  "permit_timeline": {
+    "main_permit": {
+      "permit_number": "26014-10000-00017",
+      "job_number": "B25LA55287",
+      "permit_type": "Bldg-Addition - 1 or 2 Family Dwelling",
+      "Type": "Bldg-Addition - 1 or 2 Family Dwelling",
+      "Status": "Quality Review Completed on 2/12/2026",
+      "status_date": "2/12/2026",
+      "Work_Description": "EPLAN. TWO STORY ADDITION TO EXISTING SINGLE FAMILY DWELLING TO ENLARGE AND MODIFY THE EXISTING MAIN HOUSE. PROJECT INCLUDES THE CONSTRUCTION OF A FULLY COMPLIANT ATTACHED ACCESSORY DWELLING UNIT (ADU) PER GC .66323(D)(2).",
+      "Issued_Date": "No",
+      "contractor": null,
+      "contractor_license": null,
+      "architect": null,
+      "architect_license": null,
+      "engineer": null,
+      "engineer_license": null,
+      "raw_details": {
+        "permit_number": "26014-10000-00017",
+        "job_number": "B25LA55287",
+        "group": "Building",
+        "type": "Bldg-Addition",
+        "sub_type": "1 or 2 Family Dwelling",
+        "primary_use": "()",
+        "work_description": "EPLAN. TWO STORY ADDITION TO EXISTING SINGLE FAMILY DWELLING TO ENLARGE AND MODIFY THE EXISTING MAIN HOUSE. PROJECT INCLUDES THE CONSTRUCTION OF A FULLY COMPLIANT ATTACHED ACCESSORY DWELLING UNIT (ADU) PER GC .66323(D)(2).",
+        "permit_issued": "No",
+        "current_status": "Quality Review Completed on 2/12/2026",
+        "contact_information": {},
+        "status_history": [
+          {
+            "event": "Submitted",
+            "date": "1/5/2026",
+            "person": "APPLICANT"
+          },
+          {
+            "event": "Assigned to Zoning Architect",
+            "date": "1/9/2026",
+            "person": "AMIR NAKHLA"
+          },
+          {
+            "event": "Assigned to Plan Check Engineer",
+            "date": "1/15/2026",
+            "person": "ARSALAN SHABESTARI"
+          },
+          {
+            "event": "Corrections Issued",
+            "date": "1/26/2026",
+            "person": "ARSALAN SHABESTARI"
+          },
+          {
+            "event": "Quality Review Completed",
+            "date": "2/12/2026",
+            "person": "GARO TELMI"
+          }
+        ],
+        "status_date": "2/12/2026",
+        "address_label": "3030 S MIDVALE AVE 90034"
+      },
+      "address_label": "3030 S MIDVALE AVE 90034"
+    },
+    "plans_submitted_date": "2026-01-05",
+    "plans_approved_date": null,
+    "construction_start_date": "2026-01-26",
+    "construction_completed_date": null
+  },
+  "project_durations": {},
+  "current_summary": "2 bed, 2.0 bath, 1,076 SF",
+  "public_record_summary": "2 bed, 1.0 bath",
+  "lot_summary": "Lot: 5,256 SF (0.12 acres)",
+  "permit_summary": "Resolved ZIMAS PIN 123B157  1268 and fetched 3 LADBS permit(s) by PIN.",
+  "permit_count": 3,
+  "ladbs": {
+    "source": "ladbs_pin_v1",
+    "apn": "4254008019",
+    "address": "3030 Midvale Ave, Los Angeles, CA 90034",
+    "fetched_at": "2026-03-23 17:31:37",
+    "permits": [
+      {
+        "permit_number": "26030-10000-01235",
+        "job_number": "B26LA06469",
+        "permit_type": "Grading - 1 or 2 Family Dwelling",
+        "Type": "Grading - 1 or 2 Family Dwelling",
+        "Status": "Completed on 03/06/2026",
+        "status_date": "2/20/2026",
+        "Work_Description": "GPI Written Notices for the addition to the existing single-family dwelling.",
+        "Issued_Date": "No",
+        "contractor": null,
+        "contractor_license": null,
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "26030-10000-01235",
+          "job_number": "B26LA06469",
+          "group": "Building",
+          "type": "Grading",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "GPI Written Notices for the addition to the existing single-family dwelling.",
+          "permit_issued": "No",
+          "current_status": "Completed on 03/06/2026",
+          "contact_information": {},
+          "status_history": [],
+          "status_date": "2/20/2026",
+          "address_label": "3030 S MIDVALE AVE 90034"
+        },
+        "address_label": "3030 S MIDVALE AVE 90034"
+      },
+      {
+        "permit_number": "26014-10000-00017",
+        "job_number": "B25LA55287",
+        "permit_type": "Bldg-Addition - 1 or 2 Family Dwelling",
+        "Type": "Bldg-Addition - 1 or 2 Family Dwelling",
+        "Status": "Quality Review Completed on 2/12/2026",
+        "status_date": "2/12/2026",
+        "Work_Description": "EPLAN. TWO STORY ADDITION TO EXISTING SINGLE FAMILY DWELLING TO ENLARGE AND MODIFY THE EXISTING MAIN HOUSE. PROJECT INCLUDES THE CONSTRUCTION OF A FULLY COMPLIANT ATTACHED ACCESSORY DWELLING UNIT (ADU) PER GC .66323(D)(2).",
+        "Issued_Date": "No",
+        "contractor": null,
+        "contractor_license": null,
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "26014-10000-00017",
+          "job_number": "B25LA55287",
+          "group": "Building",
+          "type": "Bldg-Addition",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "EPLAN. TWO STORY ADDITION TO EXISTING SINGLE FAMILY DWELLING TO ENLARGE AND MODIFY THE EXISTING MAIN HOUSE. PROJECT INCLUDES THE CONSTRUCTION OF A FULLY COMPLIANT ATTACHED ACCESSORY DWELLING UNIT (ADU) PER GC .66323(D)(2).",
+          "permit_issued": "No",
+          "current_status": "Quality Review Completed on 2/12/2026",
+          "contact_information": {},
+          "status_history": [
+            {
+              "event": "Submitted",
+              "date": "1/5/2026",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Assigned to Zoning Architect",
+              "date": "1/9/2026",
+              "person": "AMIR NAKHLA"
+            },
+            {
+              "event": "Assigned to Plan Check Engineer",
+              "date": "1/15/2026",
+              "person": "ARSALAN SHABESTARI"
+            },
+            {
+              "event": "Corrections Issued",
+              "date": "1/26/2026",
+              "person": "ARSALAN SHABESTARI"
+            },
+            {
+              "event": "Quality Review Completed",
+              "date": "2/12/2026",
+              "person": "GARO TELMI"
+            }
+          ],
+          "status_date": "2/12/2026",
+          "address_label": "3030 S MIDVALE AVE 90034"
+        },
+        "address_label": "3030 S MIDVALE AVE 90034"
+      },
+      {
+        "permit_number": "16041-10000-23545",
+        "job_number": "X16LA10898",
+        "permit_type": "Electrical - 1 or 2 Family Dwelling",
+        "Type": "Electrical - 1 or 2 Family Dwelling",
+        "Status": "Permit Finaled on 8/8/2018",
+        "status_date": "8/8/2018",
+        "Work_Description": "200A UPGRADE.",
+        "Issued_Date": "Issued on 7/6/2016",
+        "contractor": "Kelley Joel Electric; Lic. No.: 917355-C10 1546 LINDA ROSA AVE LOS ANGELES, CA 90041",
+        "contractor_license": "917355",
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "16041-10000-23545",
+          "job_number": "X16LA10898",
+          "group": "Electrical",
+          "type": "Electrical",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "200A UPGRADE.",
+          "permit_issued": "Issued on 7/6/2016",
+          "current_status": "Permit Finaled on 8/8/2018",
+          "issuing_office": "Metro",
+          "contact_information": {
+            "Contractor": "Kelley Joel Electric; Lic. No.: 917355-C10 1546 LINDA ROSA AVE LOS ANGELES, CA 90041"
+          },
+          "status_history": [
+            {
+              "event": "Issued",
+              "date": "7/6/2016",
+              "person": "LADBS"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "8/7/2018",
+              "person": "ANDREW NAVE"
+            }
+          ],
+          "status_date": "8/8/2018",
+          "address_label": "3030 S MIDVALE AVE 90034"
+        },
+        "address_label": "3030 S MIDVALE AVE 90034"
+      }
+    ],
+    "pin": "123B157  1268",
+    "pin_source": "zimas_ajax_v1",
+    "note": "Resolved ZIMAS PIN 123B157  1268 and fetched 3 LADBS permit(s) by PIN.",
+    "pin_route": {
+      "pin_results_url": "https://www.ladbsservices2.lacity.org/OnlineServices/PermitReport/PermitResultsbyPin",
+      "address_partial_url": "https://www.ladbsservices2.lacity.org/OnlineServices/PermitReport/_PcisAddressPartial2",
+      "page_summary": {
+        "text": "Permit and Inspection Report Skip to main content Javascript not enabled? We do apologize, but in order to use our Online Services we do require Java-script enabled browsers. If you do not know how to enable javascript click on the links below for the browser you are using. Javascript on IE Javascript on Chrome Javascript on Firefox Javascript on Safari Javascript on Opera Skip Dept Navigation to Main Content Return to Payment Portal Los Angeles Department of Building and Safety The following information was found based the given Parcel Identification Number (PIN). Expand the sections and select the specific information for further detail. The information below was found on the following Parcel Identification Number (PIN): 123B157 1268 123B157-1268 Parcel Profile Report: 1 123B157 1268 Permit Information found: 1 Retrieving Data... Code Enforcement Information: 4 Retrieving Data... Soft-story Retrofit Program Information: 1 Retrieving Data... Services Plan Review & Permitting Inspection Code Enforcement & Compliance Forms & Publications Forms Publications News & Announcements Our Organization Our Locations Employee Directory LADBS Senior Managers © Copyright 2010 -2026 City of Los Angeles. All Rights Reserved. Career Opportunities Contract Opportunities Disclaimer Privacy Policy Login",
+        "count_text": "1",
+        "permit_count": 1,
+        "service_unavailable": false
+      },
+      "request_attempts": [
+        {
+          "attempt": 1,
+          "page_summary": {
+            "text": "Permit and Inspection Report Skip to main content Javascript not enabled? We do apologize, but in order to use our Online Services we do require Java-script enabled browsers. If you do not know how to enable javascript click on the links below for the browser you are using. Javascript on IE Javascript on Chrome Javascript on Firefox Javascript on Safari Javascript on Opera Skip Dept Navigation to Main Content Return to Payment Portal Los Angeles Department of Building and Safety The following information was found based the given Parcel Identification Number (PIN). Expand the sections and select the specific information for further detail. The information below was found on the following Parcel Identification Number (PIN): 123B157 1268 123B157-1268 Parcel Profile Report: 1 123B157 1268 Permit Information found: 1 Retrieving Data... Code Enforcement Information: 4 Retrieving Data... Soft-story Retrofit Program Information: 1 Retrieving Data... Services Plan Review & Permitting Inspection Code Enforcement & Compliance Forms & Publications Forms Publications News & Announcements Our Organization Our Locations Employee Directory LADBS Senior Managers © Copyright 2010 -2026 City of Los Angeles. All Rights Reserved. Career Opportunities Contract Opportunities Disclaimer Privacy Policy Login",
+            "count_text": "1",
+            "permit_count": 1,
+            "service_unavailable": false
+          }
+        }
+      ],
+      "address_sections": [
+        "3030 S MIDVALE AVE 90034"
+      ],
+      "ignored_address_sections": [],
+      "detail_fetch_failures": []
+    },
+    "requested_strategy": "pin-first",
+    "retrieval_strategy": "pin-first",
+    "fallback_used": false,
+    "address_source": "redfin_url",
+    "pin_resolution": {
+      "pin": "123B157  1268",
+      "matched_address": "3030 S MIDVALE AVE",
+      "source": "zimas_ajax_v1",
+      "note": "Resolved ZIMAS PIN via ajaxSearchResults address lookup.",
+      "street_number": "3030",
+      "street_name": "Midvale",
+      "diagnostics": {
+        "request_url": "https://zimas.lacity.org/ajaxSearchResults.aspx",
+        "request_params": {
+          "search": "address",
+          "HouseNumber": "3030",
+          "StreetName": "Midvale"
+        },
+        "response_preview": "{action: \"ZimasData.setWaitingDataTabs; ZimasData.navigateDataToPin('123B157  1268', '3030 S MIDVALE AVE');\"}",
+        "browser_fallback_attempted": false
+      }
+    },
+    "pin_route_source": "ladbs_pin_v1",
+    "pin_route_note": "Resolved ZIMAS PIN 123B157  1268 and fetched 3 LADBS permit(s) by PIN."
+  },
+  "redfin": {
+    "source": "redfin_parsed_v3",
+    "url": "https://www.redfin.com/CA/Los-Angeles/3030-Midvale-Ave-90034/home/6752668",
+    "address": "3030 Midvale Ave, Los Angeles, CA 90034",
+    "listing_beds": 2.0,
+    "listing_baths": 2.0,
+    "listing_building_sf": 1076.0,
+    "listing_year_built": 1940,
+    "list_price": null,
+    "property_type": "Single-family",
+    "price_per_sf": null,
+    "sold_banner": "DEC 18, 2025",
+    "beds": 2.0,
+    "baths": 2.0,
+    "building_sf": 1076.0,
+    "lot_sf": 5256.0,
+    "year_built": 1940,
+    "timeline": [
+      {
+        "date": "2025-12-18",
+        "event": "sold",
+        "price": 1125000,
+        "raw_status": "Sold (from meta)"
+      }
+    ],
+    "tax": {
+      "apn": "4254008019",
+      "year": 2023,
+      "assessed_value": null
+    },
+    "public_records": {
+      "beds": 2.0,
+      "baths": 1.0,
+      "lot_sf": 5256.0,
+      "year_built": 1940
+    },
+    "generated_at": "2026-03-23",
+    "current_summary": "2 bed, 2.0 bath, 1,076 SF",
+    "public_record_summary": "2 bed, 1.0 bath",
+    "lot_summary": "Lot: 5,256 SF (0.12 acres)",
+    "raw_html_path": "C:\\codex-sandbox\\comp-intel\\data\\raw\\20260323-173117_redfin_3030_Midvale_Ave_90034.html"
+  },
+  "project_contacts": null,
+  "cslb_contractor": null,
+  "permit_categories": {
+    "building_count": 2,
+    "demo_count": 0,
+    "mep_count": 1,
+    "other_count": 0,
+    "supplement_count": 0,
+    "scope_level": "HEAVY",
+    "scope_details": "Major: ADU",
+    "permit_complexity_score": "MEDIUM",
+    "has_fire_sprinklers": false,
+    "removed_fire_sprinklers": false,
+    "has_pool": false,
+    "has_grading_or_hillside": true,
+    "has_methane": false,
+    "has_adu": true,
+    "has_new_structure": false,
+    "started_before_final_approval": false,
+    "building_permits": [
+      {
+        "permit_number": "26014-10000-00017",
+        "job_number": "B25LA55287",
+        "permit_type": "Bldg-Addition - 1 or 2 Family Dwelling",
+        "Type": "Bldg-Addition - 1 or 2 Family Dwelling",
+        "Status": "Quality Review Completed on 2/12/2026",
+        "status_date": "2/12/2026",
+        "Work_Description": "EPLAN. TWO STORY ADDITION TO EXISTING SINGLE FAMILY DWELLING TO ENLARGE AND MODIFY THE EXISTING MAIN HOUSE. PROJECT INCLUDES THE CONSTRUCTION OF A FULLY COMPLIANT ATTACHED ACCESSORY DWELLING UNIT (ADU) PER GC .66323(D)(2).",
+        "Issued_Date": "No",
+        "contractor": null,
+        "contractor_license": null,
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "26014-10000-00017",
+          "job_number": "B25LA55287",
+          "group": "Building",
+          "type": "Bldg-Addition",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "EPLAN. TWO STORY ADDITION TO EXISTING SINGLE FAMILY DWELLING TO ENLARGE AND MODIFY THE EXISTING MAIN HOUSE. PROJECT INCLUDES THE CONSTRUCTION OF A FULLY COMPLIANT ATTACHED ACCESSORY DWELLING UNIT (ADU) PER GC .66323(D)(2).",
+          "permit_issued": "No",
+          "current_status": "Quality Review Completed on 2/12/2026",
+          "contact_information": {},
+          "status_history": [
+            {
+              "event": "Submitted",
+              "date": "1/5/2026",
+              "person": "APPLICANT"
+            },
+            {
+              "event": "Assigned to Zoning Architect",
+              "date": "1/9/2026",
+              "person": "AMIR NAKHLA"
+            },
+            {
+              "event": "Assigned to Plan Check Engineer",
+              "date": "1/15/2026",
+              "person": "ARSALAN SHABESTARI"
+            },
+            {
+              "event": "Corrections Issued",
+              "date": "1/26/2026",
+              "person": "ARSALAN SHABESTARI"
+            },
+            {
+              "event": "Quality Review Completed",
+              "date": "2/12/2026",
+              "person": "GARO TELMI"
+            }
+          ],
+          "status_date": "2/12/2026",
+          "address_label": "3030 S MIDVALE AVE 90034"
+        },
+        "address_label": "3030 S MIDVALE AVE 90034"
+      },
+      {
+        "permit_number": "26030-10000-01235",
+        "job_number": "B26LA06469",
+        "permit_type": "Grading - 1 or 2 Family Dwelling",
+        "Type": "Grading - 1 or 2 Family Dwelling",
+        "Status": "Completed on 03/06/2026",
+        "status_date": "2/20/2026",
+        "Work_Description": "GPI Written Notices for the addition to the existing single-family dwelling.",
+        "Issued_Date": "No",
+        "contractor": null,
+        "contractor_license": null,
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "26030-10000-01235",
+          "job_number": "B26LA06469",
+          "group": "Building",
+          "type": "Grading",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "GPI Written Notices for the addition to the existing single-family dwelling.",
+          "permit_issued": "No",
+          "current_status": "Completed on 03/06/2026",
+          "contact_information": {},
+          "status_history": [],
+          "status_date": "2/20/2026",
+          "address_label": "3030 S MIDVALE AVE 90034"
+        },
+        "address_label": "3030 S MIDVALE AVE 90034"
+      }
+    ],
+    "mep_permits": [
+      {
+        "permit_number": "16041-10000-23545",
+        "job_number": "X16LA10898",
+        "permit_type": "Electrical - 1 or 2 Family Dwelling",
+        "Type": "Electrical - 1 or 2 Family Dwelling",
+        "Status": "Permit Finaled on 8/8/2018",
+        "status_date": "8/8/2018",
+        "Work_Description": "200A UPGRADE.",
+        "Issued_Date": "Issued on 7/6/2016",
+        "contractor": "Kelley Joel Electric; Lic. No.: 917355-C10 1546 LINDA ROSA AVE LOS ANGELES, CA 90041",
+        "contractor_license": "917355",
+        "architect": null,
+        "architect_license": null,
+        "engineer": null,
+        "engineer_license": null,
+        "raw_details": {
+          "permit_number": "16041-10000-23545",
+          "job_number": "X16LA10898",
+          "group": "Electrical",
+          "type": "Electrical",
+          "sub_type": "1 or 2 Family Dwelling",
+          "primary_use": "()",
+          "work_description": "200A UPGRADE.",
+          "permit_issued": "Issued on 7/6/2016",
+          "current_status": "Permit Finaled on 8/8/2018",
+          "issuing_office": "Metro",
+          "contact_information": {
+            "Contractor": "Kelley Joel Electric; Lic. No.: 917355-C10 1546 LINDA ROSA AVE LOS ANGELES, CA 90041"
+          },
+          "status_history": [
+            {
+              "event": "Issued",
+              "date": "7/6/2016",
+              "person": "LADBS"
+            },
+            {
+              "event": "Permit Finaled",
+              "date": "8/7/2018",
+              "person": "ANDREW NAVE"
+            }
+          ],
+          "status_date": "8/8/2018",
+          "address_label": "3030 S MIDVALE AVE 90034"
+        },
+        "address_label": "3030 S MIDVALE AVE 90034"
+      }
+    ],
+    "supplement_permits": [],
+    "other_permits": []
+  },
+  "team_network": {
+    "primary_gc": {
+      "name": "Kelley Joel Electric; Lic. No.: 917355-C10 1546 LINDA ROSA AVE LOS ANGELES, CA 90041",
+      "license": "917355",
+      "count": 1,
+      "cslb_url": "https://www2.cslb.ca.gov/OnlineServices/CheckLicenseII/LicenseDetail.aspx?LicNum=917355"
+    },
+    "primary_architect": null,
+    "primary_engineer": null,
+    "other_contractors": [],
+    "other_architects": [],
+    "other_engineers": []
+  },
+  "redfin_ok": true,
+  "redfin_error": null,
+  "ladbs_ok": true,
+  "ladbs_error": null,
+  "zimas_ok": true,
+  "zimas_error": null,
+  "ladbs_records_ok": true,
+  "ladbs_records_error": null,
+  "cslb_ok": true,
+  "cslb_error": null,
+  "property_snapshot": {
+    "address_full": "3030 Midvale Ave, Los Angeles, CA 90034",
+    "beds": 2,
+    "baths": 2,
+    "building_sf": 1076.0,
+    "lot_sf": 5256.0,
+    "year_built": 1940,
+    "property_type": "Single-family",
+    "status": "Sold",
+    "status_date": "2025-12-18",
+    "status_price": 1125000,
+    "list_price_before_sale": null,
+    "list_date": null,
+    "price_per_sf": 1046,
+    "days_on_market": null,
+    "price_history": [
+      {
+        "date": "2025-12-18",
+        "event": "sold",
+        "price": 1125000,
+        "raw_status": "Sold (from meta)"
+      }
+    ]
+  },
+  "construction_summary": {
+    "existing_sf": 0,
+    "added_sf": 1076.0,
+    "final_sf": 1076.0,
+    "lot_sf": 5256.0,
+    "scope_level": "HEAVY",
+    "is_new_construction": true
+  },
+  "cost_model": {
+    "remodel_sf": 0,
+    "cost_remodel": 0,
+    "addition_sf": 0,
+    "cost_addition": 0,
+    "new_sf_full": 1076.0,
+    "cost_new_construction": 376600.0,
+    "garage_sf": 0,
+    "cost_garage": 0,
+    "adu_sf": 0,
+    "cost_adu": 0,
+    "cost_landscape": 30000,
+    "has_pool": false,
+    "cost_pool": 0,
+    "hard_cost_total": 406600.0,
+    "soft_costs": 24396,
+    "soft_cost_pct": 0.06,
+    "financing_cost": 54891,
+    "interest_cost": 50825,
+    "points_cost": 4066,
+    "hold_months_used": 15,
+    "total_project_cost": null,
+    "estimated_profit": null,
+    "purchase_unknown": true,
+    "cost_model_constants": {
+      "cost_per_sf_new": 350,
+      "cost_per_sf_remodel": 150,
+      "cost_per_sf_addition": 300,
+      "cost_per_sf_garage": 200,
+      "cost_per_sf_adu": 300,
+      "landscape_allowance": 30000,
+      "pool_allowance": 70000,
+      "soft_cost_pct": 0.06,
+      "interest_rate": 0.1,
+      "loan_points_pct": 0.01,
+      "typical_adu_sf": 1000
+    }
+  },
+  "timeline_summary": {
+    "stages": [],
+    "total_days": null,
+    "total_months": null,
+    "purchase_date": null,
+    "exit_date": "2025-12-18",
+    "plans_submitted_date": "2026-01-05",
+    "plans_approved_date": null,
+    "construction_start_date": "2026-01-26",
+    "construction_completed_date": null,
+    "cofo_date": null
+  },
+  "deal_fitness": {
+    "score": 15,
+    "grade": "F",
+    "components": {
+      "roi_score": 0,
+      "complexity_score": 15,
+      "mot_score": 0,
+      "hold_score": 0
+    },
+    "notes": [
+      "ROI not calculable (missing purchase)",
+      "Moderate permit complexity",
+      "$/day not calculable",
+      "Hold duration unknown"
+    ],
+    "max_score": 100
+  },
+  "strategy_notes": {
+    "tactics": [
+      "Major construction project - ground-up build or substantial addition",
+      "Added ADU to maximize density and rental income potential",
+      "Ground-up new construction on cleared lot"
+    ],
+    "risks": [
+      "Hillside/grading permits indicate challenging site conditions"
+    ],
+    "insights": [
+      "Insufficient data for market insights"
+    ],
+    "source": "fallback"
+  },
+  "data_notes": [
+    "Purchase price unknown (no prior developer sale in Redfin history); spread, ROI, and profit not computed.",
+    "Certificate of Occupancy date not found; construction completion timing uncertain."
+  ],
+  "links": {
+    "redfin_url": "https://www.redfin.com/CA/Los-Angeles/3030-Midvale-Ave-90034/home/6752668",
+    "ladbs_url": "https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr",
+    "zimas_url": "https://zimas.lacity.org/map.aspx?pin=123B157%20%201268&ajax=yes",
+    "ladbs_records_url": "https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW",
+    "gc_cslb_url": "https://www2.cslb.ca.gov/OnlineServices/CheckLicenseII/LicenseDetail.aspx?LicNum=917355"
+  },
+  "hold_months": null,
+  "zimas_profile": {
+    "source": "zimas_profile_v1",
+    "transport": "http",
+    "fetched_at": "2026-03-23 17:31:18",
+    "pin": "123B157  1268",
+    "apn": "4254008019",
+    "address": "3030 S MIDVALE AVE",
+    "note": "Resolved ZIMAS parcel profile for PIN 123B157  1268.",
+    "pin_resolution_source": "zimas_apn_v1",
+    "pin_resolution": {
+      "pin": "123B157  1268",
+      "matched_address": "3030 S MIDVALE AVE",
+      "source": "zimas_apn_v1",
+      "note": "Resolved ZIMAS PIN via APN lookup for APN 4254008019.",
+      "diagnostics": {
+        "request_url": "https://zimas.lacity.org/ajaxSearchResults.aspx",
+        "request_params": {
+          "search": "apn",
+          "apn": "4254008019"
+        },
+        "response_preview": "{type: \"APN\",\r\npin: \"123B157  1268\",\r\nAddress: \"3030 S MIDVALE AVE\",\r\naddresses: [],\r\nselectedPins: [{pin: \"123B157  1268\",\r\naddresses: [\"3030 S MIDVALE AVE\"]}]}",
+        "request_attempts": [
+          {
+            "attempt": 1,
+            "status_code": 200
+          }
+        ]
+      }
+    },
+    "parcel_identity": {
+      "site_address": "3030 S MIDVALE AVE",
+      "zip_code": "90034",
+      "pin": "123B157  1268",
+      "apn": "4254008019",
+      "lot_area_sqft": 5255.6,
+      "tract": "TR 11966",
+      "map_reference": "M B 222-33/35",
+      "lot": "41",
+      "map_sheet": "123B157",
+      "thomas_brothers_grid": "PAGE 632 - GRID D7"
+    },
+    "planning_context": {
+      "community_plan_area": "Palms - Mar Vista - Del Rey",
+      "area_planning_commission": "West Los Angeles APC",
+      "neighborhood_council": "MAR VISTA NC",
+      "council_district": "CD 5 - Katy Young Yaroslavsky",
+      "census_tract": "2717.04000000",
+      "ladbs_district_office": "West Los Angeles",
+      "recent_activity": "None",
+      "city_planning_commission": "CPC-2005-8252-CA",
+      "ordinance": "ORD-129279"
+    },
+    "zoning_profile": {
+      "zoning": "R1-1",
+      "zoning_information": "ZI-2192 Specific Plan: West Los Angeles Transportation Improvement and Mitigation",
+      "general_plan_land_use": "Low Residential",
+      "general_plan_notes": "Yes",
+      "special_notes": "None",
+      "historic_preservation_review": "No",
+      "special_land_use_zoning": "None",
+      "hpoz": "None",
+      "baseline_hillside_ordinance": null,
+      "specific_plan_area": "WEST LOS ANGELES TRANSPORTATION IMPROVEMENT AND MITIGATION",
+      "residential_market_area": "High"
+    },
+    "environmental_profile": {
+      "urban_agriculture_incentive_zone": "YES",
+      "flood_zone": "Outside Flood Zone",
+      "methane_hazard_site": "None",
+      "upRS_applicability": "No",
+      "hillside_area": "No"
+    },
+    "hazard_profile": {
+      "nearest_fault": "Newport - Inglewood Fault Zone (Onshore)",
+      "nearest_fault_distance_km": 2.76831552,
+      "alquist_priolo_fault_zone": "No",
+      "liquefaction": "No",
+      "landslide": "No",
+      "tsunami_hazard_area": "No"
+    },
+    "permit_references": {
+      "building_permit_info": "View",
+      "administrative_review": "None",
+      "home_sharing": "View"
+    },
+    "section_rows": {
+      "divTab1": [
+        {
+          "label": "Site Address",
+          "value": "3030 S MIDVALE AVE",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "ZIP Code",
+          "value": "90034",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('ZIP_CD', '90034');"
+        },
+        {
+          "label": "PIN Number",
+          "value": "123B157 1268",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Lot/Parcel Area (Calculated)",
+          "value": "5,255.6 (sq ft)",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Thomas Brothers Grid",
+          "value": "PAGE 632 - GRID D7",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Assessor Parcel No. (APN)",
+          "value": "4254008019",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('BPP', '4254008019');"
+        },
+        {
+          "label": "Tract",
+          "value": "TR 11966",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Map Reference",
+          "value": "M B 222-33/35",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Block",
+          "value": "None",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Lot",
+          "value": "41",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Arb (Lot Cut Reference)",
+          "value": "None",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Map Sheet",
+          "value": "123B157",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('MAPSHEET', '123B157');"
+        }
+      ],
+      "divTab2": [
+        {
+          "label": "Community Plan Area",
+          "value": "Palms - Mar Vista - Del Rey",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('COMN', 'Palms - Mar Vista - Del Rey');"
+        },
+        {
+          "label": "Area Planning Commission",
+          "value": "West Los Angeles APC",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('APC', 'West Los Angeles APC');"
+        },
+        {
+          "label": "Neighborhood Council",
+          "value": "MAR VISTA NC",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('NC', 'MAR VISTA NC');"
+        },
+        {
+          "label": "Council District",
+          "value": "CD 5 - Katy Young Yaroslavsky",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('COUNCIL', 'CD 5 - Katy Young Yaroslavsky');"
+        },
+        {
+          "label": "Census Tract #",
+          "value": "2717.04000000",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "LADBS District Office",
+          "value": "West Los Angeles",
+          "href": null,
+          "onclick": null
+        }
+      ],
+      "divTab1200": [
+        {
+          "label": "Building Permit Info",
+          "value": "View",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('BPI', '');"
+        },
+        {
+          "label": "Administrative Review",
+          "value": "None",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Home Sharing",
+          "value": "View",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('HOME_SHARE_WEBSITE', '');"
+        }
+      ],
+      "divTab3": [
+        {
+          "label": "Special Notes",
+          "value": "None",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Zoning",
+          "value": "R1-1",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('ZONING', 'R1-1');"
+        },
+        {
+          "label": "Zoning Information (ZI)",
+          "value": "ZI-2427 Freeway Adjacent Advisory Notice for Sensitive Uses",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('ZONEINFO', 'ZI-2427 Freeway Adjacent Advisory Notice for Sensitive Uses');"
+        },
+        {
+          "label": "Zoning Information (ZI)",
+          "value": "ZI-2490 Specific Plan: Exposition Corridor Transit Neighborhood Plan",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('ZONEINFO', 'ZI-2490 Specific Plan: Exposition Corridor Transit Neighborhood Plan');"
+        },
+        {
+          "label": "Zoning Information (ZI)",
+          "value": "ZI-2192 Specific Plan: West Los Angeles Transportation Improvement and Mitigation",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('ZONEINFO', 'ZI-2192 Specific Plan: West Los Angeles Transportation Improvement and Mitigation');"
+        },
+        {
+          "label": "General Plan Land Use",
+          "value": "Low Residential",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('GENPLAN', 'Low Residential');"
+        },
+        {
+          "label": "General Plan Note(s)",
+          "value": "Yes",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('GPFN', 'Yes');"
+        },
+        {
+          "label": "Minimum Density Requirement",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Hillside Area (Zoning Code)",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Specific Plan Area",
+          "value": "EXPOSITION CORRIDOR TRANSIT NEIGHBORHOOD PLAN",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('SPA', 'EXPOSITION CORRIDOR TRANSIT NEIGHBORHOOD PLAN');"
+        },
+        {
+          "label": "Subarea",
+          "value": "None",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Specific Plan Area",
+          "value": "WEST LOS ANGELES TRANSPORTATION IMPROVEMENT AND MITIGATION",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('SPA', 'WEST LOS ANGELES TRANSPORTATION IMPROVEMENT AND MITIGATION');"
+        },
+        {
+          "label": "Subarea",
+          "value": "None",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Special Land Use / Zoning",
+          "value": "None",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Historic Preservation Review",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "HistoricPlacesLA",
+          "value": "No",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('HPLA', '');"
+        },
+        {
+          "label": "Historic Preservation Overlay Zone",
+          "value": "None",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Other Historic Designations",
+          "value": "None",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Mills Act Contract",
+          "value": "None",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "CDO: Community Design Overlay",
+          "value": "None",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "CPIO: Community Plan Imp. Overlay",
+          "value": "None",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Subarea",
+          "value": "None",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "CPIO Historic Preservation Review",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "CUGU: Clean Up-Green Up",
+          "value": "None",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "HCR: Hillside Construction Regulation",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "NSO: Neighborhood Stabilization Overlay",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "POD: Pedestrian Oriented Districts",
+          "value": "None",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "RBP: Restaurant Beverage Program Eligible Area",
+          "value": "None",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "ASP: Alcohol Sales Program",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "RFA: Residential Floor Area District",
+          "value": "None",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "RIO: River Implementation Overlay",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "SN: Sign District",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "SB 9 Eligibility",
+          "value": "View",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('SB9_CRITERIA', '');"
+        },
+        {
+          "label": "SB 35 Eligibility",
+          "value": "View",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('SB35_CRITERIA', '');"
+        },
+        {
+          "label": "SHRA / SB 684 Eligibility",
+          "value": "View",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('SB684_CRITERIA', '');"
+        },
+        {
+          "label": "AB 2334: Very Low Vehicle Travel Area",
+          "value": "Yes",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "AB 2097: Within a half mile of a Major Transit Stop",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "AB 2011 Eligibility",
+          "value": "View",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('AB2011_CRITERIA', '');"
+        },
+        {
+          "label": "AB 130 Eligibility",
+          "value": "View",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('AB130_CRITERIA', '');"
+        },
+        {
+          "label": "Streetscape",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Adaptive Reuse Subareas",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Adaptive Reuse Program",
+          "value": "Citywide Adaptive Reuse Program",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('ARP', '');"
+        },
+        {
+          "label": "Affordable Housing Linkage Fee",
+          "value": null,
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Residential Market Area",
+          "value": "High",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('AHLF_RES', 'High');"
+        },
+        {
+          "label": "Non-Residential Market Area",
+          "value": "High",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('AHLF_NONRES', 'High');"
+        },
+        {
+          "label": "Inclusionary Housing",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Local Affordable Housing Incentive",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Targeted Planting",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Special Lot Line",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Transit Oriented Communities (TOC)",
+          "value": "Not Eligible",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Mixed Income Incentive Programs",
+          "value": null,
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Transit Oriented Incentive Area (TOIA)",
+          "value": "Not Eligible",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Opportunity Corridors Incentive Area",
+          "value": "Not Eligible",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Corridor Transition Incentive Area",
+          "value": "Not Eligible",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "TCAC Opportunity Area",
+          "value": "Highest",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "High Quality Transit Corridor (within 1/2 mile)",
+          "value": "Yes",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "ED 1 Eligibility",
+          "value": "Not Eligible",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "RPA: Redevelopment Project Area",
+          "value": "None",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Central City Parking",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Downtown Parking",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Building Line",
+          "value": "None",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "500 Ft School Zone",
+          "value": "None",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "500 Ft Park Zone",
+          "value": "None",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Zanja System 1 Mile Buffer",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        }
+      ],
+      "divTab4": [
+        {
+          "label": "Assessor Parcel No. (APN)",
+          "value": "4254008019",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Ownership (Assessor)",
+          "value": null,
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Owner1",
+          "value": null,
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Address",
+          "value": null,
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Ownership (Bureau of Engineering, Land Records)",
+          "value": null,
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Owner",
+          "value": null,
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Address",
+          "value": null,
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "APN Area (Co. Public Works)*",
+          "value": "0.121 (ac)",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Use Code",
+          "value": "0100 - Residential - Single Family Residence",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Assessed Land Val.",
+          "value": "$57,139",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Assessed Improvement Val.",
+          "value": "$24,969",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Last Owner Change",
+          "value": "12/18/2025",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Last Sale Amount",
+          "value": "$1,125,000",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Tax Rate Area",
+          "value": "67",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Deed Ref No. (City Clerk)",
+          "value": "9-363",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Deed Ref No. (City Clerk)",
+          "value": "530106",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Deed Ref No. (City Clerk)",
+          "value": "0919982",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Deed Ref No. (City Clerk)",
+          "value": "0720363",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Building 1",
+          "value": null,
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Year Built",
+          "value": "1940",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Building Class",
+          "value": "D55A",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Number of Units",
+          "value": "1",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Number of Bedrooms",
+          "value": "2",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Number of Bathrooms",
+          "value": "1",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Building Square Footage",
+          "value": "1,076.0 (sq ft)",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Building 2",
+          "value": "No data for building 2",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Building 3",
+          "value": "No data for building 3",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Building 4",
+          "value": "No data for building 4",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Building 5",
+          "value": "No data for building 5",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Rent Stabilization Ordinance (RSO)",
+          "value": "No [APN: 4254008019]",
+          "href": null,
+          "onclick": null
+        }
+      ],
+      "divTab5": [
+        {
+          "label": "Recent Activity",
+          "value": "None",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2018-7547-CPU",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('20000', 'CPC-2018-7547-CPU');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2014-1457-SP",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('20000', 'CPC-2014-1457-SP');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2013-621-ZC-GPA-SP",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('20000', 'CPC-2013-621-ZC-GPA-SP');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2005-8252-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('20000', 'CPC-2005-8252-CA');"
+        },
+        {
+          "label": "Ordinance",
+          "value": "ORD-186402",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('50000', 'ORD-186402');"
+        },
+        {
+          "label": "Ordinance",
+          "value": "ORD-186108",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('50000', 'ORD-186108');"
+        },
+        {
+          "label": "Ordinance",
+          "value": "ORD-183497",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('50000', 'ORD-183497');"
+        },
+        {
+          "label": "Ordinance",
+          "value": "ORD-171492",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('50000', 'ORD-171492');"
+        },
+        {
+          "label": "Ordinance",
+          "value": "ORD-129279",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('50000', 'ORD-129279');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2014-1458-EIR-SE-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('40000', 'ENV-2014-1458-EIR-SE-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2013-622-EIR",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('40000', 'ENV-2013-622-EIR');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2005-8253-ND",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('40000', 'ENV-2005-8253-ND');"
+        }
+      ],
+      "divTab6": [
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2022-4856-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2022-4856-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2007-5740-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2007-5740-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2007-5645-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2007-5645-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2007-550-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2007-550-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2007-455-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2007-455-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2007-3179-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2007-3179-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2007-3036-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2007-3036-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2007-280-ICO",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2007-280-ICO');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2007-2216-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2007-2216-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2007-2134-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2007-2134-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2007-1207-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2007-1207-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2007-106-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2007-106-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2006-841-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2006-841-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2006-7821-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2006-7821-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2006-48-ICO",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2006-48-ICO');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2006-3536-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2006-3536-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2006-1953-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2006-1953-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2006-10077-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2006-10077-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2005-8254-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2005-8254-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2005-8252-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2005-8252-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2005-5848-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2005-5848-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2005-5847-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2005-5847-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2005-3903-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2005-3903-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2005-3863-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2005-3863-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2005-3861-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2005-3861-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2005-361-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2005-361-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2005-1124-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2005-1124-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2005-1122-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2005-1122-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2005-1101-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2005-1101-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2005-1081-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2005-1081-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2004-7453-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2004-7453-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2004-6979-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2004-6979-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2004-6587-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2004-6587-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2004-4239-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2004-4239-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2004-3334-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2004-3334-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2004-2290-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2004-2290-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2004-159-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2004-159-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2003-7784-SP-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2003-7784-SP-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2003-5266-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2003-5266-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2003-4647-GPA-ZC-CA-MPR",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2003-4647-GPA-ZC-CA-MPR');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2003-4151-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2003-4151-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2003-4015-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2003-4015-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2003-2302-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2003-2302-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2003-1501-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2003-1501-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2003-1139-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2003-1139-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2003-1038-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2003-1038-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2002-5948-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2002-5948-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2002-5008-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2002-5008-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2002-4866-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2002-4866-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2002-461-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2002-461-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2002-432-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2002-432-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2002-4109-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2002-4109-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2002-4108-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2002-4108-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2002-388-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2002-388-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2002-3158-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2002-3158-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2002-198",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2002-198');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2002-197-ACI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2002-197-ACI');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2002-1621-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2002-1621-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2002-161-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2002-161-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2002-141-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2002-141-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2002-1128-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2002-1128-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2002-1126-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2002-1126-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2002-1124-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2002-1124-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2001-748-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2001-748-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2001-5963-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2001-5963-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2001-4594-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2001-4594-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2001-4083-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2001-4083-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2001-2529-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2001-2529-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2001-2397-ACI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2001-2397-ACI');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2001-2100-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2001-2100-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2001-1760-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2001-1760-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2000-636-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2000-636-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2000-4247-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2000-4247-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2000-4046-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2000-4046-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-2000-4045-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-2000-4045-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-19XX-25998-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-19XX-25998-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1999-523-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1999-523-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1999-435-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1999-435-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1999-3156-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1999-3156-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1999-2-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1999-2-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1999-198-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1999-198-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1999-178-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1999-178-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1999-177-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1999-177-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1999-176-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1999-176-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1998-521-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1998-521-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1998-239-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1998-239-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1998-145-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1998-145-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1998-141-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1998-141-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1997-65-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1997-65-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1997-61-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1997-61-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1997-53-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1997-53-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1997-378-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1997-378-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1997-376-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1997-376-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1997-36-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1997-36-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1997-332-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1997-332-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1997-331-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1997-331-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1997-260-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1997-260-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1997-252-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1997-252-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1997-242-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1997-242-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1997-145-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1997-145-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1997-138-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1997-138-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1997-119-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1997-119-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1996-9-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1996-9-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1996-421-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1996-421-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1996-369-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1996-369-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1996-368-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1996-368-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1996-272-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1996-272-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1996-271-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1996-271-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1996-268-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1996-268-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1996-26773-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1996-26773-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1996-137-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1996-137-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1996-134-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1996-134-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1996-10-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1996-10-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1995-69-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1995-69-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1995-54-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1995-54-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1995-52-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1995-52-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1995-415-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1995-415-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1995-38-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1995-38-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1995-375-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1995-375-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1995-373-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1995-373-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1995-343-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1995-343-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1995-342-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1995-342-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1995-341-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1995-341-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1995-340-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1995-340-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1995-339-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1995-339-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1995-335-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1995-335-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1995-243-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1995-243-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1995-208-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1995-208-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1995-119-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1995-119-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1995-104-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1995-104-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1995-103-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1995-103-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1995-102-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1995-102-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1994-50-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1994-50-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1994-45-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1994-45-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1994-393-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1994-393-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1994-355-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1994-355-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1994-314-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1994-314-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1994-312-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1994-312-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1994-306-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1994-306-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1994-291-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1994-291-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1994-282-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1994-282-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1994-245-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1994-245-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1994-221-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1994-221-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1994-168-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1994-168-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1994-120-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1994-120-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1993-6-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1993-6-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1993-57-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1993-57-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1993-409-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1993-409-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1993-391-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1993-391-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1993-390-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1993-390-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1993-378-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1993-378-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1993-294-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1993-294-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1993-293-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1993-293-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1993-292-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1993-292-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1993-291-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1993-291-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1993-290-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1993-290-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1993-289-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1993-289-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1993-288-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1993-288-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1993-287-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1993-287-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1993-286-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1993-286-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1993-283-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1993-283-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1993-269-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1993-269-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1993-114-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1993-114-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1993-101-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1993-101-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1992-66-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1992-66-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1992-65-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1992-65-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1992-572-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1992-572-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1992-470-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1992-470-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1992-46-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1992-46-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1992-448-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1992-448-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1992-436-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1992-436-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1992-43-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1992-43-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1992-379-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1992-379-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1992-378-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1992-378-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1992-351-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1992-351-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1992-325-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1992-325-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1992-323-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1992-323-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1992-322-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1992-322-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1992-248-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1992-248-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1992-199-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1992-199-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1992-182-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1992-182-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1991-75-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1991-75-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1991-57-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1991-57-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1991-393-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1991-393-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1991-392-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1991-392-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1991-241-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1991-241-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1991-227-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1991-227-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1991-226-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1991-226-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1991-203-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1991-203-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1991-185-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1991-185-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1991-115-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1991-115-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1990-82-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1990-82-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1990-80-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1990-80-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1990-600-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1990-600-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1990-496-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1990-496-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1990-401-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1990-401-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1990-346-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1990-346-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1990-235-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1990-235-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1990-199-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1990-199-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1990-188-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1990-188-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1990-11-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1990-11-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1989-657-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1989-657-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1989-475-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1989-475-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1989-454-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1989-454-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1989-453-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1989-453-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1989-414-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1989-414-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1989-413-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1989-413-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1989-405-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1989-405-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1989-40-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1989-40-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1989-181-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1989-181-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1989-129-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1989-129-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1989-128-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1989-128-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1988-756-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1988-756-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1988-723-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1988-723-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1988-720-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1988-720-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1988-647-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1988-647-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1988-644-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1988-644-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1988-643-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1988-643-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1988-635-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1988-635-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1988-627-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1988-627-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1988-624-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1988-624-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1988-623-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1988-623-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1988-622-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1988-622-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1988-608-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1988-608-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1988-546-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1988-546-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1988-540-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1988-540-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1988-528-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1988-528-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1988-527-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1988-527-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1988-49-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1988-49-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1988-41-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1988-41-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1988-337-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1988-337-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1988-335-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1988-335-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1988-334-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1988-334-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1988-333-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1988-333-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1988-31-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1988-31-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1988-284-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1988-284-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1988-277-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1988-277-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1988-194-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1988-194-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1988-192-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1988-192-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1988-180-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1988-180-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1988-179-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1988-179-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1988-178-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1988-178-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1988-129-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1988-129-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1988-126-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1988-126-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1988-104-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1988-104-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1987-942-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1987-942-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1987-809-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1987-809-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1987-666-MSC",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1987-666-MSC');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1987-659-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1987-659-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1987-587-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1987-587-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1987-585-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1987-585-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1987-509-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1987-509-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1987-48-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1987-48-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1987-395-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1987-395-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1987-393-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1987-393-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1987-206-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1987-206-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1987-193-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1987-193-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1986-849-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1986-849-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1986-758-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1986-758-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1986-751-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1986-751-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1986-724-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1986-724-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1986-721-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1986-721-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1986-621-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1986-621-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1986-552-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1986-552-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1986-55-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1986-55-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1986-540-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1986-540-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1986-54-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1986-54-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1986-370-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1986-370-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1986-369-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1986-369-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1986-368-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1986-368-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1986-324-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1986-324-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1986-29-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1986-29-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1986-27-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1986-27-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1986-249-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1986-249-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1986-242-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1986-242-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1986-184-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1986-184-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1986-183-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1986-183-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1986-182-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1986-182-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1986-1096-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1986-1096-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1986-1085-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1986-1085-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1986-1084-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1986-1084-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1985-79-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1985-79-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1985-769-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1985-769-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1985-743-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1985-743-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1985-340-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1985-340-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1985-336-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1985-336-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1985-275-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1985-275-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1985-26-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1985-26-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1985-24-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1985-24-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1985-218-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1985-218-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1985-178-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1985-178-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1984-91-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1984-91-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1984-70-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1984-70-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1984-666-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1984-666-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1984-492-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1984-492-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1984-491-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1984-491-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1984-41-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1984-41-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1984-407-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1984-407-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1984-361-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1984-361-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1984-324-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1984-324-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1984-297-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1984-297-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1984-263-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1984-263-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1984-162-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1984-162-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1984-151-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1984-151-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1984-149-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1984-149-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1984-141-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1984-141-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1983-540-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1983-540-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1983-491-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1983-491-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1983-488-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1983-488-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1983-303-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1983-303-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1982-30301-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1982-30301-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1981-30302-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1981-30302-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1981-30206-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1981-30206-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1974-25705-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1974-25705-CA');"
+        },
+        {
+          "label": "City Planning Commission",
+          "value": "CPC-1970-22772-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_20000', 'CPC-1970-22772-CA');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-2019-2359-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-2019-2359-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-2006-8263-ZAI-1A",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-2006-8263-ZAI-1A');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-2005-8762-CU",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-2005-8762-CU');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-2005-5630-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-2005-5630-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-2004-7710-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-2004-7710-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-2004-7115-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-2004-7115-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-2004-6824-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-2004-6824-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-2004-1199-DRB",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-2004-1199-DRB');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-2004-1196-CDO",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-2004-1196-CDO');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-2004-1141-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-2004-1141-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-2003-5444-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-2003-5444-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-2003-4842-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-2003-4842-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-2003-31-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-2003-31-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-2003-2970-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-2003-2970-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-2002-92-PAD",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-2002-92-PAD');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-2001-5876-CART-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-2001-5876-CART-CA');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-2001-331-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-2001-331-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-2001-1595-CA-PA1-A1",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-2001-1595-CA-PA1-A1');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-2001-1595-CA-PA1",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-2001-1595-CA-PA1');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-2001-1595-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-2001-1595-CA');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1996-779-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1996-779-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1996-778-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1996-778-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1996-241-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1996-241-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1996-216-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1996-216-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1995-856-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1995-856-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1995-614-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1995-614-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1994-538-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1994-538-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1994-474-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1994-474-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1994-385-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1994-385-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1994-305-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1994-305-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1994-288-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1994-288-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1994-14-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1994-14-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1994-100-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1994-100-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1993-915-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1993-915-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1993-840-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1993-840-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1993-710-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1993-710-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1993-541-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1993-541-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1993-4-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1993-4-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1993-243-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1993-243-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1993-231-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1993-231-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1993-228-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1993-228-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1993-135-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1993-135-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1993-1069-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1993-1069-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1992-911-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1992-911-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1992-658-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1992-658-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1992-448-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1992-448-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1992-408-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1992-408-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1992-304-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1992-304-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1992-1171-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1992-1171-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1992-1170-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1992-1170-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1992-1025-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1992-1025-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1991-1091-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1991-1091-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1990-342-CUB",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1990-342-CUB');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1990-326-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1990-326-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1990-1440-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1990-1440-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1990-1439-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1990-1439-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1990-1393-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1990-1393-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1990-1392-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1990-1392-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1989-1345-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1989-1345-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1989-1317-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1989-1317-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1989-1258-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1989-1258-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1989-1256-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1989-1256-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1988-590-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1988-590-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1988-503-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1988-503-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1988-1405-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1988-1405-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1988-1335-R",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1988-1335-R');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1988-1114-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1988-1114-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1987-1100-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1987-1100-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1986-1089-ZAI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1986-1089-ZAI');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "ZA-1985-998-YV",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'ZA-1985-998-YV');"
+        },
+        {
+          "label": "Zoning Administration",
+          "value": "CUB-1984-74",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_90000', 'CUB-1984-74');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2022-4857-ND",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2022-4857-ND');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2007-5741-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2007-5741-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2007-5646-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2007-5646-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2007-3180-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2007-3180-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2007-3037-MND",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2007-3037-MND');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2007-2217-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2007-2217-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2007-2135-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2007-2135-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2007-1208-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2007-1208-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2007-107-ND",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2007-107-ND');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2006-842-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2006-842-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2006-7822-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2006-7822-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2006-49-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2006-49-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2006-3552-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2006-3552-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2006-3551-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2006-3551-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2006-3550-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2006-3550-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2006-1964-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2006-1964-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2006-10468-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2006-10468-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2006-10078-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2006-10078-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2005-8255-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2005-8255-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2005-8253-MND",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2005-8253-MND');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2005-6078-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2005-6078-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2005-6077-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2005-6077-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2005-3904-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2005-3904-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2005-3864-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2005-3864-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2005-3862-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2005-3862-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2005-362-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2005-362-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2005-3239-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2005-3239-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2005-3237-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2005-3237-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2005-1781-ND",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2005-1781-ND');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2005-1125-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2005-1125-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2005-1123-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2005-1123-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2005-1102-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2005-1102-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2004-7454-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2004-7454-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2004-6980-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2004-6980-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2004-6586-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2004-6586-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2004-4240-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2004-4240-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2004-3181-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2004-3181-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2004-2691-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2004-2691-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2004-2291-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2004-2291-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2004-161-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2004-161-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2004-1264-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2004-1264-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2003-8056-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2003-8056-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2003-7106-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2003-7106-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2003-5267-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2003-5267-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2003-4016-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2003-4016-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2003-321-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2003-321-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2003-32-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2003-32-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2003-2303-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2003-2303-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2003-1140-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2003-1140-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2003-1039-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2003-1039-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2002-5949-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2002-5949-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2002-5009-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2002-5009-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2002-4867-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2002-4867-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2002-433-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2002-433-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2002-4110",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2002-4110');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2002-411-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2002-411-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2002-3923-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2002-3923-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2002-389-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2002-389-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2002-3159",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2002-3159');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2002-1622-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2002-1622-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2002-142-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2002-142-CA');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2002-1127-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2002-1127-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2001-846-ND",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2001-846-ND');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2001-839-CE-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2001-839-CE-CA');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2001-749-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2001-749-CA');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2001-5878",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2001-5878');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2001-4595-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2001-4595-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2001-4082-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2001-4082-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2001-3700",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2001-3700');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2001-3689",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2001-3689');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2001-2531-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2001-2531-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2001-2398-ACI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2001-2398-ACI');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2001-2101-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2001-2101-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2001-1808-ACI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2001-1808-ACI');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2001-1761-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2001-1761-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2001-1124-ACI",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2001-1124-ACI');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2000-5018-CA",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2000-5018-CA');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2000-4371-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2000-4371-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2000-4356-CE",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2000-4356-CE');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-2000-4321-ND",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-2000-4321-ND');"
+        },
+        {
+          "label": "Environmental",
+          "value": "ENV-1987-9876-EAF",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'ENV-1987-9876-EAF');"
+        },
+        {
+          "label": "Environmental",
+          "value": "CE-1999-3104",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('CW_40000', 'CE-1999-3104');"
+        }
+      ],
+      "divTab7": [
+        {
+          "label": "Airport Hazard",
+          "value": "None",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Coastal Zone",
+          "value": "None",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Coastal Bluff Potential",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Canyon Bluff Potential",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Farmland",
+          "value": "Area Not Mapped",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Urban Agriculture Incentive Zone",
+          "value": "YES",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('UAIZ', 'YES');"
+        },
+        {
+          "label": "Very High Fire Hazard Severity Zone",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Fire District No. 1",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Flood Zone",
+          "value": "Outside Flood Zone",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Watercourse",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Streams",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Methane Hazard Site",
+          "value": "None",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "High Wind Velocity Areas",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Special Grading Area (BOE Basic Grid Map A-13372)",
+          "value": "Yes",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Wells",
+          "value": "None",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Sea Level Rise Area",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Oil Well Adjacency",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Universal Planning Review Service Applicability",
+          "value": "No",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('ERP', '');"
+        }
+      ],
+      "divTab1300": [
+        {
+          "label": "Santa Monica Mountains Zone",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Biological Resource Potential",
+          "value": "None",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Mountain Lion Potential",
+          "value": "None",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Monarch Butterfly Potential",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "300-Foot Habitat Buffer",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "County-Designated SEAs and CRAs",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "USFWS-designated CHAs",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Wildland Urban Interface (WUI)",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Criterion 1 Protected Areas for Wildlife (PAWs)",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        }
+      ],
+      "divTab8": [
+        {
+          "label": "Active Fault Near-Source Zone",
+          "value": null,
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Nearest Fault (Distance in km)",
+          "value": "2.76831552",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Nearest Fault (Name)",
+          "value": "Newport - Inglewood Fault Zone (Onshore)",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Region",
+          "value": "Transverse Ranges and Los Angeles Basin",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Fault Type",
+          "value": "B",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Slip Rate (mm/year)",
+          "value": "1.00000000",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Slip Geometry",
+          "value": "Right Lateral - Strike Slip",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Slip Type",
+          "value": "Poorly Constrained",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Down Dip Width (km)",
+          "value": "13.00000000",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Rupture Top",
+          "value": "0.00000000",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Rupture Bottom",
+          "value": "13.00000000",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Dip Angle (degrees)",
+          "value": "90.00000000",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Maximum Magnitude",
+          "value": "7.10000000",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Alquist-Priolo Fault Zone",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Landslide",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Liquefaction",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Preliminary Fault Rupture Study Area",
+          "value": "None",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Tsunami Hazard Area",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        }
+      ],
+      "divTab9": [
+        {
+          "label": "Business Improvement District",
+          "value": "None",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Hubzone",
+          "value": "None",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Jobs and Economic Development Incentive Zone (JEDI)",
+          "value": "None",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Opportunity Zone",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Promise Zone",
+          "value": "None",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "State Enterprise Zone",
+          "value": "None",
+          "href": null,
+          "onclick": null
+        }
+      ],
+      "divTab10": [
+        {
+          "label": "Direct all Inquiries to",
+          "value": "Los Angeles Housing Department",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Telephone",
+          "value": "(866) 557-7368",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Website",
+          "value": "housing.lacity.gov",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('HCID_WEBSITE', '');"
+        },
+        {
+          "label": "Rent Stabilization Ordinance (RSO)",
+          "value": "No [APN: 4254008019]",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Ellis Act Property",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Just Cause For Eviction Ordinance (JCO)",
+          "value": "Yes",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Assessor Parcel No. (APN)",
+          "value": "4254008019",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Assessor Parcel No. (APN)",
+          "value": "4254008019",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Address",
+          "value": "3030 MIDVALE AVE",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Year Built",
+          "value": "1940",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Use Code",
+          "value": "0100 - Residential - Single Family Residence",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Notes",
+          "value": "The Just Cause Ordinance applies after the expiration of the initial lease or after 6 months of continuous occupancy, whichever comes first.",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('HCID_JCO_NOTES', 'The Just Cause Ordinance applies after the expiration of the initial lease or after 6 months of continuous occupancy, whichever comes first.');"
+        },
+        {
+          "label": "Housing Crisis Act and Resident Protections Ordinance Replacement Review",
+          "value": "View",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('HOUSING_CRISIS_GUIDE', '');"
+        },
+        {
+          "label": "Housing Crisis Act and Resident Protections Ordinance Replacement Review",
+          "value": "Yes",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Direct all Housing Element Sites Inquiries to",
+          "value": "Los Angeles City Planning",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Email",
+          "value": "planning.housingpolicy@lacity.org",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Housing Element Sites",
+          "value": null,
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "HE Replacement Required",
+          "value": "N/A",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "SB 166 Units",
+          "value": "N/A",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Interactive Map",
+          "value": "View",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('HSE_ELE_MAP', '');"
+        },
+        {
+          "label": "Housing Use within Prior 5 Years",
+          "value": "Yes",
+          "href": null,
+          "onclick": null
+        }
+      ],
+      "divTab11": [
+        {
+          "label": "Police Information",
+          "value": null,
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Bureau",
+          "value": "West",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('BUREAU', 'West');"
+        },
+        {
+          "label": "Division / Station",
+          "value": "Pacific",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('APREC', 'Pacific');"
+        },
+        {
+          "label": "Reporting District",
+          "value": "1428",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Fire Information",
+          "value": null,
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "Bureau",
+          "value": "South",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('DIVISION', 'South');"
+        },
+        {
+          "label": "Battallion",
+          "value": "18",
+          "href": null,
+          "onclick": null
+        },
+        {
+          "label": "District / Fire Station",
+          "value": "43",
+          "href": "javascript:;",
+          "onclick": "ZimasData.openDataLink('STATION', '43');"
+        },
+        {
+          "label": "Red Flag Restricted Parking",
+          "value": "No",
+          "href": null,
+          "onclick": null
+        }
+      ]
+    },
+    "links": {
+      "profile_url": "https://zimas.lacity.org/map.aspx?pin=123B157%20%201268&ajax=yes",
+      "root_url": "https://zimas.lacity.org/"
+    },
+    "diagnostics": {
+      "pin_resolution": {
+        "pin": "123B157  1268",
+        "matched_address": "3030 S MIDVALE AVE",
+        "source": "zimas_apn_v1",
+        "note": "Resolved ZIMAS PIN via APN lookup for APN 4254008019.",
+        "diagnostics": {
+          "request_url": "https://zimas.lacity.org/ajaxSearchResults.aspx",
+          "request_params": {
+            "search": "apn",
+            "apn": "4254008019"
+          },
+          "response_preview": "{type: \"APN\",\r\npin: \"123B157  1268\",\r\nAddress: \"3030 S MIDVALE AVE\",\r\naddresses: [],\r\nselectedPins: [{pin: \"123B157  1268\",\r\naddresses: [\"3030 S MIDVALE AVE\"]}]}",
+          "request_attempts": [
+            {
+              "attempt": 1,
+              "status_code": 200
+            }
+          ]
+        }
+      },
+      "profile_url": "https://zimas.lacity.org/map.aspx?pin=123B157%20%201268&ajax=yes",
+      "request_attempts": [
+        {
+          "attempt": 1,
+          "status_code": 200
+        }
+      ],
+      "tab_keys": [
+        "divTab1",
+        "divTab10",
+        "divTab11",
+        "divTab1200",
+        "divTab1300",
+        "divTab2",
+        "divTab3",
+        "divTab4",
+        "divTab5",
+        "divTab6",
+        "divTab7",
+        "divTab8",
+        "divTab9"
+      ]
+    }
+  },
+  "ladbs_records": {
+    "source": "ladbs_records_v1",
+    "transport": "http",
+    "fetched_at": "2026-03-23 17:31:51",
+    "apn": "4254008019",
+    "pin": "123B157  1268",
+    "documents": [
+      {
+        "doc_type": "MECHANICAL PERMIT",
+        "sub_type": "HVAC",
+        "doc_date": "5/17/2016",
+        "doc_number": "16044-90000-05282",
+        "description": "INSTALL GAS WALL FURNACE",
+        "record_id": "56925302",
+        "image_visibility": "Visible",
+        "image_to_open": "{3209FCFC-A159-4E83-A40F-E312DFAE263F},",
+        "doc_ids": "{3209FCFC-A159-4E83-A40F-E312DFAE263F},",
+        "has_digital_image": true,
+        "summary_url": "https://ladbsdoc.lacity.org/IDISPublic_Records/idis/Report.aspx?Record_Id=56925302&Image=Visible&ImageToOpen=%7B3209FCFC-A159-4E83-A40F-E312DFAE263F%7D%2C",
+        "image_main_url": "https://ladbsdoc.lacity.org/IDISPublic_Records/idis/ImageMain.aspx?DocIds=%7B3209FCFC-A159-4E83-A40F-E312DFAE263F%7D%2C",
+        "image_list_url": "https://ladbsdoc.lacity.org/IDISPublic_Records/idis/ImageList.aspx",
+        "pdf_library": "IDIS",
+        "pdf_doc_id": "{3209FCFC-A159-4E83-A40F-E312DFAE263F}",
+        "pdf_url": "https://ladbsdoc.lacity.org/IDISPublic_Records/idis/StPdfViewer.aspx?Library=IDIS&Id=%7B3209FCFC-A159-4E83-A40F-E312DFAE263F%7D&ObjType=2&Op=View"
+      }
+    ],
+    "note": "Fetched 1 LADBS records document(s) for APN 4254008019.",
+    "links": {
+      "search_url": "https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW",
+      "selection_url": "https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearchSelection.aspx"
+    },
+    "search_criteria": "Assessor Number: BOOK NUMBER: 4254 PAGE NUMBER: 008 PARCEL NUMBER: 019",
+    "preselected_addresses": [
+      "Doc Type",
+      "Sub Type",
+      "Doc Date",
+      "Doc Number",
+      "Ascending",
+      "Descending",
+      "Doc Type",
+      "Sub Type",
+      "Doc Date",
+      "Doc Number",
+      "Ascending",
+      "Descending",
+      "Doc Type",
+      "Sub Type",
+      "Doc Date",
+      "Doc Number",
+      "Ascending",
+      "Descending",
+      "Doc Type",
+      "Sub Type",
+      "Doc Date",
+      "Doc Number",
+      "Ascending",
+      "Descending",
+      "3030 S MIDVALE AVE"
+    ],
+    "page_summary": {
+      "page_number": 1,
+      "total_pages": 1
+    },
+    "diagnostics": {
+      "search_url": "https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW",
+      "bootstrap_url": "https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DefaultCustom.aspx",
+      "selection_candidates": [
+        "3030 S MIDVALE AVE"
+      ],
+      "selected_addresses": [
+        "3030 S MIDVALE AVE"
+      ],
+      "document_link_resolutions": [
+        "16044-90000-05282"
+      ]
+    }
+  },
+  "source_diagnostics": {
+    "contract_version": "qa-v1",
+    "schema_warnings": [],
+    "anomaly_count": 0,
+    "anomaly_codes": [],
+    "source_states": {
+      "redfin": {
+        "source": "redfin_parsed_v3",
+        "ok": true,
+        "timeline_events": 1,
+        "has_tax_apn": true
+      },
+      "zimas": {
+        "source": "zimas_profile_v1",
+        "ok": true,
+        "transport": "http",
+        "pin": "123B157  1268",
+        "apn": "4254008019"
+      },
+      "ladbs_permits": {
+        "source": "ladbs_pin_v1",
+        "ok": true,
+        "retrieval_strategy": "pin-first",
+        "fallback_used": false,
+        "permit_count": 3,
+        "address_source": "redfin_url"
+      },
+      "ladbs_records": {
+        "source": "ladbs_records_v1",
+        "ok": true,
+        "transport": "http",
+        "document_count": 1,
+        "digital_image_count": 1,
+        "pdf_link_count": 1,
+        "duplicate_record_id_count": 0
+      }
+    }
+  },
+  "anomalies": [],
+  "payload_contract_version": "qa-v1",
+  "summary_markdown": null
+}

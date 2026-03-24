@@ -1,0 +1,36 @@
+{
+  "permit_number": "16041-10000-23545",
+  "job_number": "X16LA10898",
+  "permit_type": "Electrical - 1 or 2 Family Dwelling",
+  "status_text": "Permit Finaled on 8/8/2018",
+  "status_date": "8/8/2018",
+  "issued_text": "Issued on 7/6/2016",
+  "address_label": "3030 S MIDVALE AVE 90034",
+  "source_url": "https://www.ladbsservices2.lacity.org/OnlineServices/PermitReport/PcisPermitDetail?id1=16041&id2=10000&id3=23545",
+  "capture_type": "permit_detail_html",
+  "validation_status": "valid_for_subject",
+  "validation_evidence": [
+    "LADBS permit drilldown was filtered to 3030 S MIDVALE AVE 90034.",
+    "Permit detail page text repeats the subject address."
+  ],
+  "work_description": "200A UPGRADE.",
+  "certificate_of_occupancy": null,
+  "team_mentions": [
+    {
+      "role": "Contractor",
+      "name": "Kelley Joel Electric; Lic. No.: 917355-C10 1546 LINDA ROSA AVE LOS ANGELES, CA 90041",
+      "source": "Permit 16041-10000-23545 contact information",
+      "party_type": "project_side",
+      "license_number": "917355"
+    },
+    {
+      "role": "Permit Finaled",
+      "name": "ANDREW NAVE",
+      "source": "Permit 16041-10000-23545 status history",
+      "party_type": "city_side"
+    }
+  ],
+  "scope_signals": [
+    "200A UPGRADE."
+  ]
+}

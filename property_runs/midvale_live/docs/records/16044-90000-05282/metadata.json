@@ -1,0 +1,24 @@
+{
+  "doc_number": "16044-90000-05282",
+  "doc_type": "MECHANICAL PERMIT",
+  "sub_type": "HVAC",
+  "doc_date": "5/17/2016",
+  "description": "INSTALL GAS WALL FURNACE",
+  "record_id": "56925302",
+  "doc_ids": "{3209FCFC-A159-4E83-A40F-E312DFAE263F},",
+  "image_main_url": "https://ladbsdoc.lacity.org/IDISPublic_Records/idis/ImageMain.aspx?DocIds=%7B3209FCFC-A159-4E83-A40F-E312DFAE263F%7D%2C",
+  "summary_url": "https://ladbsdoc.lacity.org/IDISPublic_Records/idis/Report.aspx?Record_Id=56925302&Image=Visible&ImageToOpen=%7B3209FCFC-A159-4E83-A40F-E312DFAE263F%7D%2C",
+  "pdf_url": "https://ladbsdoc.lacity.org/IDISPublic_Records/idis/StPdfViewer.aspx?Library=IDIS&Id=%7B3209FCFC-A159-4E83-A40F-E312DFAE263F%7D&ObjType=2&Op=View",
+  "capture_type": "ladbs_record_pdf",
+  "validation_status": "valid_for_subject",
+  "validation_evidence": [
+    "LADBS records assessor search selected 3030 S MIDVALE AVE.",
+    "Record summary page text repeats the subject address.",
+    "Live records result returned document 16044-90000-05282."
+  ],
+  "capture_notes": [
+    "pypdf is not installed; PDF preserved locally without text extraction.",
+    "LADBS record summary URL was usable only inside the live search session and is not treated as a durable public link.",
+    "The LADBS PDF URL yielded a real PDF only inside the live records session, so the local PDF is the durable artifact."
+  ]
+}

@@ -880,11 +880,11 @@ def _build_property_snapshot(redfin: Dict[str, Any], metrics: Dict[str, Any], pe
     
     building_sf = redfin.get("building_sf") or metrics.get("building_sf_after")
     lot_sf = redfin.get("lot_sf") or metrics.get("land_sf")
-    year_built = redfin.get("year_built")
+    public_records = redfin.get("public_records") or {}
+    year_built = redfin.get("year_built") or redfin.get("listing_year_built") or public_records.get("year_built")
     
-    # Enhanced year built logic: detect if property was substantially rebuilt
-    # If there are recent major building permits, use the completion year instead of original year
-    if permits and year_built:
+    # Use permit completion year only as a fallback when Redfin does not expose year built.
+    if permits and not year_built:
         permit_years = []
         for permit in permits:
             # Look for building/new construction permits that have been finaled
@@ -922,14 +922,13 @@ def _build_property_snapshot(redfin: Dict[str, Any], metrics: Dict[str, Any], pe
                         except (ValueError, IndexError):
                             continue
         
-        # If we found permit completion years and they're recent (within last 10 years)
-        # and significantly newer than original year built, use the permit year
+        # If we found a recent permit completion year and Redfin lacks a year built,
+        # surface that as a best-effort fallback rather than fabricating a rebuild year.
         if permit_years:
             latest_permit_year = max(permit_years)
             current_year = datetime.now().year
-            
-            # If permit is recent (within 10 years) and at least 20 years newer than original
-            if (current_year - latest_permit_year <= 10) and (latest_permit_year - year_built >= 20):
+
+            if current_year - latest_permit_year <= 10:
                 year_built = latest_permit_year
     
     # Property type - get from Redfin or default

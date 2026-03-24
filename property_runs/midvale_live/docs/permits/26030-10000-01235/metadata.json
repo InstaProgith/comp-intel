@@ -1,0 +1,22 @@
+{
+  "permit_number": "26030-10000-01235",
+  "job_number": "B26LA06469",
+  "permit_type": "Grading - 1 or 2 Family Dwelling",
+  "status_text": "Completed on 03/06/2026",
+  "status_date": "2/20/2026",
+  "issued_text": "No",
+  "address_label": "3030 S MIDVALE AVE 90034",
+  "source_url": "https://www.ladbsservices2.lacity.org/OnlineServices/PermitReport/PcisPermitDetail?id1=26030&id2=10000&id3=01235",
+  "capture_type": "permit_detail_html",
+  "validation_status": "valid_for_subject",
+  "validation_evidence": [
+    "LADBS permit drilldown was filtered to 3030 S MIDVALE AVE 90034.",
+    "Permit detail page text repeats the subject address."
+  ],
+  "work_description": "GPI Written Notices for the addition to the existing single-family dwelling.",
+  "certificate_of_occupancy": null,
+  "team_mentions": [],
+  "scope_signals": [
+    "GPI Written Notices for the addition to the existing single-family dwelling."
+  ]
+}

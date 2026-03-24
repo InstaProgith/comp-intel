@@ -209,12 +209,25 @@ def _build_review_bundle_context(
     ladbs = payload.get("ladbs") or {}
     records = payload.get("ladbs_records") or {}
     documents = records.get("documents") or []
+    first_doc_with_images = _first_document_with_url(documents, "image_main_url")
     first_doc_with_summary = _first_document_with_url(documents, "summary_url")
     first_doc_with_pdf = _first_document_with_url(documents, "pdf_url")
     pin = zimas.get("pin") or ladbs.get("pin")
     zimas_page = links.get("zimas_url") or ((zimas.get("links") or {}).get("profile_url"))
-    docs_page = links.get("ladbs_records_url") or ((records.get("links") or {}).get("search_url"))
+    records_diagnostics = records.get("diagnostics") or {}
+    docs_page = (
+        records_diagnostics.get("bootstrap_url")
+        or links.get("ladbs_records_url")
+        or ((records.get("links") or {}).get("search_url"))
+    )
     asset_prefix = _bundle_asset_prefix(page_kind)
+    first_record_url = None
+    first_record_label = "First LADBS record"
+    if first_doc_with_images:
+        first_record_url = first_doc_with_images.get("image_main_url")
+        first_record_label = "First LADBS document images"
+    elif first_doc_with_summary:
+        first_record_url = first_doc_with_summary.get("summary_url")
 
     if page_kind == "report":
         local_actions = [
@@ -342,9 +355,9 @@ def _build_review_bundle_context(
         ),
         _build_link_item(
             "first_ladbs_record",
-            "First LADBS record",
-            first_doc_with_summary.get("summary_url") if first_doc_with_summary else None,
-            unavailable_reason="No LADBS record summary URL was available in the payload documents.",
+            first_record_label,
+            first_record_url,
+            unavailable_reason="No direct LADBS document review URL was available in the payload documents.",
             external=True,
             classification="canonical",
             source_basis="payload_field",
