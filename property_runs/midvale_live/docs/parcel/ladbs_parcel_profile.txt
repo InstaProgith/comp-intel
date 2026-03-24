@@ -1,0 +1,184 @@
+Skip Dept Navigation to Main Content
+Return to Payment Portal
+Los Angeles Department of Building and Safety
+Parcel Profile - Report Date: 3/24/2026 12:54:31 AM
+JOB ADDRESS(ES)
+3030 S MIDVALE AVE, LOS ANGELES, CA 90034
+1. PARCEL LEGAL DESCRIPTION INFORMATION:
+Tract:
+TR 11966
+Block:
+Lot:
+41
+Arb:
+NO
+Modifier:
+NO
+Map Reference Number for Tract Recordation:
+M B 222-33/35
+Parcel Identification Number:
+123B157  1268
+2. BASIC ZONING INFORMATION FOR PARCEL:
+Alquist-Priolo Fault Zone:
+NO
+Area Planning Commission:
+West Los Angeles
+Baseline Hillside Ordinance:
+NO
+Baseline Mansionization Ordinance:
+YES
+Certified Neighborhood Council:
+Mar Vista
+Community Redevelopment Area:
+NO
+Council District:
+5
+District Map:
+123B157
+Flood Hazard Zone:
+NO
+Hillside Grading Area:
+YES
+Hillside Ordinance Area:
+NO
+LA Preliminary Fault Study Area:
+NO
+Planning Area / Community Name:
+Palms - Mar Vista - Del Rey
+Zone(s):
+R1-1
+3. GEOGRAPHICALLY ORIENTED PARCEL INFORMATION:
+500 Foot School Zone:
+NO
+Airport Hazard Area:
+NO
+Alley:
+NO
+Building and Safety Branch Office:
+WLA
+Building Line Setback:
+NO
+Census Tract:
+2717.04
+City Street R/W:
+NO
+City Walk R/W:
+NO
+Coastal Zone Conservation Act:
+NO
+Community Design Overlay District:
+NO
+Community Noise Equiv. Level:
+NO
+Compacted Filled Ground:
+NO
+Division of Land:
+NO
+Division of Land Exemption:
+NO
+Earthquake-Induced Landslide Area:
+NO
+Earthquake-Induced Liquefaction Area:
+NO
+Easement:
+NO
+Energy Zone:
+8
+Environmentally Sensitive Area:
+NO
+Fire District:
+NO
+Front Yard Setback:
+NO
+Future Street:
+NO
+GPI Plan Route Office:
+NO
+High Wind Area:
+NO
+Highway Dedication:
+NO
+Hillside Street:
+NO
+Lot Cut Date:
+NO
+Lot Size:
+NO
+Lot Type:
+NO
+Methane Hazard Site:
+NO
+Nat. Water Course:
+NO
+Near Source Zone Distance:
+2.8
+Oil Well Area:
+NO
+Parcel Area (sqft):
+5255.50
+Parcel Map Exemption:
+NO
+Parking District:
+NO
+Parking Layout:
+NO
+Private Street:
+NO
+Rear Yard Setback:
+NO
+Side Yard Setback:
+NO
+Thomas Brothers Map Grid:
+632-D7
+Vacated Street/Alley:
+NO
+Vehicular Access Waived:
+NO
+4. CITY DOCUMENTS ASSOCIATED WITH PARCEL:
+BMO:
+Yes
+City Planning Case(s):
+CPC-2018-7547-CPU
+City Planning Case(s):
+CPC-2014-1457-SP
+City Planning Case(s):
+CPC-2013-621-ZC-GPA-SP
+City Planning Case(s):
+CPC-2005-8252-CA
+Ordinance:
+ORD-186402
+Ordinance:
+ORD-186108
+Ordinance:
+ORD-171492
+Ordinance:
+ORD-129279
+Ordinance:
+ORD-183497
+Zoning Information File(s):
+ZI-2192 Specific Plan: West Los Angeles Transportation Improvement and Mitigation
+Zoning Information File(s):
+ZI-2427 FWY Adj Advisory Notice for Sensitive Uses
+Zoning Information File(s):
+ZI-2452 Transit Priority Area in the City of Los Angeles
+Zoning Information File(s):
+ZI-2490 Specific Plan: Exposition Corridor Transit Neighborhood Plan
+5. OTHER PARCEL RELATED INFORMATION:
+Services
+Plan Review & Permitting
+Inspection
+Code Enforcement & Compliance
+Forms & Publications
+Forms
+Publications
+News & Announcements
+Our Organization
+Our Locations
+Employee Directory
+LADBS Senior Managers
+© Copyright 2010 -2026 City of Los Angeles. All Rights Reserved.
+Career Opportunities
+Contract Opportunities
+Disclaimer
+Privacy Policy
+Login

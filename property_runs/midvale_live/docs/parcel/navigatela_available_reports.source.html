@@ -1,0 +1,810 @@
+
+
+
+
+
+
+
+
+
+
+
+	
+		
+		
+		
+			
+			
+			
+				
+			
+			
+		
+
+		
+			
+		
+	
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+								
+		
+
+
+
+
+						
+ 	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+<!doctype html> 
+
+
+
+	
+
+
+
+
+
+
+<html>
+<head>
+	<title>Available Parcel Reports</title>
+
+	
+
+
+
+<script src="https://navigatela.lacity.org/resources/jquery/jquery-3.7.1.min.js"></script>
+<script src="https://navigatela.lacity.org/resources/jquery/ui/1.13.2/jquery-ui.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<STYLE TYPE="text/css"> 
+
+	body { margin: 2px 5px 2px 2px; }
+
+	.frame	{
+			position:relative;
+			top:0px;
+			left:0px;
+			z-index:25;
+			
+			width:100%;
+			-webkit-border-radius: 3px 3px 3px 3px;
+			-moz-border-radius: 3px 3px 3px 3px;
+			border-radius: 3px 3px 3px 3px;
+
+			
+			border: 1px solid #4966ab;
+			
+			
+			overflow:hidden;
+
+			margin-left: auto;
+  			margin-right: auto;		
+			margin-top: 1px;	
+			// padding: 2px 0px 1px 1px;
+			text-align: left; 
+			vertical-align: bottom;
+			font: 10px Arial, Verdana, Helvetica, sans-serif;
+			behavior: url(../htc/PIE.htc);	
+		}
+		
+	.header	{
+			position:relative;
+			
+			background:#dfe7fa;
+			color:#4966ab;
+			
+			
+			top:-3px;
+			left:-2px;
+			height:20px;
+			padding: 8px 0px 0px 6px;
+			width:100%;
+			margin:1px 0px 1px 0px;
+			font: 11px Arial, Verdana, Helvetica, sans-serif;
+		}
+			
+	table {
+			margin:1px 2px 1px 2px;
+		}
+			
+	th {
+			
+			background:#dfe7fa;
+			color:#4966ab;
+			
+			
+			
+			padding:2px 3px 0px 0px;
+			height:15px;
+			
+			
+			-moz-border-radius: 3px;
+			-webkit-border-radius: 3px;
+			border-radius: 3px;
+			
+			width:104px;
+			margin:1px 0px 1px 2px;
+			text-align:right;
+			font: 11px Arial, Verdana, Helvetica, sans-serif;
+			behavior: url(../htc/PIE.htc);
+			vertical-align:top;
+
+			}
+			
+	th.left {
+			padding:3px 0px 0px 5px;
+			height:15px;
+			text-align:left;
+			}
+			
+	th.center {
+			text-align:center;
+			}
+			
+	th.middle {
+			vertical-align:middle;
+			}		
+	
+	th.full {
+			
+			background:#dfe7fa;
+			color:#4966ab;
+			
+			
+			
+			
+			-moz-border-radius: 3px;
+			-webkit-border-radius: 3px;
+			border-radius: 3px;
+			
+			padding:2px 3px 0px 5px;
+			height:16px;
+
+			
+			
+			width:99%;
+			margin:1px 0px 1px 2px;
+			text-align:left;
+			font: 11px Arial, Verdana, Helvetica, sans-serif;
+			behavior: url(../htc/PIE.htc);
+			vertical-align:top;
+
+			}
+	td.center {
+			text-align:center;
+			}		
+			
+	td {
+			color:#666666;
+			
+			padding:1px 3px 1px 4px;
+			height:15px;
+			
+			width:170px;
+			margin:1px 0px 1px 0px;
+			font: 11px Arial, Verdana, Helvetica, sans-serif;
+			
+			border:1px #dfe7fa solid;
+			
+			
+			-moz-border-radius: 4px;
+			-webkit-border-radius: 4px;
+			border-radius: 4px;
+			behavior: url(../htc/PIE.htc);
+			overflow-wrap: anywhere;
+	}
+	
+	td.inner {
+			color:#666666;
+			
+			padding:2px 3px 0px 4px;
+			
+			height:15px;
+			margin:1px 0px 1px 0px;
+			font: 10px Arial, Verdana, Helvetica, sans-serif;
+			
+			border:1px #dfe7fa solid;
+			
+			
+			-moz-border-radius: 4px;
+			-webkit-border-radius: 4px;
+			border-radius: 4px;
+			behavior: url(../htc/PIE.htc);
+	}
+	
+	.size11 {
+			font: 11px Arial, Verdana, Helvetica, sans-serif;
+	}
+	
+	.size10 {
+			font: 10px Arial, Verdana, Helvetica, sans-serif;
+	}
+	
+	td.vspacer {
+			
+			height:1px;
+			
+			border:0px;
+	}
+	
+	td.vspacer_clr {
+			
+			height:1px;
+			
+			border:0px;
+			background:#dfe7fa;
+	}
+	
+	td.hspacer {
+			width:2px;
+			border:0px;
+			padding:0px 0px 0px 0px;
+	}
+	
+	td.subtitle {
+			padding:0px 0px 0px 0px;
+			margin:0px 0px 0px 0px;
+			text-align:center;
+			color:#4966ab;
+			background:#f6f8fd;
+			/* border:2px solid #4966ab; */
+			
+			font-weight: bold;
+			
+			
+	}
+	
+	.title {
+			font: 11px Arial, Verdana, Helvetica, sans-serif;
+			font-weight: bold;
+			
+			color:#4966ab;
+			
+	}
+
+	
+	.fclr {	color:#4966ab;
+			font-weight: bold;}
+	
+	.clr {	background:#4966ab;}
+	
+	a:link {color:#4966ab;}
+	a:visited {color:#4966ab;}
+	a:hover {color:#4966ab;}
+	a:action {color:#4966ab;}
+	
+	.arrow_icon
+	{
+		position:relative;
+		height:0px;
+		width:0px;
+		border:6px solid;
+		border-color:transparent;
+		z-index:1;
+	}
+	
+	.arrow_icon_small
+	{
+		position:relative;
+		height:0px;
+		width:0px;
+		border:5px solid;
+		border-color:transparent;
+		z-index:1;
+	}
+	
+	.arrow_top {top:0px;border-bottom-color: #4966ab;}
+	.arrow_btm {top:2px;border-top-color: #4966ab;}
+	.arrow_left {left:0px;border-right-color: #4966ab;}
+	.arrow_right {right:0px;border-left-color: #4966ab;}
+	
+	
+	
+	/* ADDED FOR FORMS */
+	input.rounded {
+			border: 1px solid #ccc;
+			-moz-border-radius: 6px;
+			-webkit-border-radius: 6px;
+			border-radius: 6px;
+			
+			font: 11px Arial, Verdana, Helvetica, sans-serif;
+			/*color: #708090; */
+			
+			padding: 4px 7px 4px 4px;  
+			
+			outline:none;
+
+			behavior: url(htc/PIE.htc);			
+	}
+	
+	input.roundedsmall {
+			border: 1px solid #ccc;
+			-moz-border-radius: 4px;
+			-webkit-border-radius: 4px;
+			border-radius: 4px;
+			
+			font: 11px Arial, Verdana, Helvetica, sans-serif;
+			/*color: #708090; */
+			
+			padding: 4px 7px 4px 4px;  
+			height:8px;
+			
+			outline:none;
+
+			behavior: url(htc/PIE.htc);			
+	}
+	
+	.button {
+			
+			-webkit-border-radius: 6px;
+			-moz-border-radius: 6px;
+			border-radius: 6px;
+			display:inline-block;
+			
+			
+			background:#4966ab;
+			background: -webkit-gradient(linear, 0 0, 0 bottom, from(#dfe7fa), to(#4966ab));
+			background: -webkit-linear-gradient(#dfe7fa, #4966ab);
+			background: -moz-linear-gradient(#dfe7fa, #4966ab);
+			background: -ms-linear-gradient(#dfe7fa, #4966ab);
+			background: -o-linear-gradient(#dfe7fa, #4966ab);
+			background: linear-gradient(#dfe7fa, #4966ab);
+			-pie-background: linear-gradient(#dfe7fa, #4966ab);
+			
+			color: #ffffff;
+			border: 1px solid #778899;
+			
+			
+			/* padding: 2px 4px 0px 4px; */  
+			text-align:center;
+			outline:none;
+
+			behavior: url(htc/PIE.htc);	
+	}
+	
+	.button:hover {
+	
+			
+			background:#4966ab;
+			background: -webkit-gradient(linear, 0 0, 0 bottom, from(#4966ab), to(#dfe7fa));
+			background: -webkit-linear-gradient(#4966ab, #dfe7fa);
+			background: -moz-linear-gradient(#4966ab, #dfe7fa);
+			background: -ms-linear-gradient(#4966ab, #dfe7fa);
+			background: -o-linear-gradient(#4966ab, #dfe7fa);
+			background: linear-gradient(#4966ab, #dfe7fa);
+			-pie-background: linear-gradient(#4966ab, #dfe7fa);
+			
+			color: #ffffff;
+			
+			
+			behavior: url(htc/PIE.htc);		
+	}	
+	
+	.buttonText {
+		font: 11px Arial, Verdana, Helvetica, sans-serif;
+		text-decoration:none;
+		
+		padding:2px 0px 0px 0px;
+		
+	}
+	
+	.bar {
+			
+			
+			background:#4966ab;
+			background: -webkit-gradient(linear, 0 0, 0 bottom, from(#dfe7fa), to(#4966ab));
+			background: -webkit-linear-gradient(#dfe7fa, #4966ab);
+			background: -moz-linear-gradient(#dfe7fa, #4966ab);
+			background: -ms-linear-gradient(#dfe7fa, #4966ab);
+			background: -o-linear-gradient(#dfe7fa, #4966ab);
+			background: linear-gradient(#dfe7fa, #4966ab);
+			-pie-background: linear-gradient(#dfe7fa, #4966ab);
+			
+			border: 0px solid #4966ab;
+			color: #ffffff;
+			
+			
+			/*overflow: hidden; */ 
+
+			behavior: url(htc/PIE.htc);				
+		}
+		
+		
+	.main_title {
+			font: 28px Arial, Verdana, Helvetica, sans-serif;
+			
+			color: #4966ab;
+			
+		}
+		
+
+	.main_subtitle {
+			font: 10px Arial, Verdana, Helvetica, sans-serif;
+			
+			color: #ffffff;
+			
+		}
+	
+</STYLE>
+
+
+
+                              <script>!function(e){var n="https://s.go-mpulse.net/boomerang/";if("False"=="True")e.BOOMR_config=e.BOOMR_config||{},e.BOOMR_config.PageParams=e.BOOMR_config.PageParams||{},e.BOOMR_config.PageParams.pci=!0,n="https://s2.go-mpulse.net/boomerang/";if(window.BOOMR_API_key="QKER6-PCMQ6-WQXTV-PL74X-MQJJ4",function(){function e(){if(!o){var e=document.createElement("script");e.id="boomr-scr-as",e.src=window.BOOMR.url,e.async=!0,i.parentNode.appendChild(e),o=!0}}function t(e){o=!0;var n,t,a,r,d=document,O=window;if(window.BOOMR.snippetMethod=e?"if":"i",t=function(e,n){var t=d.createElement("script");t.id=n||"boomr-if-as",t.src=window.BOOMR.url,BOOMR_lstart=(new Date).getTime(),e=e||d.body,e.appendChild(t)},!window.addEventListener&&window.attachEvent&&navigator.userAgent.match(/MSIE [67]\./))return window.BOOMR.snippetMethod="s",void t(i.parentNode,"boomr-async");a=document.createElement("IFRAME"),a.src="about:blank",a.title="",a.role="presentation",a.loading="eager",r=(a.frameElement||a).style,r.width=0,r.height=0,r.border=0,r.display="none",i.parentNode.appendChild(a);try{O=a.contentWindow,d=O.document.open()}catch(_){n=document.domain,a.src="javascript:var d=document.open();d.domain='"+n+"';void(0);",O=a.contentWindow,d=O.document.open()}if(n)d._boomrl=function(){this.domain=n,t()},d.write("<bo"+"dy onload='document._boomrl();'>");else if(O._boomrl=function(){t()},O.addEventListener)O.addEventListener("load",O._boomrl,!1);else if(O.attachEvent)O.attachEvent("onload",O._boomrl);d.close()}function a(e){window.BOOMR_onload=e&&e.timeStamp||(new Date).getTime()}if(!window.BOOMR||!window.BOOMR.version&&!window.BOOMR.snippetExecuted){window.BOOMR=window.BOOMR||{},window.BOOMR.snippetStart=(new Date).getTime(),window.BOOMR.snippetExecuted=!0,window.BOOMR.snippetVersion=12,window.BOOMR.url=n+"QKER6-PCMQ6-WQXTV-PL74X-MQJJ4";var i=document.currentScript||document.getElementsByTagName("script")[0],o=!1,r=document.createElement("link");if(r.relList&&"function"==typeof r.relList.supports&&r.relList.supports("preload")&&"as"in r)window.BOOMR.snippetMethod="p",r.href=window.BOOMR.url,r.rel="preload",r.as="script",r.addEventListener("load",e),r.addEventListener("error",function(){t(!0)}),setTimeout(function(){if(!o)t(!0)},3e3),BOOMR_lstart=(new Date).getTime(),i.parentNode.appendChild(r);else t(!1);if(window.addEventListener)window.addEventListener("load",a,!1);else if(window.attachEvent)window.attachEvent("onload",a)}}(),"".length>0)if(e&&"performance"in e&&e.performance&&"function"==typeof e.performance.setResourceTimingBufferSize)e.performance.setResourceTimingBufferSize();!function(){if(BOOMR=e.BOOMR||{},BOOMR.plugins=BOOMR.plugins||{},!BOOMR.plugins.AK){var n=""=="true"?1:0,t="",a="eybyaamtaaz2kjqacqdc4aaaffu4eqyp-f-d88e42b4e-clienttons-s.akamaihd.net",i="false"=="true"?2:1,o={"ak.v":"39","ak.cp":"1462346","ak.ai":parseInt("910181",10),"ak.ol":"0","ak.cr":22,"ak.ipv":6,"ak.proto":"http/1.1","ak.rid":"7ec775a4","ak.r":47594,"ak.a2":n,"ak.m":"dscb","ak.n":"essl","ak.bpcip":"2603:8001:9300:33a5::","ak.cport":56735,"ak.gh":"23.203.167.42","ak.quicv":"","ak.tlsv":"tls1.3","ak.0rtt":"","ak.0rtt.ed":"","ak.csrc":"-","ak.acc":"bbr","ak.t":"1774338831","ak.ak":"hOBiQwZUYzCg5VSAfCLimQ==VWLxPl3Q6toV5yoAjmcPX9BhmfPvOrG5ZHCN4OZMKMxwrKUl5QdxOuHfABG94uJV45/OPUI+3G3uMWwCtqMm1/1Y7tlJbiU9h4lYmj/H9SVCnHlswdelIvT+AsVOfn8wl8nsostrmhtmoTh2IaCBK3djDBu/VoMGPVX2e/diNBu/xIDwwb1/R2SlaZIVdaCtZ8QUwclsG23m8M8PuqDIJCjw1ndVFFB0pHpRCaaDwjOPwYR3z1XH9KdwiYvN5G2sJoR8hjBXSSzRUkjjYuSAZWHZYuLhWTe7RQcT3tbBX4Qt4A2R1X3iddjmqpWDHGYBRzYnxwm8Azj00HpmP5gBDvfk4KRsmM+JDxGTcTrsXp2EoeDzjzej7R5v9il4Cd4xfGLjOWl47wi2QMihvMWjAM337iZ5M4JaP6tg9c7IliY=","ak.pv":"4","ak.dpoabenc":"","ak.tf":i};if(""!==t)o["ak.ruds"]=t;var r={i:!1,av:function(n){var t="http.initiator";if(n&&(!n[t]||"spa_hard"===n[t]))o["ak.feo"]=void 0!==e.aFeoApplied?1:0,BOOMR.addVar(o)},rv:function(){var e=["ak.bpcip","ak.cport","ak.cr","ak.csrc","ak.gh","ak.ipv","ak.m","ak.n","ak.ol","ak.proto","ak.quicv","ak.tlsv","ak.0rtt","ak.0rtt.ed","ak.r","ak.acc","ak.t","ak.tf"];BOOMR.removeVar(e)}};BOOMR.plugins.AK={akVars:o,akDNSPreFetchDomain:a,init:function(){if(!r.i){var e=BOOMR.subscribe;e("before_beacon",r.av,null,null),e("onbeacon",r.rv,null,null),r.i=!0}return this},is_complete:function(){return!0}}}}()}(window);</script></head>
+<body>
+
+ 
+		
+	
+	
+	
+	
+	
+		
+	
+	
+	
+  	
+  	
+	
+	
+		
+		 
+	
+	
+	
+	
+  	
+  	
+  	
+  	
+    	
+    
+  	
+  	
+  	
+  	
+  	
+  	
+    	
+  	
+    	
+  	
+  	
+  	
+  	
+	
+	
+	
+	
+	<div id="report" class="frame">
+		<div class="header">Available Parcel Reports</div>
+		<table border="0" cellpadding="0" cellspacing="0" style="width:98.8%;">
+		
+			<tr>
+				<td colspan="3" style="padding:0px 0px 0px 0px;margin:0px 0px 0px 0px;">
+				
+				
+					<table cellspacing="0" cellpadding="0" style="position:relative;top:-8px;width:98%;height:100%;">
+						<tr> 
+							<td colspan="2" class="inner" style="border:0px;"> <span class="title">Address:</span> <br>
+								
+								
+									
+									
+										
+                                        
+                                        
+                                        
+                                        
+                                        	
+                                        
+                                        
+                                        	
+                                        
+                                        
+                                        	
+                                        
+                                        
+                                        
+                                        	
+                                        
+                                        
+									
+									
+									
+										<span> 3030   S MIDVALE AVE  90034</span><br>											
+																												
+									
+								
+							</td>
+						</tr>
+						<tr><td class="vspacer" colspan="2" style="height:5px;"></td></tr>
+						<tr> 
+							<td class="inner" style="border:0px;"><span class="title">PIN: </span>123B157-1268</td>
+							<td class="inner" style="border:0px;" align="right" ><a href = "https://navigatela.lacity.org/common/mapgallery/pdf/landbase_bw/123B157.pdf?r=0.0418666438014" target="_blank" ><span class="size11">Cadastral Map</span></a></td>
+						</tr>
+						
+                					
+              				
+              				
+                					<tr> 
+                  					<td class="inner" style="border:0px;"><span class="title">APN:</span> 4254008019</td>
+								<td align="right" style="border:0px;">
+                                	
+                                	<a href="http://maps.assessor.lacounty.gov/Geocortex/Essentials/PAIS/REST/sites/PAIS/VirtualDirectory/AssessorMaps/ViewMap.html?val=4254-008" target="_blank">Assessor Map</a>
+                                </td>
+                					</tr>
+              				
+						
+						
+                            
+                        	
+                            
+							<tr> 
+									
+                                <td style="border:0px;" align="right" colspan="2" height="20">&nbsp;<a href="https://www.google.com/maps/search/?api=1&query=3030 S MIDVALE AVE 90034" target="_blank">Google Map Search</a></td>								
+							</tr>
+						
+						
+							<tr> 
+								<td style="border:0px;height:20px;" align="right" colspan="2">&nbsp;<a href="http://www.bing.com/maps/" target="_blank">Microsoft Bing Search</a><br><i>(Entry of address required)</i></td><br>
+							</tr>
+						
+            				</table>
+				
+				
+
+				
+				
+				</td>
+			</tr>
+			<tr><td class="vspacer" colspan="3"></td></tr>
+			
+			<tr>
+				<th colspan="3" class="full">
+					
+						<a href="https://www.ladbsservices2.lacity.org/OnlineServices/PermitReport/ParcelProfileDetail2?pin=123B157-1268" target="_blank">
+							Parcel Profile Report (BAS)
+						</a> 
+						
+				</th>
+			</tr>		
+			<tr><td class="vspacer" colspan="3"></td></tr>
+			<tr>
+				<th colspan="3" class="full"><a href="" onClick="javascript:ParcelProfileReport('123B157  1268',false,true);return false;">Parcel Profile Report (DCP)</a></th>
+			</tr>
+			<tr><td class="vspacer" colspan="3"></td></tr>
+			<tr>
+				<th colspan="3" class="full">
+                	
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                	
+                	
+						<a href="javascript:void(0);" onclick="dbsPropertyActivityReport('3030','MIDVALE');">Property Activity Report (BAS)</a>
+                    	
+					
+                </th>
+			</tr>
+			<tr><td class="vspacer" colspan="3"></td></tr>
+				  
+			
+			
+			<tr>
+				<th colspan="3" class="full"><a href="fema_s_report.cfm?pin=123B157-1268">Parcel DFIRM Flood Zone Report</a></th>
+			</tr>
+			
+			<tr><td class="vspacer" colspan="3"></td></tr>
+			<tr>
+				<th colspan="3" class="full"><a href="parcel_isin.cfm?pin=123B157-1268">Parcel Is In Report</a></th>
+			</tr>
+			<tr><td class="vspacer" colspan="3"></td></tr>
+			<tr>
+				<th colspan="3" class="full"><a href="nlaby_pin.cfm?pin=123B157-1268">Parcel Description Report</a></th>
+			</tr>
+			<tr><td class="vspacer" colspan="3"></td></tr>
+			<tr>
+				<th colspan="3" class="full"><a href="" onClick="top.changeReport('reports/public_services_isin.cfm?nla_win=p,50,80&pin=123B157-1268');return false;">Public Services Report</a></th>
+			</tr>
+			<tr><td class="vspacer" colspan="3"></td></tr>
+			<tr>
+				<th colspan="3" class="full"><a href="" onClick="top.changeReport('reports/l_sewerwye_report.cfm?nla_win=p,50,80&pin=123B157-1268');return false;">Parcel Sewer Wye Report</a></th>
+			</tr>
+			<tr><td class="vspacer" colspan="3"></td></tr>
+			<tr>
+				<th colspan="3" class="full"><a href="lupams_report.cfm?pin=123B157-1268">County Assessor Report</a></th>
+			</tr>
+			
+				
+			<tr><td class="vspacer" colspan="3"></td></tr>
+			<tr>
+				<th colspan="3" class="full">
+					
+						
+						<a href="https://calscape.org/search" target="_blank" alt="Input address in Calscape search here to find California native plants that will grow in your area" title="Input address in Calscape search here to find California native plants that will grow in your area">Enhancing Biodiversity: Native plants to grow in my location</a>
+						<span id="biodiv_info" style="font-weight:bold;" onMouseOver="this.style.cursor='pointer';" alt="Input address in Calscape search here to find California native plants that will grow in your area" title="Input address in Calscape search here to find California native plants that will grow in your area">
+							?
+						</span>	
+					
+				</th>
+			</tr>
+			<tr><td class="vspacer" style="height:0px;" colspan="3"></td></tr>
+		</table>
+	</div>
+	
+	
+	<div class="frame" style="border:0px;">
+		<table border="0" cellpadding="0" cellspacing="0" width="99%">
+			<tr><td style="border:0px;">"U": Unassigned Number</td></tr>
+			<tr><td class="vspacer" style="height:5px;"></td></tr>
+			<tr><td style="border:0px;font-style:italic;">Please read our <A HREF="" onClick="window.open('../help/disclaimer.cfm','disclaimer','menubar,status,scrollbars,resizable,width=500,height=600'); return false;">Disclaimer</A>.</td></tr>
+		</table>
+	</div>
+	
+
+ 
+
+<script>
+
+function doToggle(ctrl,dv,t1,t2,txt)
+{
+	
+	$('#' + dv).toggle();
+	if ( $('#' + ctrl).attr("class") == "arrow_icon arrow_btm") {
+		$('#' + ctrl).attr("class","arrow_icon arrow_top");
+		$('#' + ctrl).css("top", t2 + "px"); 
+		$('#' + ctrl).attr("title","Hide " + txt); }
+	else {
+		$('#' + ctrl).attr("class","arrow_icon arrow_btm");
+		$('#' + ctrl).css("top", t1 + "px"); 
+		$('#' + ctrl).attr("title","Show " + txt); }
+}
+
+// Open new window with parameters and close property is to have window closed automatically
+function newWindow_args(mypage,myname,w,h,scroll,menu,t,l,tool,loc,center,stat,close_win)
+{
+	if(center=='yes')
+	{
+		l=(screen.width - w) / 2;
+		t=((screen.height - h) / 2) - 60 ;
+	}
+	winprops = 'height='+h+',width='+w+',top='+t+',left='+l+',scrollbars='+scroll+',resizable'+',menubar='+menu+',toolbar='+tool+',location='+loc+',status='+stat;
+	win=window.open(mypage, myname, winprops);
+	win.focus();
+}
+
+				
+function ParcelProfileReport(sPin, bIncludeMap, bIncludeCaseSummaries) 
+{
+  	
+		var sURL = "https://zimas.lacity.org/displayreport.aspx?pin=" + sPin;
+	
+	
+   window.open(sURL, 'ZIMAS_REPORT');
+}
+
+function dbsPropertyActivityReport(sno, sname)
+{
+	document.dbsform.StreetNumber.value=sno;
+	document.dbsform.StreetNameSingle.value=sname;
+	
+	if(sno == "" || sname == "")
+	{
+	
+	}
+	else
+	{
+		document.dbsform.submit();
+	}
+	
+	
+}
+
+// open new window centered ------------------------------------
+function newWindow(mypage, myname, w, h, scroll) 
+{
+	var winl = (screen.width - w) / 2;
+	var wint = (screen.height - h) / 2;
+	winprops = 'height='+h+',width='+w+',top='+wint+',left='+winl+',scrollbars='+scroll+',resizable'+',menubar=yes,location=1';
+	console.log(winprops);
+	win=window.open(mypage,myname,winprops);
+	win.focus();
+}
+
+</script>
+
+<form name="dbsform" id="dbsform" method="post" action="https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/Search" target="_blank">
+	<input type="hidden" value="" name="StreetNumber" id="StreetNumber">
+	<input type="hidden" value="" name="StreetNameSingle" id="StreetNameSingle">
+	<input type="hidden" value="1" name="ActiveService" id="ActiveService">
+</form>
+
+</body>
+</html>   

@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BLDGBIT | ParcelIQ - 3030 Midvale Ave, Los Angeles, CA 90034</title>
+  <link rel="stylesheet" href="_assets/css/comp.css">
+  <style>
+    :root {
+      --ink: #121826;
+      --muted: #5f6b7a;
+      --line: #d7dde4;
+      --panel: rgba(255, 255, 255, 0.9);
+      --panel-strong: #f5f7fa;
+      --accent: #1e3a5f;
+      --accent-soft: #e7eef6;
+      --warn: #6f4c1c;
+      --warn-soft: #f6efe1;
+    }
+    body { color: var(--ink); }
+    .package-shell { max-width: 1180px; position: relative; z-index: 1; }
+    .package-hero { align-items: flex-start; gap: 28px; }
+    .package-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .9px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+    .package-brand-mark {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #21476d, #93abc5);
+      box-shadow: 0 0 0 6px rgba(33, 71, 109, 0.10);
+    }
+    .package-tagline {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .2px;
+      color: var(--accent);
+      margin: 0 0 10px;
+    }
+    .package-subtitle { font-size: 18px; line-height: 1.55; color: var(--muted); max-width: 760px; }
+    .package-chip,
+    .package-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.88);
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 9px 14px;
+      text-decoration: none;
+    }
+    .package-pill:hover { border-color: var(--accent); background: #fff; }
+    .package-pill-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .package-pill-primary:hover { background: #16304f; color: #fff; }
+    .package-pill-secondary { background: var(--accent-soft); border-color: #bfd0e3; color: var(--accent); }
+    .package-link-group { display: grid; gap: 12px; }
+    .package-link-row { display: flex; flex-wrap: wrap; gap: 10px; }
+    .package-group-label {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .9px;
+      color: var(--muted);
+    }
+    .package-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(320px, .7fr);
+      gap: 22px;
+    }
+    .package-stack { display: grid; gap: 22px; }
+    .package-panel {
+      border: 1px solid rgba(203, 212, 222, 0.9);
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(245, 247, 250, 0.92));
+      box-shadow: 0 18px 42px rgba(15, 23, 42, 0.08);
+      padding: 24px;
+    }
+    .package-panel-soft { background: var(--panel-strong); }
+    .package-copy p { margin: 0 0 14px; line-height: 1.72; color: #273140; }
+    .package-meta-grid,
+    .package-kpi-grid { display: grid; gap: 14px; }
+    .package-meta-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .package-kpi-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .package-fact {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.82);
+      padding: 14px 16px;
+      min-height: 90px;
+    }
+    .package-fact-label {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .9px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .package-fact-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.35;
+    }
+    .package-fact-detail { margin-top: 6px; font-size: 13px; color: var(--muted); line-height: 1.5; }
+    .package-section-title {
+      font-size: 18px;
+      font-weight: 800;
+      margin: 0 0 14px;
+      color: var(--ink);
+    }
+    .package-section-intro {
+      margin: 0 0 14px;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 14px;
+    }
+    .package-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 10px;
+    }
+    .package-list li {
+      border-top: 1px solid rgba(203, 212, 222, 0.8);
+      padding-top: 10px;
+      font-size: 13px;
+      color: #334155;
+      line-height: 1.6;
+    }
+    .package-list li:first-child { border-top: none; padding-top: 0; }
+    .package-summary-card {
+      border: 1px solid #d9e1eb;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.78);
+      padding: 18px;
+    }
+    .package-summary-card + .package-summary-card { margin-top: 14px; }
+    .package-summary-kicker {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .9px;
+      font-weight: 800;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .package-summary-copy { font-size: 14px; line-height: 1.72; color: #273140; }
+    .package-timeline { display: grid; gap: 12px; }
+    .package-timeline-item {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.84);
+      padding: 16px 18px;
+    }
+    .package-timeline-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: baseline;
+      margin-bottom: 8px;
+    }
+    .package-timeline-label {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--ink);
+    }
+    .package-timeline-date {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+    .package-timeline-detail {
+      font-size: 13px;
+      color: #334155;
+      line-height: 1.65;
+    }
+    .package-team-grid,
+    .package-doc-grid { display: grid; gap: 14px; }
+    .package-team-card,
+    .package-doc-card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.85);
+      padding: 18px;
+    }
+    .package-team-role {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .package-team-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+    .package-team-meta {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #465467;
+    }
+    .package-doc-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; color: var(--ink); }
+    .package-doc-meta { font-size: 13px; line-height: 1.6; color: var(--muted); margin-bottom: 14px; }
+    .package-group-card {
+      border: 1px solid rgba(190, 201, 214, 0.9);
+      border-radius: 18px;
+      background: rgba(245, 247, 250, 0.92);
+      padding: 20px;
+    }
+    .package-group-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: baseline;
+      margin-bottom: 14px;
+    }
+    .package-group-count {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+    .package-warn {
+      border-color: #e4cfaa;
+      background: var(--warn-soft);
+    }
+    .package-inline-note {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      background: var(--warn-soft);
+      color: var(--warn);
+      border: 1px solid #e4cfaa;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .package-audit-copy {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.65;
+      margin: 0 0 12px;
+    }
+    @media (max-width: 980px) {
+      .package-layout { grid-template-columns: 1fr; }
+      .package-meta-grid,
+      .package-kpi-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 720px) {
+      .package-meta-grid,
+      .package-kpi-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-layer"></div>
+  <main class="shell package-shell" data-property="midvale">
+    <section class="hero-card package-hero">
+      <div class="logo-wrap">
+        <div class="logo-plate"></div>
+        <img class="logo-img" src="_assets/LG.png" alt="BLDGBIT | ParcelIQ" />
+      </div>
+      <div class="hero-text">
+        <div class="package-brand">
+          <span class="package-brand-mark" aria-hidden="true"></span>
+          <span>BLDGBIT | ParcelIQ</span>
+        </div>
+        <div class="eyebrow">Evidence-backed property intelligence</div>
+        <div class="hero-title">3030 Midvale Ave, Los Angeles, CA 90034</div>
+        <p class="package-tagline">Single-property diligence package</p>
+        <p class="package-subtitle">
+          One compact ParcelIQ property package with live truth locking, durable local parcel/doc capture, and explicit cautions wherever Redfin or LADBS stayed incomplete or inconsistent.
+        </p>
+        <div class="package-link-row" style="margin-top: 16px;">
+          <span class="package-chip">Status: Sold</span>
+          <span class="package-chip">Sold: Dec 18, 2025</span>
+          <span class="package-chip">Price: $1,125,000</span>
+          <span class="package-chip">Permits: 3</span>
+          <span class="package-chip">Record Docs: 2</span>
+          <span class="package-chip">Captured Docs: 8</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="package-layout">
+      <div class="package-stack">
+        <section class="package-panel">
+          <div class="package-link-group">
+            <div class="package-group-label">Primary Review Actions</div>
+            <div class="package-link-row">
+              
+              <a class="package-pill package-pill-primary" href="docs/parcel/navigatela_parcel_profile.pdf">Open NavigateLA parcel PDF</a>
+              
+              <a class="package-pill package-pill-secondary" href="#docs">Jump to captured docs</a>
+              <a class="package-pill" href="#team">Review team extraction</a>
+              <a class="package-pill" href="#coverage">Review search coverage</a>
+            </div>
+          </div>
+          <div class="package-link-group" style="margin-top: 16px;">
+            <div class="package-group-label">Verified Source References</div>
+            <div class="package-link-row">
+              
+              <a class="package-pill" href="https://www.redfin.com/CA/Los-Angeles/3030-Midvale-Ave-90034/home/6752668" target="_blank" rel="noopener noreferrer">Redfin live listing</a>
+              
+              <a class="package-pill" href="https://navigatela.lacity.org/navigatela/reports/dc_parcel_reports.cfm?PK=123B157-1268" target="_blank" rel="noopener noreferrer">NavigateLA reports page</a>
+              
+              <a class="package-pill" href="https://www.ladbsservices2.lacity.org/OnlineServices/PermitReport/ParcelProfileDetail2?pin=123B157-1268" target="_blank" rel="noopener noreferrer">BAS parcel profile</a>
+              
+              <a class="package-pill" href="https://www.ladbsservices2.lacity.org/OnlineServices/PermitReport/PermitResultsbyPin?pin=123B157%201268" target="_blank" rel="noopener noreferrer">LADBS permit results by PIN</a>
+              
+            </div>
+          </div>
+          
+        </section>
+
+        <section class="package-panel package-copy">
+          <h2 class="package-section-title">What Happened Here</h2>
+          <div class="package-summary-card">
+            <div class="package-summary-kicker">Transaction</div>
+            <div class="package-summary-copy">Latest Redfin sale: Dec 18, 2025 for $1,125,000. No prior Redfin sale event is exposed in the current live timeline, so prior buy/flip logic is not discoverable.</div>
+          </div>
+          <div class="package-summary-card">
+            <div class="package-summary-kicker">Scope</div>
+            <div class="package-summary-copy">Current LADBS activity centers on 26014-10000-00017: EPLAN. TWO STORY ADDITION TO EXISTING SINGLE FAMILY DWELLING TO ENLARGE AND MODIFY THE EXISTING MAIN HOUSE. PROJECT INCLUDES THE CONSTRUCTION OF A FULLY COMPLIANT ATTACHED ACCESSORY DWELLING UNIT (ADU) PER GC .66323(D)(2); 26030-10000-01235: GPI Written Notices for the addition to the existing single-family dwelling. Older captured permit/doc history includes 16041-10000-23545: 200A UPGRADE; 16044-90000-05282: INSTALL GAS WALL FURNACE; 1940LA04746: ALTER/REPAIR.</div>
+          </div>
+          <div class="package-summary-card">
+            <div class="package-summary-kicker">Coverage</div>
+            <div class="package-summary-copy">
+              
+                assessor apn: 1 result(s) for 3030 S MIDVALE AVE. address exact: 1 result(s) for 3030 S MIDVALE AVE. address history: 2 result(s) for 3030 MIDVALE AVE. doc number:26030-10000-01235: no record docs surfaced for 26030-10000-01235. doc number:26014-10000-00017: no record docs surfaced for 26014-10000-00017. doc number:16041-10000-23545: no record docs surfaced for 16041-10000-23545.
+              
+            </div>
+          </div>
+        </section>
+
+        <section class="package-panel">
+          <h2 class="package-section-title">Chronology</h2>
+          <p class="package-section-intro">Latest sale, permits, and historical LADBS records in one compact sequence.</p>
+          <div class="package-timeline">
+            
+            <article class="package-timeline-item">
+              <div class="package-timeline-top">
+                <div class="package-timeline-label">Permit 26030-10000-01235</div>
+                <div class="package-timeline-date">Feb 20, 2026</div>
+              </div>
+              <div class="package-timeline-detail">GPI Written Notices for the addition to the existing single-family dwelling</div>
+            </article>
+            
+            <article class="package-timeline-item">
+              <div class="package-timeline-top">
+                <div class="package-timeline-label">Permit 26014-10000-00017</div>
+                <div class="package-timeline-date">Feb 12, 2026</div>
+              </div>
+              <div class="package-timeline-detail">EPLAN. TWO STORY ADDITION TO EXISTING SINGLE FAMILY DWELLING TO ENLARGE AND MODIFY THE EXISTING MAIN HOUSE. PROJECT INCLUDES THE CONSTRUCTION OF A FULLY COMPLIANT ATTACHED ACCESSORY DWELLING UNIT (ADU) PER GC .66323(D)(2)</div>
+            </article>
+            
+            <article class="package-timeline-item">
+              <div class="package-timeline-top">
+                <div class="package-timeline-label">Redfin sale</div>
+                <div class="package-timeline-date">Dec 18, 2025</div>
+              </div>
+              <div class="package-timeline-detail">Sold for $1,125,000.</div>
+            </article>
+            
+            <article class="package-timeline-item">
+              <div class="package-timeline-top">
+                <div class="package-timeline-label">Permit 16041-10000-23545</div>
+                <div class="package-timeline-date">Aug 08, 2018</div>
+              </div>
+              <div class="package-timeline-detail">200A UPGRADE</div>
+            </article>
+            
+            <article class="package-timeline-item">
+              <div class="package-timeline-top">
+                <div class="package-timeline-label">Record 16044-90000-05282</div>
+                <div class="package-timeline-date">May 17, 2016</div>
+              </div>
+              <div class="package-timeline-detail">INSTALL GAS WALL FURNACE</div>
+            </article>
+            
+            <article class="package-timeline-item">
+              <div class="package-timeline-top">
+                <div class="package-timeline-label">Record 1940LA04746</div>
+                <div class="package-timeline-date">Feb 08, 1940</div>
+              </div>
+              <div class="package-timeline-detail">ALTER/REPAIR</div>
+            </article>
+            
+            
+          </div>
+        </section>
+
+        <section class="package-panel">
+          <h2 class="package-section-title">Locked Facts</h2>
+          <div class="package-kpi-grid">
+            <div class="package-fact">
+              <div class="package-fact-label">APN / PIN</div>
+              <div class="package-fact-value">4254008019</div>
+              <div class="package-fact-detail">123B157  1268</div>
+            </div>
+            <div class="package-fact">
+              <div class="package-fact-label">Municipal Address</div>
+              <div class="package-fact-value">3030 S MIDVALE AVE</div>
+            </div>
+            <div class="package-fact">
+              <div class="package-fact-label">Property Type</div>
+              <div class="package-fact-value">Single-family</div>
+            </div>
+          </div>
+          <div class="package-meta-grid" style="margin-top: 14px;">
+            <div class="package-fact">
+              <div class="package-fact-label">Beds / Baths</div>
+              <div class="package-fact-value">2 / 2</div>
+            </div>
+            <div class="package-fact">
+              <div class="package-fact-label">Year Built</div>
+              <div class="package-fact-value">1940</div>
+            </div>
+            <div class="package-fact">
+              <div class="package-fact-label">Living Area / Lot</div>
+              <div class="package-fact-value">1,076 SF</div>
+              <div class="package-fact-detail">5,256 lot SF</div>
+            </div>
+            <div class="package-fact">
+              <div class="package-fact-label">Planning Context</div>
+              <div class="package-fact-value">R1-1</div>
+              <div class="package-fact-detail">Low Residential | Palms - Mar Vista - Del Rey</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="package-panel" id="team">
+          <h2 class="package-section-title">Current Team</h2>
+          <p class="package-section-intro">No recent/current project-side names were exposed. The only current named parties are LADBS reviewers/approvers shown below.</p>
+          <div class="package-team-grid">
+            
+            
+            <article class="package-team-card">
+              <div class="package-team-role">Assigned to Zoning Architect</div>
+              <div class="package-team-name">AMIR NAKHLA</div>
+              <div class="package-team-meta">
+                Permit 26014-10000-00017 status history
+                <br>Doc: 26014-10000-00017
+              </div>
+            </article>
+            
+            <article class="package-team-card">
+              <div class="package-team-role">Assigned to Plan Check Engineer</div>
+              <div class="package-team-name">ARSALAN SHABESTARI</div>
+              <div class="package-team-meta">
+                Permit 26014-10000-00017 status history
+                <br>Doc: 26014-10000-00017
+              </div>
+            </article>
+            
+            <article class="package-team-card">
+              <div class="package-team-role">Corrections Issued</div>
+              <div class="package-team-name">ARSALAN SHABESTARI</div>
+              <div class="package-team-meta">
+                Permit 26014-10000-00017 status history
+                <br>Doc: 26014-10000-00017
+              </div>
+            </article>
+            
+            <article class="package-team-card">
+              <div class="package-team-role">Quality Review Completed</div>
+              <div class="package-team-name">GARO TELMI</div>
+              <div class="package-team-meta">
+                Permit 26014-10000-00017 status history
+                <br>Doc: 26014-10000-00017
+              </div>
+            </article>
+            
+            
+          </div>
+        </section>
+
+        <section class="package-panel package-panel-soft">
+          <h2 class="package-section-title">Historic Team (5+ years old)</h2>
+          <p class="package-section-intro">Historic team names from 5+ year-old docs: Contractor: Kelley Joel Electric (Lic. 917355); Record contact: LARRY RODRIGUEZ. Historic city-side names are listed separately below.</p>
+          <div class="package-team-grid">
+            
+            <article class="package-team-card">
+              <div class="package-team-role">Contractor</div>
+              <div class="package-team-name">Kelley Joel Electric</div>
+              <div class="package-team-meta">
+                Permit 16041-10000-23545 contact information
+                <br>License: 917355
+                <br>Doc: 16041-10000-23545
+              </div>
+            </article>
+            
+            <article class="package-team-card">
+              <div class="package-team-role">Record contact</div>
+              <div class="package-team-name">LARRY RODRIGUEZ</div>
+              <div class="package-team-meta">
+                Record 16044-90000-05282 summary page
+                
+                <br>Doc: 16044-90000-05282
+              </div>
+            </article>
+            
+            
+            <article class="package-team-card">
+              <div class="package-team-role">Permit Finaled</div>
+              <div class="package-team-name">ANDREW NAVE</div>
+              <div class="package-team-meta">
+                Permit 16041-10000-23545 status history
+                <br>Doc: 16041-10000-23545
+              </div>
+            </article>
+            
+            
+          </div>
+        </section>
+
+        <section class="package-panel" id="docs">
+          <h2 class="package-section-title">Captured Docs</h2>
+          <p class="package-section-intro">Local captured docs come first. Source links stay secondary and raw files stay out of the main review path.</p>
+          <div class="package-stack">
+            
+            <section class="package-group-card ">
+              <div class="package-group-header">
+                <h3 class="package-section-title" style="margin: 0;">Parcel / zoning</h3>
+                <span class="package-group-count">3 doc(s)</span>
+              </div>
+              
+              <div class="package-doc-grid">
+                
+                <article class="package-doc-card">
+                  <div class="package-doc-title">NavigateLA parcel profile</div>
+                  <div class="package-doc-meta">
+                    Parcel profile report | NavigateLA / ZIMAS DCP | 3/24/2026
+                    <br>Ref: 123B157-1268
+                    <br>Validation: valid_for_subject
+                  </div>
+                  
+                  <ul class="package-list" style="margin-bottom: 14px;">
+                    
+                    <li>NavigateLA reports page lists APN 4254008019.</li>
+                    
+                    <li>NavigateLA reports page lists PIN 123B157-1268.</li>
+                    
+                  </ul>
+                  
+                  <div class="package-link-group">
+                    <div class="package-group-label">Local Doc Links</div>
+                    <div class="package-link-row">
+                      
+                      <a class="package-pill package-pill-primary" href="docs/parcel/parcel-navigatela-profile/index.html">Local doc package</a>
+                      
+                      <a class="package-pill " href="docs/parcel/navigatela_parcel_profile.pdf">Captured parcel profile PDF</a>
+                      
+                      <a class="package-pill " href="docs/parcel/navigatela_available_reports.source.html">Available reports snapshot</a>
+                      
+                      <a class="package-pill " href="docs/parcel/navigatela_available_reports.txt">Available reports text</a>
+                      
+                      <a class="package-pill " href="docs/parcel/navigatela_report_generation.txt">Report generation response</a>
+                      
+                      <a class="package-pill " href="docs/parcel/navigatela_parcel_profile.metadata.json">Metadata</a>
+                      
+                    </div>
+                  </div>
+                  
+                  <div class="package-link-group" style="margin-top: 14px;">
+                    <div class="package-group-label">Source Links</div>
+                    <div class="package-link-row">
+                      
+                      <a class="package-pill" href="https://navigatela.lacity.org/navigatela/reports/dc_parcel_reports.cfm?PK=123B157-1268" target="_blank" rel="noopener noreferrer">NavigateLA reports page</a>
+                      
+                      <a class="package-pill" href="https://zimas.lacity.org/reports/0d5f9fcdfe9d43c9aa878a8e262623e6.pdf" target="_blank" rel="noopener noreferrer">Generated parcel profile source</a>
+                      
+                    </div>
+                  </div>
+                  
+                  
+                  <ul class="package-list" style="margin-top: 14px;">
+                    
+                    <li>pypdf is not installed; PDF preserved locally without text extraction.</li>
+                    
+                  </ul>
+                  
+                </article>
+                
+                <article class="package-doc-card">
+                  <div class="package-doc-title">LADBS parcel profile</div>
+                  <div class="package-doc-meta">
+                    Parcel profile detail | BAS | 3/24/2026
+                    <br>Ref: 123B157-1268
+                    <br>Validation: valid_for_subject
+                  </div>
+                  
+                  <ul class="package-list" style="margin-bottom: 14px;">
+                    
+                    <li>BAS parcel profile repeats 3030 S MIDVALE AVE.</li>
+                    
+                    <li>BAS parcel profile repeats PIN 123B157  1268.</li>
+                    
+                    <li>BAS parcel profile repeats zoning R1-1.</li>
+                    
+                  </ul>
+                  
+                  <div class="package-link-group">
+                    <div class="package-group-label">Local Doc Links</div>
+                    <div class="package-link-row">
+                      
+                      <a class="package-pill package-pill-primary" href="docs/parcel/parcel-bas-profile/index.html">Local doc package</a>
+                      
+                      <a class="package-pill " href="docs/parcel/ladbs_parcel_profile.source.html">Parcel profile snapshot</a>
+                      
+                      <a class="package-pill " href="docs/parcel/ladbs_parcel_profile.txt">Parcel profile text</a>
+                      
+                      <a class="package-pill " href="docs/parcel/ladbs_parcel_profile.metadata.json">Metadata</a>
+                      
+                    </div>
+                  </div>
+                  
+                  <div class="package-link-group" style="margin-top: 14px;">
+                    <div class="package-group-label">Source Links</div>
+                    <div class="package-link-row">
+                      
+                      <a class="package-pill" href="https://www.ladbsservices2.lacity.org/OnlineServices/PermitReport/ParcelProfileDetail2?pin=123B157-1268" target="_blank" rel="noopener noreferrer">BAS parcel profile source</a>
+                      
+                    </div>
+                  </div>
+                  
+                  
+                </article>
+                
+                <article class="package-doc-card">
+                  <div class="package-doc-title">NavigateLA cadastral map</div>
+                  <div class="package-doc-meta">
+                    Cadastral map | NavigateLA | 3/24/2026
+                    <br>Ref: 123B157-1268
+                    <br>Validation: valid_for_subject
+                  </div>
+                  
+                  <ul class="package-list" style="margin-bottom: 14px;">
+                    
+                    <li>NavigateLA reports page lists APN 4254008019.</li>
+                    
+                    <li>NavigateLA reports page lists PIN 123B157-1268.</li>
+                    
+                  </ul>
+                  
+                  <div class="package-link-group">
+                    <div class="package-group-label">Local Doc Links</div>
+                    <div class="package-link-row">
+                      
+                      <a class="package-pill package-pill-primary" href="docs/parcel/parcel-cadastral-map/index.html">Local doc package</a>
+                      
+                      <a class="package-pill " href="docs/parcel/cadastral_map.pdf">Captured cadastral map PDF</a>
+                      
+                      <a class="package-pill " href="docs/parcel/cadastral_map.metadata.json">Metadata</a>
+                      
+                    </div>
+                  </div>
+                  
+                  <div class="package-link-group" style="margin-top: 14px;">
+                    <div class="package-group-label">Source Links</div>
+                    <div class="package-link-row">
+                      
+                      <a class="package-pill" href="https://navigatela.lacity.org/common/mapgallery/pdf/landbase_bw/123B157.pdf?r=0.0418666438014" target="_blank" rel="noopener noreferrer">Cadastral map source</a>
+                      
+                    </div>
+                  </div>
+                  
+                  
+                  <ul class="package-list" style="margin-top: 14px;">
+                    
+                    <li>pypdf is not installed; PDF preserved locally without text extraction.</li>
+                    
+                  </ul>
+                  
+                </article>
+                
+              </div>
+              
+            </section>
+            
+            <section class="package-group-card ">
+              <div class="package-group-header">
+                <h3 class="package-section-title" style="margin: 0;">Current permits</h3>
+                <span class="package-group-count">2 doc(s)</span>
+              </div>
+              
+              <div class="package-doc-grid">
+                
+                <article class="package-doc-card">
+                  <div class="package-doc-title">Permit 26014-10000-00017</div>
+                  <div class="package-doc-meta">
+                    Permit detail | Bldg-Addition - 1 or 2 Family Dwelling | 2/12/2026
+                    <br>Ref: 26014-10000-00017
+                    <br>Validation: valid_for_subject
+                  </div>
+                  
+                  <ul class="package-list" style="margin-bottom: 14px;">
+                    
+                    <li>LADBS permit drilldown was filtered to 3030 S MIDVALE AVE 90034.</li>
+                    
+                    <li>Permit detail page text repeats the subject address.</li>
+                    
+                  </ul>
+                  
+                  <div class="package-link-group">
+                    <div class="package-group-label">Local Doc Links</div>
+                    <div class="package-link-row">
+                      
+                      <a class="package-pill package-pill-primary" href="docs/permits/26014-10000-00017/index.html">Local doc package</a>
+                      
+                      <a class="package-pill " href="docs/permits/26014-10000-00017/permit_detail.source.html">Permit detail snapshot</a>
+                      
+                      <a class="package-pill " href="docs/permits/26014-10000-00017/permit_detail.txt">Extracted text</a>
+                      
+                      <a class="package-pill " href="docs/permits/26014-10000-00017/metadata.json">Metadata</a>
+                      
+                    </div>
+                  </div>
+                  
+                  <div class="package-link-group" style="margin-top: 14px;">
+                    <div class="package-group-label">Source Links</div>
+                    <div class="package-link-row">
+                      
+                      <a class="package-pill" href="https://www.ladbsservices2.lacity.org/OnlineServices/PermitReport/PcisPermitDetail?id1=26014&amp;id2=10000&amp;id3=00017" target="_blank" rel="noopener noreferrer">Permit detail source</a>
+                      
+                    </div>
+                  </div>
+                  
+                  
+                </article>
+                
+                <article class="package-doc-card">
+                  <div class="package-doc-title">Permit 26030-10000-01235</div>
+                  <div class="package-doc-meta">
+                    Permit detail | Grading - 1 or 2 Family Dwelling | 2/20/2026
+                    <br>Ref: 26030-10000-01235
+                    <br>Validation: valid_for_subject
+                  </div>
+                  
+                  <ul class="package-list" style="margin-bottom: 14px;">
+                    
+                    <li>LADBS permit drilldown was filtered to 3030 S MIDVALE AVE 90034.</li>
+                    
+                    <li>Permit detail page text repeats the subject address.</li>
+                    
+                  </ul>
+                  
+                  <div class="package-link-group">
+                    <div class="package-group-label">Local Doc Links</div>
+                    <div class="package-link-row">
+                      
+                      <a class="package-pill package-pill-primary" href="docs/permits/26030-10000-01235/index.html">Local doc package</a>
+                      
+                      <a class="package-pill " href="docs/permits/26030-10000-01235/permit_detail.source.html">Permit detail snapshot</a>
+                      
+                      <a class="package-pill " href="docs/permits/26030-10000-01235/permit_detail.txt">Extracted text</a>
+                      
+                      <a class="package-pill " href="docs/permits/26030-10000-01235/metadata.json">Metadata</a>
+                      
+                    </div>
+                  </div>
+                  
+                  <div class="package-link-group" style="margin-top: 14px;">
+                    <div class="package-group-label">Source Links</div>
+                    <div class="package-link-row">
+                      
+                      <a class="package-pill" href="https://www.ladbsservices2.lacity.org/OnlineServices/PermitReport/PcisPermitDetail?id1=26030&amp;id2=10000&amp;id3=01235" target="_blank" rel="noopener noreferrer">Permit detail source</a>
+                      
+                    </div>
+                  </div>
+                  
+                  
+                </article>
+                
+              </div>
+              
+            </section>
+            
+            <section class="package-group-card ">
+              <div class="package-group-header">
+                <h3 class="package-section-title" style="margin: 0;">Historic permits</h3>
+                <span class="package-group-count">1 doc(s)</span>
+              </div>
+              
+              <div class="package-doc-grid">
+                
+                <article class="package-doc-card">
+                  <div class="package-doc-title">Permit 16041-10000-23545</div>
+                  <div class="package-doc-meta">
+                    Permit detail | Electrical - 1 or 2 Family Dwelling | 8/8/2018
+                    <br>Ref: 16041-10000-23545
+                    <br>Validation: valid_for_subject
+                  </div>
+                  
+                  <ul class="package-list" style="margin-bottom: 14px;">
+                    
+                    <li>LADBS permit drilldown was filtered to 3030 S MIDVALE AVE 90034.</li>
+                    
+                    <li>Permit detail page text repeats the subject address.</li>
+                    
+                  </ul>
+                  
+                  <div class="package-link-group">
+                    <div class="package-group-label">Local Doc Links</div>
+                    <div class="package-link-row">
+                      
+                      <a class="package-pill package-pill-primary" href="docs/permits/16041-10000-23545/index.html">Local doc package</a>
+                      
+                      <a class="package-pill " href="docs/permits/16041-10000-23545/permit_detail.source.html">Permit detail snapshot</a>
+                      
+                      <a class="package-pill " href="docs/permits/16041-10000-23545/permit_detail.txt">Extracted text</a>
+                      
+                      <a class="package-pill " href="docs/permits/16041-10000-23545/metadata.json">Metadata</a>
+                      
+                    </div>
+                  </div>
+                  
+                  <div class="package-link-group" style="margin-top: 14px;">
+                    <div class="package-group-label">Source Links</div>
+                    <div class="package-link-row">
+                      
+                      <a class="package-pill" href="https://www.ladbsservices2.lacity.org/OnlineServices/PermitReport/PcisPermitDetail?id1=16041&amp;id2=10000&amp;id3=23545" target="_blank" rel="noopener noreferrer">Permit detail source</a>
+                      
+                    </div>
+                  </div>
+                  
+                  
+                </article>
+                
+              </div>
+              
+            </section>
+            
+            <section class="package-group-card package-warn">
+              <div class="package-group-header">
+                <h3 class="package-section-title" style="margin: 0;">Certificates of Occupancy</h3>
+                <span class="package-group-count">0 doc(s)</span>
+              </div>
+              
+              <div class="package-team-card">
+                <div class="package-team-meta">
+                  
+                  No certificate-of-occupancy doc was surfaced by the accessible LADBS searches for this parcel.
+                  
+                </div>
+              </div>
+              
+            </section>
+            
+            <section class="package-group-card ">
+              <div class="package-group-header">
+                <h3 class="package-section-title" style="margin: 0;">Other LADBS records</h3>
+                <span class="package-group-count">2 doc(s)</span>
+              </div>
+              
+              <div class="package-doc-grid">
+                
+                <article class="package-doc-card">
+                  <div class="package-doc-title">Record 16044-90000-05282</div>
+                  <div class="package-doc-meta">
+                    MECHANICAL PERMIT | HVAC | 5/17/2016
+                    <br>Ref: 16044-90000-05282
+                    <br>Validation: valid_for_subject
+                  </div>
+                  
+                  <ul class="package-list" style="margin-bottom: 14px;">
+                    
+                    <li>LADBS records search selected 3030 S MIDVALE AVE.</li>
+                    
+                    <li>Record summary page text repeats the subject address.</li>
+                    
+                    <li>Live records result returned document 16044-90000-05282.</li>
+                    
+                  </ul>
+                  
+                  <div class="package-link-group">
+                    <div class="package-group-label">Local Doc Links</div>
+                    <div class="package-link-row">
+                      
+                      <a class="package-pill package-pill-primary" href="docs/records/16044-90000-05282/index.html">Local doc package</a>
+                      
+                      <a class="package-pill " href="docs/records/16044-90000-05282/record_summary.source.html">Record summary snapshot</a>
+                      
+                      <a class="package-pill " href="docs/records/16044-90000-05282/record_summary.txt">Record summary text</a>
+                      
+                      <a class="package-pill " href="docs/records/16044-90000-05282/image_main.source.html">Image viewer snapshot</a>
+                      
+                      <a class="package-pill " href="docs/records/16044-90000-05282/image_list.source.html">Image list snapshot</a>
+                      
+                      <a class="package-pill " href="docs/records/16044-90000-05282/image_list.txt">Image list text</a>
+                      
+                      <a class="package-pill " href="docs/records/16044-90000-05282/document.pdf">Captured PDF</a>
+                      
+                      <a class="package-pill " href="docs/records/16044-90000-05282/metadata.json">Metadata</a>
+                      
+                    </div>
+                  </div>
+                  
+                  <div class="package-link-group" style="margin-top: 14px;">
+                    <div class="package-group-label">Source Links</div>
+                    <div class="package-link-row">
+                      
+                      <a class="package-pill" href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/ImageMain.aspx?DocIds=%7B3209FCFC-A159-4E83-A40F-E312DFAE263F%7D%2C" target="_blank" rel="noopener noreferrer">LADBS document viewer source</a>
+                      
+                    </div>
+                  </div>
+                  
+                  
+                  <ul class="package-list" style="margin-top: 14px;">
+                    
+                    <li>pypdf is not installed; PDF preserved locally without text extraction.</li>
+                    
+                    <li>LADBS record summary URL was usable only inside the live search session and is not treated as a durable public link.</li>
+                    
+                    <li>The LADBS PDF URL yielded a real PDF only inside the live records session, so the local PDF is the durable artifact.</li>
+                    
+                  </ul>
+                  
+                </article>
+                
+                <article class="package-doc-card">
+                  <div class="package-doc-title">Record 1940LA04746</div>
+                  <div class="package-doc-meta">
+                    BUILDING PERMIT | BLDG-ALTER/REPAIR | 2/8/1940
+                    <br>Ref: 1940LA04746
+                    <br>Validation: valid_for_subject
+                  </div>
+                  
+                  <ul class="package-list" style="margin-bottom: 14px;">
+                    
+                    <li>LADBS records search selected 3030 MIDVALE AVE.</li>
+                    
+                    <li>Record summary page text repeats the subject address.</li>
+                    
+                    <li>Live records result returned document 1940LA04746.</li>
+                    
+                  </ul>
+                  
+                  <div class="package-link-group">
+                    <div class="package-group-label">Local Doc Links</div>
+                    <div class="package-link-row">
+                      
+                      <a class="package-pill package-pill-primary" href="docs/records/1940la04746/index.html">Local doc package</a>
+                      
+                      <a class="package-pill " href="docs/records/1940la04746/record_summary.source.html">Record summary snapshot</a>
+                      
+                      <a class="package-pill " href="docs/records/1940la04746/record_summary.txt">Record summary text</a>
+                      
+                      <a class="package-pill " href="docs/records/1940la04746/image_main.source.html">Image viewer snapshot</a>
+                      
+                      <a class="package-pill " href="docs/records/1940la04746/image_list.source.html">Image list snapshot</a>
+                      
+                      <a class="package-pill " href="docs/records/1940la04746/image_list.txt">Image list text</a>
+                      
+                      <a class="package-pill " href="docs/records/1940la04746/document.pdf">Captured PDF</a>
+                      
+                      <a class="package-pill " href="docs/records/1940la04746/metadata.json">Metadata</a>
+                      
+                    </div>
+                  </div>
+                  
+                  <div class="package-link-group" style="margin-top: 14px;">
+                    <div class="package-group-label">Source Links</div>
+                    <div class="package-link-row">
+                      
+                      <a class="package-pill" href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/ImageMain.aspx?DocIds=%7Bb7e91419-60e4-4c16-9701-ef0ef4d9fbdd%7D%2C" target="_blank" rel="noopener noreferrer">LADBS document viewer source</a>
+                      
+                    </div>
+                  </div>
+                  
+                  
+                  <ul class="package-list" style="margin-top: 14px;">
+                    
+                    <li>pypdf is not installed; PDF preserved locally without text extraction.</li>
+                    
+                    <li>LADBS record summary URL was usable only inside the live search session and is not treated as a durable public link.</li>
+                    
+                    <li>The LADBS PDF URL yielded a real PDF only inside the live records session, so the local PDF is the durable artifact.</li>
+                    
+                  </ul>
+                  
+                </article>
+                
+              </div>
+              
+            </section>
+            
+          </div>
+        </section>
+      </div>
+
+      <div class="package-stack">
+        <section class="package-panel">
+          <h2 class="package-section-title">Scope Summary</h2>
+          <div class="package-summary-card">
+            <div class="package-summary-kicker">Current</div>
+            <ul class="package-list">
+              
+              <li>26014-10000-00017: EPLAN. TWO STORY ADDITION TO EXISTING SINGLE FAMILY DWELLING TO ENLARGE AND MODIFY THE EXISTING MAIN HOUSE. PROJECT INCLUDES THE CONSTRUCTION OF A FULLY COMPLIANT ATTACHED ACCESSORY DWELLING UNIT (ADU) PER GC .66323(D)(2)</li>
+              
+              <li>26030-10000-01235: GPI Written Notices for the addition to the existing single-family dwelling</li>
+              
+              
+            </ul>
+          </div>
+          <div class="package-summary-card">
+            <div class="package-summary-kicker">Historic</div>
+            <ul class="package-list">
+              
+              <li>16041-10000-23545: 200A UPGRADE</li>
+              
+              <li>16044-90000-05282: INSTALL GAS WALL FURNACE</li>
+              
+              <li>1940LA04746: ALTER/REPAIR</li>
+              
+              
+            </ul>
+          </div>
+        </section>
+
+        <section class="package-panel" id="coverage">
+          <h2 class="package-section-title">Historic LADBS Search Coverage</h2>
+          <p class="package-section-intro">These are the search paths explicitly attempted before concluding the package still has coverage gaps.</p>
+          <ul class="package-list">
+            
+            <li>assessor apn: 1 result(s) for 3030 S MIDVALE AVE.</li>
+            
+            <li>address exact: 1 result(s) for 3030 S MIDVALE AVE.</li>
+            
+            <li>address history: 2 result(s) for 3030 MIDVALE AVE.</li>
+            
+            <li>doc number:26030-10000-01235: no record docs surfaced for 26030-10000-01235.</li>
+            
+            <li>doc number:26014-10000-00017: no record docs surfaced for 26014-10000-00017.</li>
+            
+            <li>doc number:16041-10000-23545: no record docs surfaced for 16041-10000-23545.</li>
+            
+            
+          </ul>
+        </section>
+
+        <section class="package-panel package-warn">
+          <h2 class="package-section-title">Key Cautions</h2>
+          <ul class="package-list">
+            
+            <li>Redfin is internally inconsistent on baths: the live listing header shows 2 bath(s), while Redfin public records show 1 bath(s).</li>
+            
+            <li>LADBS PermitResultsbyPin page summary reported 1 permit(s), but the subject-address drilldown yielded 3 permit detail page(s).</li>
+            
+            <li>Document-number searches for permit(s) 26030-10000-01235, 26014-10000-00017, 16041-10000-23545 returned no additional IDIS record docs.</li>
+            
+            <li>Expanded LADBS assessor, address, and document-number searches did not surface any certificate-of-occupancy record.</li>
+            
+            <li>Expanded LADBS searches converged on the following record doc(s): 16044-90000-05282, 1940LA04746.</li>
+            
+            <li>LADBS records coverage is sparse relative to the permit set: 2 record doc(s) versus 3 permit detail page(s).</li>
+            
+            <li>Prior developer buy price is not discoverable from the current live Redfin timeline.</li>
+            
+            <li>No certificate-of-occupancy document or permit field was accessible in this live run.</li>
+            
+          </ul>
+        </section>
+
+        <section class="package-panel">
+          <h2 class="package-section-title">Audit Data</h2>
+          <p class="package-audit-copy">Raw payload, live truth, and manifest files remain available for audit, but they stay below the primary ParcelIQ review path.</p>
+          <div class="package-link-row">
+            
+            <a class="package-pill" href="payload.normalized.json">Open payload</a>
+            
+            <a class="package-pill" href="live_truth.json">Open live truth JSON</a>
+            
+            <a class="package-pill" href="docs_manifest.json">Open docs manifest</a>
+            
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

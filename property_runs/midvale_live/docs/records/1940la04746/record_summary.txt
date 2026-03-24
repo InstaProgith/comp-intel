@@ -2,18 +2,18 @@ Document Report
 March 24, 2026
 Document Report
 Documents
-Digital Image {3209FCFC-A159-4E83-A40F-E312DFAE263F}
+Digital Image {b7e91419-60e4-4c16-9701-ef0ef4d9fbdd}
 Document Number(s)
-16044-90000-05282
+1940LA04746
 Record Description
 Record ID:
-56925302
+53918904
 Doc Type:
-MECHANICAL PERMIT
+BUILDING PERMIT
 Sub Type:
-HVAC
+BLDG-ALTER/REPAIR
 Doc Date:
-05/17/2016
+02/08/1940
 Status:
 ISSUED
 Doc Version:
@@ -37,40 +37,26 @@ None
 Case Number:
 None
 Scan Number:
-None
+5000919201100003288
 Dwelling Units:
 None
 Comments:
-INSTALL GAS WALL FURNACE
+ALTER/REPAIR.
 Property Address(es)
-3030  3030  S MIDVALE AVE   90034-
+3030     MIDVALE AVE
 Legal Description(s)
 Tract:
-TR 11966
+NOT LISTED
 Block:
 Lot:
-41
 Arb:
 Map Reference:
-M B 222-33/35
 Modifier:
-Contact
-Name:
-LARRY RODRIGUEZ
-PIN(s)
-123B157  1268
-Assessor Number(s)
-4254-008-019
-Council District(s)
-5
-Census Tracts(s)
-2717.01
-March 24, 2026
-Document Report
-District Offices(s)
-WLA
-Permit Reference(s)
-2016OL
+Film RBF
+Type: IDIS P5324; 00390; 0000 thru P5324; 0001
+Type: HIST P1318; 002; 0779
+Primary Use
+SINGLE-FAMILY DWELLING
 Cross References(s)
 Comments:
-56925302
+53918904

@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ page.package_title }}</title>
+  <link rel="stylesheet" href="{{ page.stylesheet_href }}">
+  <style>
+    :root {
+      --ink: #121826;
+      --muted: #5f6b7a;
+      --line: #d7dde4;
+      --panel: rgba(255, 255, 255, 0.9);
+      --panel-strong: #f5f7fa;
+      --accent: #1e3a5f;
+      --accent-soft: #e7eef6;
+      --warn: #6f4c1c;
+      --warn-soft: #f6efe1;
+    }
+    body { color: var(--ink); }
+    .package-shell { max-width: 1180px; position: relative; z-index: 1; }
+    .package-hero { align-items: flex-start; gap: 28px; }
+    .package-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .9px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+    .package-brand-mark {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #21476d, #93abc5);
+      box-shadow: 0 0 0 6px rgba(33, 71, 109, 0.10);
+    }
+    .package-tagline {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .2px;
+      color: var(--accent);
+      margin: 0 0 10px;
+    }
+    .package-subtitle { font-size: 18px; line-height: 1.55; color: var(--muted); max-width: 760px; }
+    .package-chip,
+    .package-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.88);
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 9px 14px;
+      text-decoration: none;
+    }
+    .package-pill:hover { border-color: var(--accent); background: #fff; }
+    .package-pill-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .package-pill-primary:hover { background: #16304f; color: #fff; }
+    .package-pill-secondary { background: var(--accent-soft); border-color: #bfd0e3; color: var(--accent); }
+    .package-link-group { display: grid; gap: 12px; }
+    .package-link-row { display: flex; flex-wrap: wrap; gap: 10px; }
+    .package-group-label {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .9px;
+      color: var(--muted);
+    }
+    .package-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(320px, .7fr);
+      gap: 22px;
+    }
+    .package-stack { display: grid; gap: 22px; }
+    .package-panel {
+      border: 1px solid rgba(203, 212, 222, 0.9);
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(245, 247, 250, 0.92));
+      box-shadow: 0 18px 42px rgba(15, 23, 42, 0.08);
+      padding: 24px;
+    }
+    .package-panel-soft { background: var(--panel-strong); }
+    .package-copy p { margin: 0 0 14px; line-height: 1.72; color: #273140; }
+    .package-meta-grid,
+    .package-kpi-grid { display: grid; gap: 14px; }
+    .package-meta-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .package-kpi-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .package-fact {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.82);
+      padding: 14px 16px;
+      min-height: 90px;
+    }
+    .package-fact-label {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .9px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .package-fact-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.35;
+    }
+    .package-fact-detail { margin-top: 6px; font-size: 13px; color: var(--muted); line-height: 1.5; }
+    .package-section-title {
+      font-size: 18px;
+      font-weight: 800;
+      margin: 0 0 14px;
+      color: var(--ink);
+    }
+    .package-section-intro {
+      margin: 0 0 14px;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 14px;
+    }
+    .package-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 10px;
+    }
+    .package-list li {
+      border-top: 1px solid rgba(203, 212, 222, 0.8);
+      padding-top: 10px;
+      font-size: 13px;
+      color: #334155;
+      line-height: 1.6;
+    }
+    .package-list li:first-child { border-top: none; padding-top: 0; }
+    .package-summary-card {
+      border: 1px solid #d9e1eb;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.78);
+      padding: 18px;
+    }
+    .package-summary-card + .package-summary-card { margin-top: 14px; }
+    .package-summary-kicker {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .9px;
+      font-weight: 800;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .package-summary-copy { font-size: 14px; line-height: 1.72; color: #273140; }
+    .package-timeline { display: grid; gap: 12px; }
+    .package-timeline-item {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.84);
+      padding: 16px 18px;
+    }
+    .package-timeline-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: baseline;
+      margin-bottom: 8px;
+    }
+    .package-timeline-label {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--ink);
+    }
+    .package-timeline-date {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+    .package-timeline-detail {
+      font-size: 13px;
+      color: #334155;
+      line-height: 1.65;
+    }
+    .package-team-grid,
+    .package-doc-grid { display: grid; gap: 14px; }
+    .package-team-card,
+    .package-doc-card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.85);
+      padding: 18px;
+    }
+    .package-team-role {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .package-team-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+    .package-team-meta {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #465467;
+    }
+    .package-doc-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; color: var(--ink); }
+    .package-doc-meta { font-size: 13px; line-height: 1.6; color: var(--muted); margin-bottom: 14px; }
+    .package-group-card {
+      border: 1px solid rgba(190, 201, 214, 0.9);
+      border-radius: 18px;
+      background: rgba(245, 247, 250, 0.92);
+      padding: 20px;
+    }
+    .package-group-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: baseline;
+      margin-bottom: 14px;
+    }
+    .package-group-count {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+    .package-warn {
+      border-color: #e4cfaa;
+      background: var(--warn-soft);
+    }
+    .package-inline-note {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      background: var(--warn-soft);
+      color: var(--warn);
+      border: 1px solid #e4cfaa;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .package-audit-copy {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.65;
+      margin: 0 0 12px;
+    }
+    @media (max-width: 980px) {
+      .package-layout { grid-template-columns: 1fr; }
+      .package-meta-grid,
+      .package-kpi-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 720px) {
+      .package-meta-grid,
+      .package-kpi-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-layer"></div>
+  <main class="shell package-shell" data-property="midvale">
+    <section class="hero-card package-hero">
+      <div class="logo-wrap">
+        <div class="logo-plate"></div>
+        <img class="logo-img" src="{{ page.logo_href }}" alt="BLDGBIT | ParcelIQ" />
+      </div>
+      <div class="hero-text">
+        <div class="package-brand">
+          <span class="package-brand-mark" aria-hidden="true"></span>
+          <span>{{ page.brand_name }}</span>
+        </div>
+        <div class="eyebrow">{{ page.brand_tagline }}</div>
+        <div class="hero-title">{{ page.truth.address }}</div>
+        <p class="package-tagline">Single-property diligence package</p>
+        <p class="package-subtitle">
+          {{ page.hero_summary }}
+        </p>
+        <div class="package-link-row" style="margin-top: 16px;">
+          <span class="package-chip">Status: {{ page.truth.status }}</span>
+          <span class="package-chip">Sold: {{ page.truth.last_sold_date_display }}</span>
+          <span class="package-chip">Price: {{ page.truth.last_sold_price_display }}</span>
+          <span class="package-chip">Permits: {{ page.permit_count }}</span>
+          <span class="package-chip">Record Docs: {{ page.record_count }}</span>
+          <span class="package-chip">Captured Docs: {{ page.doc_capture_count }}</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="package-layout">
+      <div class="package-stack">
+        <section class="package-panel">
+          <div class="package-link-group">
+            <div class="package-group-label">Primary Review Actions</div>
+            <div class="package-link-row">
+              {% if page.primary_parcel_local %}
+              <a class="package-pill package-pill-primary" href="{{ page.primary_parcel_local.path }}">Open NavigateLA parcel PDF</a>
+              {% endif %}
+              <a class="package-pill package-pill-secondary" href="#docs">Jump to captured docs</a>
+              <a class="package-pill" href="#team">Review team extraction</a>
+              <a class="package-pill" href="#coverage">Review search coverage</a>
+            </div>
+          </div>
+          <div class="package-link-group" style="margin-top: 16px;">
+            <div class="package-group-label">Verified Source References</div>
+            <div class="package-link-row">
+              {% for link in page.source_links %}
+              <a class="package-pill" href="{{ link.url }}" target="_blank" rel="noopener noreferrer">{{ link.label }}</a>
+              {% endfor %}
+            </div>
+          </div>
+          {% if not page.navigate_pdf_captured %}
+          <div style="margin-top: 16px;">
+            <span class="package-inline-note">NavigateLA parcel PDF capture was unavailable; ZIMAS remains the parcel fallback.</span>
+          </div>
+          {% endif %}
+        </section>
+
+        <section class="package-panel package-copy">
+          <h2 class="package-section-title">What Happened Here</h2>
+          <div class="package-summary-card">
+            <div class="package-summary-kicker">Transaction</div>
+            <div class="package-summary-copy">{{ page.truth.sold_flip_summary }}</div>
+          </div>
+          <div class="package-summary-card">
+            <div class="package-summary-kicker">Scope</div>
+            <div class="package-summary-copy">{{ page.scope_summary.summary }}</div>
+          </div>
+          <div class="package-summary-card">
+            <div class="package-summary-kicker">Coverage</div>
+            <div class="package-summary-copy">
+              {% if page.search_summary %}
+                {{ page.search_summary|join(' ') }}
+              {% else %}
+                No additional historical LADBS search coverage notes were recorded.
+              {% endif %}
+            </div>
+          </div>
+        </section>
+
+        <section class="package-panel">
+          <h2 class="package-section-title">Chronology</h2>
+          <p class="package-section-intro">Latest sale, permits, and historical LADBS records in one compact sequence.</p>
+          <div class="package-timeline">
+            {% for item in page.chronology %}
+            <article class="package-timeline-item">
+              <div class="package-timeline-top">
+                <div class="package-timeline-label">{{ item.label }}</div>
+                <div class="package-timeline-date">{{ item.date_display }}</div>
+              </div>
+              <div class="package-timeline-detail">{{ item.detail }}</div>
+            </article>
+            {% endfor %}
+            {% if not page.chronology %}
+            <article class="package-timeline-item">
+              <div class="package-timeline-detail">No chronology items were available from the current live run.</div>
+            </article>
+            {% endif %}
+          </div>
+        </section>
+
+        <section class="package-panel">
+          <h2 class="package-section-title">Locked Facts</h2>
+          <div class="package-kpi-grid">
+            <div class="package-fact">
+              <div class="package-fact-label">APN / PIN</div>
+              <div class="package-fact-value">{{ page.identity.apn }}</div>
+              <div class="package-fact-detail">{{ page.identity.pin }}</div>
+            </div>
+            <div class="package-fact">
+              <div class="package-fact-label">Municipal Address</div>
+              <div class="package-fact-value">{{ page.identity.municipal_address }}</div>
+            </div>
+            <div class="package-fact">
+              <div class="package-fact-label">Property Type</div>
+              <div class="package-fact-value">{{ page.truth.property_type }}</div>
+            </div>
+          </div>
+          <div class="package-meta-grid" style="margin-top: 14px;">
+            <div class="package-fact">
+              <div class="package-fact-label">Beds / Baths</div>
+              <div class="package-fact-value">{{ page.truth.beds_display }} / {{ page.truth.baths_display }}</div>
+            </div>
+            <div class="package-fact">
+              <div class="package-fact-label">Year Built</div>
+              <div class="package-fact-value">{{ page.truth.year_built }}</div>
+            </div>
+            <div class="package-fact">
+              <div class="package-fact-label">Living Area / Lot</div>
+              <div class="package-fact-value">{{ page.truth.living_area_sf_display }} SF</div>
+              <div class="package-fact-detail">{{ page.truth.lot_size_sf_display }} lot SF</div>
+            </div>
+            <div class="package-fact">
+              <div class="package-fact-label">Planning Context</div>
+              <div class="package-fact-value">{{ page.identity.zoning }}</div>
+              <div class="package-fact-detail">{{ page.identity.general_plan_land_use }} | {{ page.identity.community_plan_area }}</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="package-panel" id="team">
+          <h2 class="package-section-title">Current Team</h2>
+          <p class="package-section-intro">{{ page.team_summary.current_summary }}</p>
+          <div class="package-team-grid">
+            {% for person in page.team_summary.current.project_side %}
+            <article class="package-team-card">
+              <div class="package-team-role">{{ person.role }}</div>
+              <div class="package-team-name">{{ person.name }}</div>
+              <div class="package-team-meta">
+                {{ person.source }}
+                {% if person.license_number %}<br>License: {{ person.license_number }}{% endif %}
+                {% if person.source_doc %}<br>Doc: {{ person.source_doc }}{% endif %}
+              </div>
+            </article>
+            {% endfor %}
+            {% for person in page.team_summary.current.city_side %}
+            <article class="package-team-card">
+              <div class="package-team-role">{{ person.role }}</div>
+              <div class="package-team-name">{{ person.name }}</div>
+              <div class="package-team-meta">
+                {{ person.source }}
+                {% if person.source_doc %}<br>Doc: {{ person.source_doc }}{% endif %}
+              </div>
+            </article>
+            {% endfor %}
+            {% if not page.team_summary.current.project_side and not page.team_summary.current.city_side %}
+            <article class="package-team-card">
+              <div class="package-team-meta">No current-team names were exposed in the non-historic captured docs.</div>
+            </article>
+            {% endif %}
+          </div>
+        </section>
+
+        <section class="package-panel package-panel-soft">
+          <h2 class="package-section-title">Historic Team (5+ years old)</h2>
+          <p class="package-section-intro">{{ page.team_summary.historic_summary }}</p>
+          <div class="package-team-grid">
+            {% for person in page.team_summary.historic.project_side %}
+            <article class="package-team-card">
+              <div class="package-team-role">{{ person.role }}</div>
+              <div class="package-team-name">{{ person.name }}</div>
+              <div class="package-team-meta">
+                {{ person.source }}
+                {% if person.license_number %}<br>License: {{ person.license_number }}{% endif %}
+                {% if person.source_doc %}<br>Doc: {{ person.source_doc }}{% endif %}
+              </div>
+            </article>
+            {% endfor %}
+            {% for person in page.team_summary.historic.city_side %}
+            <article class="package-team-card">
+              <div class="package-team-role">{{ person.role }}</div>
+              <div class="package-team-name">{{ person.name }}</div>
+              <div class="package-team-meta">
+                {{ person.source }}
+                {% if person.source_doc %}<br>Doc: {{ person.source_doc }}{% endif %}
+              </div>
+            </article>
+            {% endfor %}
+            {% if not page.team_summary.historic.project_side and not page.team_summary.historic.city_side %}
+            <article class="package-team-card">
+              <div class="package-team-meta">No 5+ year-old names were exposed in the captured docs.</div>
+            </article>
+            {% endif %}
+          </div>
+        </section>
+
+        <section class="package-panel" id="docs">
+          <h2 class="package-section-title">Captured Docs</h2>
+          <p class="package-section-intro">Local captured docs come first. Source links stay secondary and raw files stay out of the main review path.</p>
+          <div class="package-stack">
+            {% for group in page.grouped_docs %}
+            <section class="package-group-card {% if group.key == 'certificate_of_occupancy' and not group.docs %}package-warn{% endif %}">
+              <div class="package-group-header">
+                <h3 class="package-section-title" style="margin: 0;">{{ group.label }}</h3>
+                <span class="package-group-count">{{ group.count }} doc(s)</span>
+              </div>
+              {% if group.docs %}
+              <div class="package-doc-grid">
+                {% for doc in group.docs %}
+                <article class="package-doc-card">
+                  <div class="package-doc-title">{{ doc.title }}</div>
+                  <div class="package-doc-meta">
+                    {{ doc.doc_type }}{% if doc.sub_type %} | {{ doc.sub_type }}{% endif %}{% if doc.doc_date %} | {{ doc.doc_date }}{% endif %}
+                    {% if doc.doc_number %}<br>Ref: {{ doc.doc_number }}{% endif %}
+                    {% if doc.validation_status %}<br>Validation: {{ doc.validation_status }}{% endif %}
+                  </div>
+                  {% if doc.validation_evidence %}
+                  <ul class="package-list" style="margin-bottom: 14px;">
+                    {% for item in doc.validation_evidence %}
+                    <li>{{ item }}</li>
+                    {% endfor %}
+                  </ul>
+                  {% endif %}
+                  <div class="package-link-group">
+                    <div class="package-group-label">Local Doc Links</div>
+                    <div class="package-link-row">
+                      {% for file in doc.local_files %}
+                      <a class="package-pill {% if loop.first %}package-pill-primary{% endif %}" href="{{ file.path }}">{{ file.label }}</a>
+                      {% endfor %}
+                    </div>
+                  </div>
+                  {% if doc.source_links %}
+                  <div class="package-link-group" style="margin-top: 14px;">
+                    <div class="package-group-label">Source Links</div>
+                    <div class="package-link-row">
+                      {% for link in doc.source_links %}
+                      <a class="package-pill" href="{{ link.url }}" target="_blank" rel="noopener noreferrer">{{ link.label }}</a>
+                      {% endfor %}
+                    </div>
+                  </div>
+                  {% endif %}
+                  {% if doc.capture_notes %}
+                  <ul class="package-list" style="margin-top: 14px;">
+                    {% for note in doc.capture_notes %}
+                    <li>{{ note }}</li>
+                    {% endfor %}
+                  </ul>
+                  {% endif %}
+                </article>
+                {% endfor %}
+              </div>
+              {% else %}
+              <div class="package-team-card">
+                <div class="package-team-meta">
+                  {% if group.key == 'certificate_of_occupancy' %}
+                  No certificate-of-occupancy doc was surfaced by the accessible LADBS searches for this parcel.
+                  {% else %}
+                  No docs currently sit in this group.
+                  {% endif %}
+                </div>
+              </div>
+              {% endif %}
+            </section>
+            {% endfor %}
+          </div>
+        </section>
+      </div>
+
+      <div class="package-stack">
+        <section class="package-panel">
+          <h2 class="package-section-title">Scope Summary</h2>
+          <div class="package-summary-card">
+            <div class="package-summary-kicker">Current</div>
+            <ul class="package-list">
+              {% for item in page.scope_summary.current_items %}
+              <li>{{ item }}</li>
+              {% endfor %}
+              {% if not page.scope_summary.current_items %}
+              <li>No active post-sale scope was exposed in the captured permit set.</li>
+              {% endif %}
+            </ul>
+          </div>
+          <div class="package-summary-card">
+            <div class="package-summary-kicker">Historic</div>
+            <ul class="package-list">
+              {% for item in page.scope_summary.historical_items %}
+              <li>{{ item }}</li>
+              {% endfor %}
+              {% if not page.scope_summary.historical_items %}
+              <li>No older permit or record scope was captured.</li>
+              {% endif %}
+            </ul>
+          </div>
+        </section>
+
+        <section class="package-panel" id="coverage">
+          <h2 class="package-section-title">Historic LADBS Search Coverage</h2>
+          <p class="package-section-intro">These are the search paths explicitly attempted before concluding the package still has coverage gaps.</p>
+          <ul class="package-list">
+            {% for item in page.search_summary %}
+            <li>{{ item }}</li>
+            {% endfor %}
+            {% if not page.search_summary %}
+            <li>No additional search-attempt detail was recorded.</li>
+            {% endif %}
+          </ul>
+        </section>
+
+        <section class="package-panel package-warn">
+          <h2 class="package-section-title">Key Cautions</h2>
+          <ul class="package-list">
+            {% for caution in page.cautions %}
+            <li>{{ caution }}</li>
+            {% endfor %}
+          </ul>
+        </section>
+
+        <section class="package-panel">
+          <h2 class="package-section-title">Audit Data</h2>
+          <p class="package-audit-copy">Raw payload, live truth, and manifest files remain available for audit, but they stay below the primary ParcelIQ review path.</p>
+          <div class="package-link-row">
+            {% for link in page.audit_links %}
+            <a class="package-pill" href="{{ link.href }}">{{ link.label }}</a>
+            {% endfor %}
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

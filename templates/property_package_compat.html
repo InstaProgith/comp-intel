@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>BLDGBIT | ParcelIQ - 3030 Midvale Ave, Los Angeles, CA 90034 | Report</title>
-  <link rel="stylesheet" href="_assets/css/comp.css">
+  <title>{{ page.package_title }} | {{ page.page_kind }}</title>
+  <link rel="stylesheet" href="{{ page.stylesheet_href }}">
   <style>
     .compat-shell { max-width: 860px; position: relative; z-index: 1; }
     .compat-hero { align-items: flex-start; }
@@ -31,14 +31,14 @@
     <section class="hero-card compat-hero">
       <div class="logo-wrap">
         <div class="logo-plate"></div>
-        <img class="logo-img" src="_assets/LG.png" alt="BLDGBIT | ParcelIQ" />
+        <img class="logo-img" src="{{ page.logo_href }}" alt="BLDGBIT | ParcelIQ" />
       </div>
       <div class="hero-text">
         <div class="eyebrow">BLDGBIT | ParcelIQ</div>
-        <div class="hero-title">3030 Midvale Ave, Los Angeles, CA 90034</div>
+        <div class="hero-title">{{ page.truth.address }}</div>
         <p class="compat-copy">The primary ParcelIQ deliverable now lives in <strong>property.html</strong>. This page remains only as a compatibility entry point.</p>
         <div style="margin-top: 16px; display: flex; flex-wrap: wrap; gap: 10px;">
-          <a class="compat-pill compat-pill-primary" href="property.html">Open primary property package</a>
+          <a class="compat-pill compat-pill-primary" href="{{ page.primary_href }}">Open primary property package</a>
         </div>
       </div>
     </section>

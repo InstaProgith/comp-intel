@@ -1,5 +1,218 @@
 [
   {
+    "id": "parcel-navigatela-profile",
+    "category": "parcel",
+    "title": "NavigateLA parcel profile",
+    "doc_number": "123B157-1268",
+    "doc_type": "Parcel profile report",
+    "sub_type": "NavigateLA / ZIMAS DCP",
+    "doc_date": "3/24/2026",
+    "address_label": "3030 S MIDVALE AVE",
+    "capture_status": "captured",
+    "validation_status": "valid_for_subject",
+    "validation_evidence": [
+      "NavigateLA reports page lists APN 4254008019.",
+      "NavigateLA reports page lists PIN 123B157-1268."
+    ],
+    "source_links": [
+      {
+        "label": "NavigateLA reports page",
+        "url": "https://navigatela.lacity.org/navigatela/reports/dc_parcel_reports.cfm?PK=123B157-1268",
+        "stable": true
+      },
+      {
+        "label": "Generated parcel profile source",
+        "url": "https://zimas.lacity.org/reports/0d5f9fcdfe9d43c9aa878a8e262623e6.pdf",
+        "stable": false
+      }
+    ],
+    "scope_signals": [
+      "Parcel profile report flow",
+      "R1-1",
+      "Low Residential"
+    ],
+    "team_mentions": [],
+    "capture_notes": [
+      "pypdf is not installed; PDF preserved locally without text extraction."
+    ],
+    "local_files": [
+      {
+        "label": "Local doc package",
+        "path": "docs/parcel/parcel-navigatela-profile/index.html",
+        "kind": "html",
+        "size_bytes": 4375,
+        "sha256": "c87f55eb72fcb6be3f6fe520d60e4066a14b859c17b55325b9ccfdc3eba25bee",
+        "href": "docs/parcel/parcel-navigatela-profile/index.html"
+      },
+      {
+        "label": "Captured parcel profile PDF",
+        "path": "docs/parcel/navigatela_parcel_profile.pdf",
+        "kind": "pdf",
+        "size_bytes": 132996,
+        "sha256": "a74550a4e224cdd615e21c89375bf4337cd0322a2a4076a04207ebc572364d02",
+        "href": "docs/parcel/navigatela_parcel_profile.pdf"
+      },
+      {
+        "label": "Available reports snapshot",
+        "path": "docs/parcel/navigatela_available_reports.source.html",
+        "kind": "html",
+        "size_bytes": 22204,
+        "sha256": "0cc18392c15fbc899c1435a1f85ab771fd80a4a9e034892ebe6bc8c83cbcf123",
+        "href": "docs/parcel/navigatela_available_reports.source.html"
+      },
+      {
+        "label": "Available reports text",
+        "path": "docs/parcel/navigatela_available_reports.txt",
+        "kind": "text",
+        "size_bytes": 591,
+        "sha256": "45b79da5ad64986f008817146164ad173fe554255dbb16e3ef5cd9b066fbf182",
+        "href": "docs/parcel/navigatela_available_reports.txt"
+      },
+      {
+        "label": "Report generation response",
+        "path": "docs/parcel/navigatela_report_generation.txt",
+        "kind": "text",
+        "size_bytes": 44,
+        "sha256": "ffa70b95dce37cbbfa0a4db3f233df801e27d6c0ae2298cab4ccf0e733183b13",
+        "href": "docs/parcel/navigatela_report_generation.txt"
+      },
+      {
+        "label": "Metadata",
+        "path": "docs/parcel/navigatela_parcel_profile.metadata.json",
+        "kind": "json",
+        "size_bytes": 2513,
+        "sha256": "a4515291bb5905eed57b4da67ec6c092180121f2d756c39e09ae4034f8db567b",
+        "href": "docs/parcel/navigatela_parcel_profile.metadata.json"
+      }
+    ],
+    "primary_local_file": "Captured parcel profile PDF",
+    "navigate_pdf_captured": true,
+    "local_doc_path": "docs/parcel/parcel-navigatela-profile/index.html"
+  },
+  {
+    "id": "parcel-bas-profile",
+    "category": "parcel",
+    "title": "LADBS parcel profile",
+    "doc_number": "123B157-1268",
+    "doc_type": "Parcel profile detail",
+    "sub_type": "BAS",
+    "doc_date": "3/24/2026",
+    "address_label": "3030 S MIDVALE AVE",
+    "capture_status": "captured",
+    "validation_status": "valid_for_subject",
+    "validation_evidence": [
+      "BAS parcel profile repeats 3030 S MIDVALE AVE.",
+      "BAS parcel profile repeats PIN 123B157  1268.",
+      "BAS parcel profile repeats zoning R1-1."
+    ],
+    "source_links": [
+      {
+        "label": "BAS parcel profile source",
+        "url": "https://www.ladbsservices2.lacity.org/OnlineServices/PermitReport/ParcelProfileDetail2?pin=123B157-1268",
+        "stable": true
+      }
+    ],
+    "scope_signals": [
+      "R1-1",
+      "Low Residential",
+      "Palms - Mar Vista - Del Rey"
+    ],
+    "team_mentions": [],
+    "capture_notes": [],
+    "local_files": [
+      {
+        "label": "Local doc package",
+        "path": "docs/parcel/parcel-bas-profile/index.html",
+        "kind": "html",
+        "size_bytes": 3819,
+        "sha256": "b0ab8aa830e7de2fd514d53dd46dab7281b367ad150017e8585b6ed6eeb4778b",
+        "href": "docs/parcel/parcel-bas-profile/index.html"
+      },
+      {
+        "label": "Parcel profile snapshot",
+        "path": "docs/parcel/ladbs_parcel_profile.source.html",
+        "kind": "html",
+        "size_bytes": 72592,
+        "sha256": "b6eda8460407d77848fce221b3278e32e71476f4d383eaba7bac5fa06bf1e766",
+        "href": "docs/parcel/ladbs_parcel_profile.source.html"
+      },
+      {
+        "label": "Parcel profile text",
+        "path": "docs/parcel/ladbs_parcel_profile.txt",
+        "kind": "text",
+        "size_bytes": 3254,
+        "sha256": "0b9e409b4ed47b74faa83451fc5a1ffc73052464d2d967136ae97f9423b043b0",
+        "href": "docs/parcel/ladbs_parcel_profile.txt"
+      },
+      {
+        "label": "Metadata",
+        "path": "docs/parcel/ladbs_parcel_profile.metadata.json",
+        "kind": "json",
+        "size_bytes": 186,
+        "sha256": "3ba3a2d85f7ee9768eda36e3795e609b2f7287dc61dc6699916a52b352e3eb25",
+        "href": "docs/parcel/ladbs_parcel_profile.metadata.json"
+      }
+    ],
+    "local_doc_path": "docs/parcel/parcel-bas-profile/index.html"
+  },
+  {
+    "id": "parcel-cadastral-map",
+    "category": "parcel",
+    "title": "NavigateLA cadastral map",
+    "doc_number": "123B157-1268",
+    "doc_type": "Cadastral map",
+    "sub_type": "NavigateLA",
+    "doc_date": "3/24/2026",
+    "address_label": "3030 S MIDVALE AVE",
+    "capture_status": "captured",
+    "validation_status": "valid_for_subject",
+    "validation_evidence": [
+      "NavigateLA reports page lists APN 4254008019.",
+      "NavigateLA reports page lists PIN 123B157-1268."
+    ],
+    "source_links": [
+      {
+        "label": "Cadastral map source",
+        "url": "https://navigatela.lacity.org/common/mapgallery/pdf/landbase_bw/123B157.pdf?r=0.0418666438014",
+        "stable": true
+      }
+    ],
+    "scope_signals": [
+      "Parcel map"
+    ],
+    "team_mentions": [],
+    "capture_notes": [
+      "pypdf is not installed; PDF preserved locally without text extraction."
+    ],
+    "local_files": [
+      {
+        "label": "Local doc package",
+        "path": "docs/parcel/parcel-cadastral-map/index.html",
+        "kind": "html",
+        "size_bytes": 3974,
+        "sha256": "6377e5baf53ebcf5aa317f71645369b0bfc1299ac0811094aa4f07a03382f09c",
+        "href": "docs/parcel/parcel-cadastral-map/index.html"
+      },
+      {
+        "label": "Captured cadastral map PDF",
+        "path": "docs/parcel/cadastral_map.pdf",
+        "kind": "pdf",
+        "size_bytes": 612173,
+        "sha256": "2908d9228082946d08b2f8d99ddac384512199f6c261f8ae9b72f2e91d71d462",
+        "href": "docs/parcel/cadastral_map.pdf"
+      },
+      {
+        "label": "Metadata",
+        "path": "docs/parcel/cadastral_map.metadata.json",
+        "kind": "json",
+        "size_bytes": 152,
+        "sha256": "557942832237a7821b63078496a9b1036f520b2ce88492eb48d5a6291a16613b",
+        "href": "docs/parcel/cadastral_map.metadata.json"
+      }
+    ],
+    "local_doc_path": "docs/parcel/parcel-cadastral-map/index.html"
+  },
+  {
     "id": "permit-26014-10000-00017",
     "category": "permit",
     "title": "Permit 26014-10000-00017",
@@ -56,8 +269,8 @@
         "label": "Local doc package",
         "path": "docs/permits/26014-10000-00017/index.html",
         "kind": "html",
-        "size_bytes": 3808,
-        "sha256": "f077016fe9ff82a6125644151cdf156fff767eef07e85d7e623c8ab8dfc1a747",
+        "size_bytes": 3773,
+        "sha256": "f32ca4aa10e61cbad7662af8366aebac7710722b58247d660313c9a6a816c15b",
         "href": "docs/permits/26014-10000-00017/index.html"
       },
       {
@@ -115,7 +328,7 @@
     "team_mentions": [
       {
         "role": "Contractor",
-        "name": "Kelley Joel Electric; Lic. No.: 917355-C10 1546 LINDA ROSA AVE LOS ANGELES, CA 90041",
+        "name": "Kelley Joel Electric",
         "source": "Permit 16041-10000-23545 contact information",
         "party_type": "project_side",
         "license_number": "917355"
@@ -133,8 +346,8 @@
         "label": "Local doc package",
         "path": "docs/permits/16041-10000-23545/index.html",
         "kind": "html",
-        "size_bytes": 3805,
-        "sha256": "02a5f6fb0061a3967aaca132f7cff24c56845625d058f1be93b6d8307941f00d",
+        "size_bytes": 3770,
+        "sha256": "5db3bc6594ddbd9bdd8021e362f42281a9643a5869942b921b189db850b4f1c2",
         "href": "docs/permits/16041-10000-23545/index.html"
       },
       {
@@ -157,8 +370,8 @@
         "label": "Metadata",
         "path": "docs/permits/16041-10000-23545/metadata.json",
         "kind": "json",
-        "size_bytes": 1293,
-        "sha256": "d2554aa3823a9ce59b38642b27ac54c0e4fd8d494155dabf5f6fd651144b8c22",
+        "size_bytes": 1229,
+        "sha256": "1a31280b7ba776607e5bfc649414c535324df2427bbb604f21e384e320a2e97b",
         "href": "docs/permits/16041-10000-23545/metadata.json"
       }
     ],
@@ -196,8 +409,8 @@
         "label": "Local doc package",
         "path": "docs/permits/26030-10000-01235/index.html",
         "kind": "html",
-        "size_bytes": 3802,
-        "sha256": "3fcd2ae1fdff2a8a87787202b05e6f8c17f3687c9e0657c9107f5dc30bb72eed",
+        "size_bytes": 3767,
+        "sha256": "e99beeb8e36dbe0abd2c245a02d4a5be5e7bad7ff4fd5603757b283a6ecb8b97",
         "href": "docs/permits/26030-10000-01235/index.html"
       },
       {
@@ -239,7 +452,7 @@
     "capture_status": "captured",
     "validation_status": "valid_for_subject",
     "validation_evidence": [
-      "LADBS records assessor search selected 3030 S MIDVALE AVE.",
+      "LADBS records search selected 3030 S MIDVALE AVE.",
       "Record summary page text repeats the subject address.",
       "Live records result returned document 16044-90000-05282."
     ],
@@ -272,8 +485,8 @@
         "label": "Local doc package",
         "path": "docs/records/16044-90000-05282/index.html",
         "kind": "html",
-        "size_bytes": 4880,
-        "sha256": "d6a0002512053640defccc9df3116570b243abea0a9382a0fc4a40c780f43954",
+        "size_bytes": 4836,
+        "sha256": "d207bdc26637d5d4a7d7c7672a6f7b4055cf06764ddf228b2ad393c521546663",
         "href": "docs/records/16044-90000-05282/index.html"
       },
       {
@@ -281,7 +494,7 @@
         "path": "docs/records/16044-90000-05282/record_summary.source.html",
         "kind": "html",
         "size_bytes": 11949,
-        "sha256": "2c8593f1457b3bb15c3c2f86acfa2297a9540946c7bf9b025c9f191062c1cc26",
+        "sha256": "d3680458c4e1aed9e027346df057e75f3f0b85b480cacb512ee59328cd0e8e37",
         "href": "docs/records/16044-90000-05282/record_summary.source.html"
       },
       {
@@ -289,7 +502,7 @@
         "path": "docs/records/16044-90000-05282/record_summary.txt",
         "kind": "text",
         "size_bytes": 1006,
-        "sha256": "54c5cf506fe792e2732784557fcf138a1e6a5863797038516e91a5101bfa9521",
+        "sha256": "8f01052057c4c6cb9dac0aa4aa90ef081e8a8c16b05cdc6a89d0eee8b9b3b056",
         "href": "docs/records/16044-90000-05282/record_summary.txt"
       },
       {
@@ -305,7 +518,7 @@
         "path": "docs/records/16044-90000-05282/image_list.source.html",
         "kind": "html",
         "size_bytes": 8923,
-        "sha256": "363804ccac038b901813744320d8cb2da97ee0cb05afdf71dc46967b08daf603",
+        "sha256": "441d15d15b035e667cba766b4dde4ebacc60b77440225f56597c9e708f61a2a3",
         "href": "docs/records/16044-90000-05282/image_list.source.html"
       },
       {
@@ -321,18 +534,127 @@
         "path": "docs/records/16044-90000-05282/document.pdf",
         "kind": "pdf",
         "size_bytes": 198760,
-        "sha256": "b53db93ad3239eb7e696ae5046b19d2ff214acfddc412999f6fb589506c41820",
+        "sha256": "78e1b1cdd62908360e8ead1d65349072044bb4be7a087e306ca3ccab65c7f7bd",
         "href": "docs/records/16044-90000-05282/document.pdf"
       },
       {
         "label": "Metadata",
         "path": "docs/records/16044-90000-05282/metadata.json",
         "kind": "json",
-        "size_bytes": 1411,
-        "sha256": "b69eff0df69d8366272d9c57d3eaf38fb177371133df8c3f2bdd90ab28a502f9",
+        "size_bytes": 1498,
+        "sha256": "aa7e8b7bc59d24bd74c648accfe2045203f5569a2b4637007a4f6154cac894d9",
         "href": "docs/records/16044-90000-05282/metadata.json"
       }
     ],
+    "discovery_paths": [
+      "address_exact",
+      "address_history",
+      "assessor_apn"
+    ],
     "local_doc_path": "docs/records/16044-90000-05282/index.html"
+  },
+  {
+    "id": "record-1940la04746",
+    "category": "record",
+    "title": "Record 1940LA04746",
+    "doc_number": "1940LA04746",
+    "doc_type": "BUILDING PERMIT",
+    "sub_type": "BLDG-ALTER/REPAIR",
+    "doc_date": "2/8/1940",
+    "address_label": "3030 MIDVALE AVE",
+    "capture_status": "captured",
+    "validation_status": "valid_for_subject",
+    "validation_evidence": [
+      "LADBS records search selected 3030 MIDVALE AVE.",
+      "Record summary page text repeats the subject address.",
+      "Live records result returned document 1940LA04746."
+    ],
+    "source_links": [
+      {
+        "label": "LADBS document viewer source",
+        "url": "https://ladbsdoc.lacity.org/IDISPublic_Records/idis/ImageMain.aspx?DocIds=%7Bb7e91419-60e4-4c16-9701-ef0ef4d9fbdd%7D%2C",
+        "stable": true
+      }
+    ],
+    "scope_signals": [
+      "ALTER/REPAIR.",
+      "BUILDING PERMIT"
+    ],
+    "team_mentions": [],
+    "capture_notes": [
+      "pypdf is not installed; PDF preserved locally without text extraction.",
+      "LADBS record summary URL was usable only inside the live search session and is not treated as a durable public link.",
+      "The LADBS PDF URL yielded a real PDF only inside the live records session, so the local PDF is the durable artifact."
+    ],
+    "local_files": [
+      {
+        "label": "Local doc package",
+        "path": "docs/records/1940la04746/index.html",
+        "kind": "html",
+        "size_bytes": 4827,
+        "sha256": "b759d1b1b458c26d258b78874a66bc176b0f433b8f954b4abe4d568ab548da79",
+        "href": "docs/records/1940la04746/index.html"
+      },
+      {
+        "label": "Record summary snapshot",
+        "path": "docs/records/1940la04746/record_summary.source.html",
+        "kind": "html",
+        "size_bytes": 10581,
+        "sha256": "f5d81b7a9d8c0301238689eccb83d2511dceb78236d1de2cca7e9ad044f2b46d",
+        "href": "docs/records/1940la04746/record_summary.source.html"
+      },
+      {
+        "label": "Record summary text",
+        "path": "docs/records/1940la04746/record_summary.txt",
+        "kind": "text",
+        "size_bytes": 879,
+        "sha256": "4fc94b80f52ba4d1fe82f09218a3c356f1f49133a450be7b55d53461b4557037",
+        "href": "docs/records/1940la04746/record_summary.txt"
+      },
+      {
+        "label": "Image viewer snapshot",
+        "path": "docs/records/1940la04746/image_main.source.html",
+        "kind": "html",
+        "size_bytes": 607,
+        "sha256": "cb1538bec8e64e7cbd9fb885caf880a961b627fddb6c7622213a04b4642ba4a4",
+        "href": "docs/records/1940la04746/image_main.source.html"
+      },
+      {
+        "label": "Image list snapshot",
+        "path": "docs/records/1940la04746/image_list.source.html",
+        "kind": "html",
+        "size_bytes": 8923,
+        "sha256": "2f16f7a5dff57ecf7db757069785a9499e759d81ec24751caadb4f63fd95e1c2",
+        "href": "docs/records/1940la04746/image_list.source.html"
+      },
+      {
+        "label": "Image list text",
+        "path": "docs/records/1940la04746/image_list.txt",
+        "kind": "text",
+        "size_bytes": 497,
+        "sha256": "0e57209d9bf66e5cd1836100ff15a1b1fd492f993fc1c3567d3d0c4b112e9e5d",
+        "href": "docs/records/1940la04746/image_list.txt"
+      },
+      {
+        "label": "Captured PDF",
+        "path": "docs/records/1940la04746/document.pdf",
+        "kind": "pdf",
+        "size_bytes": 165621,
+        "sha256": "9fb6fa6adc2d1f5300a81bea390a14c1e7189785181d769644e4cdafe57d421d",
+        "href": "docs/records/1940la04746/document.pdf"
+      },
+      {
+        "label": "Metadata",
+        "path": "docs/records/1940la04746/metadata.json",
+        "kind": "json",
+        "size_bytes": 1440,
+        "sha256": "fc039d042ec250b0811446dd9bd54ddb0302c92cb9705a4605b52ab2c95b26ee",
+        "href": "docs/records/1940la04746/metadata.json"
+      }
+    ],
+    "discovery_paths": [
+      "address_history"
+    ],
+    "local_doc_path": "docs/records/1940la04746/index.html"
   }
 ]

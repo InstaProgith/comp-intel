@@ -44,15 +44,14 @@
     <section class="hero-card doc-hero">
       <div class="logo-wrap">
         <div class="logo-plate"></div>
-        <img class="logo-img" src="{{ package.logo_href }}" alt="BLDGBIT" />
+        <img class="logo-img" src="{{ package.logo_href }}" alt="BLDGBIT | ParcelIQ" />
       </div>
       <div class="hero-text">
-        <div class="eyebrow">{{ doc.category|title }} Capture</div>
+        <div class="eyebrow">BLDGBIT | ParcelIQ - {{ doc.category|title }} Capture</div>
         <div class="hero-title">{{ doc.title }}</div>
         <div class="hero-subtitle">{{ doc.doc_type }}{% if doc.sub_type %} | {{ doc.sub_type }}{% endif %}</div>
         <div class="doc-link-row" style="margin-top: 12px;">
-          <a class="doc-pill doc-pill-primary" href="{{ package.report_href }}">Back to report</a>
-          <a class="doc-pill" href="{{ package.summary_href }}">Back to summary</a>
+          <a class="doc-pill doc-pill-primary" href="{{ package.property_href }}">Back to property package</a>
         </div>
       </div>
     </section>

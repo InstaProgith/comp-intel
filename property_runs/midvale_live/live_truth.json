@@ -16,10 +16,38 @@
   "cautions": [
     "Redfin is internally inconsistent on baths: the live listing header shows 2 bath(s), while Redfin public records show 1 bath(s).",
     "LADBS PermitResultsbyPin page summary reported 1 permit(s), but the subject-address drilldown yielded 3 permit detail page(s).",
-    "LADBS records coverage is sparse relative to the permit set: 1 record doc(s) versus 3 permit detail page(s).",
+    "Document-number searches for permit(s) 26030-10000-01235, 26014-10000-00017, 16041-10000-23545 returned no additional IDIS record docs.",
+    "Expanded LADBS assessor, address, and document-number searches did not surface any certificate-of-occupancy record.",
+    "Expanded LADBS searches converged on the following record doc(s): 16044-90000-05282, 1940LA04746.",
+    "LADBS records coverage is sparse relative to the permit set: 2 record doc(s) versus 3 permit detail page(s).",
     "Prior developer buy price is not discoverable from the current live Redfin timeline.",
     "No certificate-of-occupancy document or permit field was accessible in this live run."
   ],
+  "parcel_diagnostics": {
+    "available_reports_url": "https://navigatela.lacity.org/navigatela/reports/dc_parcel_reports.cfm?PK=123B157-1268",
+    "available_links": {
+      "Cadastral Map": "https://navigatela.lacity.org/common/mapgallery/pdf/landbase_bw/123B157.pdf?r=0.0418666438014",
+      "Assessor Map": "http://maps.assessor.lacounty.gov/Geocortex/Essentials/PAIS/REST/sites/PAIS/VirtualDirectory/AssessorMaps/ViewMap.html?val=4254-008",
+      "Google Map Search": "https://www.google.com/maps/search/?api=1&query=3030 S MIDVALE AVE 90034",
+      "Microsoft Bing Search": "http://www.bing.com/maps/",
+      "Parcel Profile Report (BAS)": "https://www.ladbsservices2.lacity.org/OnlineServices/PermitReport/ParcelProfileDetail2?pin=123B157-1268",
+      "Parcel Profile Report (DCP)": "",
+      "Property Activity Report (BAS)": "javascript:void(0);",
+      "Parcel DFIRM Flood Zone Report": "fema_s_report.cfm?pin=123B157-1268",
+      "Parcel Is In Report": "parcel_isin.cfm?pin=123B157-1268",
+      "Parcel Description Report": "nlaby_pin.cfm?pin=123B157-1268",
+      "Public Services Report": "",
+      "Parcel Sewer Wye Report": "",
+      "County Assessor Report": "lupams_report.cfm?pin=123B157-1268",
+      "Enhancing Biodiversity: Native plants to grow in my location": "https://calscape.org/search",
+      "Disclaimer": ""
+    },
+    "report_flow_url": "https://zimas.lacity.org/displayreport.aspx?pin=123B157%20%201268",
+    "run_report_url": "https://zimas.lacity.org/RunReport.aspx?type=ParcelOfficial&pin=123B157%20%201268&apn=all&cases=true&address=3030%20S%20MIDVALE%20AVE%2090034&timestamp=2026-03-24T00%3A53%3A59.584274",
+    "run_report_response": "reports/0d5f9fcdfe9d43c9aa878a8e262623e6.pdf",
+    "navigatela_pdf_url": "https://zimas.lacity.org/reports/0d5f9fcdfe9d43c9aa878a8e262623e6.pdf",
+    "navigate_pdf_captured": true
+  },
   "permit_diagnostics": {
     "pin_results_url": "https://www.ladbsservices2.lacity.org/OnlineServices/PermitReport/PermitResultsbyPin?pin=123B157+1268",
     "page_summary": {
@@ -33,6 +61,89 @@
     ]
   },
   "record_diagnostics": {
+    "search_attempts": [
+      {
+        "attempt": "assessor_apn",
+        "criteria": "Assessor Number: BOOK NUMBER: 4254 PAGE NUMBER: 008 PARCEL NUMBER: 019",
+        "result_count": 1,
+        "selected_addresses": [
+          "3030 S MIDVALE AVE"
+        ],
+        "candidate_labels": [
+          "3030 S MIDVALE AVE"
+        ],
+        "search_type": "DCMT_ASSR",
+        "query": {
+          "Assessor$txtAssessorNoBook": "4254",
+          "Assessor$txtAssessorNoPage": "008",
+          "Assessor$txtAssessorNoParcel": "019"
+        }
+      },
+      {
+        "attempt": "address_exact",
+        "criteria": "Address: 3030 S MIDVALE AVE",
+        "result_count": 1,
+        "selected_addresses": [
+          "3030 S MIDVALE AVE"
+        ],
+        "candidate_labels": [],
+        "search_type": "DCMT_ADDR",
+        "query": {
+          "Address$txtAddress": "3030 S MIDVALE AVE"
+        }
+      },
+      {
+        "attempt": "address_history",
+        "criteria": "Address: 3030 MIDVALE",
+        "result_count": 2,
+        "selected_addresses": [
+          "3030 MIDVALE AVE"
+        ],
+        "candidate_labels": [
+          "3030 MIDVALE",
+          "3030 MIDVALE AVE",
+          "3030 S MIDVALE AVE"
+        ],
+        "search_type": "DCMT_ADDR",
+        "query": {
+          "Address$txtAddress": "3030 MIDVALE",
+          "HistAddr": "True"
+        }
+      },
+      {
+        "attempt": "doc_number:26030-10000-01235",
+        "criteria": null,
+        "result_count": 0,
+        "selected_addresses": [],
+        "candidate_labels": [],
+        "search_type": "DCMT_DOCNO",
+        "query": {
+          "DocumentNumber$txtDocNumber": "26030-10000-01235"
+        }
+      },
+      {
+        "attempt": "doc_number:26014-10000-00017",
+        "criteria": null,
+        "result_count": 0,
+        "selected_addresses": [],
+        "candidate_labels": [],
+        "search_type": "DCMT_DOCNO",
+        "query": {
+          "DocumentNumber$txtDocNumber": "26014-10000-00017"
+        }
+      },
+      {
+        "attempt": "doc_number:16041-10000-23545",
+        "criteria": null,
+        "result_count": 0,
+        "selected_addresses": [],
+        "candidate_labels": [],
+        "search_type": "DCMT_DOCNO",
+        "query": {
+          "DocumentNumber$txtDocNumber": "16041-10000-23545"
+        }
+      }
+    ],
     "selection_candidates": [
       "3030 S MIDVALE AVE"
     ],

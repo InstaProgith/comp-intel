@@ -1,0 +1,27 @@
+{
+  "doc_number": "1940LA04746",
+  "doc_type": "BUILDING PERMIT",
+  "sub_type": "BLDG-ALTER/REPAIR",
+  "doc_date": "2/8/1940",
+  "description": "ALTER/REPAIR.",
+  "record_id": "53918904",
+  "doc_ids": "{b7e91419-60e4-4c16-9701-ef0ef4d9fbdd},",
+  "image_main_url": "https://ladbsdoc.lacity.org/IDISPublic_Records/idis/ImageMain.aspx?DocIds=%7Bb7e91419-60e4-4c16-9701-ef0ef4d9fbdd%7D%2C",
+  "summary_url": "https://ladbsdoc.lacity.org/IDISPublic_Records/idis/Report.aspx?Record_Id=53918904&Image=Visible&ImageToOpen=%7Bb7e91419-60e4-4c16-9701-ef0ef4d9fbdd%7D%2C",
+  "pdf_url": "https://ladbsdoc.lacity.org/IDISPublic_Records/idis/StPdfViewer.aspx?Library=IDIS&Id=%7Bb7e91419-60e4-4c16-9701-ef0ef4d9fbdd%7D&ObjType=2&Op=View",
+  "capture_type": "ladbs_record_pdf",
+  "validation_status": "valid_for_subject",
+  "validation_evidence": [
+    "LADBS records search selected 3030 MIDVALE AVE.",
+    "Record summary page text repeats the subject address.",
+    "Live records result returned document 1940LA04746."
+  ],
+  "capture_notes": [
+    "pypdf is not installed; PDF preserved locally without text extraction.",
+    "LADBS record summary URL was usable only inside the live search session and is not treated as a durable public link.",
+    "The LADBS PDF URL yielded a real PDF only inside the live records session, so the local PDF is the durable artifact."
+  ],
+  "discovery_paths": [
+    "address_history"
+  ]
+}

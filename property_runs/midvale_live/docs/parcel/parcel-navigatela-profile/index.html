@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Permit 16041-10000-23545</title>
+  <title>NavigateLA parcel profile</title>
   <link rel="stylesheet" href="../../../_assets/css/comp.css">
   <style>
     .doc-shell { max-width: 980px; position: relative; z-index: 1; }
@@ -47,9 +47,9 @@
         <img class="logo-img" src="../../../_assets/LG.png" alt="BLDGBIT | ParcelIQ" />
       </div>
       <div class="hero-text">
-        <div class="eyebrow">BLDGBIT | ParcelIQ - Permit Capture</div>
-        <div class="hero-title">Permit 16041-10000-23545</div>
-        <div class="hero-subtitle">Permit detail | Electrical - 1 or 2 Family Dwelling</div>
+        <div class="eyebrow">BLDGBIT | ParcelIQ - Parcel Capture</div>
+        <div class="hero-title">NavigateLA parcel profile</div>
+        <div class="hero-subtitle">Parcel profile report | NavigateLA / ZIMAS DCP</div>
         <div class="doc-link-row" style="margin-top: 12px;">
           <a class="doc-pill doc-pill-primary" href="../../../property.html">Back to property package</a>
         </div>
@@ -63,11 +63,15 @@
           
           <a class="doc-pill doc-pill-primary" href="index.html">Local doc package</a>
           
-          <a class="doc-pill " href="permit_detail.source.html">Permit detail snapshot</a>
+          <a class="doc-pill " href="../navigatela_parcel_profile.pdf">Captured parcel profile PDF</a>
           
-          <a class="doc-pill " href="permit_detail.txt">Extracted text</a>
+          <a class="doc-pill " href="../navigatela_available_reports.source.html">Available reports snapshot</a>
           
-          <a class="doc-pill " href="metadata.json">Metadata</a>
+          <a class="doc-pill " href="../navigatela_available_reports.txt">Available reports text</a>
+          
+          <a class="doc-pill " href="../navigatela_report_generation.txt">Report generation response</a>
+          
+          <a class="doc-pill " href="../navigatela_parcel_profile.metadata.json">Metadata</a>
           
         </div>
       </div>
@@ -76,7 +80,7 @@
         <div class="doc-group-label">Stable Source Links</div>
         <div class="doc-link-row">
           
-          <a class="doc-pill" href="https://www.ladbsservices2.lacity.org/OnlineServices/PermitReport/PcisPermitDetail?id1=16041&amp;id2=10000&amp;id3=23545" target="_blank" rel="noopener noreferrer">Permit detail source</a>
+          <a class="doc-pill" href="https://navigatela.lacity.org/navigatela/reports/dc_parcel_reports.cfm?PK=123B157-1268" target="_blank" rel="noopener noreferrer">NavigateLA reports page</a>
           
         </div>
       </div>
@@ -90,13 +94,25 @@
       </div>
       <ul class="doc-list">
         
-        <li>LADBS permit drilldown was filtered to 3030 S MIDVALE AVE 90034.</li>
+        <li>NavigateLA reports page lists APN 4254008019.</li>
         
-        <li>Permit detail page text repeats the subject address.</li>
+        <li>NavigateLA reports page lists PIN 123B157-1268.</li>
         
       </ul>
     </section>
 
+    
+    <section class="panel">
+      <div class="section-header">
+        <h2 class="section-title">Capture Notes</h2>
+        <span class="section-count">1</span>
+      </div>
+      <ul class="doc-list">
+        
+        <li>pypdf is not installed; PDF preserved locally without text extraction.</li>
+        
+      </ul>
+    </section>
     
   </main>
 </body>

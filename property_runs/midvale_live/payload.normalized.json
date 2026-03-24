@@ -121,7 +121,7 @@
     "source": "ladbs_pin_v1",
     "apn": "4254008019",
     "address": "3030 Midvale Ave, Los Angeles, CA 90034",
-    "fetched_at": "2026-03-23 17:31:37",
+    "fetched_at": "2026-03-24 00:53:35",
     "permits": [
       {
         "permit_number": "26030-10000-01235",
@@ -350,11 +350,11 @@
       "lot_sf": 5256.0,
       "year_built": 1940
     },
-    "generated_at": "2026-03-23",
+    "generated_at": "2026-03-24",
     "current_summary": "2 bed, 2.0 bath, 1,076 SF",
     "public_record_summary": "2 bed, 1.0 bath",
     "lot_summary": "Lot: 5,256 SF (0.12 acres)",
-    "raw_html_path": "C:\\codex-sandbox\\comp-intel\\data\\raw\\20260323-173117_redfin_3030_Midvale_Ave_90034.html"
+    "raw_html_path": "C:\\codex-sandbox\\comp-intel\\data\\raw\\20260324-005316_redfin_3030_Midvale_Ave_90034.html"
   },
   "project_contacts": null,
   "cslb_contractor": null,
@@ -669,7 +669,7 @@
   "zimas_profile": {
     "source": "zimas_profile_v1",
     "transport": "http",
-    "fetched_at": "2026-03-23 17:31:18",
+    "fetched_at": "2026-03-24 00:53:16",
     "pin": "123B157  1268",
     "apn": "4254008019",
     "address": "3030 S MIDVALE AVE",
@@ -720,7 +720,7 @@
     },
     "zoning_profile": {
       "zoning": "R1-1",
-      "zoning_information": "ZI-2192 Specific Plan: West Los Angeles Transportation Improvement and Mitigation",
+      "zoning_information": "ZI-2427 Freeway Adjacent Advisory Notice for Sensitive Uses",
       "general_plan_land_use": "Low Residential",
       "general_plan_notes": "Yes",
       "special_notes": "None",
@@ -899,9 +899,9 @@
         },
         {
           "label": "Zoning Information (ZI)",
-          "value": "ZI-2427 Freeway Adjacent Advisory Notice for Sensitive Uses",
+          "value": "ZI-2192 Specific Plan: West Los Angeles Transportation Improvement and Mitigation",
           "href": "javascript:;",
-          "onclick": "ZimasData.openDataLink('ZONEINFO', 'ZI-2427 Freeway Adjacent Advisory Notice for Sensitive Uses');"
+          "onclick": "ZimasData.openDataLink('ZONEINFO', 'ZI-2192 Specific Plan: West Los Angeles Transportation Improvement and Mitigation');"
         },
         {
           "label": "Zoning Information (ZI)",
@@ -911,9 +911,9 @@
         },
         {
           "label": "Zoning Information (ZI)",
-          "value": "ZI-2192 Specific Plan: West Los Angeles Transportation Improvement and Mitigation",
+          "value": "ZI-2427 Freeway Adjacent Advisory Notice for Sensitive Uses",
           "href": "javascript:;",
-          "onclick": "ZimasData.openDataLink('ZONEINFO', 'ZI-2192 Specific Plan: West Los Angeles Transportation Improvement and Mitigation');"
+          "onclick": "ZimasData.openDataLink('ZONEINFO', 'ZI-2427 Freeway Adjacent Advisory Notice for Sensitive Uses');"
         },
         {
           "label": "General Plan Land Use",
@@ -4893,7 +4893,7 @@
   "ladbs_records": {
     "source": "ladbs_records_v1",
     "transport": "http",
-    "fetched_at": "2026-03-23 17:31:51",
+    "fetched_at": "2026-03-24 00:53:48",
     "apn": "4254008019",
     "pin": "123B157  1268",
     "documents": [
