@@ -264,6 +264,7 @@ def _build_redfin_truth(payload: Dict[str, Any]) -> Dict[str, Any]:
         "lot_size_sf_display": _format_int(redfin.get("lot_sf")),
         "year_built": redfin.get("year_built") or redfin.get("listing_year_built"),
         "property_type": redfin.get("property_type"),
+        "property_type_display": _normalize_text(redfin.get("property_type")) or "Unknown",
         "prior_sale": prior_sale,
         "latest_sale": latest_sale,
         "sold_flip_summary": sold_flip_summary,
@@ -404,6 +405,7 @@ def _build_named_party(
 ) -> Dict[str, Any]:
     cleaned_name = _normalize_text(name)
     cleaned_name = re.split(r"\s*;\s*Lic\.?\s*No\.?:", cleaned_name, maxsplit=1, flags=re.IGNORECASE)[0].strip(" ;,")
+    cleaned_name = re.sub(r"\s*,\s*,\s*", ", ", cleaned_name)
     if not cleaned_name:
         cleaned_name = _normalize_text(name)
     item = {
@@ -1683,6 +1685,7 @@ def _build_property_context(
         "logo_href": "_assets/LG.png",
         "brand_name": "BLDGBIT | ParcelIQ",
         "brand_tagline": "Evidence-backed property intelligence",
+        "property_slug": _slugify(_normalize_text(truth.get("address")) or output_dir.name),
         "hero_summary": (
             "One compact ParcelIQ property package with live truth locking, durable local parcel/doc capture, "
             "and explicit cautions wherever Redfin or LADBS stayed incomplete or inconsistent."
