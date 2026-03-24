@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ page.package_title }}</title>
+  <link rel="stylesheet" href="{{ page.stylesheet_href }}">
+  <style>
+    .package-shell { max-width: 1180px; position: relative; z-index: 1; }
+    .package-hero { align-items: flex-start; }
+    .package-chip,
+    .package-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      border: 1px solid #d9d9d9;
+      background: #fff;
+      color: #111;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px 12px;
+      text-decoration: none;
+    }
+    .package-pill:hover { border-color: #111; background: #fafafa; }
+    .package-pill-primary { background: #111; border-color: #111; color: #fff; }
+    .package-pill-primary:hover { background: #222; color: #fff; }
+    .package-link-group { display: grid; gap: 10px; }
+    .package-link-row { display: flex; flex-wrap: wrap; gap: 10px; }
+    .package-group-label {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      color: #475569;
+    }
+    .package-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 22px; }
+    .package-doc-grid { display: grid; gap: 18px; }
+    .package-doc-card { border: 1px solid #ececec; border-radius: 12px; padding: 18px; background: #fafafa; }
+    .package-doc-title { font-size: 16px; font-weight: 700; color: #111; margin-bottom: 6px; }
+    .package-doc-meta { font-size: 13px; color: #555; line-height: 1.6; margin-bottom: 12px; }
+    .package-copy p { margin: 0 0 14px; line-height: 1.7; color: #333; }
+    .package-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+    .package-list li { border-top: 1px solid #ececec; padding-top: 10px; font-size: 13px; color: #333; line-height: 1.6; }
+    .package-list li:first-child { border-top: none; padding-top: 0; }
+    .package-team-grid { display: grid; gap: 12px; }
+    .package-team-card { border: 1px solid #ececec; border-radius: 12px; padding: 16px; background: #fafafa; }
+    .package-team-role { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .8px; color: #475569; margin-bottom: 6px; }
+    .package-team-name { font-size: 15px; font-weight: 700; color: #111; margin-bottom: 4px; }
+    .package-team-meta { font-size: 13px; color: #555; line-height: 1.6; }
+    @media (max-width: 960px) { .package-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="bg-layer"></div>
+  <main class="shell package-shell" data-property="midvale">
+    <section class="hero-card package-hero">
+      <div class="logo-wrap">
+        <div class="logo-plate"></div>
+        <img class="logo-img" src="{{ page.logo_href }}" alt="BLDGBIT" />
+      </div>
+      <div class="hero-text">
+        <div class="eyebrow">Live Property Package</div>
+        <div class="hero-title">{{ page.truth.address }}</div>
+        <div class="hero-subtitle">Local Midvale package with captured LADBS permit and record artifacts</div>
+        <div class="package-link-row" style="margin-top: 12px;">
+          <span class="package-chip">Status: {{ page.truth.status }}</span>
+          <span class="package-chip">Sold: {{ page.truth.last_sold_date_display }}</span>
+          <span class="package-chip">Price: {{ page.truth.last_sold_price_display }}</span>
+          <span class="package-chip">Permits: {{ page.permit_count }}</span>
+          <span class="package-chip">Record Docs: {{ page.record_count }}</span>
+          <span class="package-chip">Captured Docs: {{ page.doc_capture_count }}</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="package-link-group">
+        <div class="package-group-label">Local Actions</div>
+        <div class="package-link-row">
+          <a class="package-pill package-pill-primary" href="summary.html">Open summary</a>
+          {% for action in page.local_actions %}
+          <a class="package-pill" href="{{ action.href }}">{{ action.label }}</a>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="package-link-group" style="margin-top: 16px;">
+        <div class="package-group-label">Stable Source Links</div>
+        <div class="package-link-row">
+          {% for link in page.top_source_links %}
+          <a class="package-pill" href="{{ link.url }}" target="_blank" rel="noopener noreferrer">{{ link.label }}</a>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <section class="panel package-copy">
+      <div class="section-header">
+        <h2 class="section-title">Property Truth</h2>
+        <span class="section-count">Live</span>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-pill"><div class="stat-label">APN</div><div class="stat-value">{{ page.identity.apn }}</div></div>
+        <div class="stat-pill"><div class="stat-label">PIN</div><div class="stat-value">{{ page.identity.pin }}</div></div>
+        <div class="stat-pill"><div class="stat-label">Municipal Address</div><div class="stat-value">{{ page.identity.municipal_address }}</div></div>
+        <div class="stat-pill"><div class="stat-label">Property Type</div><div class="stat-value">{{ page.truth.property_type }}</div></div>
+        <div class="stat-pill"><div class="stat-label">Beds</div><div class="stat-value">{{ page.truth.beds_display }}</div></div>
+        <div class="stat-pill"><div class="stat-label">Baths</div><div class="stat-value">{{ page.truth.baths_display }}</div></div>
+        <div class="stat-pill"><div class="stat-label">Living Area SF</div><div class="stat-value">{{ page.truth.living_area_sf_display }}</div></div>
+        <div class="stat-pill"><div class="stat-label">Lot SF</div><div class="stat-value">{{ page.truth.lot_size_sf_display }}</div></div>
+        <div class="stat-pill"><div class="stat-label">Year Built</div><div class="stat-value">{{ page.truth.year_built }}</div></div>
+        <div class="stat-pill"><div class="stat-label">Zoning</div><div class="stat-value">{{ page.identity.zoning }}</div></div>
+        <div class="stat-pill"><div class="stat-label">General Plan</div><div class="stat-value">{{ page.identity.general_plan_land_use }}</div></div>
+        <div class="stat-pill"><div class="stat-label">Community Plan</div><div class="stat-value">{{ page.identity.community_plan_area }}</div></div>
+      </div>
+      <p style="margin-top: 18px;">{{ page.truth.sold_flip_summary }}</p>
+    </section>
+
+    <section class="panel">
+      <div class="section-header">
+        <h2 class="section-title">Job Scope Summary</h2>
+        <span class="section-count">Doc-backed</span>
+      </div>
+      <div class="package-grid">
+        <div class="package-copy">
+          <p>{{ page.scope_summary.summary }}</p>
+          {% if page.scope_summary.current_items %}
+          <div class="package-group-label">Current / Post-sale activity</div>
+          <ul class="package-list">
+            {% for item in page.scope_summary.current_items %}
+            <li>{{ item }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+        </div>
+        <div>
+          <div class="package-group-label">Older / Historical activity</div>
+          <ul class="package-list">
+            {% for item in page.scope_summary.historical_items %}
+            <li>{{ item }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-header">
+        <h2 class="section-title">Team Extraction</h2>
+        <span class="section-count">{{ (page.team_summary.project_side|length) + (page.team_summary.city_side|length) }}</span>
+      </div>
+      <p style="margin-bottom: 16px; line-height: 1.7; color: #333;">{{ page.team_summary.summary }}</p>
+      <div class="package-grid">
+        <div>
+          <div class="package-group-label">Project-side names</div>
+          <div class="package-team-grid">
+            {% if page.team_summary.project_side %}
+              {% for person in page.team_summary.project_side %}
+              <div class="package-team-card">
+                <div class="package-team-role">{{ person.role }}</div>
+                <div class="package-team-name">{{ person.name }}</div>
+                <div class="package-team-meta">
+                  {{ person.source }}
+                  {% if person.license_number %}<br>License: {{ person.license_number }}{% endif %}
+                </div>
+              </div>
+              {% endfor %}
+            {% else %}
+              <div class="package-team-card"><div class="package-team-meta">No project-side architect, engineer, owner, or applicant names were exposed in the live permit detail pages.</div></div>
+            {% endif %}
+          </div>
+        </div>
+        <div>
+          <div class="package-group-label">Named LADBS personnel</div>
+          <div class="package-team-grid">
+            {% if page.team_summary.city_side %}
+              {% for person in page.team_summary.city_side %}
+              <div class="package-team-card">
+                <div class="package-team-role">{{ person.role }}</div>
+                <div class="package-team-name">{{ person.name }}</div>
+                <div class="package-team-meta">{{ person.source }}</div>
+              </div>
+              {% endfor %}
+            {% else %}
+              <div class="package-team-card"><div class="package-team-meta">No named LADBS reviewers or inspectors were exposed in the captured permit status history.</div></div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-header">
+        <h2 class="section-title">Captured Docs</h2>
+        <span class="section-count">{{ page.doc_capture_count }}</span>
+      </div>
+      <div class="package-doc-grid">
+        {% for doc in page.docs_manifest %}
+        <article class="package-doc-card">
+          <div class="package-doc-title">{{ doc.title }}</div>
+          <div class="package-doc-meta">
+            {{ doc.doc_type }}{% if doc.sub_type %} | {{ doc.sub_type }}{% endif %}{% if doc.doc_date %} | {{ doc.doc_date }}{% endif %}<br>
+            Validation: {{ doc.validation_status }}
+          </div>
+          {% if doc.validation_evidence %}
+          <ul class="package-list" style="margin-bottom: 14px;">
+            {% for item in doc.validation_evidence %}
+            <li>{{ item }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+          <div class="package-link-group">
+            <div class="package-group-label">Local Doc Links</div>
+            <div class="package-link-row">
+              {% for file in doc.local_files %}
+              <a class="package-pill {% if loop.first %}package-pill-primary{% endif %}" href="{{ file.path }}">{{ file.label }}</a>
+              {% endfor %}
+            </div>
+          </div>
+          {% if doc.source_links %}
+          <div class="package-link-group" style="margin-top: 12px;">
+            <div class="package-group-label">Stable Source Links</div>
+            <div class="package-link-row">
+              {% for link in doc.source_links %}
+              <a class="package-pill" href="{{ link.url }}" target="_blank" rel="noopener noreferrer">{{ link.label }}</a>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+          {% if doc.capture_notes %}
+          <ul class="package-list" style="margin-top: 14px;">
+            {% for note in doc.capture_notes %}
+            <li>{{ note }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+        </article>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-header">
+        <h2 class="section-title">Key Cautions</h2>
+        <span class="section-count">{{ page.cautions|length }}</span>
+      </div>
+      <ul class="package-list">
+        {% for caution in page.cautions %}
+        <li>{{ caution }}</li>
+        {% endfor %}
+      </ul>
+    </section>
+  </main>
+</body>
+</html>

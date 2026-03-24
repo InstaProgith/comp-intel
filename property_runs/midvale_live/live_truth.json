@@ -1,0 +1,48 @@
+{
+  "address": "3030 Midvale Ave, Los Angeles, CA 90034",
+  "status": "Sold",
+  "last_sold_date": "2025-12-18",
+  "last_sold_price": 1125000,
+  "beds": 2.0,
+  "baths": 2.0,
+  "living_area_sf": 1076.0,
+  "lot_size_sf": 5256.0,
+  "year_built": 1940,
+  "property_type": "Single-family",
+  "prior_sale": null,
+  "apn": "4254008019",
+  "pin": "123B157  1268",
+  "municipal_address": "3030 S MIDVALE AVE",
+  "cautions": [
+    "Redfin is internally inconsistent on baths: the live listing header shows 2 bath(s), while Redfin public records show 1 bath(s).",
+    "LADBS PermitResultsbyPin page summary reported 1 permit(s), but the subject-address drilldown yielded 3 permit detail page(s).",
+    "LADBS records coverage is sparse relative to the permit set: 1 record doc(s) versus 3 permit detail page(s).",
+    "Prior developer buy price is not discoverable from the current live Redfin timeline.",
+    "No certificate-of-occupancy document or permit field was accessible in this live run."
+  ],
+  "permit_diagnostics": {
+    "pin_results_url": "https://www.ladbsservices2.lacity.org/OnlineServices/PermitReport/PermitResultsbyPin?pin=123B157+1268",
+    "page_summary": {
+      "text": "Permit and Inspection Report Skip to main content Javascript not enabled? We do apologize, but in order to use our Online Services we do require Java-script enabled browsers. If you do not know how to enable javascript click on the links below for the browser you are using. Javascript on IE Javascript on Chrome Javascript on Firefox Javascript on Safari Javascript on Opera Skip Dept Navigation to Main Content Return to Payment Portal Los Angeles Department of Building and Safety The following information was found based the given Parcel Identification Number (PIN). Expand the sections and select the specific information for further detail. The information below was found on the following Parcel Identification Number (PIN): 123B157 1268 123B157-1268 Parcel Profile Report: 1 123B157 1268 Permit Information found: 1 Retrieving Data... Code Enforcement Information: 4 Retrieving Data... Soft-story Retrofit Program Information: 1 Retrieving Data... Services Plan Review & Permitting Inspection Code Enforcement & Compliance Forms & Publications Forms Publications News & Announcements Our Organization Our Locations Employee Directory LADBS Senior Managers © Copyright 2010 -2026 City of Los Angeles. All Rights Reserved. Career Opportunities Contract Opportunities Disclaimer Privacy Policy Login",
+      "count_text": "1",
+      "permit_count": 1,
+      "service_unavailable": false
+    },
+    "address_sections": [
+      "3030 S MIDVALE AVE 90034"
+    ]
+  },
+  "record_diagnostics": {
+    "selection_candidates": [
+      "3030 S MIDVALE AVE"
+    ],
+    "selected_addresses": [
+      "3030 S MIDVALE AVE"
+    ],
+    "search_criteria": "Assessor Number: BOOK NUMBER: 4254 PAGE NUMBER: 008 PARCEL NUMBER: 019",
+    "page_summary": {
+      "page_number": 1,
+      "total_pages": 1
+    }
+  }
+}

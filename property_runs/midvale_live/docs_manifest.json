@@ -1,0 +1,338 @@
+[
+  {
+    "id": "permit-26014-10000-00017",
+    "category": "permit",
+    "title": "Permit 26014-10000-00017",
+    "doc_number": "26014-10000-00017",
+    "doc_type": "Permit detail",
+    "sub_type": "Bldg-Addition - 1 or 2 Family Dwelling",
+    "doc_date": "2/12/2026",
+    "address_label": "3030 S MIDVALE AVE 90034",
+    "capture_status": "captured",
+    "validation_status": "valid_for_subject",
+    "validation_evidence": [
+      "LADBS permit drilldown was filtered to 3030 S MIDVALE AVE 90034.",
+      "Permit detail page text repeats the subject address."
+    ],
+    "source_links": [
+      {
+        "label": "Permit detail source",
+        "url": "https://www.ladbsservices2.lacity.org/OnlineServices/PermitReport/PcisPermitDetail?id1=26014&id2=10000&id3=00017",
+        "stable": true
+      }
+    ],
+    "scope_signals": [
+      "EPLAN. TWO STORY ADDITION TO EXISTING SINGLE FAMILY DWELLING TO ENLARGE AND MODIFY THE EXISTING MAIN HOUSE. PROJECT INCLUDES THE CONSTRUCTION OF A FULLY COMPLIANT ATTACHED ACCESSORY DWELLING UNIT (ADU) PER GC .66323(D)(2)."
+    ],
+    "team_mentions": [
+      {
+        "role": "Assigned to Zoning Architect",
+        "name": "AMIR NAKHLA",
+        "source": "Permit 26014-10000-00017 status history",
+        "party_type": "city_side"
+      },
+      {
+        "role": "Assigned to Plan Check Engineer",
+        "name": "ARSALAN SHABESTARI",
+        "source": "Permit 26014-10000-00017 status history",
+        "party_type": "city_side"
+      },
+      {
+        "role": "Corrections Issued",
+        "name": "ARSALAN SHABESTARI",
+        "source": "Permit 26014-10000-00017 status history",
+        "party_type": "city_side"
+      },
+      {
+        "role": "Quality Review Completed",
+        "name": "GARO TELMI",
+        "source": "Permit 26014-10000-00017 status history",
+        "party_type": "city_side"
+      }
+    ],
+    "capture_notes": [],
+    "local_files": [
+      {
+        "label": "Local doc package",
+        "path": "docs/permits/26014-10000-00017/index.html",
+        "kind": "html",
+        "size_bytes": 3808,
+        "sha256": "f077016fe9ff82a6125644151cdf156fff767eef07e85d7e623c8ab8dfc1a747",
+        "href": "docs/permits/26014-10000-00017/index.html"
+      },
+      {
+        "label": "Permit detail snapshot",
+        "path": "docs/permits/26014-10000-00017/permit_detail.source.html",
+        "kind": "html",
+        "size_bytes": 31748,
+        "sha256": "78a365379bb15efdb07880464c0e37f054d4eb1846fc569e4f96c553d1b534c7",
+        "href": "docs/permits/26014-10000-00017/permit_detail.source.html"
+      },
+      {
+        "label": "Extracted text",
+        "path": "docs/permits/26014-10000-00017/permit_detail.txt",
+        "kind": "text",
+        "size_bytes": 2149,
+        "sha256": "d4959a5c05905d66711f0b5728892962ed5465ab34a8d7864ca14253bef70948",
+        "href": "docs/permits/26014-10000-00017/permit_detail.txt"
+      },
+      {
+        "label": "Metadata",
+        "path": "docs/permits/26014-10000-00017/metadata.json",
+        "kind": "json",
+        "size_bytes": 1998,
+        "sha256": "064b579f7e036bbd50e74b250dfde45cd8a1319a3a16e2fd37f5791a293798bb",
+        "href": "docs/permits/26014-10000-00017/metadata.json"
+      }
+    ],
+    "local_doc_path": "docs/permits/26014-10000-00017/index.html"
+  },
+  {
+    "id": "permit-16041-10000-23545",
+    "category": "permit",
+    "title": "Permit 16041-10000-23545",
+    "doc_number": "16041-10000-23545",
+    "doc_type": "Permit detail",
+    "sub_type": "Electrical - 1 or 2 Family Dwelling",
+    "doc_date": "8/8/2018",
+    "address_label": "3030 S MIDVALE AVE 90034",
+    "capture_status": "captured",
+    "validation_status": "valid_for_subject",
+    "validation_evidence": [
+      "LADBS permit drilldown was filtered to 3030 S MIDVALE AVE 90034.",
+      "Permit detail page text repeats the subject address."
+    ],
+    "source_links": [
+      {
+        "label": "Permit detail source",
+        "url": "https://www.ladbsservices2.lacity.org/OnlineServices/PermitReport/PcisPermitDetail?id1=16041&id2=10000&id3=23545",
+        "stable": true
+      }
+    ],
+    "scope_signals": [
+      "200A UPGRADE."
+    ],
+    "team_mentions": [
+      {
+        "role": "Contractor",
+        "name": "Kelley Joel Electric; Lic. No.: 917355-C10 1546 LINDA ROSA AVE LOS ANGELES, CA 90041",
+        "source": "Permit 16041-10000-23545 contact information",
+        "party_type": "project_side",
+        "license_number": "917355"
+      },
+      {
+        "role": "Permit Finaled",
+        "name": "ANDREW NAVE",
+        "source": "Permit 16041-10000-23545 status history",
+        "party_type": "city_side"
+      }
+    ],
+    "capture_notes": [],
+    "local_files": [
+      {
+        "label": "Local doc package",
+        "path": "docs/permits/16041-10000-23545/index.html",
+        "kind": "html",
+        "size_bytes": 3805,
+        "sha256": "02a5f6fb0061a3967aaca132f7cff24c56845625d058f1be93b6d8307941f00d",
+        "href": "docs/permits/16041-10000-23545/index.html"
+      },
+      {
+        "label": "Permit detail snapshot",
+        "path": "docs/permits/16041-10000-23545/permit_detail.source.html",
+        "kind": "html",
+        "size_bytes": 27002,
+        "sha256": "b0d40801b9733974c53b9edfddf8a11d79539636b9a123d7c8cb7ce16a404649",
+        "href": "docs/permits/16041-10000-23545/permit_detail.source.html"
+      },
+      {
+        "label": "Extracted text",
+        "path": "docs/permits/16041-10000-23545/permit_detail.txt",
+        "kind": "text",
+        "size_bytes": 1451,
+        "sha256": "0f589e74b410bd4b564f32eef6ab2fe61f76e0e0103e2e8cd4fa860451a9d543",
+        "href": "docs/permits/16041-10000-23545/permit_detail.txt"
+      },
+      {
+        "label": "Metadata",
+        "path": "docs/permits/16041-10000-23545/metadata.json",
+        "kind": "json",
+        "size_bytes": 1293,
+        "sha256": "d2554aa3823a9ce59b38642b27ac54c0e4fd8d494155dabf5f6fd651144b8c22",
+        "href": "docs/permits/16041-10000-23545/metadata.json"
+      }
+    ],
+    "local_doc_path": "docs/permits/16041-10000-23545/index.html"
+  },
+  {
+    "id": "permit-26030-10000-01235",
+    "category": "permit",
+    "title": "Permit 26030-10000-01235",
+    "doc_number": "26030-10000-01235",
+    "doc_type": "Permit detail",
+    "sub_type": "Grading - 1 or 2 Family Dwelling",
+    "doc_date": "2/20/2026",
+    "address_label": "3030 S MIDVALE AVE 90034",
+    "capture_status": "captured",
+    "validation_status": "valid_for_subject",
+    "validation_evidence": [
+      "LADBS permit drilldown was filtered to 3030 S MIDVALE AVE 90034.",
+      "Permit detail page text repeats the subject address."
+    ],
+    "source_links": [
+      {
+        "label": "Permit detail source",
+        "url": "https://www.ladbsservices2.lacity.org/OnlineServices/PermitReport/PcisPermitDetail?id1=26030&id2=10000&id3=01235",
+        "stable": true
+      }
+    ],
+    "scope_signals": [
+      "GPI Written Notices for the addition to the existing single-family dwelling."
+    ],
+    "team_mentions": [],
+    "capture_notes": [],
+    "local_files": [
+      {
+        "label": "Local doc package",
+        "path": "docs/permits/26030-10000-01235/index.html",
+        "kind": "html",
+        "size_bytes": 3802,
+        "sha256": "3fcd2ae1fdff2a8a87787202b05e6f8c17f3687c9e0657c9107f5dc30bb72eed",
+        "href": "docs/permits/26030-10000-01235/index.html"
+      },
+      {
+        "label": "Permit detail snapshot",
+        "path": "docs/permits/26030-10000-01235/permit_detail.source.html",
+        "kind": "html",
+        "size_bytes": 24867,
+        "sha256": "ce75108cf7c9e7d7672cee2127cab90ba602ae84e4c4fb33b08d3f4741848ba6",
+        "href": "docs/permits/26030-10000-01235/permit_detail.source.html"
+      },
+      {
+        "label": "Extracted text",
+        "path": "docs/permits/26030-10000-01235/permit_detail.txt",
+        "kind": "text",
+        "size_bytes": 1304,
+        "sha256": "2bdc5f204ba384deed8783fb724d69d9b752d6e94679c8371bfa7cd4278808fa",
+        "href": "docs/permits/26030-10000-01235/permit_detail.txt"
+      },
+      {
+        "label": "Metadata",
+        "path": "docs/permits/26030-10000-01235/metadata.json",
+        "kind": "json",
+        "size_bytes": 941,
+        "sha256": "4f57b0e4c9de138bc71a19c8212732cc8789754064f8671f89960adc67ffe8b4",
+        "href": "docs/permits/26030-10000-01235/metadata.json"
+      }
+    ],
+    "local_doc_path": "docs/permits/26030-10000-01235/index.html"
+  },
+  {
+    "id": "record-16044-90000-05282",
+    "category": "record",
+    "title": "Record 16044-90000-05282",
+    "doc_number": "16044-90000-05282",
+    "doc_type": "MECHANICAL PERMIT",
+    "sub_type": "HVAC",
+    "doc_date": "5/17/2016",
+    "address_label": "3030 S MIDVALE AVE",
+    "capture_status": "captured",
+    "validation_status": "valid_for_subject",
+    "validation_evidence": [
+      "LADBS records assessor search selected 3030 S MIDVALE AVE.",
+      "Record summary page text repeats the subject address.",
+      "Live records result returned document 16044-90000-05282."
+    ],
+    "source_links": [
+      {
+        "label": "LADBS document viewer source",
+        "url": "https://ladbsdoc.lacity.org/IDISPublic_Records/idis/ImageMain.aspx?DocIds=%7B3209FCFC-A159-4E83-A40F-E312DFAE263F%7D%2C",
+        "stable": true
+      }
+    ],
+    "scope_signals": [
+      "INSTALL GAS WALL FURNACE",
+      "MECHANICAL PERMIT"
+    ],
+    "team_mentions": [
+      {
+        "role": "Record contact",
+        "name": "LARRY RODRIGUEZ",
+        "source": "Record 16044-90000-05282 summary page",
+        "party_type": "project_side"
+      }
+    ],
+    "capture_notes": [
+      "pypdf is not installed; PDF preserved locally without text extraction.",
+      "LADBS record summary URL was usable only inside the live search session and is not treated as a durable public link.",
+      "The LADBS PDF URL yielded a real PDF only inside the live records session, so the local PDF is the durable artifact."
+    ],
+    "local_files": [
+      {
+        "label": "Local doc package",
+        "path": "docs/records/16044-90000-05282/index.html",
+        "kind": "html",
+        "size_bytes": 4880,
+        "sha256": "d6a0002512053640defccc9df3116570b243abea0a9382a0fc4a40c780f43954",
+        "href": "docs/records/16044-90000-05282/index.html"
+      },
+      {
+        "label": "Record summary snapshot",
+        "path": "docs/records/16044-90000-05282/record_summary.source.html",
+        "kind": "html",
+        "size_bytes": 11949,
+        "sha256": "2c8593f1457b3bb15c3c2f86acfa2297a9540946c7bf9b025c9f191062c1cc26",
+        "href": "docs/records/16044-90000-05282/record_summary.source.html"
+      },
+      {
+        "label": "Record summary text",
+        "path": "docs/records/16044-90000-05282/record_summary.txt",
+        "kind": "text",
+        "size_bytes": 1006,
+        "sha256": "54c5cf506fe792e2732784557fcf138a1e6a5863797038516e91a5101bfa9521",
+        "href": "docs/records/16044-90000-05282/record_summary.txt"
+      },
+      {
+        "label": "Image viewer snapshot",
+        "path": "docs/records/16044-90000-05282/image_main.source.html",
+        "kind": "html",
+        "size_bytes": 607,
+        "sha256": "cb1538bec8e64e7cbd9fb885caf880a961b627fddb6c7622213a04b4642ba4a4",
+        "href": "docs/records/16044-90000-05282/image_main.source.html"
+      },
+      {
+        "label": "Image list snapshot",
+        "path": "docs/records/16044-90000-05282/image_list.source.html",
+        "kind": "html",
+        "size_bytes": 8923,
+        "sha256": "363804ccac038b901813744320d8cb2da97ee0cb05afdf71dc46967b08daf603",
+        "href": "docs/records/16044-90000-05282/image_list.source.html"
+      },
+      {
+        "label": "Image list text",
+        "path": "docs/records/16044-90000-05282/image_list.txt",
+        "kind": "text",
+        "size_bytes": 497,
+        "sha256": "464358205e1713f44c06fe9ad4d4b8bb87c6d0c4ff8e35148292dc414c5dc1dc",
+        "href": "docs/records/16044-90000-05282/image_list.txt"
+      },
+      {
+        "label": "Captured PDF",
+        "path": "docs/records/16044-90000-05282/document.pdf",
+        "kind": "pdf",
+        "size_bytes": 198760,
+        "sha256": "b53db93ad3239eb7e696ae5046b19d2ff214acfddc412999f6fb589506c41820",
+        "href": "docs/records/16044-90000-05282/document.pdf"
+      },
+      {
+        "label": "Metadata",
+        "path": "docs/records/16044-90000-05282/metadata.json",
+        "kind": "json",
+        "size_bytes": 1411,
+        "sha256": "b69eff0df69d8366272d9c57d3eaf38fb177371133df8c3f2bdd90ab28a502f9",
+        "href": "docs/records/16044-90000-05282/metadata.json"
+      }
+    ],
+    "local_doc_path": "docs/records/16044-90000-05282/index.html"
+  }
+]

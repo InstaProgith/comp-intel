@@ -1,0 +1,47 @@
+{
+  "permit_number": "26014-10000-00017",
+  "job_number": "B25LA55287",
+  "permit_type": "Bldg-Addition - 1 or 2 Family Dwelling",
+  "status_text": "Quality Review Completed on 2/12/2026",
+  "status_date": "2/12/2026",
+  "issued_text": "No",
+  "address_label": "3030 S MIDVALE AVE 90034",
+  "source_url": "https://www.ladbsservices2.lacity.org/OnlineServices/PermitReport/PcisPermitDetail?id1=26014&id2=10000&id3=00017",
+  "capture_type": "permit_detail_html",
+  "validation_status": "valid_for_subject",
+  "validation_evidence": [
+    "LADBS permit drilldown was filtered to 3030 S MIDVALE AVE 90034.",
+    "Permit detail page text repeats the subject address."
+  ],
+  "work_description": "EPLAN. TWO STORY ADDITION TO EXISTING SINGLE FAMILY DWELLING TO ENLARGE AND MODIFY THE EXISTING MAIN HOUSE. PROJECT INCLUDES THE CONSTRUCTION OF A FULLY COMPLIANT ATTACHED ACCESSORY DWELLING UNIT (ADU) PER GC .66323(D)(2).",
+  "certificate_of_occupancy": null,
+  "team_mentions": [
+    {
+      "role": "Assigned to Zoning Architect",
+      "name": "AMIR NAKHLA",
+      "source": "Permit 26014-10000-00017 status history",
+      "party_type": "city_side"
+    },
+    {
+      "role": "Assigned to Plan Check Engineer",
+      "name": "ARSALAN SHABESTARI",
+      "source": "Permit 26014-10000-00017 status history",
+      "party_type": "city_side"
+    },
+    {
+      "role": "Corrections Issued",
+      "name": "ARSALAN SHABESTARI",
+      "source": "Permit 26014-10000-00017 status history",
+      "party_type": "city_side"
+    },
+    {
+      "role": "Quality Review Completed",
+      "name": "GARO TELMI",
+      "source": "Permit 26014-10000-00017 status history",
+      "party_type": "city_side"
+    }
+  ],
+  "scope_signals": [
+    "EPLAN. TWO STORY ADDITION TO EXISTING SINGLE FAMILY DWELLING TO ENLARGE AND MODIFY THE EXISTING MAIN HOUSE. PROJECT INCLUDES THE CONSTRUCTION OF A FULLY COMPLIANT ATTACHED ACCESSORY DWELLING UNIT (ADU) PER GC .66323(D)(2)."
+  ]
+}

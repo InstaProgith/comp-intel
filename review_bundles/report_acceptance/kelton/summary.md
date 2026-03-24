@@ -62,15 +62,17 @@
 - Open report: [report.html](report.html)
 - Open payload: [payload.normalized.json](payload.normalized.json)
 
-### Property-specific source links
+### Verified source links
 - ZIMAS parcel page: [https://zimas.lacity.org/map.aspx?pin=120B157%20%20%20124&ajax=yes](https://zimas.lacity.org/map.aspx?pin=120B157%20%20%20124&ajax=yes)
-- PIN permit results: [https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&view=permit&pin=120B157%20124](https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&view=permit&pin=120B157%20124)
 - First LADBS record: [https://ladbsdoc.lacity.org/IDISPublic_Records/idis/Report.aspx?Record_Id=130935079&Image=Visible&ImageToOpen=%7BE49F2A15-4A63-459B-BDE4-40F16BCB55BB%7D%2C](https://ladbsdoc.lacity.org/IDISPublic_Records/idis/Report.aspx?Record_Id=130935079&Image=Visible&ImageToOpen=%7BE49F2A15-4A63-459B-BDE4-40F16BCB55BB%7D%2C)
 - First LADBS PDF: [https://ladbsdoc.lacity.org/IDISPublic_Records/idis/StPdfViewer.aspx?Library=IDIS&Id=%7BE49F2A15-4A63-459B-BDE4-40F16BCB55BB%7D&ObjType=2&Op=View](https://ladbsdoc.lacity.org/IDISPublic_Records/idis/StPdfViewer.aspx?Library=IDIS&Id=%7BE49F2A15-4A63-459B-BDE4-40F16BCB55BB%7D&ObjType=2&Op=View)
 
 ### Generic search/home pages
 - Permit search home: [https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr](https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr)
 - Docs search home: [https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW](https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW)
+
+### Fallback links
+- PIN permit search fallback: [https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&view=permit&pin=120B157%20124](https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&view=permit&pin=120B157%20124)
 
 
 ## Mismatches / Issues

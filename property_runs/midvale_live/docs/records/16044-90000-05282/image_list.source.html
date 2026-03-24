@@ -1,0 +1,241 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+	<HEAD>
+		<title>ImageList</title>
+		<meta name="GENERATOR" content="Microsoft Visual Studio.NET 7.0">
+		<meta name="CODE_LANGUAGE" content="Visual Basic 7.0">
+		<meta name="vs_defaultClientScript" content="JavaScript">
+		<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
+
+		<script language=javascript>
+		
+		var webIDMViewing = true;
+		//------------------------------------------------------------------
+		// Function:
+		//    NoWebViewing
+		//
+		// Description:
+		//    This is the "onerror" procedure that is called when we get an 
+		//		error from trying to instantiate the Viewer Control on the client.
+		//		This is a mechanism similar to 3.x Web pages to determine whether
+		//		the IDM Viewer is installed on the client machine.
+		//
+		// Parameters:
+		//	none
+		//------------------------------------------------------------------
+		function NoWebViewing()
+		{
+			webIDMViewing = false;
+		}	
+				
+		function IDMViewDocument(library, docId, width, height)
+		{
+			
+			
+//			var popupName;
+
+//			var cleanId = getDocIdNoVersion(docId);
+			// Form the unique popup window name.
+//			if (docId != null && docId.length > 0)
+//				popupName = "Viewer_" + cleanId;
+//			else
+//				popupName = "Viewer"; // all non-docID instances labelled the same, go to same window
+		        
+//			var popupFeatures = "dependent=no,toolbar=no,directories=no,location=no,menubar=yes,resizable=yes,scrollbars=no,status=no";
+
+//			parent.frames[1].location.href=pageURL;
+			//createWindow(pageURL, popupName, popupFeatures, -1, width, height, "center", "middle", "no");
+		}
+
+				
+				
+		function JavaViewDocument(docId, libraryName, width, height)
+		{
+		
+			//alert("Java View");
+			if (width < 0)
+				width = screen.width * 3 / 4;
+			if (height < 0)
+				height = screen.height * 2 / 3;
+			
+			var popupFeatures = "dependent=no,toolbar=yes,directories=no,location=yes,menubar=yes,resizable=yes,scrollbars=no,status=yes";
+		    
+			var strFirst;
+			var strLast;
+			var intLocOfCaret;
+		   
+			intLocOfCaret=libraryName.indexOf("^");
+		    
+			if (intLocOfCaret>0)
+			{
+			strFirst = libraryName.substring(0,intLocOfCaret);
+			strLast = libraryName.substring(intLocOfCaret+1,libraryName.length);
+			encodedlibrary=strFirst+"%5E"+strLast
+			}
+			else
+			{
+			encodedlibrary = libraryName
+			}
+			
+			//var pageURL = g_baseURL + "/FnJavaView.aspx?Library=" + encodedlibrary + "&Id=" + docId + "&ObjType=2&Op=View"; 
+			//var pageURL = "https://ladbsdoc.lacity.org/IDISPublic_Records/FnJavaView.aspx?Library=" + encodedlibrary + "&Id=" + docId + "&ObjType=2&Op=View"; 
+			
+			//Added by amulya by 10/17/2014 to convet tiff flie to pdf
+			var pageURL = "https://ladbsdoc.lacity.org/IDISPublic_Records/idis/StPdfViewer.aspx?Library=" + encodedlibrary + "&Id=" + docId + "&ObjType=2&Op=View"; 
+			
+			//alert(pageURL);
+			// Form the unique popup window name.
+			var cleanId = getDocIdNoVersion(docId);
+			var popupName = "JavaView_" + cleanId;
+			parent.frames[1].location.href=pageURL;
+			//createWindow(pageURL, popupName, popupFeatures, 200, width, height, "center", "middle", "no");
+		}
+		function createWindow(pageURL, title, popupFeatures, decoration, width, height, align, valign, focus)
+		{
+			if (decoration < 0)
+				decoration = 30;    
+			var x = (screen.width - width) / 2;
+			var y = (screen.height - decoration - height) / 2;
+
+			if ( align == 'left' )
+				x = 0
+			else if ( align == 'right' )
+				x = screen.width - (decoration/2) - width;
+
+			if ( valign == 'top' )
+				y = 0
+			else if ( valign == 'bottom' )
+				y = screen.height - decoration - height;
+
+			var popupFeatures = popupFeatures + ",width=" + width + ",height=" + height + ",top=" + y + ",left=" + x;
+
+			var w = window.open(pageURL, title, popupFeatures);
+
+			if ( focus == 'yes' )
+				w.focus();
+
+			return(w);
+		}
+
+		function getDocIdNoVersion(inDocId)
+		{
+			var rtnId;
+			var idx = inDocId.indexOf(":");
+			if (idx > -1)
+				rtnId = inDocId.substr(0,idx);
+			else
+				rtnId = inDocId;
+			return rtnId;
+		}
+		
+		function ViewDocument(psDocId,psLibName)
+		{	
+			//alert("here");
+			//alert(psDocId.substr(psDocId.length-1));
+			//alert(document.getElementById('lblCurrentDoc').innerHTML);
+			document.getElementById('lblCurrentDoc').innerHTML='Currently selected image: ' + psDocId.substr(0,psDocId.length-1);
+			//alert(document.getElementById('lblCurrentDoc').innerHTML);
+
+			if (psDocId.substr(psDocId.length-1) == 'n')	
+				alert('Insufficient privileges to view this document.');				
+			else if (psDocId.substr(psDocId.length-1) == 'j')
+				JavaViewDocument(psDocId.substr(0,psDocId.length-1),psLibName,800,600);
+			else
+				//IDMViewDocument(psLibName,psDocId.substr(0,psDocId.length-1),800,600);
+				//Testing
+				JavaViewDocument(psDocId.substr(0,psDocId.length-1),psLibName,800,600);
+						
+		}
+		function move()
+		{
+			//alert("here");
+			var mm = document.getElementById('divLabel');
+			var my = document.body.scrollLeft;
+			//var mmy = xPageY(mm);
+			//alert(mmy);
+			//if (my < mmy) 
+			//	my = mmy;
+			//else 
+				my = my + 10;
+			//alert(my);
+			document.getElementById("divLabel").style.left = my;			
+			setTimeout("move()",0);		
+			
+		}
+		function ShowMsg()
+		{
+		alert("2" + webIDMViewing);
+		}
+				
+		</script>
+	</HEAD>
+    	
+	<!-- changed above line with below by Amulya on 10/17/2014   -->
+	<body MS_POSITIONING="GridLayout" onload="javascript:move(); javascript:JavaViewDocument('{3209FCFC-A159-4E83-A40F-E312DFAE263F}','IDIS',800,600);">
+		<form method="post" action="./ImageList.aspx" id="ImageList">
+<div class="aspNetHidden">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="xoiWU934TX9VplkoGLz5fjHUX6KRD4p6iUmIiTrZW5GQc3DZjiswAN6c31DDM1ZdvajffqfkRuGZQ3afNvYuujYRDfWdD0Jgho9ALCTzrxDIxdMYF306SzX0F4tYbNE7Uqb/JU8q+MOwPpkeKgrz5rRCfA8mmy5SW5Pgt1oFcpLvCz/8Dg2xVBdpa+WdTha67V/GQIRlYhUa2SD1EtLaYg==" />
+</div>
+
+<div class="aspNetHidden">
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="7E5CBCAA" />
+</div>
+
+			
+			<table cellpadding="0" cellspacing="5" height=0 border=0 bordercolor=white>
+			<tr>
+			<td width=45%>
+			<table cellpadding="0" cellspacing="5" height=0 border=0 bordercolor=white>
+				<tr>
+					<td>
+						<table width=150 border=1 bordercolor=white cellpadding=0 cellspacing=0 >
+						<tr>
+							<td width=150 align=center valign=center bordercolor=red>
+								<font  style="FONT-SIZE: x-small; COLOR: #3333cc; FONT-FAMILY: Arial">Please click on an image to the right to view</font>
+							</td>							
+						</tr>
+						</table>
+					</td>
+					
+								<td width=40 align=center bordercolor=white >
+									<font  style="FONT-SIZE: x-small; COLOR: #3333cc; FONT-FAMILY: Arial"><A href="JavaScript:ViewDocument('{3209FCFC-A159-4E83-A40F-E312DFAE263F}j','IDIS');"><img src='images/image.gif' border="0" height="30" width="30"><br>{3209FCFC-A159-4E83-A40F-E312DFAE263F}</A></font>
+								</td>
+								
+				</tr>
+			</table>
+			
+			</td>
+			<!--Added blurb by Amulya on 06/20/2014 -->
+			
+			<td width=55%>
+			<table width=400 border=1 bordercolor=white cellpadding=0 cellspacing=0 >
+				<tr>
+					<td width=400 align=left valign=bottom bordercolor=blue>						
+						<font  style="FONT-SIZE: xx-small; COLOR: #3333cc; FONT-FAMILY: Arial">&nbsp;Note: If you have any questions, please visit one of our Records Counter Section 
+						        <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;open Monday thru Fridays from 7:30 AM to 4:30 PM, EXCEPT on 
+								<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Wednesdays which  opens from 9:00 AM to 4:30 PM. <br/>
+								<br/>&nbsp;Locations: Metro - 201 N. Figueroa St., 1st Floor Rm. 110, Los Angeles CA 90012
+                                <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Van Nuys -  6262 Van Nuys Blvd, 2nd Floor Van Nuys CA 91401 </font>
+					</td>							
+				</tr>
+		    </table>
+		    </td>
+		    </tr>	    
+		    
+		    </table>
+		    
+		    <table border=0 cellpadding=0>
+				
+				<tr>
+					<td>
+						<div style= "WIDTH: 300px; POSITION: absolute" id="divLabel"><label id="lblCurrentDoc" style="FONT-WEIGHT: normal; FONT-SIZE: small; COLOR: blue; FONT-FAMILY: Arial">Currently selected image: {3209FCFC-A159-4E83-A40F-E312DFAE263F}</label></div>
+					</td>
+				</tr>
+			</table>
+		    
+		
+		</form>
+	</body>
+</HTML>

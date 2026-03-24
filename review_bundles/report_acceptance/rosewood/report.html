@@ -74,6 +74,13 @@
       border-color: #111;
       background: #fdfdfd;
     }
+
+    .review-toolbar-group[data-group="generic"] a,
+    .review-toolbar-group[data-group="fallback"] a {
+      background: #f8fafc;
+      border-style: dashed;
+      color: #475569;
+    }
     
     .report-section {
       padding: 16px 20px;
@@ -494,6 +501,12 @@
       background: #fafafa;
     }
 
+    .links-group[data-group="generic"],
+    .links-group[data-group="fallback"] {
+      background: #fcfcfd;
+      border-style: dashed;
+    }
+
     .links-group-title {
       font-size: 10px;
       font-weight: 800;
@@ -693,16 +706,12 @@
           </div>
         </div>
         
-        <div class="review-toolbar-group" data-group="source">
-          <div class="review-toolbar-label">Property-specific source links</div>
+        <div class="review-toolbar-group" data-group="verified_source">
+          <div class="review-toolbar-label">Verified source links</div>
           <div class="review-toolbar-links">
             
               
               <a data-link-key="zimas_parcel_page" href="https://zimas.lacity.org/map.aspx?pin=111B149%20%20%20315&amp;ajax=yes" target="_blank" rel="noopener noreferrer">ZIMAS parcel page</a>
-              
-            
-              
-              <a data-link-key="pin_permit_results" href="https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&amp;view=permit&amp;pin=111B149%20315" target="_blank" rel="noopener noreferrer">PIN permit results</a>
               
             
               
@@ -726,6 +735,17 @@
             
               
               <a data-link-key="docs_search_home" href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW" target="_blank" rel="noopener noreferrer">Docs search home</a>
+              
+            
+          </div>
+        </div>
+        
+        <div class="review-toolbar-group" data-group="fallback">
+          <div class="review-toolbar-label">Fallback links</div>
+          <div class="review-toolbar-links">
+            
+              
+              <a data-link-key="pin_permit_results" href="https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&amp;view=permit&amp;pin=111B149%20315" target="_blank" rel="noopener noreferrer">PIN permit search fallback</a>
               
             
           </div>
@@ -1472,21 +1492,14 @@
             </div>
           </div>
           
-          <div class="links-group" data-group="source">
-            <div class="links-group-title">Property-specific source links</div>
+          <div class="links-group" data-group="verified_source">
+            <div class="links-group-title">Verified source links</div>
             <div class="links-list">
               
               <div class="link-item">
                 <span class="link-label">ZIMAS parcel page</span>
                 
                 <a data-link-key="zimas_parcel_page" href="https://zimas.lacity.org/map.aspx?pin=111B149%20%20%20315&amp;ajax=yes" target="_blank" rel="noopener noreferrer" class="link-url">https://zimas.lacity.org/map.aspx?pin=111B149%20%20%20315&amp;ajax=yes</a>
-                
-              </div>
-              
-              <div class="link-item">
-                <span class="link-label">PIN permit results</span>
-                
-                <a data-link-key="pin_permit_results" href="https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&amp;view=permit&amp;pin=111B149%20315" target="_blank" rel="noopener noreferrer" class="link-url">https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&amp;view=permit&amp;pin=111B149%20315</a>
                 
               </div>
               
@@ -1522,6 +1535,20 @@
                 <span class="link-label">Docs search home</span>
                 
                 <a data-link-key="docs_search_home" href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW" target="_blank" rel="noopener noreferrer" class="link-url">https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW</a>
+                
+              </div>
+              
+            </div>
+          </div>
+          
+          <div class="links-group" data-group="fallback">
+            <div class="links-group-title">Fallback links</div>
+            <div class="links-list">
+              
+              <div class="link-item">
+                <span class="link-label">PIN permit search fallback</span>
+                
+                <a data-link-key="pin_permit_results" href="https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&amp;view=permit&amp;pin=111B149%20315" target="_blank" rel="noopener noreferrer" class="link-url">https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&amp;view=permit&amp;pin=111B149%20315</a>
                 
               </div>
               

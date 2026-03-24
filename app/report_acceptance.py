@@ -167,12 +167,20 @@ def _build_link_item(
     *,
     unavailable_reason: str,
     external: bool,
+    classification: str,
+    source_basis: str,
+    primary: bool,
+    display_group: str,
 ) -> Dict[str, Any]:
     normalized_url = _normalize_text(url)
     item: Dict[str, Any] = {
         "key": key,
         "label": label,
         "external": external,
+        "classification": classification,
+        "source_basis": source_basis,
+        "primary": primary,
+        "display_group": display_group,
     }
     if normalized_url:
         item["status"] = "available"
@@ -201,12 +209,25 @@ def _build_review_bundle_context(
     ladbs = payload.get("ladbs") or {}
     records = payload.get("ladbs_records") or {}
     documents = records.get("documents") or []
+    first_doc_with_images = _first_document_with_url(documents, "image_main_url")
     first_doc_with_summary = _first_document_with_url(documents, "summary_url")
     first_doc_with_pdf = _first_document_with_url(documents, "pdf_url")
     pin = zimas.get("pin") or ladbs.get("pin")
     zimas_page = links.get("zimas_url") or ((zimas.get("links") or {}).get("profile_url"))
-    docs_page = links.get("ladbs_records_url") or ((records.get("links") or {}).get("search_url"))
+    records_diagnostics = records.get("diagnostics") or {}
+    docs_page = (
+        records_diagnostics.get("bootstrap_url")
+        or links.get("ladbs_records_url")
+        or ((records.get("links") or {}).get("search_url"))
+    )
     asset_prefix = _bundle_asset_prefix(page_kind)
+    first_record_url = None
+    first_record_label = "First LADBS record"
+    if first_doc_with_images:
+        first_record_url = first_doc_with_images.get("image_main_url")
+        first_record_label = "First LADBS document images"
+    elif first_doc_with_summary:
+        first_record_url = first_doc_with_summary.get("summary_url")
 
     if page_kind == "report":
         local_actions = [
@@ -216,6 +237,10 @@ def _build_review_bundle_context(
                 "../index.html",
                 unavailable_reason="Bundle index is unavailable.",
                 external=False,
+                classification="local",
+                source_basis="other",
+                primary=True,
+                display_group="local",
             ),
             _build_link_item(
                 "open_summary",
@@ -223,6 +248,10 @@ def _build_review_bundle_context(
                 "summary.html",
                 unavailable_reason="Summary page is unavailable.",
                 external=False,
+                classification="local",
+                source_basis="other",
+                primary=True,
+                display_group="local",
             ),
             _build_link_item(
                 "open_payload",
@@ -230,6 +259,10 @@ def _build_review_bundle_context(
                 "payload.normalized.json",
                 unavailable_reason="Normalized payload is unavailable.",
                 external=False,
+                classification="local",
+                source_basis="other",
+                primary=True,
+                display_group="local",
             ),
         ]
     elif page_kind == "summary":
@@ -240,6 +273,10 @@ def _build_review_bundle_context(
                 "../index.html",
                 unavailable_reason="Bundle index is unavailable.",
                 external=False,
+                classification="local",
+                source_basis="other",
+                primary=True,
+                display_group="local",
             ),
             _build_link_item(
                 "open_report",
@@ -247,6 +284,10 @@ def _build_review_bundle_context(
                 "report.html",
                 unavailable_reason="Report page is unavailable.",
                 external=False,
+                classification="local",
+                source_basis="other",
+                primary=True,
+                display_group="local",
             ),
             _build_link_item(
                 "open_payload",
@@ -254,6 +295,10 @@ def _build_review_bundle_context(
                 "payload.normalized.json",
                 unavailable_reason="Normalized payload is unavailable.",
                 external=False,
+                classification="local",
+                source_basis="other",
+                primary=True,
+                display_group="local",
             ),
         ]
     elif page_kind == "index":
@@ -265,6 +310,10 @@ def _build_review_bundle_context(
                 f"{local_prefix}report.html",
                 unavailable_reason="Report page is unavailable.",
                 external=False,
+                classification="local",
+                source_basis="other",
+                primary=True,
+                display_group="local",
             ),
             _build_link_item(
                 "open_summary",
@@ -272,6 +321,10 @@ def _build_review_bundle_context(
                 f"{local_prefix}summary.html",
                 unavailable_reason="Summary page is unavailable.",
                 external=False,
+                classification="local",
+                source_basis="other",
+                primary=True,
+                display_group="local",
             ),
             _build_link_item(
                 "open_payload",
@@ -279,6 +332,10 @@ def _build_review_bundle_context(
                 f"{local_prefix}payload.normalized.json",
                 unavailable_reason="Normalized payload is unavailable.",
                 external=False,
+                classification="local",
+                source_basis="other",
+                primary=True,
+                display_group="local",
             ),
         ]
     else:
@@ -291,20 +348,21 @@ def _build_review_bundle_context(
             zimas_page,
             unavailable_reason="No canonical ZIMAS parcel page was available in the payload.",
             external=True,
-        ),
-        _build_link_item(
-            "pin_permit_results",
-            "PIN permit results",
-            _pin_permit_results_url(pin),
-            unavailable_reason="No normalized PIN was available for a property-specific permit results link.",
-            external=True,
+            classification="canonical",
+            source_basis="payload_field",
+            primary=True,
+            display_group="verified_source",
         ),
         _build_link_item(
             "first_ladbs_record",
-            "First LADBS record",
-            first_doc_with_summary.get("summary_url") if first_doc_with_summary else None,
-            unavailable_reason="No LADBS record summary URL was available in the payload documents.",
+            first_record_label,
+            first_record_url,
+            unavailable_reason="No direct LADBS document review URL was available in the payload documents.",
             external=True,
+            classification="canonical",
+            source_basis="payload_field",
+            primary=True,
+            display_group="verified_source",
         ),
         _build_link_item(
             "first_ladbs_pdf",
@@ -312,6 +370,10 @@ def _build_review_bundle_context(
             first_doc_with_pdf.get("pdf_url") if first_doc_with_pdf else None,
             unavailable_reason="No LADBS PDF URL was available in the payload documents.",
             external=True,
+            classification="canonical",
+            source_basis="payload_field",
+            primary=True,
+            display_group="verified_source",
         ),
     ]
 
@@ -322,6 +384,10 @@ def _build_review_bundle_context(
             links.get("ladbs_url"),
             unavailable_reason="No generic LADBS permit search home URL was available in the payload.",
             external=True,
+            classification="generic",
+            source_basis="generic_home",
+            primary=False,
+            display_group="generic",
         ),
         _build_link_item(
             "docs_search_home",
@@ -329,13 +395,34 @@ def _build_review_bundle_context(
             docs_page,
             unavailable_reason="No generic LADBS docs search home URL was available in the payload.",
             external=True,
+            classification="generic",
+            source_basis="generic_home",
+            primary=False,
+            display_group="generic",
+        ),
+    ]
+
+    fallback_links = [
+        _build_link_item(
+            "pin_permit_results",
+            "PIN permit search fallback",
+            _pin_permit_results_url(pin),
+            unavailable_reason=(
+                "No normalized PIN was available for the best-effort PIN-derived permit search fallback."
+            ),
+            external=True,
+            classification="synthetic",
+            source_basis="pin_derived",
+            primary=False,
+            display_group="fallback",
         ),
     ]
 
     link_groups = [
         {"key": "local", "title": "Local review actions", "links": local_actions},
-        {"key": "source", "title": "Property-specific source links", "links": source_links},
+        {"key": "verified_source", "title": "Verified source links", "links": source_links},
         {"key": "generic", "title": "Generic search/home pages", "links": generic_links},
+        {"key": "fallback", "title": "Fallback links", "links": fallback_links},
     ]
 
     return {
@@ -349,6 +436,7 @@ def _build_review_bundle_context(
         "local_actions": local_actions,
         "source_links": source_links,
         "generic_links": generic_links,
+        "fallback_links": fallback_links,
     }
 
 
@@ -691,6 +779,7 @@ def _build_property_page_context(summary: Dict[str, Any], *, page_kind: str) -> 
         "local_actions": review_bundle["local_actions"],
         "source_links": review_bundle["source_links"],
         "generic_links": review_bundle["generic_links"],
+        "fallback_links": review_bundle["fallback_links"],
     }
 
 
@@ -848,8 +937,8 @@ def _build_index_markdown(bundle_root: Path, summaries: List[Dict[str, Any]]) ->
         "",
         "- Static landing page: [review_bundles/report_acceptance/index.html](./review_bundles/report_acceptance/index.html)",
         "",
-        "| Property | Role | Verdict | Address | Key Facts | Review Context | Local Review | Source Links | Generic Search |",
-        "| --- | --- | --- | --- | --- | --- | --- | --- | --- |",
+        "| Property | Role | Verdict | Address | Key Facts | Review Context | Local Review | Verified Sources | Generic Search | Fallbacks |",
+        "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",
     ]
     for summary in summaries:
         facts = summary["actual_facts"]
@@ -868,11 +957,17 @@ def _build_index_markdown(bundle_root: Path, summaries: List[Dict[str, Any]]) ->
         generic_search_links = ", ".join(
             f"[{link['label']}]({link['url']})" for link in review_bundle["generic_links"] if link["status"] == "available"
         )
+        fallback_links = ", ".join(
+            f"[{link['label']}]({link['url']})" for link in review_bundle["fallback_links"] if link["status"] == "available"
+        )
         unavailable_source_links = ", ".join(
             link["label"] for link in review_bundle["source_links"] if link["status"] != "available"
         )
         unavailable_generic_links = ", ".join(
             link["label"] for link in review_bundle["generic_links"] if link["status"] != "available"
+        )
+        unavailable_fallback_links = ", ".join(
+            link["label"] for link in review_bundle["fallback_links"] if link["status"] != "available"
         )
         if unavailable_source_links:
             property_source_links = (
@@ -886,6 +981,12 @@ def _build_index_markdown(bundle_root: Path, summaries: List[Dict[str, Any]]) ->
                 if generic_search_links
                 else f"unavailable: {unavailable_generic_links}"
             )
+        if unavailable_fallback_links:
+            fallback_links = (
+                f"{fallback_links} ; unavailable: {unavailable_fallback_links}"
+                if fallback_links
+                else f"unavailable: {unavailable_fallback_links}"
+            )
         lines.append(
             "| "
             + f"{summary['name']} | "
@@ -897,6 +998,7 @@ def _build_index_markdown(bundle_root: Path, summaries: List[Dict[str, Any]]) ->
             + f"{local_review_links or 'none'} | "
             + f"{property_source_links or 'none'} | "
             + f"{generic_search_links or 'none'} |"
+            + f" {fallback_links or 'none'} |"
         )
 
     lines.extend(["", "## Questionable Items", ""])

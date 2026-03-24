@@ -6,6 +6,61 @@ from app import orchestrator
 
 
 class OrchestratorContractTests(TestCase):
+    def test_build_property_snapshot_keeps_redfin_year_built_over_recent_permits(self) -> None:
+        snapshot = orchestrator._build_property_snapshot(
+            {
+                "address": "3030 Midvale Ave, Los Angeles, CA 90034",
+                "beds": 2.0,
+                "baths": 2.0,
+                "building_sf": 1076.0,
+                "lot_sf": 5256.0,
+                "year_built": 1940,
+                "property_type": "Single-family",
+                "timeline": [{"event": "sold", "date": "2025-12-18", "price": 1125000}],
+            },
+            {"building_sf_after": 1076.0, "land_sf": 5256.0},
+            permits=[
+                {
+                    "permit_type": "Bldg-Addition - 1 or 2 Family Dwelling",
+                    "Status": "Quality Review Completed on 2/12/2026",
+                    "raw_details": {
+                        "status_history": [
+                            {"event": "Completed", "date": "3/6/2026", "person": "LADBS"}
+                        ]
+                    },
+                }
+            ],
+        )
+
+        self.assertEqual(snapshot["year_built"], 1940)
+
+    def test_build_property_snapshot_uses_recent_permit_year_only_when_redfin_year_missing(self) -> None:
+        snapshot = orchestrator._build_property_snapshot(
+            {
+                "address": "3030 Midvale Ave, Los Angeles, CA 90034",
+                "beds": 2.0,
+                "baths": 2.0,
+                "building_sf": 1076.0,
+                "lot_sf": 5256.0,
+                "property_type": "Single-family",
+                "timeline": [{"event": "sold", "date": "2025-12-18", "price": 1125000}],
+            },
+            {"building_sf_after": 1076.0, "land_sf": 5256.0},
+            permits=[
+                {
+                    "permit_type": "Bldg-Addition - 1 or 2 Family Dwelling",
+                    "Status": "Quality Review Completed on 2/12/2026",
+                    "raw_details": {
+                        "status_history": [
+                            {"event": "Completed", "date": "3/6/2026", "person": "LADBS"}
+                        ]
+                    },
+                }
+            ],
+        )
+
+        self.assertEqual(snapshot["year_built"], 2026)
+
     def test_run_full_comp_pipeline_applies_payload_contract_and_review_flags(self) -> None:
         redfin_data = {
             "source": "redfin_parsed_v3",

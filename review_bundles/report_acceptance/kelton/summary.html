@@ -54,6 +54,12 @@
       color: #fff;
     }
 
+    .bundle-pill-secondary {
+      background: #f8fafc;
+      border-style: dashed;
+      color: #475569;
+    }
+
     .bundle-pill-muted {
       color: #6b7280;
       background: #f3f4f6;
@@ -242,8 +248,8 @@
         </div>
       </div>
       
-      <div class="bundle-link-group" data-group="source">
-        <div class="bundle-group-label">Property-specific source links</div>
+      <div class="bundle-link-group" data-group="verified_source">
+        <div class="bundle-group-label">Verified source links</div>
         <div class="bundle-link-row">
           
             
@@ -253,15 +259,6 @@
               href="https://zimas.lacity.org/map.aspx?pin=120B157%20%20%20124&amp;ajax=yes"
               target="_blank" rel="noopener noreferrer"
             >ZIMAS parcel page</a>
-            
-          
-            
-            <a
-              data-link-key="pin_permit_results"
-              class="bundle-pill "
-              href="https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&amp;view=permit&amp;pin=120B157%20124"
-              target="_blank" rel="noopener noreferrer"
-            >PIN permit results</a>
             
           
             
@@ -292,7 +289,7 @@
             
             <a
               data-link-key="permit_search_home"
-              class="bundle-pill "
+              class="bundle-pill bundle-pill-secondary"
               href="https://www.ladbsservices2.lacity.org/OnlineServices/OnlineServices/OnlineServices?service=plr"
               target="_blank" rel="noopener noreferrer"
             >Permit search home</a>
@@ -301,10 +298,26 @@
             
             <a
               data-link-key="docs_search_home"
-              class="bundle-pill "
+              class="bundle-pill bundle-pill-secondary"
               href="https://ladbsdoc.lacity.org/IDISPublic_Records/idis/DocumentSearch.aspx?SearchType=DCMT_ASSR_NEW"
               target="_blank" rel="noopener noreferrer"
             >Docs search home</a>
+            
+          
+        </div>
+      </div>
+      
+      <div class="bundle-link-group" data-group="fallback">
+        <div class="bundle-group-label">Fallback links</div>
+        <div class="bundle-link-row">
+          
+            
+            <a
+              data-link-key="pin_permit_results"
+              class="bundle-pill bundle-pill-secondary"
+              href="https://www.ladbsservices2.lacity.org/OnlineServices/?service=plr&amp;view=permit&amp;pin=120B157%20124"
+              target="_blank" rel="noopener noreferrer"
+            >PIN permit search fallback</a>
             
           
         </div>
